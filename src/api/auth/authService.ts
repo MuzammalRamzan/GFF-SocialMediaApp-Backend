@@ -1,17 +1,13 @@
 import { IAuthService } from "./interface";
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
 
 export class AuthService implements IAuthService {
-    hashPassword(password: string): Promise<string> {
-        return new Promise((resolve, reject) => {
-            bcrypt.genSalt(process.env.SALT_ROUNDS), (err: Object, salt: string) => {
-                if (err) reject(err);
-                bcrypt.hash(password, salt, (err: Object, hash: string) => {
-                  if (err) reject(err);
-                  else resolve(hash);
-                });
-              };
-        })
+    async hashPassword(password: string): Promise<string> {
+        const salt = await bcrypt.genSalt(10)
+
+        const hash = await bcrypt.hash(password, salt)
+
+        return hash
     }
     generateJwtToken(email: string, password: string): string {
         throw new Error("Method not implemented.");
