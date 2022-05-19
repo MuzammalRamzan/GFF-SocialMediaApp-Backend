@@ -1,6 +1,7 @@
 import { IAuthService } from "./interface";
+import { pool } from "../../database";
 import bcrypt from 'bcrypt';
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 export class AuthService implements IAuthService {
     async hashPassword(password: string): Promise<string> {
@@ -10,6 +11,7 @@ export class AuthService implements IAuthService {
 
         return hash
     }
+
     generateJwtToken(email: string, password: string): string {
             const timestamp = Date.now() / 1000;
             const token = jwt.sign(
@@ -19,8 +21,20 @@ export class AuthService implements IAuthService {
                 email,
                 password
             },
-            process.env.JWT_SECRET
+            process.env.JWT_SECRET!
         )
         return token;
+    }
+
+    async createUser (email: string, password: string): Promise<any> {
+        const passwordHash = await this.hashPassword(password)
+
+        const [rows, fields] = await pool.promise().query(`
+        INSERT INTO user (role_id, firstname, lastname, email, password, phone_number)
+        VALUES (1, 'ime', 'prezime', ?, ?, 091234567);`,
+        [email, passwordHash]
+        )
+
+        return rows
     }
 }
