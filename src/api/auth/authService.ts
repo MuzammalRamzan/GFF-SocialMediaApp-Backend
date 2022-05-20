@@ -37,4 +37,9 @@ export class AuthService implements IAuthService {
 
         return rows
     }
+
+    async checkEmail(email: string): Promise<any> {
+        const [rows, fields] = await pool.promise().query(`SELECT * FROM user WHERE email=?`, email)
+        return rows
+    }
 }
