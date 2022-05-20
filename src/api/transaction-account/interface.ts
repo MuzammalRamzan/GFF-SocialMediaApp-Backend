@@ -1,4 +1,4 @@
-export type TransactionAccountParms = {
+export type TransactionAccountParams = {
     id: number
     account_type_id: number
     balance: number
@@ -14,9 +14,8 @@ export type TransactionAccountParms = {
     status: string
 }
 
-
 export interface ITransactionAccount {
-    list(): Promise<TransactionAccountParms[]>
-    fetch(id: number): Promise<TransactionAccountParms[]>
-    add(params: TransactionAccountParms): Promise<TransactionAccountParms[]>
+    list (): Promise<TransactionAccountParams[]>
+    fetch (id: number): Promise<TransactionAccountParams[]>
+    add (params: TransactionAccountParams): Promise<TransactionAccountParams[]>
 }
