@@ -1,5 +1,5 @@
 export type User = {
-    'default_currency_id': number
+    default_currency_id: number
     email: string
     firstname: string
     id: number
@@ -9,10 +9,8 @@ export type User = {
     role_id: number
 }
 
-export type FetchParams = {}
-
 export interface IUserService {
     list (): Promise<User[]>
-    add (params: User): Promise<User>
-    fetch (params: FetchParams): Promise<User[]>
+    fetchById (id: number): Promise<User[]>
+    fetchByEmail (email: string): Promise<User[]>
 }
