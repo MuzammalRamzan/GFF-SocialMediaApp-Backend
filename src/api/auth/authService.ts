@@ -2,6 +2,7 @@ import { IAuthService } from "./interface";
 import { pool } from "../../database";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { User } from "../user/interface";
 
 export class AuthService implements IAuthService {
     async hashPassword(password: string): Promise<string> {
@@ -26,7 +27,7 @@ export class AuthService implements IAuthService {
         return token;
     }
 
-    async createUser (email: string, password: string): Promise<any> {
+    async createUser (email: string, password: string): Promise<User[]> {
         const passwordHash = await this.hashPassword(password)
 
         const [rows, fields] = await pool.promise().query(`
@@ -35,11 +36,26 @@ export class AuthService implements IAuthService {
         [email, passwordHash]
         )
 
-        return rows
+        return rows as User[]
     }
 
-    async checkEmail(email: string): Promise<any> {
+    async checkCreds (email: string, password: string): Promise<User[] | undefined> {
+        const user = await this.checkEmail(email)
+        const isValid = await this.checkPass(password, user[0].password)
+
+        if (!isValid) {
+            return
+        }
+
+        return user
+    }
+
+    private async checkEmail (email: string): Promise<User[]> {
         const [rows, fields] = await pool.promise().query(`SELECT * FROM user WHERE email=?`, email)
-        return rows
+        return rows as User[]
+    }
+
+    private async checkPass (pass: string, hashedPass: string): Promise<boolean> {
+        return bcrypt.compare(pass, hashedPass)
     }
 }

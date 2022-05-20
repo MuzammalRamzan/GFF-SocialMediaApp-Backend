@@ -5,3 +5,4 @@ const authController = new AuthController()
 export const authRouter = express.Router();
 
 authRouter.get('/signup', authController.signUp)
+authRouter.get('/login', authController.signIn)
