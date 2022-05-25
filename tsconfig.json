@@ -9,6 +9,7 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "inlineSourceMap": true,
+    "resolveJsonModule": true,
     "typeRoots": ["node_modules/@types", "types"]
   },
   "include": ["src/**/*.ts"]

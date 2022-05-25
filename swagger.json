@@ -1,0 +1,930 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "GFF Backend API",
+    "description": "",
+    "version": "0.3"
+  },
+  "servers": [
+    {
+      "url": "http://3.232.6.9:3000"
+    }
+  ],
+  "tags": [
+    {
+      "name": "auth",
+      "description": "Authentication related routes"
+    },
+    {
+      "name": "user",
+      "description": "App users related routes"
+    },
+    {
+      "name": "transaction-account",
+      "description": "Transaction-Account related routes"
+    },
+    {
+      "name": "transaction",
+      "description": "Transaction related routes"
+    },
+    {
+      "name": "transaction-category",
+      "description": "Transaction-Category related routes"
+    }
+  ],
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "description": "Log in a user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/auth_login_body"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\n    \"email\": \"test\",\n    \"password\": \"password\"\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"data\":{\"user\":[{\"id\":37,\"role_id\":1,\"firstname\":\"ime\",\"lastname\":\"prezime\",\"email\":\"test\",\"password\":\"$2b$10$SIdb.mMUme3Dthq5KXoSc.L7wQSHihnv.mNfMCVkKGhVnpyXXHYgu\",\"phone_number\":\"91234567\",\"default_currency_id\":1}],\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTMzODY5MzAsImlhdCI6MTY1MzM3OTczMC41MTgsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFNJZGIubU1VbWUzRHRocTVLWG9TYy5MN3dRU0hpaG52Lm1OZk1DVmtLR2hWbnB5WFhIWWd1In0.GPcB2VFHRhA3ytXfT0seBjNC9aetP_k24QktNVm6vOI\"},\"code\":200,\"message\":\"OK\"}"
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9:3000"
+        }
+      ]
+    },
+    "/transactionAccount/list": {
+      "get": {
+        "tags": [
+          "transaction-account"
+        ],
+        "description": "List all transaction accounts",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "[{\"id\":1,\"balance\":10.5,\"account_type_id\":1,\"name\":\"Lucijan\",\"country\":\"Croatia\",\"bank_name\":\"Test bank name\",\"card_owner\":\"Test owner\",\"card_number\":\"Test number\",\"card_expiration_date\":\"0000-00-00\",\"card_cvc\":\"Test cvc\",\"currency_id\":1,\"user_id\":17,\"status\":\"active\"},{\"id\":2,\"balance\":10.5,\"account_type_id\":1,\"name\":\"askjhgd\",\"bank_name\":\"adf\",\"card_owner\":\"sdfsd\",\"card_number\":\"af\",\"card_expiration_date\":\"0000-00-00\",\"card_cvc\":\"dafgg\",\"currency_id\":1,\"user_id\":16,\"status\":\"active\"}]"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9:3000"
+        }
+      ]
+    },
+    "/transactionAccount/id/{id}": {
+      "get": {
+        "tags": [
+          "transaction-account"
+        ],
+        "description": "Get transaction account for id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Transaction account ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "[{\"id\":1,\"balance\":10.5,\"account_type_id\":1,\"name\":\"Lucijan\",\"country\":\"Croatia\",\"bank_name\":\"Test bank name\",\"card_owner\":\"Test owner\",\"card_number\":\"Test number\",\"card_expiration_date\":\"0000-00-00\",\"card_cvc\":\"Test cvc\",\"currency_id\":1,\"user_id\":17,\"status\":\"active\"}]"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9:3000"
+        }
+      ]
+    },
+    "/user/email/{email}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "description": "Get a user by email",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "description": "User email",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"id\":16,\"role_id\":1,\"firstname\":\"ime\",\"lastname\":\"prezime\",\"email\":\"email\",\"password\":\"$2b$10$tIGGiXJKnwZgUy/trwDVHOUPMJW/Pfl/kLKxGQ\",\"phone_number\":\"91234567\",\"default_currency_id\":1}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9:3000"
+        }
+      ]
+    },
+    "/transactionAccount/add/": {
+      "post": {
+        "tags": [
+          "transaction-account"
+        ],
+        "description": "Add new transaction account",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/transactionAccount_add_body"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\n        \"id\": 7,\n        \"balance\": 10.5,\n        \"account_type_id\": 1,\n        \"name\": \"Test3\",\n        \"country\": null,\n        \"bank_name\": \"adf\",\n        \"card_owner\": \"sdfsd\",\n        \"card_number\": \"af\",\n        \"card_expiration_date\": \"0000-00-00\",\n        \"card_cvc\": \"dafgg\",\n        \"currency_id\": 1,\n        \"user_id\": 16,\n        \"status\": \"active\"\n    }"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"fieldCount\":0,\"affectedRows\":1,\"insertId\":6,\"info\":\"\",\"serverStatus\":2,\"warningStatus\":0}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9:3000"
+        }
+      ]
+    },
+    "/user/{id}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "description": "Get a user by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"id\":16,\"role_id\":1,\"firstname\":\"ime\",\"lastname\":\"prezime\",\"email\":\"email\",\"password\":\"$2b$10$tIGGiXJKnwZgUy/trwDVHOUPMJW/Pfl/kLKxGQ\",\"phone_number\":\"91234567\",\"default_currency_id\":1}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9:3000"
+        }
+      ]
+    },
+    "/auth/signup": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "description": "",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/auth_signup_body"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\n    \"email\": \"test2\",\n    \"password\": \"password\"\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "[{\"fieldCount\":0,\"affectedRows\":1,\"insertId\":39,\"info\":\"\",\"serverStatus\":2,\"warningStatus\":0}]"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9:3000"
+        }
+      ]
+    },
+    "/user/": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "description": "Get all users",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "[{\"id\":16,\"role_id\":1,\"firstname\":\"ime\",\"lastname\":\"prezime\",\"email\":\"email\",\"password\":\"$2b$10$tIGGiXJKnwZgUy/trwDVHOUPMJW/Pfl/kLKxGQ\",\"phone_number\":\"91234567\",\"default_currency_id\":1},{\"id\":37,\"role_id\":1,\"firstname\":\"ime\",\"lastname\":\"prezime\",\"email\":\"test\",\"password\":\"$2b$10$SIdb.mMUme3Dthq5KXoSc.L7wQSHihnv.mNfMCVkKGhVnpyXXHYgu\",\"phone_number\":\"91234567\",\"default_currency_id\":1},{\"id\":39,\"role_id\":1,\"firstname\":\"ime\",\"lastname\":\"prezime\",\"email\":\"test3\",\"password\":\"$2b$10$TplJLAhan8kGhoKAFH/gCOPQZEQ6yYGusIAQbE/8o754joNUDXSNW\",\"phone_number\":\"91234567\",\"default_currency_id\":1}]"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9:3000"
+        }
+      ]
+    },
+    "/transaction/list": {
+      "get": {
+        "tags": [
+          "transaction"
+        ],
+        "description": "List all transactions",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "[{\"id\":1,\"frequency\":\"monthly\",\"user_id\":16,\"account_id\":3,\"category_id\":1,\"status\":\"active\"},{\"id\":6,\"frequency\":\"weekly\",\"user_id\":16,\"account_id\":2,\"category_id\":1,\"status\":\"inactive\"}]"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9:3000"
+        }
+      ]
+    },
+    "/transactionCategory/{id}": {
+      "get": {
+        "tags": [
+          "transaction-category"
+        ],
+        "description": "Get a transaction category by user id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "[{\"id\":1,\"name\":\"New name\",\"user_id\":16,\"icon_url\":\"test icon url\",\"type\":\"income\",\"is_default\":1,\"status\":\"active\"}]"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9:3000"
+        }
+      ]
+    },
+    "/transactionCategory/": {
+      "get": {
+        "tags": [
+          "transaction-category"
+        ],
+        "description": "List all transaction categories",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "[{\"id\":1,\"name\":\"New name\",\"user_id\":16,\"icon_url\":\"test icon url\",\"type\":\"income\",\"is_default\":1,\"status\":\"active\"},{\"id\":3,\"name\":\"TestName\",\"user_id\":17,\"icon_url\":\"icon_url\",\"type\":\"expense\",\"is_default\":1,\"status\":\"active\"},{\"id\":4,\"name\":\"TestName2\",\"user_id\":17,\"icon_url\":\"icon_url\",\"type\":\"income\",\"is_default\":1,\"status\":\"\"}]"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9:3000"
+        }
+      ]
+    },
+    "/transactionCategory/delete/{id}": {
+      "delete": {
+        "tags": [
+          "transaction-category"
+        ],
+        "description": "Delete a transaction category by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"fieldCount\":0,\"affectedRows\":1,\"insertId\":0,\"info\":\"Rows matched: 1  Changed: 1  Warnings: 0\",\"serverStatus\":2,\"warningStatus\":0,\"changedRows\":1}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9:3000"
+        }
+      ]
+    },
+    "/transaction/delete/{id}": {
+      "delete": {
+        "tags": [
+          "transaction"
+        ],
+        "description": "Auto generated using Swagger Inspector",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"fieldCount\":0,\"affectedRows\":0,\"insertId\":0,\"info\":\"\",\"serverStatus\":2,\"warningStatus\":0}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9:3000"
+        }
+      ]
+    },
+    "/transaction/update/{id}": {
+      "put": {
+        "tags": [
+          "transaction"
+        ],
+        "description": "Update transaction",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/update_id_body"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\n        \"frequency\": \"weekly\",\n        \"user_id\": 16,\n        \"account_id\": 3,\n        \"category_id\": 1,\n        \"status\": \"active\"\n    }"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"fieldCount\":0,\"affectedRows\":1,\"insertId\":0,\"info\":\"Rows matched: 1  Changed: 1  Warnings: 0\",\"serverStatus\":2,\"warningStatus\":0,\"changedRows\":1}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9:3000"
+        }
+      ]
+    },
+    "/transactionCategory/update/{id}": {
+      "put": {
+        "tags": [
+          "transaction-category"
+        ],
+        "description": "Update transaction category",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/update_id_body_1"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\n        \"name\": \"New updated name\",\n        \"user_id\": 16,\n        \"icon_url\": \"test icon url\",\n        \"type\": \"income\",\n        \"is_default\": 1,\n        \"status\": \"active\"\n    }"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"fieldCount\":0,\"affectedRows\":1,\"insertId\":0,\"info\":\"Rows matched: 1  Changed: 1  Warnings: 0\",\"serverStatus\":2,\"warningStatus\":0,\"changedRows\":1}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9:3000"
+        }
+      ]
+    },
+    "/transaction/add": {
+      "post": {
+        "tags": [
+          "transaction"
+        ],
+        "description": "Add a new transaction",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/transaction_add_body"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\n\n        \"frequency\": \"Weekly\",\n        \"user_id\": 16,\n        \"account_id\": 2,\n        \"category_id\": 1,\n        \"status\": \"Inactive\"\n    }"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"fieldCount\":0,\"affectedRows\":1,\"insertId\":9,\"info\":\"\",\"serverStatus\":2,\"warningStatus\":0}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9:3000"
+        }
+      ]
+    },
+    "/transactionCategory/add": {
+      "post": {
+        "tags": [
+          "transaction-category"
+        ],
+        "description": "Add a new transaction category",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/transactionCategory_add_body"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\n        \"name\": \"TestName3\",\n        \"user_id\": \"16\",\n        \"icon_url\": \"icon_url\",\n        \"type\": \"Income\",\n        \"is_default\": \"1\",\n        \"status\": \"status\"\n    }"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"fieldCount\":0,\"affectedRows\":1,\"insertId\":4,\"info\":\"\",\"serverStatus\":2,\"warningStatus\":1}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9:3000"
+        }
+      ]
+    }
+  },
+  "components": {
+    "schemas": {
+      "auth_login_body": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "transactionAccount_add_body": {
+        "type": "object",
+        "properties": {
+          "country": {},
+          "card_number": {
+            "type": "string"
+          },
+          "card_expiration_date": {
+            "type": "string"
+          },
+          "card_cvc": {
+            "type": "string"
+          },
+          "account_type_id": {
+            "type": "integer"
+          },
+          "balance": {
+            "type": "number"
+          },
+          "user_id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "bank_name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "card_owner": {
+            "type": "string"
+          },
+          "currency_id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "auth_signup_body": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "update_id_body": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "integer"
+          },
+          "category_id": {
+            "type": "integer"
+          },
+          "user_id": {
+            "type": "integer"
+          },
+          "frequency": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "update_id_body_1": {
+        "type": "object",
+        "properties": {
+          "icon_url": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "is_default": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "transaction_add_body": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "integer"
+          },
+          "category_id": {
+            "type": "integer"
+          },
+          "user_id": {
+            "type": "integer"
+          },
+          "frequency": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "transactionCategory_add_body": {
+        "type": "object",
+        "properties": {
+          "icon_url": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "is_default": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
