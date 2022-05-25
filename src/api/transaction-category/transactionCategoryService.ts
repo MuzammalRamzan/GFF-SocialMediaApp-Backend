@@ -1,43 +1,62 @@
 import { ITransactionCategoryService, TransactionCategoryType, TransactionCategory } from "./interface";
 import { pool } from "../../database";
+import { TransactionCategoryModel } from "./transactionCategoryModel";
 
 export class TransactionCategoryService implements ITransactionCategoryService {
-    async add (params: TransactionCategory): Promise<TransactionCategory[]> {
-        const [rows, fields] = await pool.promise().query(`
-        INSERT INTO transaction_category (name, user_id, icon_url, type, is_default, status)
-        VALUES (?, ?, ?, ?, ?, ?);`,
-        [params.name, params.user_id, params.icon_url, params.type, params.is_default, params.status])
+    async add (params: TransactionCategory): Promise<TransactionCategoryModel> {
+        const transactionCategory = await TransactionCategoryModel.create({ 
+            name: params.name, 
+            user_id: params.user_id, 
+            icon_url: params.icon_url, 
+            type: params.type, 
+            is_default: params.is_default, 
+            status: params.status
+        })
 
-        return rows as TransactionCategory[]
+        return transactionCategory as TransactionCategoryModel
     }
 
-    async list (): Promise<TransactionCategory[]> {
-        const [rows, fields] = await pool.promise().query(`SELECT * FROM transaction_category`)
+    async list (): Promise<TransactionCategoryModel[]> {
+        const transactionCategories = await TransactionCategoryModel.findAll()
         
-        return rows as TransactionCategory[]
+        return transactionCategories as TransactionCategoryModel[]
     }
 
-    async fetchByUserId (user_id: number): Promise<TransactionCategory[]> {
-        const [rows, fields] = await pool.promise().query(`
-        SELECT * FROM transaction_category WHERE user_id=?`, user_id)
+    async fetchByUserId (user_id: number): Promise<TransactionCategoryModel[]> {
+        const transactionCategories = await TransactionCategoryModel.findAll({
+            where: {
+                user_id: user_id
+            }
+        })
 
-        return rows as TransactionCategory[]
+        return transactionCategories as TransactionCategoryModel[]
     }
 
-    async update (id: number, params: TransactionCategory): Promise<TransactionCategory[]> {
-        const [rows, fields] = await pool.promise().query(`
-        UPDATE transaction_category 
-        SET name = ?, user_id = ?, icon_url = ?, type = ?, is_default = ?, status = ?
-        WHERE id=?`, [params.name, params.user_id, params.icon_url, params.type, params.is_default, params.status, id])
+    async update (id: number, params: TransactionCategory): Promise<Array<any>> {
+        const updatedRow = await TransactionCategoryModel.update({
+            name: params.name, 
+            user_id: params.user_id, 
+            icon_url: params.icon_url, 
+            type: params.type, 
+            is_default: params.is_default, 
+            status: params.status
+        },
+        {
+            where: {
+                id: id
+            }
+        })
 
-        return rows as TransactionCategory[]
+        return updatedRow
     }
 
-    async delete (id: number): Promise<TransactionCategory[]> {
-        const [rows, fields] = await pool.promise().query(`
-        DELETE FROM transaction_category 
-        WHERE id=?`, id)
+    async delete (id: number): Promise<Object> {
+        const deletedRow = await TransactionCategoryModel.destroy({
+            where: {
+                id: id
+            }
+        })
 
-        return rows as TransactionCategory[]
+        return deletedRow
     }
 }

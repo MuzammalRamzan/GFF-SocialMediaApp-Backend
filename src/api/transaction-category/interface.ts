@@ -1,4 +1,5 @@
 import { Request } from "express" 
+import { TransactionCategoryModel } from './transactionCategoryModel'
 
 export type TransactionCategory = {
     id: number
@@ -16,11 +17,11 @@ export enum TransactionCategoryType {
 }
 
 export interface ITransactionCategoryService {
-    list (): Promise<TransactionCategory[]>
-    fetchByUserId (user_id: number): Promise<TransactionCategory[]>
-    add (params: TransactionCategory): Promise<TransactionCategory[]>
-    update (id: number, params: TransactionCategory): Promise<TransactionCategory[]>
-    delete (id: number): Promise<TransactionCategory[]>
+    list (): Promise<TransactionCategoryModel[]>
+    fetchByUserId (user_id: number): Promise<TransactionCategoryModel[]>
+    add (params: TransactionCategory): Promise<TransactionCategoryModel>
+    update (id: number, params: TransactionCategory): Promise<Array<any>>
+    delete (id: number): Promise<Object>
 }
 
 export interface CreateTransactionCategoryRequest extends Request {
@@ -33,7 +34,7 @@ export interface GetTransactionCategoriesByUserIdRequest extends Request {
 
 export interface UpdateTransactionCategoryByIdRequest extends Request {
     user_id: number
-    TransactionCategory: TransactionCategory
+    TransactionCategory: TransactionCategoryModel
 }
 
 export interface DeleteTransactionCategoryRequest extends Request {

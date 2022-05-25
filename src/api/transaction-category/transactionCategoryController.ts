@@ -56,7 +56,7 @@ export class TransactionCategotryController {
         const id = +req.params.id
         try {
             const transactionCategory = await this.transactionCategoryService.delete(id)
-            res.send(transactionCategory)
+            res.send({transactionCategory})
         } catch (err) {
             throw err
         }
