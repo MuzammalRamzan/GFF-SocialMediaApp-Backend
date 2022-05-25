@@ -6,6 +6,7 @@ import { authRouter } from './api/auth/authRouter';
 import { userRouter } from './api/user/userRouter';
 import { transactionAccRouter } from './api/transaction-account/transactionAccRouter';
 import { transactionCategoryRouter } from './api/transaction-category/transactionCategoryRouter';
+import { recordRouter } from './api/record/recordRouter';
 
 const options = {
   swaggerOptions: {
@@ -22,6 +23,7 @@ const options = {
   app.use('/user', userRouter)
   app.use('/transactionAccount', transactionAccRouter)
   app.use('/transactionCategory', transactionCategoryRouter)
+  app.use('/record', recordRouter)
 
   app.listen(process.env.PORT, () => {
     console.log(`Server running at port ${process.env.PORT}`)
