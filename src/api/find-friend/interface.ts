@@ -1,5 +1,5 @@
 import { Request } from "express"
-import { FindFriendModel } from './findFirendModel'
+import { FindFriendModel } from './findFriendModel'
 
 export type FindFriend = {
   id: number

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { FindFriendService } from './findFirendService';
+import { FindFriendService } from './findFriendService';
 import {
   createFindFriendRequest,
 } from './interface';

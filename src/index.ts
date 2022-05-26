@@ -7,7 +7,7 @@ import { userRouter } from './api/user/userRouter';
 import { transactionAccRouter } from './api/transaction-account/transactionAccRouter';
 import { transactionCategoryRouter } from './api/transaction-category/transactionCategoryRouter';
 import { recordRouter } from './api/record/recordRouter';
-import { findFriendRouter } from './api/find-friend/findFirendRouter';
+import { findFriendRouter } from './api/find-friend/findFriendRouter';
 import { sequelize } from './database';
 
 const options = {

@@ -1,4 +1,4 @@
-import { FindFriendModel } from "./findFirendModel";
+import { FindFriendModel } from "./findFriendModel";
 import { FindFriend, IFindFriendService } from "./interface";
 
 export class FindFriendService implements IFindFriendService {
