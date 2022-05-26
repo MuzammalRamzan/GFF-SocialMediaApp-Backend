@@ -7,6 +7,8 @@ import { userRouter } from './api/user/userRouter';
 import { transactionAccRouter } from './api/transaction-account/transactionAccRouter';
 import { transactionCategoryRouter } from './api/transaction-category/transactionCategoryRouter';
 import { recordRouter } from './api/record/recordRouter';
+import { findFriendRouter } from './api/find-friend/findFirendRouter';
+import { sequelize } from './database';
 
 const options = {
   swaggerOptions: {
@@ -14,7 +16,7 @@ const options = {
   }
 };
 
-(async function main (): Promise<void> {
+(async function main(): Promise<void> {
   const app = Express()
 
   app.use(bodyParser.json())
@@ -24,10 +26,18 @@ const options = {
   app.use('/transactionAccount', transactionAccRouter)
   app.use('/transactionCategory', transactionCategoryRouter)
   app.use('/record', recordRouter)
+  app.use('/find-friend', findFriendRouter)
 
   app.listen(process.env.PORT, () => {
     console.log(`Server running at port ${process.env.PORT}`)
   })
+
+  try {
+    await sequelize.authenticate();
+    console.log('Database connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
 })().catch((err) => {
   console.log('Error starting application $s', err.message)
   process.exit(1)
