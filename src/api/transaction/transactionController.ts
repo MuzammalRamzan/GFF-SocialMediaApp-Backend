@@ -12,7 +12,7 @@ export class TransactionController {
 	getAllTransactions = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const transaction = await this.transactionService.list()
-			res.send(transaction)
+			res.status(200).send({ transaction })
 		} catch (err) {
 			throw err
 		}
@@ -23,7 +23,7 @@ export class TransactionController {
 
 		try {
 			const transaction = await this.transactionService.add(params)
-			res.send(transaction)
+			res.status(200).send({ transaction })
 		} catch (err) {
 			throw err
 		}

@@ -1,10 +1,10 @@
-import { ITransaction, TransactionType } from './interface'
+import { ITransactionService, TransactionType } from './interface'
 import { Transaction } from './transactionModel'
 
-export class TransactionService implements ITransaction {
+export class TransactionService implements ITransactionService {
 	async list(): Promise<Transaction[]> {
 		const transactions = await Transaction.findAll()
-		return transactions as Transaction[]
+		return transactions
 	}
 
 	async add(params: TransactionType): Promise<Transaction> {
@@ -15,10 +15,10 @@ export class TransactionService implements ITransaction {
 			category_id: params.category_id,
 			status: params.status
 		})
-		return transaction as Transaction
+		return transaction
 	}
 
-	async update(id: number, params: TransactionType): Promise<number> {
+	async update(id: number, params: TransactionType): Promise<[affectedCount: number]> {
 		const transaction = await Transaction.update(
 			{
 				frequency: params.frequency,
@@ -33,7 +33,7 @@ export class TransactionService implements ITransaction {
 				}
 			}
 		)
-		return transaction as unknown as number
+		return transaction
 	}
 
 	async delete(id: number): Promise<number> {
@@ -42,6 +42,6 @@ export class TransactionService implements ITransaction {
 				id: id
 			}
 		})
-		return transaction as number
+		return transaction
 	}
 }
