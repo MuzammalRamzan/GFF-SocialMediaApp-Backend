@@ -1,24 +1,24 @@
-import { ITransactionAccount, TransactionAccType } from './interface'
-import { TransactionAcc } from './transactionAccModel'
+import { ITransactionAccountService, TransactionAccountType } from './interface'
+import { TransactionAccount } from './transactionAccModel'
 
-export class TransactionAccService implements ITransactionAccount {
-	async list(): Promise<TransactionAcc[]> {
-		const transactionAcc = await TransactionAcc.findAll()
-		return transactionAcc as TransactionAcc[]
+export class TransactionAccService implements ITransactionAccountService {
+	async list(): Promise<TransactionAccount[]> {
+		const transactionAcc = await TransactionAccount.findAll()
+		return transactionAcc as TransactionAccount[]
 	}
 
-	async fetch(id: number): Promise<TransactionAcc[]> {
-		const transactionAcc = await TransactionAcc.findAll({
+	async fetch(id: number): Promise<TransactionAccount[]> {
+		const transactionAccount = await TransactionAccount.findAll({
 			where: {
 				id: id
 			}
 		})
 
-		return transactionAcc as TransactionAcc[]
+		return transactionAccount
 	}
 
-	async add(params: TransactionAccType): Promise<TransactionAcc> {
-		const transactionAcc = await TransactionAcc.create({
+	async add(params: TransactionAccountType): Promise<TransactionAccount> {
+		const transactionAccount = await TransactionAccount.create({
 			balance: params.balance,
 			account_type_id: params.account_type_id,
 			name: params.name,
@@ -32,11 +32,11 @@ export class TransactionAccService implements ITransactionAccount {
 			user_id: params.user_id,
 			status: params.status
 		})
-		return transactionAcc as TransactionAcc
+		return transactionAccount
 	}
 
-	async update(id: number, params: TransactionAccType): Promise<number> {
-		const transactionAcc = await TransactionAcc.update(
+	async update(id: number, params: TransactionAccountType): Promise<[affectedCount: number]> {
+		const transactionAccount = await TransactionAccount.update(
 			{
 				balance: params.balance,
 				account_type_id: params.account_type_id,
@@ -57,6 +57,6 @@ export class TransactionAccService implements ITransactionAccount {
 				}
 			}
 		)
-		return transactionAcc as unknown as number
+		return transactionAccount
 	}
 }

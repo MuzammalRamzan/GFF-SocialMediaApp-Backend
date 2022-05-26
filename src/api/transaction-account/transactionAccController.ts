@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import {
-	TransactionAccType,
+	TransactionAccountType,
 	GetTransactionAccountByIdRequest,
 	CreateTransactionAccountRequest,
 	UpdateTransactionAccountRequest
@@ -16,8 +16,8 @@ export class TransactionAccController {
 
 	getAllTransactionAccounts = async (req: Request, res: Response, next: NextFunction) => {
 		try {
-			const transactionAcc = await this.transactionAccService.list()
-			res.send(transactionAcc)
+			const transactionAccount = await this.transactionAccService.list()
+			res.status(200).send({ transactionAccount })
 		} catch (err) {
 			throw err
 		}
@@ -27,8 +27,8 @@ export class TransactionAccController {
 		const id = +req.params.id
 
 		try {
-			const transactionAcc = await this.transactionAccService.fetch(id)
-			res.send(transactionAcc)
+			const transactionAccount = await this.transactionAccService.fetch(id)
+			res.status(200).send({ transactionAccount })
 		} catch (err) {
 			throw err
 		}
@@ -38,8 +38,8 @@ export class TransactionAccController {
 		const params = req.body
 
 		try {
-			const transactionAcc = await this.transactionAccService.add(params as unknown as TransactionAccType)
-			res.send(transactionAcc)
+			const transactionAccount = await this.transactionAccService.add(params as unknown as TransactionAccountType)
+			res.status(200).send({ transactionAccount })
 		} catch (err) {
 			throw err
 		}
@@ -49,8 +49,8 @@ export class TransactionAccController {
 		const id = +req.params.id
 		const params = req.body
 		try {
-			const transactionAcc = await this.transactionAccService.update(id, params)
-			res.status(200).send({ transactionAcc })
+			const transactionAccount = await this.transactionAccService.update(id, params)
+			res.status(200).send({ transactionAccount })
 		} catch (err) {
 			throw err
 		}

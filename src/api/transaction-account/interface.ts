@@ -1,7 +1,7 @@
 import { Request } from 'express'
-import { TransactionAcc } from './transactionAccModel'
+import { TransactionAccount } from './transactionAccModel'
 
-export type TransactionAccType = {
+export type TransactionAccountType = {
 	id: number
 	account_type_id: number
 	balance: number
@@ -28,17 +28,17 @@ export interface GetTransactionAccountByIdRequest extends Request {
 }
 
 export interface CreateTransactionAccountRequest extends Request {
-	TransactionAccType: TransactionAccType
+	TransactionAccType: TransactionAccountType
 }
 
 export interface UpdateTransactionAccountRequest extends Request {
 	id: number
-	TransactionAccType: TransactionAccType
+	TransactionAccType: TransactionAccountType
 }
 
-export interface ITransactionAccount {
-	list(): Promise<TransactionAcc[]>
-	fetch(id: number): Promise<TransactionAcc[]>
-	add(params: TransactionAccType): Promise<TransactionAcc>
-	update(id: number, params: TransactionAccType): Promise<number>
+export interface ITransactionAccountService {
+	list(): Promise<TransactionAccount[]>
+	fetch(id: number): Promise<TransactionAccount[]>
+	add(params: TransactionAccountType): Promise<TransactionAccount>
+	update(id: number, params: TransactionAccountType): Promise<[affectedCount: number]>
 }

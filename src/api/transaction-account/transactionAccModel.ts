@@ -1,9 +1,9 @@
 import { DataTypes, Model } from 'sequelize'
 import { sequelize } from '../../database/index'
 
-export class TransactionAcc extends Model {}
+export class TransactionAccount extends Model {}
 
-TransactionAcc.init(
+TransactionAccount.init(
 	{
 		id: {
 			type: DataTypes.INTEGER,
