@@ -3,23 +3,23 @@ import { Transaction } from './transactionModel'
 
 export class TransactionService implements ITransaction {
 	async list(): Promise<Transaction[]> {
-		const records = await Transaction.findAll()
-		return records as Transaction[]
+		const transactions = await Transaction.findAll()
+		return transactions as Transaction[]
 	}
 
 	async add(params: TransactionType): Promise<Transaction> {
-		const record = await Transaction.create({
+		const transaction = await Transaction.create({
 			frequency: params.frequency,
 			user_id: params.user_id,
 			account_id: params.account_id,
 			category_id: params.category_id,
 			status: params.status
 		})
-		return record as Transaction
+		return transaction as Transaction
 	}
 
 	async update(id: number, params: TransactionType): Promise<number> {
-		const updatedRecord = await Transaction.update(
+		const transaction = await Transaction.update(
 			{
 				frequency: params.frequency,
 				user_id: params.user_id,
@@ -33,15 +33,15 @@ export class TransactionService implements ITransaction {
 				}
 			}
 		)
-		return updatedRecord as unknown as number
+		return transaction as unknown as number
 	}
 
 	async delete(id: number): Promise<number> {
-		const deleteRecord = await Transaction.destroy({
+		const transaction = await Transaction.destroy({
 			where: {
 				id: id
 			}
 		})
-		return deleteRecord as number
+		return transaction as number
 	}
 }

@@ -1,8 +1,8 @@
-import express from 'express';
-import { TransactionController } from './transactionController';
+import express from 'express'
+import { TransactionController } from './transactionController'
 
 const transactionController = new TransactionController()
-export const transactionRouter = express.Router();
+export const transactionRouter = express.Router()
 
 transactionRouter.get('/list', transactionController.getAllTransactions)
 transactionRouter.post('/add', transactionController.createTransaction as any)
