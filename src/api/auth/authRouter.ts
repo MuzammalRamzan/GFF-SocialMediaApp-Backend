@@ -4,5 +4,5 @@ import { AuthController } from './authController';
 const authController = new AuthController()
 export const authRouter = express.Router();
 
-authRouter.get('/signup', authController.signUp)
-authRouter.get('/login', authController.signIn)
+authRouter.post('/signup', authController.signUp)
+authRouter.post('/login', authController.logIn)
