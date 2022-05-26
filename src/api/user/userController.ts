@@ -1,4 +1,4 @@
-import e, { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { UserService } from './userService';
 
 export class UserController {
@@ -29,10 +29,31 @@ export class UserController {
     }
 
     getUsersByEmail = async (req: Request, res: Response, next: NextFunction) => {
-        const email = req.query.email
+        const email = req.params.email
         try {
             const users = await this.userService.fetchByEmail(email + '')
             res.send(users)
+        } catch (err) {
+            throw err
+        }
+    }
+
+    updateUser = async (req: Request, res: Response, next: NextFunction) => {
+        const id = +req.params.id
+        const params = req.body
+        try {
+            const user = await this.userService.update(id, params)
+            res.send(user)
+        } catch (err) {
+            throw err
+        }
+    }
+
+    deleteUser = async (req: Request, res: Response, next: NextFunction) => {
+        const id = +req.params.id
+        try {
+            const user = await this.userService.delete(id)
+            res.send({user})
         } catch (err) {
             throw err
         }

@@ -1,8 +1,8 @@
 import { IAuthService } from "./interface";
-import { pool } from "../../database";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { User } from "../user/interface";
+import { User } from "../user/userModel";
+import { UserType } from "../user/interface";
 
 export class AuthService implements IAuthService {
     async hashPassword(password: string): Promise<string> {
@@ -27,21 +27,25 @@ export class AuthService implements IAuthService {
         return token;
     }
 
-    async createUser (email: string, password: string): Promise<User[]> {
+    async createUser (email: string, password: string): Promise<User> {
         const passwordHash = await this.hashPassword(password)
 
-        const [rows, fields] = await pool.promise().query(`
-        INSERT INTO user (role_id, firstname, lastname, email, password, phone_number)
-        VALUES (1, 'ime', 'prezime', ?, ?, 091234567);`,
-        [email, passwordHash]
-        )
+        const user = await User.create({ 
+            role_id: '1',
+            firstname: 'ime',
+            lastname: 'prezime',
+            email: email, 
+            password: passwordHash, 
+            phone_number: '123456',
+            default_currency_id: '1'
+        })
 
-        return rows as User[]
+        return user as User
     }
 
-    async checkCreds (email: string, password: string): Promise<User[] | undefined> {
+    async checkCreds (email: string, password: string): Promise<UserType | undefined> {
         const user = await this.checkEmail(email)
-        const isValid = await this.checkPass(password, user[0].password)
+        const isValid = await this.checkPass(password, user.password)
 
         if (!isValid) {
             return
@@ -50,9 +54,13 @@ export class AuthService implements IAuthService {
         return user
     }
 
-    private async checkEmail (email: string): Promise<User[]> {
-        const [rows, fields] = await pool.promise().query(`SELECT * FROM user WHERE email=?`, email)
-        return rows as User[]
+    private async checkEmail (email: string): Promise<UserType> {
+        const user = await User.findOne({
+            where: {
+                email: email
+            }
+        })
+        return user as any
     }
 
     private async checkPass (pass: string, hashedPass: string): Promise<boolean> {

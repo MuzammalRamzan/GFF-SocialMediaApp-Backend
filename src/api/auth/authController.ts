@@ -9,19 +9,19 @@ export class AuthController {
     }
 
     signUp = async (req: Request, res: Response, next: NextFunction) => {
-        const email = req.query.email
-        const pass = req.query.password
+        const email = req.body.email
+        const pass = req.body.password
         try {
             const user = await this.authService.createUser(email + '', pass + '')
-            res.send(user)
+            res.status(200).send(user)
         } catch (err) {
             throw err
         }
     }
 
-    signIn = async (req: Request, res: Response, next: NextFunction) => {
-        const email = req.query.email
-        const password = req.query.password
+    logIn = async (req: Request, res: Response, next: NextFunction) => {
+        const email = req.body.email
+        const password = req.body.password
         try {
             const user = await this.authService.checkCreds(email + '', password + '')
 
@@ -29,7 +29,7 @@ export class AuthController {
                 res.status(404).send('User not found')
             }
 
-            const token = this.authService.generateJwtToken(user![0].email, user![0].password)
+            const token = this.authService.generateJwtToken(user!.email, user!.password)
 
             res.set('auth-token', token)
 

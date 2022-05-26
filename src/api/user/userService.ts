@@ -1,24 +1,68 @@
-import { IUserService } from "./interface";
-import { User } from "./interface";
-import { pool } from "../../database";
+import { IUserService, UserType } from "./interface";
+import { User } from "./userModel";
+import { AuthService } from "../auth/authService"
 
 export class UserService implements IUserService {
+    private readonly authService: AuthService
+
+    constructor () {
+        this.authService = new AuthService()
+    }
+
     async list (): Promise<User[]> {
-        const [rows, fields] = await pool.promise().query(`SELECT * FROM user`)
+        const users = await User.findAll()
         
-        return rows as User[]
+        return users
     }
 
-    async fetchById (id: number): Promise<User[]> {
-        const [rows, fields] = await pool.promise().query(`
-        SELECT * FROM user WHERE id=?`, id)
+    async fetchById (id: number): Promise<User> {
+        const user = await User.findOne({
+            where: {
+                id: id
+            }
+        })
 
-        return rows as User[]
+        return user as any
     }
 
-    async fetchByEmail (email: string): Promise<User[]> {
-        const [rows, fields] = await pool.promise().query(`SELECT * FROM user WHERE email=?`, email)
+    async fetchByEmail (email: string): Promise<User> {
+        const user = await User.findOne({
+            where: {
+                email:email
+            }
+        })
 
-        return rows as User[]
+        return user as any
+    }
+
+    async update (id: number, params: UserType): Promise<[affectedCount: number]> {
+        const passwordHash = await this.authService.hashPassword(params.password)
+
+        const updatedRow = await User.update({
+            role_id: params.role_id,
+            firstname: params.firstname,
+            lastname: params.lastname,
+            email: params.email, 
+            password: passwordHash, 
+            phone_number: params.phone_number,
+            default_currency_id: params.default_currency_id
+        },
+        {
+            where: {
+                id: id
+            }
+        })
+
+        return updatedRow
+    }
+
+    async delete (id: number): Promise<number> {
+        const deletedRow = await User.destroy({
+            where: {
+                id: id
+            }
+        })
+
+        return deletedRow
     }
 }
