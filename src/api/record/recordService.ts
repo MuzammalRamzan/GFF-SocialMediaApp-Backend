@@ -1,13 +1,14 @@
-import { IRecordService, RecordParams } from './interface'
-import { RecordModel } from './recordModel'
+import { IRecordService, RecordType } from './interface'
+import { Record } from './recordModel'
 
 export class RecordService implements IRecordService {
-	async list(): Promise<RecordModel[]> {
-		const records = await RecordModel.findAll()
-		return records as RecordModel[]
+	async list(): Promise<Record[]> {
+		const records = await Record.findAll()
+		return records as Record[]
 	}
-	async add(params: RecordParams): Promise<RecordModel> {
-		const record = await RecordModel.create({
+
+	async add(params: RecordType): Promise<Record> {
+		const record = await Record.create({
 			amount: params.amount,
 			type: params.type,
 			category_id: params.category_id,
@@ -16,10 +17,11 @@ export class RecordService implements IRecordService {
 			currency_id: params.currency_id,
 			account_id: params.account_id
 		})
-		return record as RecordModel
+		return record as Record
 	}
-	async update(id: number, params: RecordParams): Promise<number> {
-		const updatedRecord = await RecordModel.update(
+
+	async update(id: number, params: RecordType): Promise<number> {
+		const updatedRecord = await Record.update(
 			{
 				amount: params.amount,
 				type: params.type,
@@ -37,8 +39,9 @@ export class RecordService implements IRecordService {
 		)
 		return updatedRecord as unknown as number
 	}
+
 	async delete(id: number): Promise<number> {
-		const deleteRecord = await RecordModel.destroy({
+		const deleteRecord = await Record.destroy({
 			where: {
 				id: id
 			}

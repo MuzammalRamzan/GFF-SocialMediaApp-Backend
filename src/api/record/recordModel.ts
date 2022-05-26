@@ -1,9 +1,9 @@
 import { DataTypes, Model } from 'sequelize'
 import { sequelize } from '../../database/index'
 
-export class RecordModel extends Model {}
+export class Record extends Model {}
 
-RecordModel.init(
+Record.init(
 	{
 		id: {
 			type: DataTypes.INTEGER,
