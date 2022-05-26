@@ -5,5 +5,5 @@ const findFriendController = new FindFriendController()
 export const findFriendRouter = express.Router();
 
 findFriendRouter.post('/add', findFriendController.createFindFriendRequest as any)
-findFriendRouter.post('/accept', findFriendController.acceptFriendRequest as any)
-findFriendRouter.post('/reject', findFriendController.rejectFriendRequest as any)
+findFriendRouter.patch('/accept/:request_id', findFriendController.acceptFriendRequest as any)
+findFriendRouter.patch('/reject/:request_id', findFriendController.rejectFriendRequest as any)

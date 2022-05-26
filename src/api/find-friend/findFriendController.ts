@@ -23,7 +23,8 @@ export class FindFriendController {
   }
   acceptFriendRequest = async (req: acceptRejectFriendRequest, res: Response, next: NextFunction) => {
     try {
-      const acceptFriendRequest = await this.findFriendService.approve(req.body.request_id)
+      const id = +req.params.request_id;
+      const acceptFriendRequest = await this.findFriendService.approve(id)
       return res.send(acceptFriendRequest)
     } catch (err) {
       console.log(err);
@@ -32,8 +33,9 @@ export class FindFriendController {
   }
   rejectFriendRequest = async (req: acceptRejectFriendRequest, res: Response, next: NextFunction) => {
     try {
-      const acceptFriendRequest = await this.findFriendService.reject(req.body.request_id)
-      return res.send(acceptFriendRequest)
+      const id = +req.params.request_id;
+      const rejectFriendRequest = await this.findFriendService.reject(id)
+      return res.send(rejectFriendRequest)
     } catch (err) {
       console.log(err);
       throw err

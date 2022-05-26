@@ -26,7 +26,5 @@ export interface createFindFriendRequest extends Request {
   }
 }
 export interface acceptRejectFriendRequest extends Request {
-  body: {
-    request_id: number
-  }
+  request_id: number
 }
