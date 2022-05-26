@@ -20,8 +20,8 @@ export interface ITransactionCategoryService {
     list (): Promise<TransactionCategory[]>
     fetchByUserId (user_id: number): Promise<TransactionCategory[]>
     add (params: TransactionCategoryType): Promise<TransactionCategory>
-    update (id: number, params: TransactionCategoryType): Promise<Array<any>>
-    delete (id: number): Promise<Object>
+    update (id: number, params: TransactionCategoryType): Promise<[affectedCount: number]>
+    delete (id: number): Promise<number>
 }
 
 export interface CreateTransactionCategoryRequest extends Request {

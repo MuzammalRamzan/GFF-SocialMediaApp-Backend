@@ -31,7 +31,7 @@ export class TransactionCategoryService implements ITransactionCategoryService {
         return transactionCategories as TransactionCategory[]
     }
 
-    async update (id: number, params: TransactionCategoryType): Promise<Array<any>> {
+    async update (id: number, params: TransactionCategoryType): Promise<[affectedCount: number]> {
         const updatedRow = await TransactionCategory.update({
             name: params.name, 
             user_id: params.user_id, 
@@ -49,7 +49,7 @@ export class TransactionCategoryService implements ITransactionCategoryService {
         return updatedRow
     }
 
-    async delete (id: number): Promise<Object> {
+    async delete (id: number): Promise<number> {
         const deletedRow = await TransactionCategory.destroy({
             where: {
                 id: id
