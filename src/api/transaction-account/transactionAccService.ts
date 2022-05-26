@@ -1,25 +1,62 @@
-import { ITransactionAccount, TransactionAccountParams } from "./interface";
-import { pool } from "../../database";
+import { ITransactionAccountService, TransactionAccountType } from './interface'
+import { TransactionAccount } from './transactionAccModel'
 
-export class TransactionAccService implements ITransactionAccount {
-    async list(): Promise<TransactionAccountParams[]> {
-        const [rows, fields] = await pool.promise().query(`SELECT * FROM transaction_account`)
-        return rows as TransactionAccountParams[];
-    }
+export class TransactionAccService implements ITransactionAccountService {
+	async list(): Promise<TransactionAccount[]> {
+		const transactionAcc = await TransactionAccount.findAll()
+		return transactionAcc as TransactionAccount[]
+	}
 
-    async fetch(id: number): Promise<TransactionAccountParams[]> {
-        const [rows, fields] = await pool.promise().query(`SELECT * FROM transaction_account WHERE id=? `, id)
+	async fetch(id: number): Promise<TransactionAccount[]> {
+		const transactionAccount = await TransactionAccount.findAll({
+			where: {
+				id: id
+			}
+		})
 
-        return rows as TransactionAccountParams[];
-    }
+		return transactionAccount
+	}
 
-    async add(params: TransactionAccountParams): Promise<TransactionAccountParams[]> {
-        const [rows, fields] = await pool.promise().query(`
-        INSERT INTO transaction_account (account_type_id, balance, name, country, bank_name, card_owner, card_number, card_expiration_date, card_cvc, currency_id, user_id, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
-        [params.account_type_id, params.balance, params.name, params.country, params.bank_name, params.card_owner, params.card_number, params.card_expiration_date, params.card_cvc, params.currency_id, params.user_id, params.status]
-        )
+	async add(params: TransactionAccountType): Promise<TransactionAccount> {
+		const transactionAccount = await TransactionAccount.create({
+			balance: params.balance,
+			account_type_id: params.account_type_id,
+			name: params.name,
+			country: params.country,
+			bank_name: params.bank_name,
+			card_owner: params.card_owner,
+			card_number: params.card_number,
+			card_expiration_date: params.card_expiration_date,
+			card_cvc: params.card_cvc,
+			currency_id: params.currency_id,
+			user_id: params.user_id,
+			status: params.status
+		})
+		return transactionAccount
+	}
 
-        return rows as TransactionAccountParams[];
-    }
+	async update(id: number, params: TransactionAccountType): Promise<[affectedCount: number]> {
+		const transactionAccount = await TransactionAccount.update(
+			{
+				balance: params.balance,
+				account_type_id: params.account_type_id,
+				name: params.name,
+				country: params.country,
+				bank_name: params.bank_name,
+				card_owner: params.card_owner,
+				card_number: params.card_number,
+				card_expiration_date: params.card_expiration_date,
+				card_cvc: params.card_cvc,
+				currency_id: params.currency_id,
+				user_id: params.user_id,
+				status: params.status
+			},
+			{
+				where: {
+					id: id
+				}
+			}
+		)
+		return transactionAccount
+	}
 }
