@@ -1,5 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../database';
+import { RequestType } from "./interface"
 
 export class FindFriendModel extends Model { }
 
@@ -16,12 +17,14 @@ FindFriendModel.init({
   receiver_id: {
     type: DataTypes.INTEGER
   },
-  is_approved: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
+  request_type: {
+    type: DataTypes.ENUM(RequestType.SEND, RequestType.APPROVE, RequestType.REJECT),
+    defaultValue: RequestType.SEND
   },
 },
   {
     sequelize,
     tableName: 'find_friend',
   })
+
+FindFriendModel.sync();
