@@ -13,7 +13,7 @@ export class AuthController {
         const pass = req.body.password
         try {
             const user = await this.authService.createUser(email + '', pass + '')
-            res.send(user)
+            res.status(200).send(user)
         } catch (err) {
             throw err
         }

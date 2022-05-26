@@ -35,7 +35,7 @@ export class UserService implements IUserService {
         return user as any
     }
 
-    async update (id: number, params: UserType): Promise<Array<any>> {
+    async update (id: number, params: UserType): Promise<[affectedCount: number]> {
         const passwordHash = await this.authService.hashPassword(params.password)
 
         const updatedRow = await User.update({
@@ -44,8 +44,8 @@ export class UserService implements IUserService {
             lastname: params.lastname,
             email: params.email, 
             password: passwordHash, 
-            phone_number: '123456',
-            default_currency_id: '1'
+            phone_number: params.phone_number,
+            default_currency_id: params.default_currency_id
         },
         {
             where: {
@@ -56,7 +56,7 @@ export class UserService implements IUserService {
         return updatedRow
     }
 
-    async delete (id: number): Promise<Object> {
+    async delete (id: number): Promise<number> {
         const deletedRow = await User.destroy({
             where: {
                 id: id
