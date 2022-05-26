@@ -1,26 +1,26 @@
 import { Request } from "express" 
-import { TransactionCategoryModel } from './transactionCategoryModel'
+import { TransactionCategory } from './transactionCategoryModel'
 
-export type TransactionCategory = {
+export type TransactionCategoryType = {
     id: number
     name: string
     user_id: string
     icon_url: string
-    type: TransactionCategoryType
+    type: TransactionCategoryTypeEnum
     is_default: number
     status: string
 }
 
-export enum TransactionCategoryType {
+export enum TransactionCategoryTypeEnum {
     Expense = "Expense",
     Income = "Income"
 }
 
 export interface ITransactionCategoryService {
-    list (): Promise<TransactionCategoryModel[]>
-    fetchByUserId (user_id: number): Promise<TransactionCategoryModel[]>
-    add (params: TransactionCategory): Promise<TransactionCategoryModel>
-    update (id: number, params: TransactionCategory): Promise<Array<any>>
+    list (): Promise<TransactionCategory[]>
+    fetchByUserId (user_id: number): Promise<TransactionCategory[]>
+    add (params: TransactionCategoryType): Promise<TransactionCategory>
+    update (id: number, params: TransactionCategoryType): Promise<Array<any>>
     delete (id: number): Promise<Object>
 }
 
@@ -34,7 +34,7 @@ export interface GetTransactionCategoriesByUserIdRequest extends Request {
 
 export interface UpdateTransactionCategoryByIdRequest extends Request {
     user_id: number
-    TransactionCategory: TransactionCategoryModel
+    TransactionCategory: TransactionCategory
 }
 
 export interface DeleteTransactionCategoryRequest extends Request {
