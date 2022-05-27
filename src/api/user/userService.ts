@@ -1,21 +1,22 @@
 import { IUserService, UserType } from "./interface";
 import { User } from "./userModel";
 import { AuthService } from "../auth/authService"
+import { Op } from "sequelize";
 
 export class UserService implements IUserService {
     private readonly authService: AuthService
 
-    constructor () {
+    constructor() {
         this.authService = new AuthService()
     }
 
-    async list (): Promise<User[]> {
+    async list(): Promise<User[]> {
         const users = await User.findAll()
-        
+
         return users
     }
 
-    async fetchById (id: number): Promise<User> {
+    async fetchById(id: number): Promise<User> {
         const user = await User.findOne({
             where: {
                 id: id
@@ -25,48 +26,48 @@ export class UserService implements IUserService {
         return user as any
     }
 
-    async fetchByEmail (email: string): Promise<User> {
+    async fetchByEmail(email: string): Promise<User> {
         const user = await User.findOne({
             where: {
-                email:email
+                email: email
             }
         })
 
         return user as any
     }
 
-    static async findByEmail (email: string): Promise<User> {
+    static async findByEmail(email: string): Promise<User> {
         const user = await User.findOne({
             where: {
-                email:email
+                email: email
             }
         })
 
         return user as User;
     }
 
-    async update (id: number, params: UserType): Promise<[affectedCount: number]> {
+    async update(id: number, params: UserType): Promise<[affectedCount: number]> {
         const passwordHash = await this.authService.hashPassword(params.password)
 
         const updatedRow = await User.update({
             role_id: params.role_id,
             firstname: params.firstname,
             lastname: params.lastname,
-            email: params.email, 
-            password: passwordHash, 
+            email: params.email,
+            password: passwordHash,
             phone_number: params.phone_number,
             default_currency_id: params.default_currency_id
         },
-        {
-            where: {
-                id: id
-            }
-        })
+            {
+                where: {
+                    id: id
+                }
+            })
 
         return updatedRow
     }
 
-    async delete (id: number): Promise<number> {
+    async delete(id: number): Promise<number> {
         const deletedRow = await User.destroy({
             where: {
                 id: id
@@ -74,5 +75,29 @@ export class UserService implements IUserService {
         })
 
         return deletedRow
+    }
+
+    async searchFriend(searchTerm: string, userId: number): Promise<User[]> {
+        const user = await User.findAll({
+            where: {
+                [Op.or]: [
+                    {
+                        firstname: {
+                            [Op.like]: `%${searchTerm}%`
+                        },
+                    },
+                    {
+                        lastname: {
+                            [Op.like]: `%${searchTerm}%`
+                        }
+                    }
+                ],
+                id: {
+                    [Op.ne]: userId
+                }
+            }
+        })
+
+        return user as any
     }
 }
