@@ -1,10 +1,9 @@
-import { ITransactionCategoryService, TransactionCategoryType, TransactionCategory } from "./interface";
-import { pool } from "../../database";
-import { TransactionCategoryModel } from "./transactionCategoryModel";
+import { ITransactionCategoryService, TransactionCategoryType } from "./interface";
+import { TransactionCategory } from "./transactionCategoryModel";
 
 export class TransactionCategoryService implements ITransactionCategoryService {
-    async add (params: TransactionCategory): Promise<TransactionCategoryModel> {
-        const transactionCategory = await TransactionCategoryModel.create({ 
+    async add (params: TransactionCategoryType): Promise<TransactionCategory> {
+        const transactionCategory = await TransactionCategory.create({ 
             name: params.name, 
             user_id: params.user_id, 
             icon_url: params.icon_url, 
@@ -13,27 +12,27 @@ export class TransactionCategoryService implements ITransactionCategoryService {
             status: params.status
         })
 
-        return transactionCategory as TransactionCategoryModel
+        return transactionCategory as TransactionCategory
     }
 
-    async list (): Promise<TransactionCategoryModel[]> {
-        const transactionCategories = await TransactionCategoryModel.findAll()
+    async list (): Promise<TransactionCategory[]> {
+        const transactionCategories = await TransactionCategory.findAll()
         
-        return transactionCategories as TransactionCategoryModel[]
+        return transactionCategories as TransactionCategory[]
     }
 
-    async fetchByUserId (user_id: number): Promise<TransactionCategoryModel[]> {
-        const transactionCategories = await TransactionCategoryModel.findAll({
+    async fetchByUserId (user_id: number): Promise<TransactionCategory[]> {
+        const transactionCategories = await TransactionCategory.findAll({
             where: {
                 user_id: user_id
             }
         })
 
-        return transactionCategories as TransactionCategoryModel[]
+        return transactionCategories as TransactionCategory[]
     }
 
-    async update (id: number, params: TransactionCategory): Promise<Array<any>> {
-        const updatedRow = await TransactionCategoryModel.update({
+    async update (id: number, params: TransactionCategoryType): Promise<[affectedCount: number]> {
+        const updatedRow = await TransactionCategory.update({
             name: params.name, 
             user_id: params.user_id, 
             icon_url: params.icon_url, 
@@ -50,8 +49,8 @@ export class TransactionCategoryService implements ITransactionCategoryService {
         return updatedRow
     }
 
-    async delete (id: number): Promise<Object> {
-        const deletedRow = await TransactionCategoryModel.destroy({
+    async delete (id: number): Promise<number> {
+        const deletedRow = await TransactionCategory.destroy({
             where: {
                 id: id
             }

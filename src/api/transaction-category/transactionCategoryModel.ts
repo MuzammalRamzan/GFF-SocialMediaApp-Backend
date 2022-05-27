@@ -1,9 +1,9 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../database';
 
-export class TransactionCategoryModel extends Model {} 
+export class TransactionCategory extends Model {} 
 
-TransactionCategoryModel.init({
+TransactionCategory.init({
     id: {
         type: DataTypes.INTEGER,
         allowNull: false,
