@@ -1,6 +1,9 @@
+import { UserType } from "../user/interface"
+import { User } from "../user/userModel"
+
 export interface IAuthService {
-    createUser (email: string, password: string): Promise<any>
-    // login (email: string, password: string): Promise<any>
+    createUser (email: string, password: string): Promise<User>
+    checkCreds (email: string, password: string): Promise<UserType | undefined>
     hashPassword (password: string): Promise<string>
     generateJwtToken (email: string, password: string): string
 }
