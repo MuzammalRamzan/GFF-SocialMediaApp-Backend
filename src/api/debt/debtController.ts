@@ -1,5 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
 import { DebtService } from './debtService'
+import { CreateDebtRequest, 
+         DeleteDebtRequest, 
+         GetByIdRequest, 
+         GetDueDateByDebtIdRequest, 
+         UpdateDebtRequest } from './interface'
 
 export class DebtController {
 	private readonly debtService: DebtService
@@ -17,7 +22,7 @@ export class DebtController {
 		}
 	}
 
-    getById = async (req: Request, res: Response, next: NextFunction) => {
+    getById = async (req: GetByIdRequest, res: Response, next: NextFunction) => {
         const id = +req.params.id
 
         try {
@@ -28,7 +33,7 @@ export class DebtController {
         }
     }
 
-    getDueDateByDebtId = async (req: Request, res: Response, next: NextFunction) => {
+    getDueDateByDebtId = async (req: GetDueDateByDebtIdRequest, res: Response, next: NextFunction) => {
         const id = +req.params.id
         try {
             const dueDate = await this.debtService.fetchDueDateById(id)
@@ -38,7 +43,7 @@ export class DebtController {
         }
     }
 
-	createDebt = async (req: Request, res: Response, next: NextFunction) => {
+	createDebt = async (req: CreateDebtRequest, res: Response, next: NextFunction) => {
 		const params = req.body
 
 		try {
@@ -49,7 +54,7 @@ export class DebtController {
 		}
 	}
 
-	updateDebt = async (req: Request, res: Response, next: NextFunction) => {
+	updateDebt = async (req: UpdateDebtRequest, res: Response, next: NextFunction) => {
 		const id = +req.params.id
 		const params = req.body
 		try {
@@ -60,7 +65,7 @@ export class DebtController {
 		}
 	}
 
-	deleteDebt = async (req: Request, res: Response, next: NextFunction) => {
+	deleteDebt = async (req: DeleteDebtRequest, res: Response, next: NextFunction) => {
 		const id = +req.params.id
 		try {
 			const debt = await this.debtService.delete(id)

@@ -16,3 +16,24 @@ export interface IDebtService {
 	update(id: number, params: DebtType): Promise<[affectedCount: number]>
 	delete(id: number): Promise<number>
 }
+
+export interface GetByIdRequest extends Request {
+    id: number
+}
+
+export interface GetDueDateByDebtIdRequest extends Request {
+    id: number
+}
+
+export interface CreateDebtRequest extends Request {
+    DebtType: DebtType
+}
+
+export interface UpdateDebtRequest extends Request {
+    id: number
+    DebtType: DebtType
+}
+
+export interface DeleteDebtRequest extends Request {
+    id: number
+}
