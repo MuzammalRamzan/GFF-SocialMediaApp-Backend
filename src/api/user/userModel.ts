@@ -1,7 +1,18 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../database';
 
-export class User extends Model {} 
+export interface IUser {
+    id: number;
+    email: string;
+    firstname: string;
+    lastname: string;
+    phone_number: string;
+    default_currency_id: number;
+    role_id: number;
+    password: string;
+}
+
+export class User extends Model { }
 User.init({
     id: {
         type: DataTypes.INTEGER,
@@ -31,7 +42,7 @@ User.init({
         type: DataTypes.INTEGER
     }
 },
-{
-    sequelize,
-    tableName: 'user',
-})
+    {
+        sequelize,
+        tableName: 'user',
+    })

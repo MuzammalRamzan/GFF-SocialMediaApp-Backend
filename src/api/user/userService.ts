@@ -35,6 +35,16 @@ export class UserService implements IUserService {
         return user as any
     }
 
+    static async findByEmail (email: string): Promise<User> {
+        const user = await User.findOne({
+            where: {
+                email:email
+            }
+        })
+
+        return user as User;
+    }
+
     async update (id: number, params: UserType): Promise<[affectedCount: number]> {
         const passwordHash = await this.authService.hashPassword(params.password)
 
