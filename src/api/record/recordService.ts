@@ -4,29 +4,30 @@ import { Record } from './recordModel'
 export class RecordService implements IRecordService {
 	async list(): Promise<Record[]> {
 		const records = await Record.findAll()
-		return records as Record[]
+		return records
 	}
 
 	async add(params: RecordType): Promise<Record> {
+		const timestamp = new Date().getTime()
+
 		const record = await Record.create({
 			amount: params.amount,
 			type: params.type,
 			category_id: params.category_id,
-			timestamp: params.timestamp,
+			timestamp: timestamp,
 			transaction_id: params.transaction_id,
 			currency_id: params.currency_id,
 			account_id: params.account_id
 		})
-		return record as Record
+		return record
 	}
 
-	async update(id: number, params: RecordType): Promise<number> {
-		const updatedRecord = await Record.update(
+	async update(id: number, params: RecordType): Promise<[affectedCount: number]> {
+		const record = await Record.update(
 			{
 				amount: params.amount,
 				type: params.type,
 				category_id: params.category_id,
-				timestamp: params.timestamp,
 				transaction_id: params.transaction_id,
 				currency_id: params.currency_id,
 				account_id: params.account_id
@@ -37,15 +38,15 @@ export class RecordService implements IRecordService {
 				}
 			}
 		)
-		return updatedRecord as unknown as number
+		return record
 	}
 
 	async delete(id: number): Promise<number> {
-		const deleteRecord = await Record.destroy({
+		const record = await Record.destroy({
 			where: {
 				id: id
 			}
 		})
-		return deleteRecord as number
+		return record
 	}
 }
