@@ -64,7 +64,7 @@ export class AuthService implements IAuthService {
                 email: email
             }
         })
-        return user as any
+        return user?.get();
     }
 
     private async checkPass (pass: string, hashedPass: string): Promise<boolean> {

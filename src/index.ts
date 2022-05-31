@@ -10,6 +10,7 @@ import { transactionCategoryRouter } from './api/transaction-category/transactio
 import { recordRouter } from './api/record/recordRouter';
 import { findFriendRouter } from './api/find-friend/findFriendRouter';
 import { sequelize } from './database';
+import { mentorMatcherRouter } from './api/mentor-matcher/mentorMatcherRouter';
 
 const options = {
   swaggerOptions: {
@@ -28,7 +29,8 @@ const options = {
   app.use('/transactionAccount', transactionAccRouter)
   app.use('/transactionCategory', transactionCategoryRouter)
   app.use('/record', recordRouter)
-  app.use('/find-friend', findFriendRouter)
+  app.use('/find-friend', findFriendRouter);
+  app.use('/mentor-matcher', mentorMatcherRouter);
 
   app.listen(process.env.PORT, () => {
     console.log(`Server running at port ${process.env.PORT}`)
