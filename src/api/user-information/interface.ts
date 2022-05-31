@@ -4,6 +4,7 @@ import { UserInformation } from "./userInformationModel"
 export type UserInformationType = {
     id: number
     user_id: number
+    profile_url: string
     bio: string
     date_of_birth: Date
     gender: GenderEnum
@@ -14,8 +15,11 @@ export type UserInformationType = {
     state: string
     zip_code: number
     address: string
-    hashtags: string
-    social_media: string
+    twitter: string
+    facebook: string
+    linkedin: string
+    instagram: string
+    tiktok: string
     employer_name: string
     job_role: string
     education: string

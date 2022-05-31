@@ -7,79 +7,97 @@ UserInformation.init({
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
-        allowNull: false,
+        allowNull: true,
     },
     user_id: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true,
+        unique: true
+    },
+    profile_url: {
+        type: DataTypes.STRING,
+        allowNull: true
     },
     bio: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     date_of_birth: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
     },
     gender: {
         type: DataTypes.ENUM('male', 'female', 'other'),
-        allowNull: false
+        allowNull: true
         
     },
     email: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     phone_number: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     country: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     city: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     state: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     zip_code: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
     },
     address: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
-    hashtags: {
+    twitter: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
-    social_media: {
+    facebook: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
+    },
+    instagram: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    linkedin: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    tiktok: {
+        type: DataTypes.STRING,
+        allowNull: true
     },
     employer_name: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     job_role: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     education: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     other_education: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: true
     },
     profile_role: {
         type: DataTypes.ENUM('employer', 'mentor', 'wellness warrior'),
-        allowNull: false
+        allowNull: true
     }
 },
 {
