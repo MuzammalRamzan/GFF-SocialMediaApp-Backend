@@ -9,6 +9,7 @@ import { transactionAccRouter } from './api/transaction-account/transactionAccRo
 import { transactionCategoryRouter } from './api/transaction-category/transactionCategoryRouter';
 import { recordRouter } from './api/record/recordRouter';
 import { userInformationRouter } from './api/user-information/userInformationRouter';
+import { hashtagRouter } from './api/hashtag/hashtagRouter';
 
 const options = {
   swaggerOptions: {
@@ -28,6 +29,7 @@ const options = {
   app.use('/transactionCategory', transactionCategoryRouter)
   app.use('/record', recordRouter)
   app.use('/userInformation', userInformationRouter)
+  app.use('/hashtag', hashtagRouter)
 
   app.listen(process.env.PORT, () => {
     console.log(`Server running at port ${process.env.PORT}`)
