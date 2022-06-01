@@ -27,17 +27,16 @@ export class AuthService implements IAuthService {
         return token;
     }
 
-    async createUser (email: string, password: string): Promise<User> {
+    async createUser (email: string, fullName: string, password: string): Promise<User> {
         const passwordHash = await this.hashPassword(password)
 
-        const user = await User.create({ 
+        const user = await User.create({       
             role_id: '1',
-            firstname: 'ime',
-            lastname: 'prezime',
+            full_name: fullName,
             email: email, 
             password: passwordHash, 
-            phone_number: '123456',
-            default_currency_id: '1'
+            default_currency_id: '1',
+            user_feature_id: ''
         })
 
         return user as User
