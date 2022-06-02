@@ -32,7 +32,8 @@ User.init({
     },
     user_feature_id: {
         type: DataTypes.INTEGER,
-        allowNull: true
+        allowNull: true,
+        defaultValue: null
     }
 },
 {

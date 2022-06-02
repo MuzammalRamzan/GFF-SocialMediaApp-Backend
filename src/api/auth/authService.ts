@@ -35,8 +35,7 @@ export class AuthService implements IAuthService {
             full_name: fullName,
             email: email, 
             password: passwordHash, 
-            default_currency_id: '1',
-            user_feature_id: ''
+            default_currency_id: '1'
         })
 
         return user as User
