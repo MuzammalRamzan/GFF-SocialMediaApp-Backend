@@ -45,6 +45,10 @@ MentorMatcherModel.init({
   status: {
     type: DataTypes.ENUM(MentorMatcherRequestStatus.SEND, MentorMatcherRequestStatus.APPROVE, MentorMatcherRequestStatus.REJECT),
     allowNull: true,
+  },
+  is_contract_signed: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   }
 }, {
   sequelize: sequelize,

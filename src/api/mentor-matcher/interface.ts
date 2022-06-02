@@ -15,6 +15,8 @@ export interface IMentorMatcherService {
   addMentorToFavorite(userId: number, mentor_id: number): Promise<boolean>
   removeMentorFromFavorite(userId: number, mentor_id: number): Promise<boolean>
   isFavoriteExist(userId: number, mentor_id: number): Promise<boolean>
+  signContract(userId: number, mentor_id: number): Promise<boolean>
+  findByIdForMentor(request_id:number, userId: number): Promise<IMentorMatcher>
 }
 
 export interface IMentorRequest {

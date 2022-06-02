@@ -238,4 +238,33 @@ export class MentorMatcherService implements IMentorMatcherService {
 
     return data ? true : false;
   }
+
+  async findByIdForMentor(id: number, userId: number): Promise<IMentorMatcher> {
+    const data = await MentorMatcherModel.findOne({
+      where: {
+        id: id,
+        mentor_id: userId
+      }
+    })
+
+    return data?.get();
+  }
+
+  async signContract(userId: number, request_id: number): Promise<boolean> {
+    const data = await MentorMatcherModel.update(
+      {
+        is_contract_signed: true
+      },
+      {
+        where: {
+          id: request_id,
+          mentor_id: userId,
+          status: MentorMatcherRequestStatus.APPROVE,
+          request_type: MentorMatcherRequestType.MENTOR,
+          is_contract_signed: false
+        },
+      })
+
+    return data[0] ? true : false;
+  }
 }

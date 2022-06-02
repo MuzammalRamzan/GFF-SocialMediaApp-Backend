@@ -34,3 +34,6 @@ mentorMatcherRouter.get('/request/mentor', authMiddleware, controller.getMentorR
 mentorMatcherRouter.get('/request/mentee', authMiddleware, controller.getMentorRequestsByMenteeId as Application);
 mentorMatcherRouter.get('/mentor/favorite/add', authMiddleware, requiredMentorId, controller.addMentorToFavorite as Application);
 mentorMatcherRouter.get('/mentor/favorite/remove', authMiddleware, requiredMentorId, controller.removeMentorFromFavorite as Application);
+
+// this might be signed by both parties, currently only mentor can sign the contract
+mentorMatcherRouter.get('/sign-contract', authMiddleware, requiredRequestId, controller.signContract as Application);

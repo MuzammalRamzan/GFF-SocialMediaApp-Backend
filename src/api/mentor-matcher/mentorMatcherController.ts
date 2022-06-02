@@ -1,4 +1,4 @@
-import { Response, NextFunction, Request } from 'express';
+import { Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 import { IAuthenticatedRequest } from '../helper/authMiddleware';
 import { MentorMatcherAuthRequest } from './interface';
@@ -17,7 +17,10 @@ export class MentorMatcherController {
       const searchTerm = req.query.searchTerm as string;
 
       const result = await this.mentorMatcherService.findMentors(userId, searchTerm);
-      return res.status(200).json(result);
+      return res.status(200).json({
+        status: 200,
+        data: result
+      });
     } catch (error) {
       next(error);
     }
@@ -28,7 +31,10 @@ export class MentorMatcherController {
       const userId = req?.user?.id || 0 as number;
 
       const result = await this.mentorMatcherService.myMentors(userId);
-      return res.status(200).json(result);
+      return res.status(200).json({
+        status: 200,
+        data: result
+      });
     } catch (error) {
       next(error);
     }
@@ -39,7 +45,10 @@ export class MentorMatcherController {
       const userId = req?.user?.id || 0 as number;
 
       const result = await this.mentorMatcherService.myMentees(userId);
-      return res.status(200).json(result);
+      return res.status(200).json({
+        status: 200,
+        data: result
+      });
     } catch (error) {
       next(error);
     }
@@ -145,7 +154,10 @@ export class MentorMatcherController {
       const userId = req?.user?.id || 0 as number;
 
       const result = await this.mentorMatcherService.getMentorRequests(userId);
-      return res.status(200).json(result);
+      return res.status(200).json({
+        status: 200,
+        data: result
+      });
     } catch (error) {
       next(error);
     }
@@ -156,7 +168,10 @@ export class MentorMatcherController {
       const userId = req?.user?.id || 0 as number;
 
       const result = await this.mentorMatcherService.getMentorRequestsByMenteeId(userId);
-      return res.status(200).json(result);
+      return res.status(200).json({
+        status: 200,
+        data: result
+      });
     } catch (error) {
       next(error);
     }
@@ -188,7 +203,10 @@ export class MentorMatcherController {
       }
 
       const result = await this.mentorMatcherService.removeMentorFromFavorite(userId, mentor_id);
-      return res.status(200).json(result ? "Mentor removed from favorite list successfully!" : "Mentor not found!");
+      return res.status(200).json({
+        status: 200,
+        data: result ? "Mentor removed from favorite list successfully!" : "Mentor not found!"
+      });
     } catch (error) {
       next(error);
     }
@@ -220,7 +238,38 @@ export class MentorMatcherController {
       }
 
       const result = await this.mentorMatcherService.addMentorToFavorite(userId, mentor_id);
-      return res.status(200).json(result ? "Mentor added to favorite list successfully!" : "Error occurred while adding into favorite!");
+      return res.status(200).json({
+        status: 200,
+        data: result ? "Mentor added to favorite list successfully!" : "Error occurred while adding into favorite!"
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public signContract = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+      const errors = validationResult(req).array({ onlyFirstError: true });
+      if (errors.length) {
+        return res.status(400).json({ errors: errors, message: 'Validation error', status: 400 });
+      }
+
+      const userId = req?.user?.id || 0 as number;
+      const request_id = Number(req.query.request_id || 0);
+
+      const is_exist = await this.mentorMatcherService.findByIdForMentor(request_id, userId);
+      if (!is_exist) {
+        return res.status(401).json({
+          message: 'You are not authorized to access this resource!',
+          status: 401
+        });
+      }
+
+      const result = await this.mentorMatcherService.signContract(userId, request_id);
+      return res.status(200).json({
+        status: 200,
+        data: result ? "Contract signed successfully!" : "The contract has been signed already or you haven't accepted the mentor request yet!"
+      });
     } catch (error) {
       next(error);
     }
