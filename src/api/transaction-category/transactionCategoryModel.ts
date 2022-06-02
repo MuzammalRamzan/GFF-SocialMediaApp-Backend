@@ -1,9 +1,9 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../database';
 
-export class TransactionCategoryModel extends Model {} 
+export class TransactionCategory extends Model {} 
 
-TransactionCategoryModel.init({
+TransactionCategory.init({
     id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -11,22 +11,34 @@ TransactionCategoryModel.init({
         primaryKey: true
     },
     name: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     user_id: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        allowNull: false,
     },
     icon_url: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    colour: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     type: {
-        type: DataTypes.ENUM('income', 'expense')
+        type: DataTypes.ENUM('income', 'expense'),
+        allowNull: false,
     },
     is_default: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 1
     },
     status: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'active'
     }
 },
 {

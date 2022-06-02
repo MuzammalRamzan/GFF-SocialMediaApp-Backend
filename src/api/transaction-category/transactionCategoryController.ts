@@ -16,7 +16,7 @@ export class TransactionCategotryController {
         const params = req.body
         try {
             const transactionCategory = await this.transactionCategoryService.add(params)
-            res.send(transactionCategory)
+            res.status(200).send(transactionCategory)
         } catch (err) {
             throw err
         }
@@ -25,7 +25,7 @@ export class TransactionCategotryController {
     getAllTransactionCategories = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const transactionCategories = await this.transactionCategoryService.list()
-            res.send(transactionCategories)
+            res.status(200).send(transactionCategories)
         } catch (err) {
             throw err
         }
@@ -35,7 +35,7 @@ export class TransactionCategotryController {
         const userId = +req.params.user_id
         try {
             const transactionCategories = await this.transactionCategoryService.fetchByUserId(userId)
-            res.send(transactionCategories)
+            res.status(200).send(transactionCategories)
         } catch (err) {
             throw err
         }
@@ -56,7 +56,7 @@ export class TransactionCategotryController {
         const id = +req.params.id
         try {
             const transactionCategory = await this.transactionCategoryService.delete(id)
-            res.send({transactionCategory})
+            res.status(200).send({transactionCategory})
         } catch (err) {
             throw err
         }

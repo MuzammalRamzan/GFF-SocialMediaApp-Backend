@@ -51,12 +51,11 @@ export class UserService implements IUserService {
 
         const updatedRow = await User.update({
             role_id: params.role_id,
-            firstname: params.firstname,
-            lastname: params.lastname,
-            email: params.email,
-            password: passwordHash,
-            phone_number: params.phone_number,
-            default_currency_id: params.default_currency_id
+            full_name: params.full_name,
+            email: params.email, 
+            password: passwordHash, 
+            default_currency_id: params.default_currency_id,
+            user_feature_id: params.user_feature_id
         },
             {
                 where: {
