@@ -6,29 +6,34 @@ User.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
-        primaryKey: true
+        primaryKey: true,
+        allowNull:false,
     },
     role_id: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        allowNull:false,
     },
-    firstname: {
-        type: DataTypes.STRING
-    },
-    lastname: {
-        type: DataTypes.STRING
+    full_name: {
+        type: DataTypes.STRING,
+        allowNull:false,
     },
     email: {
         type: DataTypes.STRING,
+        allowNull:false,
         unique: true
     },
     password: {
-        type: DataTypes.STRING
-    },
-    phone_number: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull:false
     },
     default_currency_id: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        defaultValue:1
+    },
+    user_feature_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: null
     }
 },
 {

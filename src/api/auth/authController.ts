@@ -11,8 +11,9 @@ export class AuthController {
     signUp = async (req: Request, res: Response, next: NextFunction) => {
         const email = req.body.email
         const pass = req.body.password
+        const fullName = req.body.full_name
         try {
-            const user = await this.authService.createUser(email + '', pass + '')
+            const user = await this.authService.createUser(email + '', fullName + '', pass + '')
             res.status(200).send(user)
         } catch (err) {
             throw err

@@ -3,12 +3,11 @@ import { User } from "./userModel"
 export type UserType = {
     default_currency_id: number
     email: string
-    firstname: string
+    full_name: string
     id: number
-    lastname: string
     password: string
-    phone_number: string
     role_id: number
+    user_feature_id: number
 }
 
 export interface IUserService {
