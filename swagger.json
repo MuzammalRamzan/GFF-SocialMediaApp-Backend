@@ -5,11 +5,8 @@
     "description": "",
     "version": "0.3"
   },
-  "servers": [
-    {
-      "url": "http://3.232.6.9:3000"
-    }
-  ],
+  "schemes": ["http", "https"],
+  "host": "localhost:3000",
   "tags": [
     {
       "name": "auth",
@@ -30,14 +27,885 @@
     {
       "name": "transaction-category",
       "description": "Transaction-Category related routes"
+    },
+    {
+      "name": "record",
+      "description": "Record related routes"
+    },
+    {
+      "name": "hashtag",
+      "description": "Hashtags related routes"
+    },
+    {
+      "name": "debt",
+      "description": "Debt related routes"
+    },
+    {
+      "name": "user-information",
+      "description": "User information related routes"
     }
   ],
   "paths": {
+    "/debt/delete/{id}": {
+      "delete": {
+        "tags": ["debt"],
+        "description": "Delete a debt",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Debt ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"debt\":1}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9"
+        }
+      ]
+    },
+    "/debt/{id}": {
+      "get": {
+        "tags": ["debt"],
+        "description": "Get debt by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Debt ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "[{\"id\": 2,\"amount\":500,\"due_date\":\"2022-05-05\",\"user_id\":17}]"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9"
+        }
+      ]
+    },
+    "/hashtag/add": {
+      "post": {
+        "tags": ["hashtag"],
+        "description": "Add new hashtag",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/hashtag_add_body"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\n    \"hashtag_name\": \" testni hashtag\",\n    \"user_information_id\": 2\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"hashtag\":{\"id\":7,\"hashtag_name\":\"#testnihashtag\",\"user_information_id\":2}}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9"
+        }
+      ]
+    },
+    "/userInformation/add": {
+      "post": {
+        "tags": ["user-information"],
+        "description": "Add additional user information",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/userInformation_add_body"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\n    \"user_id\": 37,\n    \"profile_url\": null,\n    \"bio\": \"Test my bio\",\n    \"date_of_birth\": \"2022-05-31\",\n    \"gender\": \"male\",\n    \"email\": \"email\",\n    \"phone_number\": \"+55555555555\",\n    \"country\": \"test country\",\n    \"city\": \"test city\",\n    \"state\": \"test state\",\n    \"zip_code\": 10000,\n    \"address\": \"Test my address \",\n    \"twitter\": \"frfrfrfrfrf\",\n    \"facebook\": null,\n    \"instagram\": null,\n    \"linkedin\": null,\n    \"tiktok\": null,\n    \"employer_name\": \"Test employer\",\n    \"job_role\": \"CEO\",\n    \"education\": \"No education\",\n    \"other_education\": \"No test education\"\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"id\":7,\"user_id\":37,\"bio\":\"Test my bio\",\"date_of_birth\":\"2022-05-31T00:00:00.000Z\",\"gender\":\"male\",\"email\":\"email\",\"phone_number\":\"+55555555555\",\"country\":\"test country\",\"city\":\"test city\",\"state\":\"test state\",\"zip_code\":10000,\"address\":\"Test my address \",\"twitter\":\"frfrfrfrfrf\",\"employer_name\":\"Test employer\",\"job_role\":\"CEO\",\"education\":\"No education\",\"other_education\":\"No test education\"}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9"
+        }
+      ]
+    },
+    "/debt/": {
+      "get": {
+        "tags": ["debt"],
+        "description": "Lists all debts",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "[{ \"id\": 1,\"amount\": 300,\"due_date\": \"2022-07-07\",\"user_id\": 17},{\"id\": 2,\"amount\": 500,\"due_date\": \"2022-05-05\",\"user_id\": 17},{\"id\": 4,\"amount\": 100,\"due_date\": \"2022-08-05\",\"user_id\": 16}]"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9"
+        }
+      ]
+    },
+    "/hashtag/update/{id}": {
+      "put": {
+        "tags": ["hashtag"],
+        "description": "Update hashtag",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Hashtag ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/update_id_body_2"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\n            \"hashtag_name\": \"#hashtagagain\",\n            \"user_information_id\": 1\n        }"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"hashtag\":1}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9"
+        }
+      ]
+    },
+    "/hashtag/list": {
+      "get": {
+        "tags": ["hashtag"],
+        "description": "Lists all hashtags",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "hashtags:\n  - id: 1\n    hashtag_name: '#test'\n    user_information_id: 1\n  - id: 4\n    hashtag_name: '#testtest'\n    user_information_id: 2\n  - id: 5\n    hashtag_name: '#hashtagagain'\n    user_information_id: 1"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9"
+        }
+      ]
+    },
+    "/userInformation/update/{id}": {
+      "put": {
+        "tags": ["user-information"],
+        "description": "Updates user informations",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User information ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/update_id_body_3"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\n    \"user_id\": 39,\n    \"profile_url\": null,\n    \"bio\": \"Test my bio\",\n    \"date_of_birth\": \"2022-05-31\",\n    \"gender\": \"male\",\n    \"email\": \"email\",\n    \"phone_number\": \"+55555555555\",\n    \"country\": \"test country\",\n    \"city\": \"test city\",\n    \"state\": \"test state\",\n    \"zip_code\": 10000,\n    \"address\": \"Test my address \",\n    \"twitter\": \"frfrfrfrfrf\",\n    \"facebook\": null,\n    \"instagram\": null,\n    \"linkedin\": null,\n    \"tiktok\": null,\n    \"employer_name\": \"Test employer\",\n    \"job_role\": \"CEO\",\n    \"education\": \"No education\",\n    \"other_education\": \"No test education\"\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"userInformation\":1}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9"
+        }
+      ]
+    },
+    "/debt/update/{id}": {
+      "put": {
+        "tags": ["debt"],
+        "description": "Update debt by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Debt ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/update_id_body_4"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\n\t\"amount\": \"500\",\n\t\"due_date\": \"2022-05-07\",\n\t\"user_id\": \"16\"\n    }"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"debt\":1}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9"
+        }
+      ]
+    },
+    "/hashtag/{user_info_id}": {
+      "get": {
+        "tags": ["hashtag"],
+        "description": "Gets hashtag by user information id",
+        "parameters": [
+          {
+            "name": "user_info_id",
+            "in": "path",
+            "description": "User information id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "[{\"id\": 1,\"hashtag_name\": \"#test\",\"user_information_id\": 1},{\"id\": 5,\"hashtag_name\": \"#hashtagagain\", \"user_information_id\": 1},{\"id\": 6,\"hashtag_name\": \"#testagain\",\"user_information_id\": 1}] "
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9"
+        }
+      ]
+    },
+    "/hashtag/delete/{id}": {
+      "delete": {
+        "tags": ["hashtag"],
+        "description": "Deletes hashtag",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Hashtag ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"hashtag\":1}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9"
+        }
+      ]
+    },
+    "/debt/dueDate/{id}": {
+      "get": {
+        "tags": ["debt"],
+        "description": "Gets due date for debt",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Debt ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "text/html; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9"
+        }
+      ]
+    },
+    "/userInformation/delete/{id}": {
+      "delete": {
+        "tags": ["user-information"],
+        "description": "Deletes user infomations for user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Debt ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"userInformation\":1}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9"
+        }
+      ]
+    },
+    "/userInformation/{user_id}": {
+      "get": {
+        "tags": ["user-information"],
+        "description": "Gets user information by user id",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "Debt ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"id\":7,\"user_id\":37,\"bio\":\"Test my bio\",\"date_of_birth\":\"2022-05-31T00:00:00.000Z\",\"gender\":\"male\",\"email\":\"email\",\"phone_number\":\"+55555555555\",\"country\":\"test country\",\"city\":\"test city\",\"state\":\"test state\",\"zip_code\":10000,\"address\":\"Test my address \",\"twitter\":\"frfrfrfrfrf\",\"employer_name\":\"Test employer\",\"job_role\":\"CEO\",\"education\":\"No education\",\"other_education\":\"No test education\"}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost"
+        }
+      ]
+    },
+    "/debt/add": {
+      "post": {
+        "tags": ["debt"],
+        "description": "Adds new debt",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/debt_add_body"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\n\t\"amount\": \"500\",\n\t\"due_date\": \"2022-05-07\",\n\t\"user_id\": \"17\"\n    }"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"id\":6,\"amount\":500,\"due_date\":\"2022-05-07T00:00:00.000Z\",\"user_id\":17}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9"
+        }
+      ]
+    },
+    "/record/delete/{id}": {
+      "delete": {
+        "tags": ["record"],
+        "description": "Delete a record",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"record\":1}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9"
+        }
+      ]
+    },
+    "/record/list": {
+      "get": {
+        "tags": ["record"],
+        "description": "Get all records",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {
+                  "0": {
+                    "value": [
+                      {
+                        "id": 10,
+                        "amount": 30,
+                        "type": "expense",
+                        "category_id": 1,
+                        "timestamp": "2022-05-25T15:57:41.000Z",
+                        "transaction_id": 6,
+                        "currency_id": 1,
+                        "account_id": 6
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9"
+        }
+      ]
+    },
+    "/record/add": {
+      "post": {
+        "tags": ["record"],
+        "description": "Add a record",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/record_add_body"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\n        \"amount\": 30,\n        \"type\": \"expense\",\n        \"category_id\": 1,\n        \"transaction_id\": 6,\n        \"currency_id\": 1,\n        \"account_id\": 6\n    }"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "examples": {
+                  "0": {
+                    "value": {
+                      "amount": 30,
+                      "type": "expense",
+                      "category_id": 1,
+                      "transaction_id": 6,
+                      "currency_id": 1,
+                      "account_id": 6
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9"
+        }
+      ]
+    },
+    "/record/update/{id}": {
+      "put": {
+        "tags": ["record"],
+        "description": "Update a record",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/update_10_body"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\n        \"amount\": 100\n    }"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"record\":1}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9"
+        }
+      ]
+    },
     "/auth/login": {
       "post": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "description": "Log in a user",
         "requestBody": {
           "content": {
@@ -61,7 +929,7 @@
                 "schema": {
                   "type": "string"
                 },
-                "example": "{\"data\":{\"user\":[{\"id\":37,\"role_id\":1,\"firstname\":\"ime\",\"lastname\":\"prezime\",\"email\":\"test\",\"password\":\"$2b$10$SIdb.mMUme3Dthq5KXoSc.L7wQSHihnv.mNfMCVkKGhVnpyXXHYgu\",\"phone_number\":\"91234567\",\"default_currency_id\":1}],\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTMzODY5MzAsImlhdCI6MTY1MzM3OTczMC41MTgsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFNJZGIubU1VbWUzRHRocTVLWG9TYy5MN3dRU0hpaG52Lm1OZk1DVmtLR2hWbnB5WFhIWWd1In0.GPcB2VFHRhA3ytXfT0seBjNC9aetP_k24QktNVm6vOI\"},\"code\":200,\"message\":\"OK\"}"
+                "example": "{\"data\":{\"user\":[{\"id\":37,\"role_id\":1,\"full_name\":\"ime\",\"email\":\"test\",\"password\":\"$2b$10$SIdb.mMUme3Dthq5KXoSc.L7wQSHihnv.mNfMCVkKGhVnpyXXHYgu\",\"default_currency_id\":1,\"user_feature_id\": null}],\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTMzODY5MzAsImlhdCI6MTY1MzM3OTczMC41MTgsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFNJZGIubU1VbWUzRHRocTVLWG9TYy5MN3dRU0hpaG52Lm1OZk1DVmtLR2hWbnB5WFhIWWd1In0.GPcB2VFHRhA3ytXfT0seBjNC9aetP_k24QktNVm6vOI\"},\"code\":200,\"message\":\"OK\"}"
               }
             }
           },
@@ -71,21 +939,19 @@
         },
         "servers": [
           {
-            "url": "http://3.232.6.9:3000"
+            "url": "http://3.232.6.9"
           }
         ]
       },
       "servers": [
         {
-          "url": "http://3.232.6.9:3000"
+          "url": "http://3.232.6.9"
         }
       ]
     },
     "/transactionAccount/list": {
       "get": {
-        "tags": [
-          "transaction-account"
-        ],
+        "tags": ["transaction-account"],
         "description": "List all transaction accounts",
         "responses": {
           "200": {
@@ -102,21 +968,19 @@
         },
         "servers": [
           {
-            "url": "http://3.232.6.9:3000"
+            "url": "http://3.232.6.9"
           }
         ]
       },
       "servers": [
         {
-          "url": "http://3.232.6.9:3000"
+          "url": "http://3.232.6.9"
         }
       ]
     },
     "/transactionAccount/id/{id}": {
       "get": {
-        "tags": [
-          "transaction-account"
-        ],
+        "tags": ["transaction-account"],
         "description": "Get transaction account for id",
         "parameters": [
           {
@@ -147,21 +1011,19 @@
         },
         "servers": [
           {
-            "url": "http://3.232.6.9:3000"
+            "url": "http://3.232.6.9"
           }
         ]
       },
       "servers": [
         {
-          "url": "http://3.232.6.9:3000"
+          "url": "http://3.232.6.9"
         }
       ]
     },
     "/user/email/{email}": {
       "get": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "description": "Get a user by email",
         "parameters": [
           {
@@ -184,28 +1046,26 @@
                 "schema": {
                   "type": "string"
                 },
-                "example": "{\"id\":16,\"role_id\":1,\"firstname\":\"ime\",\"lastname\":\"prezime\",\"email\":\"email\",\"password\":\"$2b$10$tIGGiXJKnwZgUy/trwDVHOUPMJW/Pfl/kLKxGQ\",\"phone_number\":\"91234567\",\"default_currency_id\":1}"
+                "example": "{\"id\":16,\"role_id\":1,\"full_name\":\"ime\",\"email\":\"email\",\"password\":\"$2b$10$tIGGiXJKnwZgUy/trwDVHOUPMJW/Pfl/kLKxGQ\",\"phone_number\":\"91234567\",\"default_currency_id\":1,\"user_feature_id\": null}"
               }
             }
           }
         },
         "servers": [
           {
-            "url": "http://3.232.6.9:3000"
+            "url": "http://3.232.6.9"
           }
         ]
       },
       "servers": [
         {
-          "url": "http://3.232.6.9:3000"
+          "url": "http://3.232.6.9"
         }
       ]
     },
     "/transactionAccount/add/": {
       "post": {
-        "tags": [
-          "transaction-account"
-        ],
+        "tags": ["transaction-account"],
         "description": "Add new transaction account",
         "requestBody": {
           "content": {
@@ -229,28 +1089,26 @@
                 "schema": {
                   "type": "string"
                 },
-                "example": "{\"fieldCount\":0,\"affectedRows\":1,\"insertId\":6,\"info\":\"\",\"serverStatus\":2,\"warningStatus\":0}"
+                "example": "{\"transactionAccount\":{\"id\":10,\"balance\":10.5,\"account_type_id\":1,\"name\":\"Test neme\",\"country\":\"Croatia\",\"bank_name\":\"Test bank name\",\"card_owner\":\"Test owner\",\"card_number\":\"Test number\",\"card_expiration_date\":\"2025-03-05T00:00:00.000Z\",\"card_cvc\":\"Test cvc\",\"currency_id\":1,\"user_id\":17,\"status\":\"active\"}}"
               }
             }
           }
         },
         "servers": [
           {
-            "url": "http://3.232.6.9:3000"
+            "url": "http://3.232.6.9"
           }
         ]
       },
       "servers": [
         {
-          "url": "http://3.232.6.9:3000"
+          "url": "http://3.232.6.9"
         }
       ]
     },
     "/user/{id}": {
       "get": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "description": "Get a user by id",
         "parameters": [
           {
@@ -274,28 +1132,26 @@
                 "schema": {
                   "type": "string"
                 },
-                "example": "{\"id\":16,\"role_id\":1,\"firstname\":\"ime\",\"lastname\":\"prezime\",\"email\":\"email\",\"password\":\"$2b$10$tIGGiXJKnwZgUy/trwDVHOUPMJW/Pfl/kLKxGQ\",\"phone_number\":\"91234567\",\"default_currency_id\":1}"
+                "example": "{\"id\":16,\"role_id\":1,\"full_name\":\"ime\",\"email\":\"email\",\"password\":\"$2b$10$tIGGiXJKnwZgUy/trwDVHOUPMJW/Pfl/kLKxGQ\",\"default_currency_id\":1,\"user_feature_id\": null}"
               }
             }
           }
         },
         "servers": [
           {
-            "url": "http://3.232.6.9:3000"
+            "url": "http://3.232.6.9"
           }
         ]
       },
       "servers": [
         {
-          "url": "http://3.232.6.9:3000"
+          "url": "http://3.232.6.9"
         }
       ]
     },
     "/auth/signup": {
       "post": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "description": "",
         "requestBody": {
           "content": {
@@ -305,7 +1161,7 @@
               },
               "examples": {
                 "0": {
-                  "value": "{\n    \"email\": \"test2\",\n    \"password\": \"password\"\n}"
+                  "value": "{\n    \"full_name\": \"Ime Prezime\"\n    \"email\": \"test2\",\n    \"password\": \"password\"\n}"
                 }
               }
             }
@@ -319,28 +1175,26 @@
                 "schema": {
                   "type": "string"
                 },
-                "example": "[{\"fieldCount\":0,\"affectedRows\":1,\"insertId\":39,\"info\":\"\",\"serverStatus\":2,\"warningStatus\":0}]"
+                "example": "user_feature_id: 'null' id: 50 role_id: '1' full_name: Ime Prezime email: NewUser2 password: $2b$10$jDPeXmeniYQmldqkQaEaUOeeyMSbMUVruTaAxhZx0D16uUucmopp2 default_currency_id: '1'"
               }
             }
           }
         },
         "servers": [
           {
-            "url": "http://3.232.6.9:3000"
+            "url": "http://3.232.6.9"
           }
         ]
       },
       "servers": [
         {
-          "url": "http://3.232.6.9:3000"
+          "url": "http://3.232.6.9"
         }
       ]
     },
     "/user/": {
       "get": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "description": "Get all users",
         "responses": {
           "200": {
@@ -350,28 +1204,26 @@
                 "schema": {
                   "type": "string"
                 },
-                "example": "[{\"id\":16,\"role_id\":1,\"firstname\":\"ime\",\"lastname\":\"prezime\",\"email\":\"email\",\"password\":\"$2b$10$tIGGiXJKnwZgUy/trwDVHOUPMJW/Pfl/kLKxGQ\",\"phone_number\":\"91234567\",\"default_currency_id\":1},{\"id\":37,\"role_id\":1,\"firstname\":\"ime\",\"lastname\":\"prezime\",\"email\":\"test\",\"password\":\"$2b$10$SIdb.mMUme3Dthq5KXoSc.L7wQSHihnv.mNfMCVkKGhVnpyXXHYgu\",\"phone_number\":\"91234567\",\"default_currency_id\":1},{\"id\":39,\"role_id\":1,\"firstname\":\"ime\",\"lastname\":\"prezime\",\"email\":\"test3\",\"password\":\"$2b$10$TplJLAhan8kGhoKAFH/gCOPQZEQ6yYGusIAQbE/8o754joNUDXSNW\",\"phone_number\":\"91234567\",\"default_currency_id\":1}]"
+                "example": "[{\"id\":16,\"role_id\":1,\"full_name\":\"ime prezime\",\"email\":\"email\",\"password\":\"$2b$10$tIGGiXJKnwZgUy/trwDVHOUPMJW/Pfl/kLKxGQ\",\"default_currency_id\":1,\"user_feature_id\": null},{\"id\":37,\"role_id\":1,\"full_name\":\"ime\",\"email\":\"test\",\"password\":\"$2b$10$SIdb.mMUme3Dthq5KXoSc.L7wQSHihnv.mNfMCVkKGhVnpyXXHYgu\",\"default_currency_id\":1,\"user_feature_id\": null},{\"id\":39,\"role_id\":1,\"full_name\":\"ime\",\"email\":\"test3\",\"password\":\"$2b$10$TplJLAhan8kGhoKAFH/gCOPQZEQ6yYGusIAQbE/8o754joNUDXSNW\",\"default_currency_id\":1,\"user_feature_id\": null}]"
               }
             }
           }
         },
         "servers": [
           {
-            "url": "http://3.232.6.9:3000"
+            "url": "http://3.232.6.9"
           }
         ]
       },
       "servers": [
         {
-          "url": "http://3.232.6.9:3000"
+          "url": "http://3.232.6.9"
         }
       ]
     },
     "/transaction/list": {
       "get": {
-        "tags": [
-          "transaction"
-        ],
+        "tags": ["transaction"],
         "description": "List all transactions",
         "responses": {
           "200": {
@@ -388,25 +1240,23 @@
         },
         "servers": [
           {
-            "url": "http://3.232.6.9:3000"
+            "url": "http://3.232.6.9"
           }
         ]
       },
       "servers": [
         {
-          "url": "http://3.232.6.9:3000"
+          "url": "http://3.232.6.9"
         }
       ]
     },
-    "/transactionCategory/{id}": {
+    "/transactionCategory/{user_id}": {
       "get": {
-        "tags": [
-          "transaction-category"
-        ],
+        "tags": ["transaction-category"],
         "description": "Get a transaction category by user id",
         "parameters": [
           {
-            "name": "id",
+            "name": "user_id",
             "in": "path",
             "description": "User ID",
             "required": true,
@@ -433,21 +1283,19 @@
         },
         "servers": [
           {
-            "url": "http://3.232.6.9:3000"
+            "url": "http://3.232.6.9"
           }
         ]
       },
       "servers": [
         {
-          "url": "http://3.232.6.9:3000"
+          "url": "http://3.232.6.9"
         }
       ]
     },
     "/transactionCategory/": {
       "get": {
-        "tags": [
-          "transaction-category"
-        ],
+        "tags": ["transaction-category"],
         "description": "List all transaction categories",
         "responses": {
           "200": {
@@ -464,21 +1312,19 @@
         },
         "servers": [
           {
-            "url": "http://3.232.6.9:3000"
+            "url": "http://3.232.6.9"
           }
         ]
       },
       "servers": [
         {
-          "url": "http://3.232.6.9:3000"
+          "url": "http://3.232.6.9"
         }
       ]
     },
     "/transactionCategory/delete/{id}": {
       "delete": {
-        "tags": [
-          "transaction-category"
-        ],
+        "tags": ["transaction-category"],
         "description": "Delete a transaction category by id",
         "parameters": [
           {
@@ -509,22 +1355,63 @@
         },
         "servers": [
           {
-            "url": "http://3.232.6.9:3000"
+            "url": "http://3.232.6.9"
           }
         ]
       },
       "servers": [
         {
-          "url": "http://3.232.6.9:3000"
+          "url": "http://3.232.6.9"
+        }
+      ]
+    },
+    "/user/delete/{id}": {
+      "delete": {
+        "tags": ["user"],
+        "description": "Delete a user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"user\":1}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9"
         }
       ]
     },
     "/transaction/delete/{id}": {
       "delete": {
-        "tags": [
-          "transaction"
-        ],
-        "description": "Auto generated using Swagger Inspector",
+        "tags": ["transaction"],
+        "description": "Delete a transaction",
         "parameters": [
           {
             "name": "id",
@@ -547,28 +1434,83 @@
                 "schema": {
                   "type": "string"
                 },
-                "example": "{\"fieldCount\":0,\"affectedRows\":0,\"insertId\":0,\"info\":\"\",\"serverStatus\":2,\"warningStatus\":0}"
+                "example": "{\"transaction\":1}"
               }
             }
           }
         },
         "servers": [
           {
-            "url": "http://3.232.6.9:3000"
+            "url": "http://3.232.6.9"
           }
         ]
       },
       "servers": [
         {
-          "url": "http://3.232.6.9:3000"
+          "url": "http://3.232.6.9"
+        }
+      ]
+    },
+    "/user/update/{id}": {
+      "put": {
+        "tags": ["user"],
+        "description": "Update user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/update_id_body_5"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\n        \"role_id\": 1,\n        \"full_name\": \"Ime Prezime\",\n        \"email\": \"mail\",\n        \"password\": \"$2b$10$M4QdxV/.ReaW3P25HBO7wumg.DJAiVIo1QF2SAjeeeiR89aXen6Dy\",\n        \"phone_number\": \"91234567\",\n        \"default_currency_id\": 1,\n        \"user_feature_id\": null\n    }"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"user\":1}"
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://3.232.6.9"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://3.232.6.9"
         }
       ]
     },
     "/transaction/update/{id}": {
       "put": {
-        "tags": [
-          "transaction"
-        ],
+        "tags": ["transaction"],
         "description": "Update transaction",
         "parameters": [
           {
@@ -606,28 +1548,26 @@
                 "schema": {
                   "type": "string"
                 },
-                "example": "{\"fieldCount\":0,\"affectedRows\":1,\"insertId\":0,\"info\":\"Rows matched: 1  Changed: 1  Warnings: 0\",\"serverStatus\":2,\"warningStatus\":0,\"changedRows\":1}"
+                "example": "{\"transaction\":[1]}"
               }
             }
           }
         },
         "servers": [
           {
-            "url": "http://3.232.6.9:3000"
+            "url": "http://3.232.6.9"
           }
         ]
       },
       "servers": [
         {
-          "url": "http://3.232.6.9:3000"
+          "url": "http://3.232.6.9"
         }
       ]
     },
     "/transactionCategory/update/{id}": {
       "put": {
-        "tags": [
-          "transaction-category"
-        ],
+        "tags": ["transaction-category"],
         "description": "Update transaction category",
         "parameters": [
           {
@@ -665,28 +1605,26 @@
                 "schema": {
                   "type": "string"
                 },
-                "example": "{\"fieldCount\":0,\"affectedRows\":1,\"insertId\":0,\"info\":\"Rows matched: 1  Changed: 1  Warnings: 0\",\"serverStatus\":2,\"warningStatus\":0,\"changedRows\":1}"
+                "example": "{\"transactionCategory\":1}"
               }
             }
           }
         },
         "servers": [
           {
-            "url": "http://3.232.6.9:3000"
+            "url": "http://3.232.6.9"
           }
         ]
       },
       "servers": [
         {
-          "url": "http://3.232.6.9:3000"
+          "url": "http://3.232.6.9"
         }
       ]
     },
     "/transaction/add": {
       "post": {
-        "tags": [
-          "transaction"
-        ],
+        "tags": ["transaction"],
         "description": "Add a new transaction",
         "requestBody": {
           "content": {
@@ -717,21 +1655,19 @@
         },
         "servers": [
           {
-            "url": "http://3.232.6.9:3000"
+            "url": "http://3.232.6.9"
           }
         ]
       },
       "servers": [
         {
-          "url": "http://3.232.6.9:3000"
+          "url": "http://3.232.6.9"
         }
       ]
     },
     "/transactionCategory/add": {
       "post": {
-        "tags": [
-          "transaction-category"
-        ],
+        "tags": ["transaction-category"],
         "description": "Add a new transaction category",
         "requestBody": {
           "content": {
@@ -762,19 +1698,50 @@
         },
         "servers": [
           {
-            "url": "http://3.232.6.9:3000"
+            "url": "http://3.232.6.9"
           }
         ]
       },
       "servers": [
         {
-          "url": "http://3.232.6.9:3000"
+          "url": "http://3.232.6.9"
         }
       ]
     }
   },
   "components": {
     "schemas": {
+      "record_add_body": {
+        "type": "object",
+        "properties": {
+          "transaction_id": {
+            "type": "integer"
+          },
+          "amount": {
+            "type": "integer"
+          },
+          "account_id": {
+            "type": "integer"
+          },
+          "category_id": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string"
+          },
+          "currency_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "update_10_body": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "integer"
+          }
+        }
+      },
       "auth_login_body": {
         "type": "object",
         "properties": {
@@ -921,6 +1888,198 @@
             "type": "string"
           },
           "status": {
+            "type": "string"
+          }
+        }
+      },
+      "hashtag_add_body": {
+        "type": "object",
+        "properties": {
+          "user_information_id": {
+            "type": "integer"
+          },
+          "hashtag_name": {
+            "type": "string"
+          }
+        }
+      },
+      "userInformation_add_body": {
+        "type": "object",
+        "properties": {
+          "country": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "job_role": {
+            "type": "string"
+          },
+          "education": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "profile_url": {},
+          "city": {
+            "type": "string"
+          },
+          "date_of_birth": {
+            "type": "string"
+          },
+          "facebook": {},
+          "bio": {
+            "type": "string"
+          },
+          "employer_name": {
+            "type": "string"
+          },
+          "instagram": {},
+          "linkedin": {},
+          "zip_code": {
+            "type": "integer"
+          },
+          "other_education": {
+            "type": "string"
+          },
+          "twitter": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "integer"
+          },
+          "tiktok": {},
+          "phone_number": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "update_id_body_2": {
+        "type": "object",
+        "properties": {
+          "user_information_id": {
+            "type": "integer"
+          },
+          "hashtag_name": {
+            "type": "string"
+          }
+        }
+      },
+      "update_id_body_3": {
+        "type": "object",
+        "properties": {
+          "country": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "job_role": {
+            "type": "string"
+          },
+          "education": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "profile_url": {},
+          "city": {
+            "type": "string"
+          },
+          "date_of_birth": {
+            "type": "string"
+          },
+          "facebook": {},
+          "bio": {
+            "type": "string"
+          },
+          "employer_name": {
+            "type": "string"
+          },
+          "instagram": {},
+          "linkedin": {},
+          "zip_code": {
+            "type": "integer"
+          },
+          "other_education": {
+            "type": "string"
+          },
+          "twitter": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "integer"
+          },
+          "tiktok": {},
+          "phone_number": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "update_id_body_4": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "due_date": {
+            "type": "string"
+          }
+        }
+      },
+      "debt_add_body": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "due_date": {
+            "type": "string"
+          }
+        }
+      },
+      "update_id_body_5": {
+        "type": "object",
+        "properties": {
+          "default_currency_id": {
+            "type": "integer"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "role_id": {
+            "type": "integer"
+          },
+          "phone_number": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "lastname": {
             "type": "string"
           }
         }
