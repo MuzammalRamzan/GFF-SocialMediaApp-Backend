@@ -6,6 +6,7 @@ export type TransactionCategoryType = {
     name: string
     user_id: string
     icon_url: string
+    colour: string
     type: TransactionCategoryTypeEnum
     is_default: number
     status: string
