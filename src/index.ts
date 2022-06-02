@@ -10,6 +10,7 @@ import { transactionCategoryRouter } from './api/transaction-category/transactio
 import { recordRouter } from './api/record/recordRouter';
 import { userInformationRouter } from './api/user-information/userInformationRouter';
 import { hashtagRouter } from './api/hashtag/hashtagRouter';
+import { debtRouter } from './api/debt/debtRouter';
 
 const options = {
   swaggerOptions: {
@@ -30,6 +31,7 @@ const options = {
   app.use('/record', recordRouter)
   app.use('/userInformation', userInformationRouter)
   app.use('/hashtag', hashtagRouter)
+  app.use('/debt', debtRouter)
 
   app.listen(process.env.PORT, () => {
     console.log(`Server running at port ${process.env.PORT}`)
