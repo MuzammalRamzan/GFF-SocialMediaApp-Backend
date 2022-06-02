@@ -65,7 +65,7 @@ export class UserController {
         const userId = req?.user?.id as number;
         try {
             const users = await this.userService.searchFriend(search, userId)
-            res.send(users)
+            res.status(200).send(users)
         } catch (err) {
             throw err
         }

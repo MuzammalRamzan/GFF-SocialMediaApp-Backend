@@ -13,6 +13,16 @@ export type FindFriend = {
   sender_id: string
   receiver_id: string
   request_type: RequestType
+  receiver?: {
+    id: number
+    firstname: string
+    lastname: string
+  }
+  sender?: {
+    id: number
+    firstname: string
+    lastname: string
+  }
 }
 
 export interface IFindFriendService {
@@ -20,9 +30,9 @@ export interface IFindFriendService {
   approve(request_id: number, user_id: number): Promise<FindFriendModel>
   reject(request_id: number, user_id: number): Promise<FindFriendModel>
   findBySenderIdAndReceiverId(sender_id: number, receiver_id: number): Promise<IFriendRequest>
-  friends(userId: number): Promise<any[]>
-  getFriendRequestsBySenderId(sender_id: number): Promise<any[]>
-  getFriendRequestsByReceiverId(receiver_id: number): Promise<any[]>
+  friends(userId: number): Promise<FindFriend[]>
+  getFriendRequestsBySenderId(sender_id: number): Promise<FindFriend[]>
+  getFriendRequestsByReceiverId(receiver_id: number): Promise<FindFriend[]>
 }
 
 export interface createFindFriendRequest extends Request, IAuthenticatedRequest {
