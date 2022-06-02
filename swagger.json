@@ -1,12 +1,13 @@
 {
-  "openapi": "3.0.1",
+  "swagger": "2.0",
   "info": {
     "title": "GFF Backend API",
     "description": "",
-    "version": "0.3"
+    "version": "1.0"
   },
   "schemes": ["http", "https"],
   "host": "localhost:3000",
+  "basePath": "/",
   "tags": [
     {
       "name": "auth",
@@ -76,18 +77,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/debt/{id}": {
       "get": {
@@ -119,18 +110,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/hashtag/add": {
       "post": {
@@ -162,18 +143,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/userInformation/add": {
       "post": {
@@ -205,18 +176,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/debt/": {
       "get": {
@@ -234,18 +195,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/hashtag/update/{id}": {
       "put": {
@@ -291,18 +242,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/hashtag/list": {
       "get": {
@@ -320,18 +261,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/userInformation/update/{id}": {
       "put": {
@@ -377,18 +308,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/debt/update/{id}": {
       "put": {
@@ -434,18 +355,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/hashtag/{user_info_id}": {
       "get": {
@@ -477,18 +388,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/hashtag/delete/{id}": {
       "delete": {
@@ -520,18 +421,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/debt/dueDate/{id}": {
       "get": {
@@ -563,18 +454,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/userInformation/delete/{id}": {
       "delete": {
@@ -606,18 +487,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/userInformation/{user_id}": {
       "get": {
@@ -649,18 +520,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://localhost"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://localhost"
         }
-      ]
+      }
     },
     "/debt/add": {
       "post": {
@@ -692,18 +553,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/record/delete/{id}": {
       "delete": {
@@ -735,18 +586,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/record/list": {
       "get": {
@@ -779,18 +620,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/record/add": {
       "post": {
@@ -833,18 +664,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/record/update/{id}": {
       "put": {
@@ -890,18 +711,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/auth/login": {
       "post": {
@@ -936,18 +747,8 @@
           "404": {
             "description": "User not found"
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/transactionAccount/list": {
       "get": {
@@ -965,18 +766,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/transactionAccount/id/{id}": {
       "get": {
@@ -1008,18 +799,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/user/email/{email}": {
       "get": {
@@ -1050,18 +831,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/transactionAccount/add/": {
       "post": {
@@ -1093,18 +864,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/user/{id}": {
       "get": {
@@ -1136,18 +897,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/auth/signup": {
       "post": {
@@ -1179,18 +930,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/user/": {
       "get": {
@@ -1208,18 +949,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/transaction/list": {
       "get": {
@@ -1237,18 +968,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/transactionCategory/{user_id}": {
       "get": {
@@ -1280,18 +1001,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/transactionCategory/": {
       "get": {
@@ -1309,18 +1020,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/transactionCategory/delete/{id}": {
       "delete": {
@@ -1352,18 +1053,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/user/delete/{id}": {
       "delete": {
@@ -1395,18 +1086,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/transaction/delete/{id}": {
       "delete": {
@@ -1438,18 +1119,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/user/update/{id}": {
       "put": {
@@ -1495,18 +1166,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/transaction/update/{id}": {
       "put": {
@@ -1552,18 +1213,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/transactionCategory/update/{id}": {
       "put": {
@@ -1609,18 +1260,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/transaction/add": {
       "post": {
@@ -1652,18 +1293,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     },
     "/transactionCategory/add": {
       "post": {
@@ -1695,18 +1326,8 @@
               }
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://3.232.6.9"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://3.232.6.9"
         }
-      ]
+      }
     }
   },
   "components": {
