@@ -7,6 +7,7 @@ export class TransactionCategoryService implements ITransactionCategoryService {
             name: params.name, 
             user_id: params.user_id, 
             icon_url: params.icon_url, 
+            colour: params.colour,
             type: params.type, 
             is_default: params.is_default, 
             status: params.status
@@ -35,7 +36,8 @@ export class TransactionCategoryService implements ITransactionCategoryService {
         const updatedRow = await TransactionCategory.update({
             name: params.name, 
             user_id: params.user_id, 
-            icon_url: params.icon_url, 
+            icon_url: params.icon_url,
+            colour: params.colour,
             type: params.type, 
             is_default: params.is_default, 
             status: params.status

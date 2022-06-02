@@ -11,6 +11,8 @@ import { recordRouter } from './api/record/recordRouter';
 import { findFriendRouter } from './api/find-friend/findFriendRouter';
 import { sequelize } from './database';
 import { userInformationRouter } from './api/user-information/userInformationRouter';
+import { hashtagRouter } from './api/hashtag/hashtagRouter';
+import { debtRouter } from './api/debt/debtRouter';
 
 const options = {
   swaggerOptions: {
@@ -31,6 +33,8 @@ const options = {
   app.use('/record', recordRouter)
   app.use('/find-friend', findFriendRouter)
   app.use('/userInformation', userInformationRouter)
+  app.use('/hashtag', hashtagRouter)
+  app.use('/debt', debtRouter)
 
   app.listen(process.env.PORT, () => {
     console.log(`Server running at port ${process.env.PORT}`)

@@ -33,6 +33,6 @@ export interface DeleteRecordRequest extends Request {
 export interface IRecordService {
 	list(): Promise<Record[]>
 	add(params: RecordType): Promise<Record>
-	update(id: number, params: RecordType): Promise<number>
+	update(id: number, params: RecordType): Promise<[affectedCount: number]>
 	delete(id: number): Promise<number>
 }

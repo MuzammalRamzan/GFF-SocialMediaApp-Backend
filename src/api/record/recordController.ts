@@ -12,7 +12,7 @@ export class RecordController {
 	getAllRecords = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const records = await this.recordService.list()
-			res.send(records)
+			res.status(200).send({ records })
 		} catch (err) {
 			throw err
 		}
@@ -23,7 +23,7 @@ export class RecordController {
 
 		try {
 			const record = await this.recordService.add(params)
-			res.send(record)
+			res.status(200).send({ record })
 		} catch (err) {
 			throw err
 		}
