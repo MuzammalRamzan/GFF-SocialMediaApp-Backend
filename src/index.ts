@@ -10,6 +10,7 @@ import { transactionCategoryRouter } from './api/transaction-category/transactio
 import { recordRouter } from './api/record/recordRouter';
 import { findFriendRouter } from './api/find-friend/findFriendRouter';
 import { sequelize } from './database';
+import { userInformationRouter } from './api/user-information/userInformationRouter';
 
 const options = {
   swaggerOptions: {
@@ -29,6 +30,7 @@ const options = {
   app.use('/transactionCategory', transactionCategoryRouter)
   app.use('/record', recordRouter)
   app.use('/find-friend', findFriendRouter)
+  app.use('/userInformation', userInformationRouter)
 
   app.listen(process.env.PORT, () => {
     console.log(`Server running at port ${process.env.PORT}`)
