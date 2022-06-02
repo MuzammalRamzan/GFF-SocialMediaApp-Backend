@@ -26,8 +26,7 @@ export class UserInformationService implements IUserInformationService {
             employer_name: params.employer_name,
             job_role: params.job_role,
             education: params.education,
-            other_education: params.other_education,
-            profile_role: params.profile_role
+            other_education: params.other_education
         })
 
         return userInformation
@@ -66,7 +65,6 @@ export class UserInformationService implements IUserInformationService {
             job_role: params.job_role,
             education: params.education,
             other_education: params.other_education,
-            profile_role: params.profile_role
         },
         {
             where: {

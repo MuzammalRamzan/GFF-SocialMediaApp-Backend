@@ -94,10 +94,6 @@ UserInformation.init({
     other_education: {
         type: DataTypes.STRING,
         allowNull: true
-    },
-    profile_role: {
-        type: DataTypes.ENUM('employer', 'mentor', 'wellness warrior'),
-        allowNull: true
     }
 },
 {
