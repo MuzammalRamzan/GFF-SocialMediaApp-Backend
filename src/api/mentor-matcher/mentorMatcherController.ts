@@ -62,7 +62,8 @@ export class MentorMatcherController {
       }
 
       const userId = req?.user?.id || 0 as number;
-      const mentor_id = Number(req.query.mentor_id || 0);
+      const mentor_id = Number(req.body.mentor_id || 0);
+      const message = req.body.message
 
 
       if (mentor_id === userId) {
@@ -75,11 +76,11 @@ export class MentorMatcherController {
       if (is_exist) {
         return res.status(200).json({
           message: 'Mentor request already exist',
-          status: 201,
+          status: 200,
         });
       }
 
-      await this.mentorMatcherService.sendMentorRequest(userId, mentor_id);
+      await this.mentorMatcherService.sendMentorRequest(userId, mentor_id, message);
 
       return res.status(200).json({
         message: 'Mentor request sent successfully!',
@@ -257,7 +258,7 @@ export class MentorMatcherController {
       const userId = req?.user?.id || 0 as number;
       const request_id = Number(req.query.request_id || 0);
 
-      const is_exist = await this.mentorMatcherService.findByIdForMentor(request_id, userId);
+      const is_exist = await this.mentorMatcherService.findById(request_id, userId);
       if (!is_exist) {
         return res.status(401).json({
           message: 'You are not authorized to access this resource!',
@@ -268,7 +269,7 @@ export class MentorMatcherController {
       const result = await this.mentorMatcherService.signContract(userId, request_id);
       return res.status(200).json({
         status: 200,
-        data: result ? "Contract signed successfully!" : "The contract has been signed already or you haven't accepted the mentor request yet!"
+        data: result ? "Contract signed successfully!" : "The contract has been signed already or the mentor request is not accepted!"
       });
     } catch (error) {
       next(error);

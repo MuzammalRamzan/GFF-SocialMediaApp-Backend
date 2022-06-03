@@ -19,6 +19,8 @@ export interface IMentorMatcher {
   mentee_id: number;
   request_type: MentorMatcherRequestType;
   status: MentorMatcherRequestStatus;
+  is_contract_signed_by_mentee: boolean;
+  is_contract_signed_by_mentor: boolean;
 }
 
 export class MentorMatcherModel extends Model { };
@@ -38,6 +40,10 @@ MentorMatcherModel.init({
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  message: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   request_type: {
     type: DataTypes.ENUM(MentorMatcherRequestType.FAVORITE, MentorMatcherRequestType.MENTOR),
     defaultValue: MentorMatcherRequestType.MENTOR
@@ -46,7 +52,11 @@ MentorMatcherModel.init({
     type: DataTypes.ENUM(MentorMatcherRequestStatus.SEND, MentorMatcherRequestStatus.APPROVE, MentorMatcherRequestStatus.REJECT),
     allowNull: true,
   },
-  is_contract_signed: {
+  is_contract_signed_by_mentee: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
+  is_contract_signed_by_mentor: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   }

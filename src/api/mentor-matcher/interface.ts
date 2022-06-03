@@ -6,7 +6,7 @@ export interface IMentorMatcherService {
   findMentors(userId: number, searchTerm: string): Promise<User[]>
   myMentors(userId: number): Promise<IMentorRequest[]>
   myMentees(userId: number): Promise<IMentorRequest[]>
-  sendMentorRequest(userId: number, mentor_id: number): Promise<IMentorMatcher>
+  sendMentorRequest(userId: number, mentor_id: number, message: string): Promise<IMentorMatcher>
   isExist(userId: number, mentor_id: number): Promise<boolean>
   acceptMentorRequest(request_id: number, userId: number, mentor_id: number): Promise<boolean>
   rejectMentorRequest(request_id: number, userId: number, mentor_id: number): Promise<boolean>
@@ -16,7 +16,7 @@ export interface IMentorMatcherService {
   removeMentorFromFavorite(userId: number, mentor_id: number): Promise<boolean>
   isFavoriteExist(userId: number, mentor_id: number): Promise<boolean>
   signContract(userId: number, mentor_id: number): Promise<boolean>
-  findByIdForMentor(request_id:number, userId: number): Promise<IMentorMatcher>
+  findById(request_id:number, userId: number): Promise<IMentorMatcher>
 }
 
 export interface IMentorRequest {

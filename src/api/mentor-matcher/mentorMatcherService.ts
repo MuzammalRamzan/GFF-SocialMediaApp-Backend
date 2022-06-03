@@ -58,10 +58,11 @@ export class MentorMatcherService implements IMentorMatcherService {
     });
   }
 
-  async sendMentorRequest(userId: number, mentor_id: number): Promise<IMentorMatcher> {
+  async sendMentorRequest(userId: number, mentor_id: number, message: string): Promise<IMentorMatcher> {
     const mentor = await MentorMatcherModel.create({
       mentor_id: mentor_id,
       mentee_id: userId,
+      message: message,
       request_type: MentorMatcherRequestType.MENTOR,
       status: MentorMatcherRequestStatus.SEND
     })
@@ -239,11 +240,18 @@ export class MentorMatcherService implements IMentorMatcherService {
     return data ? true : false;
   }
 
-  async findByIdForMentor(id: number, userId: number): Promise<IMentorMatcher> {
+  async findById(id: number, userId: number): Promise<IMentorMatcher> {
     const data = await MentorMatcherModel.findOne({
       where: {
         id: id,
-        mentor_id: userId
+        [Op.or]: [
+          {
+            mentor_id: userId
+          },
+          {
+            mentee_id: userId
+          }
+        ]
       }
     })
 
@@ -251,20 +259,40 @@ export class MentorMatcherService implements IMentorMatcherService {
   }
 
   async signContract(userId: number, request_id: number): Promise<boolean> {
-    const data = await MentorMatcherModel.update(
-      {
-        is_contract_signed: true
-      },
-      {
+    try {
+      const request = await MentorMatcherModel.findOne({
         where: {
           id: request_id,
-          mentor_id: userId,
-          status: MentorMatcherRequestStatus.APPROVE,
           request_type: MentorMatcherRequestType.MENTOR,
-          is_contract_signed: false
-        },
-      })
+          status: MentorMatcherRequestStatus.APPROVE,
+          [Op.or]: [
+            {
+              mentor_id: userId
+            },
+            {
+              mentee_id: userId
+            }
+          ]
+        }
+      });
 
-    return data[0] ? true : false;
+      if (!request) {
+        throw new Error('Request not found');
+      }
+
+      if (request.get().mentor_id === userId) {
+        request.set('is_contract_signed_by_mentor', true)
+      }
+
+      if (request.get().mentee_id === userId) {
+        request.set('is_contract_signed_by_mentee', true)
+      }
+
+      await request.save();
+
+      return true
+    } catch (error) {
+      return false
+    }
   }
 }
