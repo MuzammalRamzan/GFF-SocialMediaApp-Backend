@@ -27,6 +27,10 @@ export class AuthService implements IAuthService {
         return token;
     }
 
+    public static verifyJwtToken(token: string): any {
+        return jwt.verify(token, process.env.JWT_SECRET!)
+    }
+
     async createUser (email: string, fullName: string, password: string): Promise<User> {
         const passwordHash = await this.hashPassword(password)
 

@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { IAuthenticatedRequest } from '../helper/authMiddleware';
 import { UserService } from './userService';
 
 export class UserController {
@@ -54,6 +55,17 @@ export class UserController {
         try {
             const user = await this.userService.delete(id)
             res.send({user})
+        } catch (err) {
+            throw err
+        }
+    }
+
+    searchFriend = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+        const search = req.query.search as string;
+        const userId = req?.user?.id as number;
+        try {
+            const users = await this.userService.searchFriend(search, userId)
+            res.status(200).send(users)
         } catch (err) {
             throw err
         }
