@@ -13,6 +13,7 @@ import { sequelize } from './database';
 import { userInformationRouter } from './api/user-information/userInformationRouter';
 import { hashtagRouter } from './api/hashtag/hashtagRouter';
 import { debtRouter } from './api/debt/debtRouter';
+import { loanLedgerProfessionalInformationRouter } from './api/loan-ledger-professional-information/professionalInformationRouter';
 
 const options = {
   swaggerOptions: {
@@ -35,6 +36,7 @@ const options = {
   app.use('/userInformation', userInformationRouter)
   app.use('/hashtag', hashtagRouter)
   app.use('/debt', debtRouter)
+  app.use('/loanLedgerProfessionalInformation', loanLedgerProfessionalInformationRouter)
 
   app.listen(process.env.PORT, () => {
     console.log(`Server running at port ${process.env.PORT}`)
