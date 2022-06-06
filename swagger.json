@@ -182,7 +182,7 @@
     "/debt/": {
       "get": {
         "tags": ["debt"],
-        "description": "Lists all debts",
+        "description": "List all debts",
         "responses": {
           "200": {
             "description": "",
@@ -248,7 +248,7 @@
     "/hashtag/list": {
       "get": {
         "tags": ["hashtag"],
-        "description": "Lists all hashtags",
+        "description": "List all hashtags",
         "responses": {
           "200": {
             "description": "",
@@ -267,7 +267,7 @@
     "/userInformation/update/{id}": {
       "put": {
         "tags": ["user-information"],
-        "description": "Updates user informations",
+        "description": "Update user informations",
         "parameters": [
           {
             "name": "id",
@@ -361,7 +361,7 @@
     "/hashtag/{user_info_id}": {
       "get": {
         "tags": ["hashtag"],
-        "description": "Gets hashtag by user information id",
+        "description": "Get hashtag by user information id",
         "parameters": [
           {
             "name": "user_info_id",
@@ -394,7 +394,7 @@
     "/hashtag/delete/{id}": {
       "delete": {
         "tags": ["hashtag"],
-        "description": "Deletes hashtag",
+        "description": "Delete hashtag",
         "parameters": [
           {
             "name": "id",
@@ -427,7 +427,7 @@
     "/debt/dueDate/{id}": {
       "get": {
         "tags": ["debt"],
-        "description": "Gets due date for debt",
+        "description": "Get due date for debt",
         "parameters": [
           {
             "name": "id",
@@ -448,9 +448,9 @@
             "content": {
               "text/html; charset=utf-8": {
                 "schema": {
-                  "type": "string"
+                  "type": "date"
                 },
-                "examples": {}
+                "examples": "2022-05-05"
               }
             }
           }
@@ -460,12 +460,12 @@
     "/userInformation/delete/{id}": {
       "delete": {
         "tags": ["user-information"],
-        "description": "Deletes user infomations for user",
+        "description": "Delete user infomations for user",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Debt ID",
+            "description": "User information ID",
             "required": true,
             "style": "simple",
             "explode": false,
@@ -493,12 +493,12 @@
     "/userInformation/{user_id}": {
       "get": {
         "tags": ["user-information"],
-        "description": "Gets user information by user id",
+        "description": "Get user information by user id",
         "parameters": [
           {
             "name": "user_id",
             "in": "path",
-            "description": "Debt ID",
+            "description": "User ID",
             "required": true,
             "style": "simple",
             "explode": false,
@@ -526,7 +526,7 @@
     "/debt/add": {
       "post": {
         "tags": ["debt"],
-        "description": "Adds new debt",
+        "description": "Add new debt",
         "requestBody": {
           "content": {
             "application/json": {
@@ -564,7 +564,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "User ID",
+            "description": "Record ID",
             "required": true,
             "style": "simple",
             "explode": false,
@@ -912,7 +912,7 @@
               },
               "examples": {
                 "0": {
-                  "value": "{\n    \"full_name\": \"Ime Prezime\"\n    \"email\": \"test2\",\n    \"password\": \"password\"\n}"
+                  "value": "{\n    \"full_name\": \"Ime Prezime\",\n    \"email\": \"test2\",\n    \"password\": \"password\"\n}"
                 }
               }
             }
@@ -1031,7 +1031,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "User ID",
+            "description": "Transaction category ID",
             "required": true,
             "style": "simple",
             "explode": false,
@@ -1097,7 +1097,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "User ID",
+            "description": "Transaction ID",
             "required": true,
             "style": "simple",
             "explode": false,
@@ -1109,7 +1109,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Auto generated using Swagger Inspector",
+            "description": "",
             "content": {
               "application/json; charset=utf-8": {
                 "schema": {
@@ -1177,7 +1177,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "User ID",
+            "description": "Transaction ID",
             "required": true,
             "style": "simple",
             "explode": false,
@@ -1216,6 +1216,53 @@
         }
       }
     },
+    "/transactionAccount/update/{id}": {
+      "put": {
+        "tags": ["transaction-account"],
+        "description": "Update transaction account",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Transaction account ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/update_7_body"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\n        \"balance\": 11.5,\n        \"account_type_id\": 1,\n        \"name\": \"Test name\",\n        \"country\": \"Croatia\",\n        \"bank_name\": \"Test bank name\",\n        \"card_owner\": \"Test owner\",\n        \"card_number\": \"Test number\",\n        \"card_expiration_date\": \"2025-11-10\",\n        \"card_cvc\": \"Test cvc\",\n        \"currency_id\": 1,\n        \"user_id\": 16,\n        \"status\": \"active\"\n    }"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "{\"transactionAccount\":1}"
+              }
+            }
+          }
+        }
+      }
+    },
     "/transactionCategory/update/{id}": {
       "put": {
         "tags": ["transaction-category"],
@@ -1224,7 +1271,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "User ID",
+            "description": "Transaction category ID",
             "required": true,
             "style": "simple",
             "explode": false,
@@ -1308,7 +1355,7 @@
               },
               "examples": {
                 "0": {
-                  "value": "{\n        \"name\": \"TestName3\",\n        \"user_id\": \"16\",\n        \"icon_url\": \"icon_url\",\n        \"type\": \"Income\",\n        \"is_default\": \"1\",\n        \"status\": \"status\"\n    }"
+                  "value": "{\n        \"name\": \"TestName3\",\n        \"user_id\": \"16\",\n        \"icon_url\": \"icon_url\",\n        \"type\": \"Income\",\n        \"is_default\": \"1\",\n        \"status\": \"active\",\n    \"colour\": \"#FF0000\"\n     }"
                 }
               }
             }
@@ -1419,6 +1466,9 @@
       "auth_signup_body": {
         "type": "object",
         "properties": {
+          "full_name": {
+            "type": "string"
+          },
           "password": {
             "type": "string"
           },
@@ -1578,6 +1628,47 @@
             "type": "string"
           },
           "email": {
+            "type": "string"
+          }
+        }
+      },
+      "update_7_body": {
+        "type": "object",
+        "properties": {
+          "country": {
+            "type": "string"
+          },
+          "balance": {
+            "type": "number"
+          },
+          "card_number": {
+            "type": "string"
+          },
+          "card_expiration_date": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "integer"
+          },
+          "card_cvc": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "bank_name": {
+            "type": "string"
+          },
+          "account_type_id": {
+            "type": "integer"
+          },
+          "card_owner": {
+            "type": "string"
+          },
+          "currency_id": {
+            "type": "integer"
+          },
+          "status": {
             "type": "string"
           }
         }
