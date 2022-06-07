@@ -1,4 +1,5 @@
 import { Request } from 'express'
+import { UserType } from '../user/interface'
 import { TransactionAccount } from './transactionAccModel'
 
 export type TransactionAccountType = {
@@ -25,20 +26,23 @@ export enum Status {
 
 export interface GetTransactionAccountByIdRequest extends Request {
 	id: number
+	user: UserType
 }
 
 export interface CreateTransactionAccountRequest extends Request {
 	TransactionAccType: TransactionAccountType
+	user: UserType
 }
 
 export interface UpdateTransactionAccountRequest extends Request {
 	id: number
 	TransactionAccType: TransactionAccountType
+	user: UserType
 }
 
 export interface ITransactionAccountService {
 	list(): Promise<TransactionAccount[]>
-	fetch(id: number): Promise<TransactionAccount[]>
+	fetch(id: number, userId: number): Promise<TransactionAccount[]>
 	add(params: TransactionAccountType): Promise<TransactionAccount>
-	update(id: number, params: TransactionAccountType): Promise<[affectedCount: number]>
+	update(id: number, params: TransactionAccountType): Promise<TransactionAccount>
 }

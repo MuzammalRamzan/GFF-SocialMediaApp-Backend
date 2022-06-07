@@ -25,9 +25,10 @@ export class TransactionAccController {
 
 	getTransactionAccountById = async (req: GetTransactionAccountByIdRequest, res: Response, next: NextFunction) => {
 		const id = +req.params.id
+		const userId = +req.user.id
 
 		try {
-			const transactionAccount = await this.transactionAccService.fetch(id)
+			const transactionAccount = await this.transactionAccService.fetch(id, userId)
 			res.status(200).send({ transactionAccount })
 		} catch (err) {
 			throw err
@@ -35,10 +36,11 @@ export class TransactionAccController {
 	}
 
 	createTransactionAccount = async (req: CreateTransactionAccountRequest, res: Response, next: NextFunction) => {
-		const params = req.body
+		const user_id = +req.user.id
+		const params = {...req.body, user_id}
 
 		try {
-			const transactionAccount = await this.transactionAccService.add(params as unknown as TransactionAccountType)
+			const transactionAccount = await this.transactionAccService.add(params as TransactionAccountType)
 			res.status(200).send({ transactionAccount })
 		} catch (err) {
 			throw err
@@ -47,7 +49,8 @@ export class TransactionAccController {
 
 	updateTransaction = async (req: UpdateTransactionAccountRequest, res: Response, next: NextFunction) => {
 		const id = +req.params.id
-		const params = req.body
+		const user_id = +req.user.id
+		const params = {...req.body, user_id}
 		try {
 			const transactionAccount = await this.transactionAccService.update(id, params)
 			res.status(200).send({ transactionAccount })

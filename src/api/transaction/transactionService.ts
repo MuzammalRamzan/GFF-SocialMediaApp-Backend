@@ -18,8 +18,8 @@ export class TransactionService implements ITransactionService {
 		return transaction
 	}
 
-	async update(id: number, params: TransactionType): Promise<[affectedCount: number]> {
-		const transaction = await Transaction.update(
+	async update(id: number, params: TransactionType): Promise<Transaction> {
+		const updatedTransaction = await Transaction.update(
 			{
 				frequency: params.frequency,
 				user_id: params.user_id,
@@ -29,17 +29,24 @@ export class TransactionService implements ITransactionService {
 			},
 			{
 				where: {
-					id: id
+					id: id,
+					user_id: params.user_id
 				}
 			}
 		)
-		return transaction
+		if (updatedTransaction[0] === 1){
+			const transaction = await Transaction.findByPk(id)
+			return transaction as Transaction
+		}
+
+		throw new Error("Unauthorized")
 	}
 
-	async delete(id: number): Promise<number> {
+	async delete(id: number, user_id: number): Promise<number> {
 		const transaction = await Transaction.destroy({
 			where: {
-				id: id
+				id: id,
+				user_id: user_id
 			}
 		})
 		return transaction

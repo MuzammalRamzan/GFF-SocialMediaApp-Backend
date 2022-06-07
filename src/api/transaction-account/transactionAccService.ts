@@ -7,10 +7,11 @@ export class TransactionAccService implements ITransactionAccountService {
 		return transactionAcc as TransactionAccount[]
 	}
 
-	async fetch(id: number): Promise<TransactionAccount[]> {
+	async fetch(id: number, userId: number): Promise<TransactionAccount[]> {
 		const transactionAccount = await TransactionAccount.findAll({
 			where: {
-				id: id
+				id: id,
+				user_id: userId
 			}
 		})
 
@@ -35,8 +36,8 @@ export class TransactionAccService implements ITransactionAccountService {
 		return transactionAccount
 	}
 
-	async update(id: number, params: TransactionAccountType): Promise<[affectedCount: number]> {
-		const transactionAccount = await TransactionAccount.update(
+	async update(id: number, params: TransactionAccountType): Promise<TransactionAccount> {
+		const updatedTransactionAccount = await TransactionAccount.update(
 			{
 				balance: params.balance,
 				account_type_id: params.account_type_id,
@@ -53,10 +54,17 @@ export class TransactionAccService implements ITransactionAccountService {
 			},
 			{
 				where: {
-					id: id
+					id: id,
+					user_id: params.user_id
 				}
 			}
 		)
-		return transactionAccount
+		if (updatedTransactionAccount[0] === 1){
+			const transactionAccount = await TransactionAccount.findByPk(id)
+			return transactionAccount as TransactionAccount
+		}
+
+		throw new Error("Unauthorized")
+		
 	}
 }
