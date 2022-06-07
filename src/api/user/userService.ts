@@ -1,4 +1,4 @@
-import { IUserService, UserType } from "./interface";
+import { ISearchUser, IUserService, UserType } from "./interface";
 import { User } from "./userModel";
 import { AuthService } from "../auth/authService"
 import { Op } from "sequelize";
@@ -76,7 +76,7 @@ export class UserService implements IUserService {
         return deletedRow
     }
 
-    async searchFriend(searchTerm: string, userId: number): Promise<User[]> {
+    async searchFriend(searchTerm: string, userId: number): Promise<ISearchUser[]> {
         const user = await User.findAll({
             where: {
                 [Op.or]: [
@@ -97,6 +97,13 @@ export class UserService implements IUserService {
             }
         })
 
-        return user as any
+        return user.map(user => {
+            const data = user.get();
+            return {
+                id: data.id,
+                firstname: data.firstname,
+                lastname: data.lastname,
+            }
+        })
     }
 }

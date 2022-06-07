@@ -10,10 +10,12 @@ import { transactionCategoryRouter } from './api/transaction-category/transactio
 import { recordRouter } from './api/record/recordRouter';
 import { findFriendRouter } from './api/find-friend/findFriendRouter';
 import { sequelize } from './database';
-import { mentorMatcherRouter } from './api/mentor-matcher/mentorMatcherRouter';
 import { userInformationRouter } from './api/user-information/userInformationRouter';
 import { hashtagRouter } from './api/hashtag/hashtagRouter';
 import { debtRouter } from './api/debt/debtRouter';
+import { loanLedgerProfessionalInformationRouter } from './api/loan-ledger-professional-information/professionalInformationRouter';
+import { loanLedgerPersonalInfoRouter } from './api/loan-ledger-personal-information/loanLedgerPersonalInformationRouter';
+import { mentorMatcherRouter } from './api/mentor-matcher/mentorMatcherRouter';
 
 const options = {
   swaggerOptions: {
@@ -32,11 +34,13 @@ const options = {
   app.use('/transactionAccount', transactionAccRouter)
   app.use('/transactionCategory', transactionCategoryRouter)
   app.use('/record', recordRouter)
-  app.use('/find-friend', findFriendRouter);
-  app.use('/mentor-matcher', mentorMatcherRouter);
+  app.use('/find-friend', findFriendRouter)
   app.use('/userInformation', userInformationRouter)
   app.use('/hashtag', hashtagRouter)
   app.use('/debt', debtRouter)
+  app.use('/loanLedgerProfessionalInformation', loanLedgerProfessionalInformationRouter)
+  app.use('/loanLedgerPersonalInformation', loanLedgerPersonalInfoRouter)
+  app.use('/mentor-matcher', mentorMatcherRouter);
 
   app.listen(process.env.PORT, () => {
     console.log(`Server running at port ${process.env.PORT}`)

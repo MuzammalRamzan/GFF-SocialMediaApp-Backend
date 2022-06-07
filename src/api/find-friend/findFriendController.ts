@@ -18,7 +18,7 @@ export class FindFriendController {
     try {
       const userId = req?.user?.id as number;
       const friendRequests = await this.findFriendService.getFriendRequestsBySenderId(userId)
-      res.status(200).send(friendRequests)
+      res.status(200).send({ friend: friendRequests })
     } catch (err) {
       throw err
     }
@@ -28,7 +28,7 @@ export class FindFriendController {
     try {
       const userId = req?.user?.id as number;
       const receivedFriendRequests = await this.findFriendService.getFriendRequestsByReceiverId(userId)
-      res.status(200).send(receivedFriendRequests)
+      res.status(200).send({ requests: receivedFriendRequests })
     } catch (err) {
       throw err
     }
@@ -52,7 +52,7 @@ export class FindFriendController {
       }
 
       const findFriendRequest = await this.findFriendService.add(loggedInUserId, req.body.receiver_id)
-      return res.send(findFriendRequest)
+      return res.status(200).send({ requests: findFriendRequest })
     } catch (err) {
       console.log(err);
       throw err
@@ -64,10 +64,10 @@ export class FindFriendController {
       const userId = req?.user?.id as number;
       const id = +req.params.request_id;
       const acceptFriendRequest = await this.findFriendService.approve(id, userId)
-      return res.send(acceptFriendRequest)
+      return res.status(200).send({ requests: acceptFriendRequest })
     } catch (err: any) {
       console.log(err);
-      return res.status(500).json({ message: err.message || 'Internal server error', status: 500 });
+      throw new Error(err.message || 'Internal server error')
     }
   }
 
@@ -77,10 +77,10 @@ export class FindFriendController {
       const id = +req.params.request_id;
       const rejectFriendRequest = await this.findFriendService.reject(id, userId)
 
-      return res.send(rejectFriendRequest)
+      return res.status(200).send({ requests: rejectFriendRequest })
     } catch (err: any) {
       console.log(err);
-      return res.status(500).json({ message: err.message || 'Internal server error', status: 500 })
+      throw new Error(err.message || 'Internal server error')
     }
   }
 
@@ -88,7 +88,7 @@ export class FindFriendController {
     try {
       const userId = req?.user?.id as number;
       const friends = await this.findFriendService.friends(userId)
-      return res.send(friends)
+      return res.status(200).send({ friends })
     } catch (err) {
       throw err
     }

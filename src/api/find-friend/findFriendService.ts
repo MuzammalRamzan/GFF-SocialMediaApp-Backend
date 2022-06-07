@@ -4,11 +4,10 @@ import { User } from "../user/userModel"
 import { Op } from "sequelize";
 
 export class FindFriendService implements IFindFriendService {
-  async getFriendRequestsBySenderId(sender_id: number): Promise<any[]> {
+  async getFriendRequestsBySenderId(sender_id: number): Promise<FindFriend[]> {
     const findFriends = await FindFriendModel.findAll(
       {
         where: { sender_id: sender_id, request_type: RequestType.SEND },
-        raw: true,
         include: [
           {
             model: User,
@@ -16,43 +15,29 @@ export class FindFriendService implements IFindFriendService {
             identifier: 'receiver_id',
             foreignKey: 'id',
             attributes: ['id', 'firstname', 'lastname'],
-          },
-          {
-            model: User,
-            as: 'sender',
-            identifier: 'sender_id',
-            foreignKey: 'id',
-            attributes: ['id', 'firstname', 'lastname'],
           }
         ]
       },
     );
 
-    return findFriends.map((friend: any) => {
-      let user: any = {
-        id: friend.id,
-        userId: friend.receiver_id,
-        firstname: friend['receiver.firstname'],
-        lastname: friend['receiver.lastname'],
-      };
+    return findFriends.map((friend) => {
+      const user = friend.get();
 
-      return user
+      return {
+        id: user.id,
+        receiver: user.receiver.get(),
+        sender_id: user.sender_id,
+        receiver_id: user.receiver_id,
+        request_type: user.request_type
+      };
     });
   }
 
-  async getFriendRequestsByReceiverId(receiver_id: number): Promise<any[]> {
+  async getFriendRequestsByReceiverId(receiver_id: number): Promise<FindFriend[]> {
     const findFriends = await FindFriendModel.findAll(
       {
         where: { receiver_id: receiver_id, request_type: RequestType.SEND },
-        raw: true,
         include: [
-          {
-            model: User,
-            as: 'receiver',
-            identifier: 'receiver_id',
-            foreignKey: 'id',
-            attributes: ['id', 'firstname', 'lastname'],
-          },
           {
             model: User,
             as: 'sender',
@@ -64,15 +49,15 @@ export class FindFriendService implements IFindFriendService {
       },
     );
 
-    return findFriends.map((friend: any) => {
-      let user: any = {
-        id: friend.id,
-        userId: friend.sender_id,
-        firstname: friend['sender.firstname'],
-        lastname: friend['sender.lastname'],
-      };
-
-      return user
+    return findFriends.map((friend) => {
+      const user = friend.get();
+      return {
+        id: user.id,
+        sender: user.sender.get(),
+        sender_id: user.sender_id,
+        receiver_id: user.receiver_id,
+        request_type: user.request_type
+      }
     });
   }
 
@@ -122,7 +107,7 @@ export class FindFriendService implements IFindFriendService {
     return findFriend?.get();
   }
 
-  async friends(userId: number): Promise<any[]> {
+  async friends(userId: number): Promise<FindFriend[]> {
     const findFriends = await FindFriendModel.findAll(
       {
         where: {
@@ -132,7 +117,6 @@ export class FindFriendService implements IFindFriendService {
           ],
           request_type: RequestType.APPROVE
         },
-        raw: true,
         include: [
           {
             model: User,
@@ -152,25 +136,25 @@ export class FindFriendService implements IFindFriendService {
       },
     );
 
-    return findFriends.map((friend: any) => {
-      let user: any = {};
-      if (friend.sender_id === userId) {
-        user = {
-          userId: friend.receiver_id,
-          firstname: friend['receiver.firstname'],
-          lastname: friend['receiver.lastname'],
+    return findFriends.map((friend) => {
+      const user = friend.get();
+      if (user.sender_id === userId) {
+        return {
+          id: user.id,
+          receiver: user.receiver.get(),
+          sender_id: user.sender_id,
+          receiver_id: user.receiver_id,
+          request_type: user.request_type
         };
       } else {
-        user = {
-          userId: friend.sender_id,
-          firstname: friend['sender.firstname'],
-          lastname: friend['sender.lastname'],
+        return {
+          id: user.id,
+          sender: user.sender.get(),
+          sender_id: user.sender_id,
+          receiver_id: user.receiver_id,
+          request_type: user.request_type
         }
       }
-
-      user.id = friend.id;
-
-      return user
     });
   }
 }
