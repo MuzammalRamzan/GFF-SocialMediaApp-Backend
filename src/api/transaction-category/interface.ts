@@ -1,4 +1,5 @@
 import { Request } from "express" 
+import { UserType } from "../user/interface"
 import { TransactionCategory } from './transactionCategoryModel'
 
 export type TransactionCategoryType = {
@@ -22,22 +23,24 @@ export interface ITransactionCategoryService {
     fetchByUserId (user_id: number): Promise<TransactionCategory[]>
     add (params: TransactionCategoryType): Promise<TransactionCategory>
     update (id: number, params: TransactionCategoryType): Promise<[affectedCount: number]>
-    delete (id: number): Promise<number>
+    delete (id: number, user_id: number): Promise<number>
 }
 
 export interface CreateTransactionCategoryRequest extends Request {
-    TransactionCategory: TransactionCategory
+    TransactionCategory: TransactionCategory,
+    user: UserType
 }
 
 export interface GetTransactionCategoriesByUserIdRequest extends Request {
-    user_id: number
+    user: UserType
 }
 
 export interface UpdateTransactionCategoryByIdRequest extends Request {
-    user_id: number
+    user: UserType
     TransactionCategory: TransactionCategory
 }
 
 export interface DeleteTransactionCategoryRequest extends Request {
-    id: number
+    id: number,
+    user: UserType
 }

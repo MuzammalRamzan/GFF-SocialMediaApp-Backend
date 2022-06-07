@@ -44,17 +44,19 @@ export class TransactionCategoryService implements ITransactionCategoryService {
         },
         {
             where: {
-                id: id
+                id: id,
+                user_id: params.user_id
             }
         })
 
         return updatedRow
     }
 
-    async delete (id: number): Promise<number> {
+    async delete (id: number, userId: number): Promise<number> {
         const deletedRow = await TransactionCategory.destroy({
             where: {
-                id: id
+                id: id,
+                user_id: userId
             }
         })
 
