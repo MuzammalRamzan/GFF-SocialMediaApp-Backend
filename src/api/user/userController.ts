@@ -1,5 +1,7 @@
+import { Console } from 'console';
 import { Request, Response, NextFunction } from 'express';
 import { IAuthenticatedRequest } from '../helper/authMiddleware';
+import { DeleteUserRequest, GetUsersByEmailRequest, GetUsersByIdRequest, UpdateUserRequest } from './interface';
 import { UserService } from './userService';
 
 export class UserController {
@@ -18,42 +20,47 @@ export class UserController {
         }
     }
 
-    getUsersById = async (req: Request, res: Response, next: NextFunction) => {
+    getUsersById = async (req: GetUsersByIdRequest, res: Response, next: NextFunction) => {
         const id = +req.params.id
+        const userId = +req.user.id
 
         try {
-            const users = await this.userService.fetchById(id)
+            const users = await this.userService.fetchById(id, userId)
             res.send(users)
         } catch (err) {
             throw err
         }
     }
 
-    getUsersByEmail = async (req: Request, res: Response, next: NextFunction) => {
+    getUsersByEmail = async (req: GetUsersByEmailRequest, res: Response, next: NextFunction) => {
         const email = req.params.email
+        const userId = +req.user.id
         try {
-            const users = await this.userService.fetchByEmail(email + '')
+            const users = await this.userService.fetchByEmail(email + '', userId)
             res.send(users)
         } catch (err) {
             throw err
         }
     }
 
-    updateUser = async (req: Request, res: Response, next: NextFunction) => {
-        const id = +req.params.id
-        const params = req.body
+    updateUser = async (req: UpdateUserRequest, res: Response, next: NextFunction) => {
+        const paramsId = +req.params.id
+        const id = +req.user.id
+        const params = {...req.body, id}
+        
         try {
-            const user = await this.userService.update(id, params)
+            const user = await this.userService.update(paramsId, params)
             res.send(user)
         } catch (err) {
             throw err
         }
     }
 
-    deleteUser = async (req: Request, res: Response, next: NextFunction) => {
+    deleteUser = async (req: DeleteUserRequest, res: Response, next: NextFunction) => {
         const id = +req.params.id
+        const userId = +req.user.id
         try {
-            const user = await this.userService.delete(id)
+            const user = await this.userService.delete(id, userId)
             res.send({user})
         } catch (err) {
             throw err

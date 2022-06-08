@@ -13,7 +13,8 @@ export class UserInformationController {
     }
 
     createUserInformation = async (req: CreateUserInformationRequest, res: Response, next: NextFunction) => {
-        const params = req.body
+        const user_id = +req.user.id
+        const params = {...req.body, user_id}
         try {
             const userInformation = await this.userInformationService.add(params)
             res.status(200).send(userInformation)
@@ -23,10 +24,11 @@ export class UserInformationController {
     }
 
     getUserInformationByUserId = async (req: GetUserInformationByUserIdRequest, res: Response, next: NextFunction) => {
-        const user_id = +req.params.user_id
+        const params_user_id = +req.params.user_id
+        const userId = +req.user.id
 
         try {
-            const userInformation = await this.userInformationService.fetchById(user_id)
+            const userInformation = await this.userInformationService.fetchById(params_user_id, userId)
             res.status(200).send(userInformation)
         } catch (err) {
             throw err
@@ -34,10 +36,11 @@ export class UserInformationController {
     }
 
     updateUserInformation = async (req: UpdateUserInformationRequest, res: Response, next: NextFunction) => {
-        const id = +req.params.id
-        const params = req.body
+        const userId = +req.params.user_id
+        const user_id = +req.user.id
+        const params = {...req.body, user_id}
         try {
-            const userInformation = await this.userInformationService.update(id, params)
+            const userInformation = await this.userInformationService.update(userId, params)
             res.status(200).send(userInformation)
         } catch (err) {
             throw err
@@ -45,9 +48,10 @@ export class UserInformationController {
     }
 
     deleteUserInformation = async (req: DeleteUserInformationRequest, res: Response, next: NextFunction) => {
-        const id = +req.params.id
+        const params_user_id = +req.params.user_id
+        const userId = +req.user.id
         try {
-            const userInformation = await this.userInformationService.delete(id)
+            const userInformation = await this.userInformationService.delete(params_user_id, userId)
             res.send({userInformation})
         } catch (err) {
             throw err
