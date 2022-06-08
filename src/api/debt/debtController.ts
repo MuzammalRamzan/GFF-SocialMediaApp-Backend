@@ -26,7 +26,6 @@ export class DebtController {
         const id = +req.params.id
 		const userId = +req.user.id
 
-		console.log("TU SAM", userId)
         try {
             const debt = await this.debtService.fetchById(id, userId)
             res.status(200).send(debt)
