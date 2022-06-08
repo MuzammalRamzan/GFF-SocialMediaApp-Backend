@@ -1,4 +1,5 @@
 import express, { Application } from 'express'
+import { authMiddleware } from '../helper/authMiddleware'
 import { LoanLedgerProfessionalInformationController } from './professionalInformationController'
 
 const loanLedgerProfessionalInformationController = new LoanLedgerProfessionalInformationController()
@@ -10,26 +11,26 @@ loanLedgerProfessionalInformationRouter.get(
 )
 
 loanLedgerProfessionalInformationRouter.get(
-	'/:id',
+	'/:id', authMiddleware,
 	loanLedgerProfessionalInformationController.getLoanLedgerProfessionalInformationById as Application
 )
 
 loanLedgerProfessionalInformationRouter.get(
-	'/user/:user_id',
+	'/user/:user_id', authMiddleware,
 	loanLedgerProfessionalInformationController.getLoanLedgerProfessionalInformationByUserId as Application
 )
 
 loanLedgerProfessionalInformationRouter.post(
-	'/add',
+	'/add', authMiddleware,
 	loanLedgerProfessionalInformationController.createLoanLedgerProfessionalInformation as Application
 )
 
 loanLedgerProfessionalInformationRouter.put(
-	'/update/:id',
+	'/update/:id', authMiddleware,
 	loanLedgerProfessionalInformationController.updateLoanLedgerProfessionalInformation as Application
 )
 
 loanLedgerProfessionalInformationRouter.delete(
-	'/delete/:id',
+	'/delete/:id', authMiddleware,
 	loanLedgerProfessionalInformationController.deleteLoanLedgerProfessionalInformation as Application
 )
