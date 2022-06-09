@@ -1,4 +1,5 @@
 import { Request } from "express"
+import { UserType } from "../user/interface"
 import { LoanLedgerPersonalInformation } from "./loanLedgerPersonalInformationModel"
 
 export type LoanLedgerPersonalInformationType = {
@@ -24,29 +25,34 @@ export enum GenderEnum {
 export interface ILoanLedgerPersonalInformationService {
     list (): Promise<LoanLedgerPersonalInformation[]>
     add (params: LoanLedgerPersonalInformationType): Promise<LoanLedgerPersonalInformation>
-    fetchByUserId (id: number): Promise<LoanLedgerPersonalInformation[]>
-    fetchById (id: number): Promise<LoanLedgerPersonalInformation>
-    update (id: number, params: LoanLedgerPersonalInformationType): Promise<[affectedCount: number]>
-    delete (id: number): Promise<number>
+    fetchByUserId (params_userId: number, userId: number): Promise<LoanLedgerPersonalInformation[]>
+    fetchById (id: number, userId: number): Promise<LoanLedgerPersonalInformation>
+    update (id: number, params: LoanLedgerPersonalInformationType): Promise<LoanLedgerPersonalInformation>
+    delete (id: number, userId: number): Promise<number>
 }
 
 export interface CreateLoanLedgerPersonalInfoRequest extends Request {
     LoanLedgerPersonalInformationType: LoanLedgerPersonalInformationType
+    user: UserType
 }
 
 export interface GetLoanLedgerPersonalInfoByIdRequest extends Request {
     user_id: number
+    user: UserType
 }
 
 export interface GetLoanLedgerPersonalInfoByUserIdRequest extends Request {
     id: number
+    user: UserType
 }
 
 export interface UpdateLoanLedgerPersonalInfoRequest extends Request {
     user_id: number
     LoanLedgerPersonalInformationType: LoanLedgerPersonalInformationType
+    user: UserType
 }
 
 export interface DeleteLoanLedgerPersonalInfoRequest extends Request {
     id: number
+    user: UserType
 }

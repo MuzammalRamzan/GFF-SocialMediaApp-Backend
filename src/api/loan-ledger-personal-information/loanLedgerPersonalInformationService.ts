@@ -26,27 +26,43 @@ export class LoanLedgerPersonalInformationService implements ILoanLedgerPersonal
 		return loanPersonalInfos
 	}
 
-    async fetchByUserId (user_id: number): Promise<LoanLedgerPersonalInformation[]> {
+    async fetchByUserId (params_userId: number, userId:number): Promise<LoanLedgerPersonalInformation[]> {
+        if(params_userId !== userId){
+            throw new Error("Unauthorized")
+        }
         const loanLedgerPersonalInfos = await LoanLedgerPersonalInformation.findAll({
             where: {
-                user_id: user_id
+                user_id: params_userId
             }
         })
-
         return loanLedgerPersonalInfos as LoanLedgerPersonalInformation[]
     }
 
-    async fetchById (id: number): Promise<LoanLedgerPersonalInformation> {
+    async fetchById (id: number, userId: number): Promise<LoanLedgerPersonalInformation> {
         const loanLedgerPersonalInfo = await LoanLedgerPersonalInformation.findOne({
             where: {
-                id: id
+                id: id,
+                user_id: userId 
             }
         })
-
+        if(!loanLedgerPersonalInfo){
+            throw new Error("Unauthorized")
+        }
         return loanLedgerPersonalInfo as LoanLedgerPersonalInformation
     }
 
-    async update (id: number, params: LoanLedgerPersonalInformationType): Promise<[affectedCount: number]> {
+    async update (id: number, params: LoanLedgerPersonalInformationType): Promise<LoanLedgerPersonalInformation> {
+        const loan = await LoanLedgerPersonalInformation.findOne({
+            where:{
+                id: id,
+                user_id: params.user_id
+            }
+        })
+
+        if (!loan){
+            throw new Error("Unauthorized")
+        }
+
         const updatedRow = await LoanLedgerPersonalInformation.update({
             user_id: params.user_id,
             full_name: params.full_name,
@@ -62,20 +78,29 @@ export class LoanLedgerPersonalInformationService implements ILoanLedgerPersonal
         },
         {
             where: {
+                id: id,
+                user_id: params.user_id
+            }
+        })
+        const newUpdatedRow = await LoanLedgerPersonalInformation.findOne({
+            where:{
                 id: id
             }
         })
-
-        return updatedRow
+        return newUpdatedRow as LoanLedgerPersonalInformation
     }
 
-    async delete (id: number): Promise<number> {
+    async delete (id: number, userId: number): Promise<number> {
         const deletedRow = await LoanLedgerPersonalInformation.destroy({
             where: {
-                id: id
+                id: id,
+                user_id: userId
             }
         })
 
+        if(!deletedRow){
+            throw new Error("Unauthorized")
+        }
         return deletedRow
     }
 }

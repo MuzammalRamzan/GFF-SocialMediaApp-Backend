@@ -1,4 +1,5 @@
 import { Request } from 'express'
+import { UserType } from '../user/interface'
 import { LoanLedgerProfessionalInformation } from './professionalInformationModel'
 
 export type LoanLedgerProfessionalInformationType = {
@@ -14,30 +15,34 @@ export type LoanLedgerProfessionalInformationType = {
 
 export interface CreateLoanLedgerProfessionalInformationRequest extends Request {
 	LoanLedgerProfessionalInformationParams: LoanLedgerProfessionalInformationType
+	user: UserType
 }
 
 export interface GetLoanLedgerProfessionalInformationByIdRequest extends Request {
 	id: number
+	user: UserType
 }
 
 export interface GetLoanLedgerProfessionalInformationByUserIdRequest extends Request {
-	id: number
+	user: UserType
 }
 
 export interface UpdateLoanLedgerProfessionalInformationRequest extends Request {
 	id: number
 	LoanLedgerProfessionalInformationParams: LoanLedgerProfessionalInformationType
+	user: UserType
 }
 
 export interface DeleteLoanLedgerProfessionalInformationRequest extends Request {
 	id: number
+	user: UserType
 }
 
 export interface ILoanLedgerProfessionalInformationService {
 	list(): Promise<LoanLedgerProfessionalInformation[]>
-	fetchById(id: number): Promise<LoanLedgerProfessionalInformation>
+	fetchById(id: number, userId: number): Promise<LoanLedgerProfessionalInformation>
 	fetchByUserId(user_id: number): Promise<LoanLedgerProfessionalInformation[]>
 	add(params: LoanLedgerProfessionalInformationType): Promise<LoanLedgerProfessionalInformation>
-	update(id: number, params: LoanLedgerProfessionalInformationType): Promise<[affectedCount: number]>
-	delete(id: number): Promise<number>
+	update(id: number, params: LoanLedgerProfessionalInformationType): Promise<LoanLedgerProfessionalInformation>
+	delete(id: number, userId: number): Promise<number>
 }
