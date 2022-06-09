@@ -2,7 +2,6 @@ import { ISearchUser, IUserService, UserType } from "./interface";
 import { User } from "./userModel";
 import { AuthService } from "../auth/authService"
 import { Op } from "sequelize";
-import bcrypt from 'bcrypt';
 
 export class UserService implements IUserService {
     private readonly authService: AuthService
@@ -17,31 +16,22 @@ export class UserService implements IUserService {
         return users
     }
 
-    async fetchById(id: number, userId: number): Promise<User> {
-        if(id != userId) {
-            throw new Error("Unauthorized")
-        }
-
+    async fetchById(id: number): Promise<User> {
         const user = await User.findOne({
             where: {
-                id: userId
+                id: id
             }
         })
 
         return user as any
     }
 
-    async fetchByEmail(email: string, userId: number): Promise<User> {
+    async fetchByEmail(email: string): Promise<User> {
         const user = await User.findOne({
             where: {
-                email: email,
-                id: userId
+                email: email
             }
         })
-
-        if(!user){
-            throw new Error("Unauthorized")
-        }
 
         return user as any
     }
@@ -56,16 +46,10 @@ export class UserService implements IUserService {
         return user as User;
     }
 
-    async update(paramsId: number, params: UserType): Promise<User> {
-        if(paramsId !== params.id){
-            throw new Error("Unauthorized")
-        }
-        let passwordHash
-        if(params.password){
-            passwordHash = await this.authService.hashPassword(params.password)
-        }
+    async update(id: number, params: UserType): Promise<[affectedCount: number]> {
+        const passwordHash = await this.authService.hashPassword(params.password)
 
-        await User.update({
+        const updatedRow = await User.update({
             role_id: params.role_id,
             full_name: params.full_name,
             email: params.email, 
@@ -75,21 +59,17 @@ export class UserService implements IUserService {
         },
             {
                 where: {
-                    id: params.id
+                    id: id
                 }
             })
 
-            const newUpdatedRow = await User.findByPk(paramsId)
-            return newUpdatedRow as User   
+        return updatedRow
     }
 
-    async delete(id: number, userId: number): Promise<number> {
-        if(userId !== id){
-            throw new Error("Unauthorized")
-        }
+    async delete(id: number): Promise<number> {
         const deletedRow = await User.destroy({
             where: {
-                id: userId
+                id: id
             }
         })
 

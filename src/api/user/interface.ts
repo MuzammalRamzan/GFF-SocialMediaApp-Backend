@@ -1,4 +1,3 @@
-import { Request } from "express"
 import { User } from "./userModel"
 
 export type UserType = {
@@ -19,27 +18,9 @@ export interface ISearchUser {
 
 export interface IUserService {
     list (): Promise<User[]>
-    fetchById ( userId: number, id: number): Promise<User>
-    fetchByEmail (email: string, userId: number): Promise<User>
-    update (id: number, params: UserType): Promise<User>
-    delete (id: number, userId: number): Promise<number>
+    fetchById (id: number): Promise<User>
+    fetchByEmail (email: string): Promise<User>
+    update (id: number, params: UserType): Promise<[affectedCount: number]>
+    delete (id: number): Promise<number>
     searchFriend (search: string, userId: number): Promise<ISearchUser[]>
-}
-
-export interface GetUsersByIdRequest extends Request {
-    user: UserType
-    id: number
-}
-export interface GetUsersByEmailRequest extends Request {
-    email: string,
-    user: UserType
-}
-export interface UpdateUserRequest extends Request {
-    id: number,
-    user: UserType
-}
-
-export interface DeleteUserRequest extends Request {
-    id: number
-    user: UserType
 }
