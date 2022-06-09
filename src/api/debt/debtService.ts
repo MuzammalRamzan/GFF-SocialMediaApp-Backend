@@ -9,24 +9,34 @@ export class DebtService implements IDebtService {
         return debts
     }
 
-    async fetchById (id: number): Promise<Debt> {
+    async fetchById (id: number, userId: number): Promise<Debt> {
         const debt = await Debt.findOne({
             where: {
-                id: id
+                id: id,
+                user_id: userId
             }
         })
+
+        if (!debt){
+            throw new Error("Unauthorized")
+        }
 
         return debt as Debt
     }
 
-    async fetchDueDateById (id: number): Promise<Date> {
+    async fetchDueDateById (id: number, userId: number): Promise<Date> {
         const debt = await Debt.findOne({
             where: {
-                id:id
+                id: id,
+                user_id: userId
             }
         })
-        const dueDate = debt!.get("due_date")
 
+        if(!debt){
+            throw new Error("Unauthorized")
+        }
+
+        const dueDate = debt!.get("due_date")
         return dueDate as Date
     }
 
@@ -40,7 +50,7 @@ export class DebtService implements IDebtService {
 		return debt
 	}
 
-    async update (id: number, params: DebtType): Promise<[affectedCount: number]> {
+    async update (id: number, params: DebtType): Promise<Debt> {
         const updatedRow = await Debt.update({
             amount: params.amount,
             due_date: params.due_date,
@@ -48,19 +58,30 @@ export class DebtService implements IDebtService {
         },
         {
             where: {
-                id: id
+                id: id,
+                user_id: params.user_id
             }
         })
+        if (updatedRow[0] === 1){
+			const updatedRow = await Debt.findByPk(id)
+			return updatedRow as Debt
 
-        return updatedRow
+		}
+
+		throw new Error("Unauthorized")
+
     }
 
-    async delete (id: number): Promise<number> {
+    async delete (id: number, userId: number): Promise<number> {
         const deletedRow = await Debt.destroy({
             where: {
-                id: id
+                id: id,
+                user_id: userId
             }
         })
+        if(!deletedRow){
+            throw new Error("Unauthorized")
+        }
 
         return deletedRow
     }

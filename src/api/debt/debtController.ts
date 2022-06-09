@@ -24,9 +24,10 @@ export class DebtController {
 
     getById = async (req: GetByIdRequest, res: Response, next: NextFunction) => {
         const id = +req.params.id
+		const userId = +req.user.id
 
         try {
-            const debt = await this.debtService.fetchById(id)
+            const debt = await this.debtService.fetchById(id, userId)
             res.status(200).send(debt)
         } catch (err) {
             throw err
@@ -35,8 +36,9 @@ export class DebtController {
 
     getDueDateByDebtId = async (req: GetDueDateByDebtIdRequest, res: Response, next: NextFunction) => {
         const id = +req.params.id
+		const userId = +req.user.id
         try {
-            const dueDate = await this.debtService.fetchDueDateById(id)
+            const dueDate = await this.debtService.fetchDueDateById(id, userId)
             res.status(200).send(dueDate)
         } catch (err) {
             throw err
@@ -44,7 +46,8 @@ export class DebtController {
     }
 
 	createDebt = async (req: CreateDebtRequest, res: Response, next: NextFunction) => {
-		const params = req.body
+		const user_id = +req.user.id
+		const params = {...req.body, user_id}
 
 		try {
 			const debt = await this.debtService.add(params)
@@ -56,7 +59,8 @@ export class DebtController {
 
 	updateDebt = async (req: UpdateDebtRequest, res: Response, next: NextFunction) => {
 		const id = +req.params.id
-		const params = req.body
+		const user_id = +req.user.id
+		const params = {...req.body, user_id}
 		try {
 			const debt = await this.debtService.update(id, params)
 			res.status(200).send({ debt })
@@ -67,8 +71,9 @@ export class DebtController {
 
 	deleteDebt = async (req: DeleteDebtRequest, res: Response, next: NextFunction) => {
 		const id = +req.params.id
+		const userId = +req.user.id
 		try {
-			const debt = await this.debtService.delete(id)
+			const debt = await this.debtService.delete(id, userId)
 			res.status(200).send({ debt })
 		} catch (err) {
 			throw err
