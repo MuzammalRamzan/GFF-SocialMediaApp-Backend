@@ -19,7 +19,9 @@ export class TransactionController {
 	}
 
 	createTransaction = async (req: CreateTransactionRequest, res: Response, next: NextFunction) => {
-		const params = req.body
+		const user_id = +req.user.id
+		console.log(user_id)
+		const params = {...req.body, user_id}
 
 		try {
 			const transaction = await this.transactionService.add(params)
@@ -31,7 +33,8 @@ export class TransactionController {
 
 	updateTransaction = async (req: UpdateTransactionRequest, res: Response, next: NextFunction) => {
 		const id = +req.params.id
-		const params = req.body
+		const user_id = +req.user.id
+		const params = {...req.body, user_id}
 
 		try {
 			const transaction = await this.transactionService.update(id, params)
@@ -43,9 +46,10 @@ export class TransactionController {
 
 	deleteTransaction = async (req: DeleteTransactionRequest, res: Response, next: NextFunction) => {
 		const id = +req.params.id
+		const user_id = +req.user.id
 
 		try {
-			const transaction = await this.transactionService.delete(id)
+			const transaction = await this.transactionService.delete(id, user_id)
 			res.status(200).send({ transaction })
 		} catch (err) {
 			throw err
