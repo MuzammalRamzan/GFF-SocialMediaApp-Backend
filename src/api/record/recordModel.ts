@@ -1,5 +1,6 @@
 import { DataTypes, Model } from 'sequelize'
 import { sequelize } from '../../database/index'
+import { TransactionAccount } from '../transaction-account/transactionAccModel';
 
 export class Record extends Model {}
 
@@ -36,11 +37,12 @@ Record.init(
 		},
 		account_id: {
 			type: DataTypes.INTEGER,
-			allowNull: false
+			allowNull: false,
+			
 		}
 	},
 	{
 		sequelize,
 		tableName: 'transaction_history'
-	}
-)
+	},
+)	
