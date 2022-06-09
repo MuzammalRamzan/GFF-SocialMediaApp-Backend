@@ -13,7 +13,8 @@ export class TransactionCategotryController {
     }
 
     createTransactionCategory = async (req: CreateTransactionCategoryRequest, res: Response, next: NextFunction) => {
-        const params = req.body
+        const user_id = req.user.id
+        const params = {...req.body, user_id}
         try {
             const transactionCategory = await this.transactionCategoryService.add(params)
             res.status(200).send(transactionCategory)
@@ -32,7 +33,7 @@ export class TransactionCategotryController {
     }
 
     getTransactionCategoriesByUserId = async (req: GetTransactionCategoriesByUserIdRequest, res: Response, next: NextFunction) => {
-        const userId = +req.params.user_id
+        const userId = +req.user.id
         try {
             const transactionCategories = await this.transactionCategoryService.fetchByUserId(userId)
             res.status(200).send(transactionCategories)
@@ -42,8 +43,9 @@ export class TransactionCategotryController {
     }
 
     updateTransactionCategoryById = async (req: UpdateTransactionCategoryByIdRequest, res: Response, next: NextFunction) => {
+        const user_id = +req.user.id
         const id = +req.params.id
-        const params = req.body
+        const params = {...req.body, user_id}
         try {
             const transactionCategory = await this.transactionCategoryService.update(id, params)
             res.send(transactionCategory)
@@ -53,9 +55,10 @@ export class TransactionCategotryController {
     }
 
     deleteTransactionCategory = async (req: DeleteTransactionCategoryRequest, res: Response, next: NextFunction) => {
+        const userId = +req.user.id
         const id = +req.params.id
         try {
-            const transactionCategory = await this.transactionCategoryService.delete(id)
+            const transactionCategory = await this.transactionCategoryService.delete(id, userId)
             res.status(200).send({transactionCategory})
         } catch (err) {
             throw err
