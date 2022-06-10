@@ -1,9 +1,12 @@
 import { Request, Response, NextFunction } from 'express'
+import { jsonErrorHandler } from '../helper/errorHandler'
 import { HashtagService } from './hashtagService'
-import { CreateHashtagRequest, 
-         DeleteHashtagRequest, 
-         GetHashtagByUserInformationIdRequest, 
-         UpdateHashtagRequest } from './interface'
+import {
+	CreateHashtagRequest,
+	DeleteHashtagRequest,
+	GetHashtagByUserInformationIdRequest,
+	UpdateHashtagRequest
+} from './interface'
 
 export class HashtagController {
 	private readonly hashtagService: HashtagService
@@ -17,7 +20,7 @@ export class HashtagController {
 			const hashtags = await this.hashtagService.list()
 			res.status(200).send({ hashtags })
 		} catch (err) {
-			throw err
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 
@@ -28,20 +31,24 @@ export class HashtagController {
 			const hashtag = await this.hashtagService.add(params)
 			res.status(200).send({ hashtag })
 		} catch (err) {
-			throw err
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 
-    getHashtagByUserInformationId = async (req: GetHashtagByUserInformationIdRequest, res: Response, next: NextFunction) => {
-        const id = +req.params.user_info_id
+	getHashtagByUserInformationId = async (
+		req: GetHashtagByUserInformationIdRequest,
+		res: Response,
+		next: NextFunction
+	) => {
+		const id = +req.params.user_info_id
 
-        try {
-            const hashtags = await this.hashtagService.fetchById(id)
-            res.send(hashtags)
-        } catch (err) {
-            throw err
-        }
-    }
+		try {
+			const hashtags = await this.hashtagService.fetchById(id)
+			res.send(hashtags)
+		} catch (err) {
+			return jsonErrorHandler(err, req, res, () => {})
+		}
+	}
 
 	updateHashtag = async (req: UpdateHashtagRequest, res: Response, next: NextFunction) => {
 		const id = +req.params.id
@@ -51,7 +58,7 @@ export class HashtagController {
 			const hashtag = await this.hashtagService.update(id, params)
 			res.status(200).send({ hashtag })
 		} catch (err) {
-			throw err
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 
@@ -62,7 +69,7 @@ export class HashtagController {
 			const hashtag = await this.hashtagService.delete(id)
 			res.status(200).send({ hashtag })
 		} catch (err) {
-			throw err
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 }
