@@ -10,7 +10,7 @@ mentorMatcherRouter.get('/mentors', controller.findMentors as Application);
 mentorMatcherRouter.get('/my-mentor', authMiddleware, controller.myMentors as Application);
 mentorMatcherRouter.get('/my-mentee', authMiddleware, controller.myMentees as Application);
 mentorMatcherRouter.post('/request/send', authMiddleware, sendMentorRequestValidation, controller.sendMentorRequest as Application);
-mentorMatcherRouter.get(
+mentorMatcherRouter.put(
   '/request/accept',
   authMiddleware,
   [
@@ -19,7 +19,7 @@ mentorMatcherRouter.get(
   ],
   controller.acceptMentorRequest as Application
 );
-mentorMatcherRouter.get(
+mentorMatcherRouter.put(
   '/request/reject',
   authMiddleware,
   [
@@ -32,7 +32,7 @@ mentorMatcherRouter.get(
 mentorMatcherRouter.get('/request/mentor', authMiddleware, controller.getMentorRequests as Application);
 // get list of sent requests
 mentorMatcherRouter.get('/request/mentee', authMiddleware, controller.getMentorRequestsByMenteeId as Application);
-mentorMatcherRouter.get('/mentor/favorite/add', authMiddleware, requiredMentorId, controller.addMentorToFavorite as Application);
-mentorMatcherRouter.get('/mentor/favorite/remove', authMiddleware, requiredMentorId, controller.removeMentorFromFavorite as Application);
+mentorMatcherRouter.post('/mentor/favorite/add', authMiddleware, requiredMentorId, controller.addMentorToFavorite as Application);
+mentorMatcherRouter.post('/mentor/favorite/remove', authMiddleware, requiredMentorId, controller.removeMentorFromFavorite as Application);
 
-mentorMatcherRouter.get('/sign-contract', authMiddleware, requiredRequestId, controller.signContract as Application);
+mentorMatcherRouter.put('/sign-contract', authMiddleware, requiredRequestId, controller.signContract as Application);

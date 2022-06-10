@@ -23,7 +23,8 @@ export class MentorMatcherService implements IMentorMatcherService {
             }
           }
         ]
-      }
+      },
+      attributes: ['id', 'firstname', 'lastname', 'full_name']
     })
 
     return mentors;
@@ -54,6 +55,8 @@ export class MentorMatcherService implements IMentorMatcherService {
         id: mentor_request.id,
         mentor_id: mentor_request.mentor_id,
         mentee_id: mentor_request.mentee_id,
+        is_contract_signed_by_mentor: mentor_request.is_contract_signed_by_mentor,
+        is_contract_signed_by_mentee: mentor_request.is_contract_signed_by_mentee,
       }
     });
   }
@@ -156,6 +159,8 @@ export class MentorMatcherService implements IMentorMatcherService {
         id: mentor_request.id,
         mentor_id: mentor_request.mentor_id,
         mentee_id: mentor_request.mentee_id,
+        is_contract_signed_by_mentor: mentor_request.is_contract_signed_by_mentor,
+        is_contract_signed_by_mentee: mentor_request.is_contract_signed_by_mentee,
       }
     });
   }
@@ -185,6 +190,8 @@ export class MentorMatcherService implements IMentorMatcherService {
         id: mentor_request.id,
         mentor_id: mentor_request.mentor_id,
         mentee_id: mentor_request.mentee_id,
+        is_contract_signed_by_mentor: mentor_request.is_contract_signed_by_mentor,
+        is_contract_signed_by_mentee: mentor_request.is_contract_signed_by_mentee,
       }
     })
   }
@@ -214,6 +221,8 @@ export class MentorMatcherService implements IMentorMatcherService {
         id: mentor_request.id,
         mentor_id: mentor_request.mentor_id,
         mentee_id: mentor_request.mentee_id,
+        is_contract_signed_by_mentor: mentor_request.is_contract_signed_by_mentor,
+        is_contract_signed_by_mentee: mentor_request.is_contract_signed_by_mentee,
       }
     })
   }

@@ -25,6 +25,8 @@ export interface IMentorRequest {
   mentee_id: number
   request_type: string
   status?: string
+  is_contract_signed_by_mentee: boolean
+  is_contract_signed_by_mentor: boolean
   mentee?: {
     id: number
     firstname: string
