@@ -9,9 +9,9 @@ export class MpesaController {
 		this.mpesaService = new MpesaService()
 	}
 
-    fetch = (req: Request, res: Response, next: NextFunction) => {
+    fetch = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const response = this.mpesaService.mpesaAuth()
+            const response = await this.mpesaService.mpesaAuth()
             res.status(200).send(response)
         } catch (err) {
             throw err

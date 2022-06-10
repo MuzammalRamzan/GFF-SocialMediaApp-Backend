@@ -40,7 +40,7 @@ const options = {
   app.use('/debt', debtRouter)
   app.use('/loanLedgerProfessionalInformation', loanLedgerProfessionalInformationRouter)
   app.use('/loanLedgerPersonalInformation', loanLedgerPersonalInfoRouter)
-  app.use('/mpasa', mpesaRouter)
+  app.use('/mpesa', mpesaRouter)
 
   app.listen(process.env.PORT, () => {
     console.log(`Server running at port ${process.env.PORT}`)

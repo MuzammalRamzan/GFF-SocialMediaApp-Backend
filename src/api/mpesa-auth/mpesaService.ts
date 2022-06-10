@@ -3,18 +3,16 @@ import axios from 'axios';
 
 export class MpesaService implements IMpesaService{
 
-    async mpesaAuth(): Promise<any> {
+    async mpesaAuth(): Promise<MpesaType> {
 
 		const url = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
 
-		const response = await axios.get(url, {
+		const { data } = await axios.get(url, {
 			headers: {
 				'Authorization': `Basic ${process.env.MPESA_AUTHORIZATION}`
 			}
 		})
-		.then(response => console.log(response.data))
-		.catch(err => console.log("ERROR",err))
 
-		return response
+		return data as MpesaType
 	}
 }
