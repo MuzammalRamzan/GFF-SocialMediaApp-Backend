@@ -1,5 +1,11 @@
 import { Request, Response, NextFunction } from 'express'
-import { CreateRecordRequest, DeleteRecordRequest, GetAllRecordsByUserIdRequest, UpdateRecordRequest } from './interface'
+import { jsonErrorHandler } from '../helper/errorHandler'
+import {
+	CreateRecordRequest,
+	DeleteRecordRequest,
+	GetAllRecordsByUserIdRequest,
+	UpdateRecordRequest
+} from './interface'
 import { RecordService } from './recordService'
 
 export class RecordController {
@@ -14,7 +20,7 @@ export class RecordController {
 			const records = await this.recordService.list()
 			res.status(200).send({ records })
 		} catch (err) {
-			throw err
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 
@@ -24,7 +30,7 @@ export class RecordController {
 			const records = await this.recordService.listByUserId(userId)
 			res.status(200).send(records)
 		} catch (err) {
-			throw err
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 
@@ -36,7 +42,7 @@ export class RecordController {
 			const record = await this.recordService.add(params, userId)
 			res.status(200).send({ record })
 		} catch (err) {
-			throw err
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 
@@ -48,7 +54,7 @@ export class RecordController {
 			const record = await this.recordService.update(id, params, userId)
 			res.status(200).send({ record })
 		} catch (err) {
-			throw err
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 
@@ -58,7 +64,7 @@ export class RecordController {
 			const record = await this.recordService.delete(id)
 			res.status(200).send({ record })
 		} catch (err) {
-			throw err
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 }
