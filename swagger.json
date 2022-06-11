@@ -106,12 +106,37 @@
 						"type": "string"
 					},
 					{
-						"name": "searchTerm",
+						"name": "text",
 						"in": "query",
-						"description": "Search Term",
+						"description": "Mentor name",
 						"required": true,
-						"style": "simple",
-						"explode": false,
+						"type": "string"
+					},
+					{
+						"name": "industry",
+						"in": "query",
+						"description": "Industry(comma separated value with no spaces, e.g. IT,Software)",
+						"required": false
+					},
+					{
+						"name": "role",
+						"in": "query",
+						"description": "Role(comma separated value with no spaces, e.g IT,Software)",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"name": "frequency",
+						"in": "query",
+						"description": "Frequency(comma separated value with no spaces, e.g IT,Software)",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"name": "conversation_mode",
+						"in": "query",
+						"description": "Conversation Mode(comma separated value with no spaces, e.g IT,Software)",
+						"required": false,
 						"type": "string"
 					}
 				],

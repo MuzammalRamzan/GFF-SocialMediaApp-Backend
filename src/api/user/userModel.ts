@@ -1,5 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../database';
+import { MentorInformation } from '../mentor-information/mentorInformationModel';
+import { UserInformation } from '../user-information/userInformationModel';
 
 export interface IUser {
     id: number;
@@ -18,28 +20,28 @@ User.init({
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
-        allowNull:false,
+        allowNull: false,
     },
     role_id: {
         type: DataTypes.INTEGER,
-        allowNull:false,
+        allowNull: false,
     },
     full_name: {
         type: DataTypes.STRING,
-        allowNull:false,
+        allowNull: false,
     },
     email: {
         type: DataTypes.STRING,
-        allowNull:false,
+        allowNull: false,
         unique: true
     },
     password: {
         type: DataTypes.STRING,
-        allowNull:false
+        allowNull: false
     },
     default_currency_id: {
         type: DataTypes.INTEGER,
-        defaultValue:1
+        defaultValue: 1
     },
     user_feature_id: {
         type: DataTypes.INTEGER,
@@ -51,3 +53,13 @@ User.init({
         sequelize,
         tableName: 'user',
     })
+
+User.hasOne(MentorInformation, {
+    foreignKey: 'user_id',
+    as: 'mentor_information'
+})
+
+User.hasOne(UserInformation, {
+    foreignKey: 'user_id',
+    as: 'user_information'
+})

@@ -1,11 +1,17 @@
-import { IMentorMatcherService, IMentorRequest } from "./interface";
+import { IMentorMatcherService, IMentorRequest, ISarchTermParams } from "./interface";
 import { User } from "../user/userModel"
 import { Op } from "sequelize";
 import { IMentorMatcher, MentorMatcherModel, MentorMatcherRequestStatus, MentorMatcherRequestType } from "./mentorMatcherModel";
+import { MentorInformation } from "../mentor-information/mentorInformationModel";
+import { UserInformation } from "../user-information/userInformationModel";
 
 export class MentorMatcherService implements IMentorMatcherService {
-  // distance, industry[], role[], frequency[], mode[], name
-  async findMentors(userId: number, searchTerm: string): Promise<User[]> {
+  async findMentors(userId: number, searchTerms: ISarchTermParams): Promise<User[]> {
+    const _industry = searchTerms.industry?.split(',');
+    const _role = searchTerms.role?.split(',');
+    const _frequency = searchTerms.frequency?.split(',');
+    const _conversation_mode = searchTerms.conversation_mode?.split(',');
+
     const mentors = await User.findAll({
       where: {
         id: {
@@ -13,18 +19,57 @@ export class MentorMatcherService implements IMentorMatcherService {
         },
         [Op.or]: [
           {
-            firstname: {
-              [Op.like]: `%${searchTerm}%`
-            }
-          },
-          {
-            lastname: {
-              [Op.like]: `%${searchTerm}%`
+            full_name: {
+              [Op.like]: `%${searchTerms.text?.trim()}%`
             }
           }
         ]
       },
-      attributes: ['id', 'firstname', 'lastname', 'full_name']
+      attributes: ['id', 'full_name'],
+      include: [
+        {
+          model: MentorInformation,
+          as: 'mentor_information',
+          attributes: ['id', 'industry', 'role', 'frequency', 'conversation_mode'],
+          where: {
+            [Op.or]: [
+              {
+                industry: {
+                  [Op.or]: _industry?.length && _industry?.map((item: string) => ({
+                    [Op.like]: `%${item.trim()}%`
+                  })),
+                }
+              },
+              {
+                role: {
+                  [Op.or]: _role?.length && _role?.map((item: string) => ({
+                    [Op.like]: `%${item.trim()}%`
+                  })),
+                }
+              },
+              {
+                frequency: {
+                  [Op.or]: _frequency?.length && _frequency?.map((item: string) => ({
+                    [Op.like]: `%${item.trim()}%`
+                  })),
+                }
+              },
+              {
+                conversation_mode: {
+                  [Op.or]: _conversation_mode?.length && _conversation_mode?.map((item: string) => ({
+                    [Op.like]: `%${item.trim()}%`
+                  })),
+                }
+              },
+            ]
+          }
+        },
+        {
+          model: UserInformation,
+          as: 'user_information',
+          attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country']
+        }
+      ]
     })
 
     return mentors;
@@ -40,8 +85,15 @@ export class MentorMatcherService implements IMentorMatcherService {
         {
           model: User,
           as: 'mentor',
-          attributes: ['id', 'firstname', 'lastname'],
-          foreignKey: 'mentor_id'
+          attributes: ['id', 'full_name'],
+          foreignKey: 'mentor_id',
+          include: [
+            {
+              model: MentorInformation,
+              as: 'mentor_information',
+              attributes: ['id', 'industry', 'role', 'frequency', 'conversation_mode'],
+            }
+          ]
         }
       ]
     })
@@ -144,7 +196,7 @@ export class MentorMatcherService implements IMentorMatcherService {
         {
           model: User,
           as: 'mentee',
-          attributes: ['id', 'firstname', 'lastname'],
+          attributes: ['id', 'full_name'],
           foreignKey: 'mentee_id'
         }
       ]
@@ -175,7 +227,7 @@ export class MentorMatcherService implements IMentorMatcherService {
         {
           model: User,
           as: 'mentee',
-          attributes: ['id', 'firstname', 'lastname'],
+          attributes: ['id', 'full_name'],
           foreignKey: 'mentee_id'
         },
       ]
@@ -206,7 +258,7 @@ export class MentorMatcherService implements IMentorMatcherService {
         {
           model: User,
           as: 'mentor',
-          attributes: ['id', 'firstname', 'lastname'],
+          attributes: ['id', 'full_name'],
           foreignKey: 'mentor_id'
         }
       ]

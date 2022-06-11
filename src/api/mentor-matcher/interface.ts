@@ -3,7 +3,7 @@ import { User } from "../user/userModel"
 import { IMentorMatcher } from "./mentorMatcherModel"
 
 export interface IMentorMatcherService {
-  findMentors(userId: number, searchTerm: string): Promise<User[]>
+  findMentors(userId: number, searchTerms: ISarchTermParams): Promise<User[]>
   myMentors(userId: number): Promise<IMentorRequest[]>
   myMentees(userId: number): Promise<IMentorRequest[]>
   sendMentorRequest(userId: number, mentor_id: number, message: string): Promise<IMentorMatcher>
@@ -41,4 +41,12 @@ export interface IMentorRequest {
 
 export interface MentorMatcherAuthRequest extends IAuthenticatedRequest {
   mentor_id: number;
+}
+
+export interface ISarchTermParams {
+  industry?: string;
+  role?: string;
+  frequency?: string;
+  conversation_mode?: string;
+  text?: string;
 }

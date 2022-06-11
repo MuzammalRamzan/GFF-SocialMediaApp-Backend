@@ -1,7 +1,7 @@
 import { Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 import { IAuthenticatedRequest } from '../helper/authMiddleware';
-import { MentorMatcherAuthRequest } from './interface';
+import { ISarchTermParams, MentorMatcherAuthRequest } from './interface';
 import { MentorMatcherService } from './mentorMatcherService';
 
 export class MentorMatcherController {
@@ -14,9 +14,8 @@ export class MentorMatcherController {
   public findMentors = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
       const userId = req?.user?.id || 0 as number;
-      const searchTerm = req.query.searchTerm as string;
 
-      const mentors = await this.mentorMatcherService.findMentors(userId, searchTerm);
+      const mentors = await this.mentorMatcherService.findMentors(userId, req.query as ISarchTermParams);
       return res.status(200).json({ mentors });
     } catch (error) {
       next(error);

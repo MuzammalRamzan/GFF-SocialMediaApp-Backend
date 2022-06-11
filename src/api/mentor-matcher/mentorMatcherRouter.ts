@@ -6,7 +6,7 @@ import { requiredMenteeId, requiredMentorId, requiredRequestId, sendMentorReques
 const controller = new MentorMatcherController()
 export const mentorMatcherRouter = express.Router();
 
-mentorMatcherRouter.get('/mentors', controller.findMentors as Application);
+mentorMatcherRouter.get('/mentors', authMiddleware, controller.findMentors as Application);
 mentorMatcherRouter.get('/my-mentor', authMiddleware, controller.myMentors as Application);
 mentorMatcherRouter.get('/my-mentee', authMiddleware, controller.myMentees as Application);
 mentorMatcherRouter.post('/request/send', authMiddleware, sendMentorRequestValidation, controller.sendMentorRequest as Application);
