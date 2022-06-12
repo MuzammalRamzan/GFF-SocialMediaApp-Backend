@@ -17,6 +17,18 @@ export class MentorInformationService implements IMentorInformationService {
       isPassedIRT: params.isPassedIRT
     });
 
+    // make user as a mentor, change the role_id of User table.
+    await User.update(
+      {
+        role_id: 3
+      },
+      {
+        where: {
+          id: params.user_id
+        }
+      }
+    )
+
     return mentorInformation.get();
   }
 
