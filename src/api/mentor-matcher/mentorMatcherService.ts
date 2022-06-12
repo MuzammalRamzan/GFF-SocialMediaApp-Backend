@@ -1,4 +1,4 @@
-import { IMentorMatcherService, IMentorRequest, ISarchTermParams } from "./interface";
+import { IMentorMatcherService, IMentorRequest, ISarchTermParams, ISearchMentors } from "./interface";
 import { User } from "../user/userModel"
 import { Op } from "sequelize";
 import { IMentorMatcher, MentorMatcherModel, MentorMatcherRequestStatus, MentorMatcherRequestType } from "./mentorMatcherModel";
@@ -6,7 +6,7 @@ import { MentorInformation } from "../mentor-information/mentorInformationModel"
 import { UserInformation } from "../user-information/userInformationModel";
 
 export class MentorMatcherService implements IMentorMatcherService {
-  async findMentors(userId: number, searchTerms: ISarchTermParams): Promise<User[]> {
+  async findMentors(userId: number, searchTerms: ISarchTermParams): Promise<ISearchMentors[]> {
     const _industry = searchTerms.industry?.split(',');
     const _role = searchTerms.role?.split(',');
     const _frequency = searchTerms.frequency?.split(',');
@@ -62,17 +62,38 @@ export class MentorMatcherService implements IMentorMatcherService {
                 }
               },
             ]
-          }
+          },
         },
         {
           model: UserInformation,
           as: 'user_information',
-          attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country']
+          attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education']
         }
       ]
     })
 
-    return mentors;
+    return mentors.map((mentor) => {
+      const _data = mentor.get();
+      return {
+        id: _data.id,
+        full_name: _data.full_name,
+        mentor_information: {
+          industry: _data.mentor_information.industry.split(','),
+          role: _data.mentor_information.role.split(','),
+          frequency: _data.mentor_information.frequency.split(','),
+          conversation_mode: _data.mentor_information.conversation_mode.split(','),
+        },
+        user_information: {
+          profile_url: _data.user_information.profile_url,
+          bio: _data.user_information.bio,
+          date_of_birth: _data.user_information.date_of_birth,
+          gender: _data.user_information.gender,
+          country: _data.user_information.country,
+          job_role: _data.user_information.job_role,
+          education: _data.user_information.education,
+        }
+      }
+    });
   }
 
   async myMentors(userId: number): Promise<IMentorRequest[]> {
@@ -125,7 +146,7 @@ export class MentorMatcherService implements IMentorMatcherService {
     return mentor.get();
   }
 
-  async isExist(userId: number, mentor_id: number): Promise<boolean> {
+  static async isExist(userId: number, mentor_id: number): Promise<MentorMatcherModel> {
     const mentor = await MentorMatcherModel.findOne({
       where: {
         mentee_id: userId,
@@ -133,7 +154,7 @@ export class MentorMatcherService implements IMentorMatcherService {
       }
     })
 
-    return mentor ? true : false;
+    return mentor?.get();
   }
 
   async isFavoriteExist(userId: number, mentor_id: number): Promise<boolean> {
