@@ -7,3 +7,4 @@ export const mentorInformationRouter = express.Router();
 
 mentorInformationRouter.post('/', authMiddleware, controller.createMentorInformation as Application);
 mentorInformationRouter.put('/', authMiddleware, controller.updateMentorInformation as Application);
+mentorInformationRouter.get('/:mentor_id', authMiddleware, controller.getMentorInformation as Application);

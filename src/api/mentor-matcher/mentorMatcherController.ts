@@ -62,7 +62,7 @@ export class MentorMatcherController {
         });
       }
 
-      const is_exist = await this.mentorMatcherService.isExist(userId, mentor_id);
+      const is_exist = await MentorMatcherService.isExist(userId, mentor_id) as any;
       if (is_exist) {
         return res.status(200).json({
           message: 'Mentor request already exist',

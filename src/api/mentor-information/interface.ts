@@ -1,3 +1,5 @@
+import { MentorMatcherModel } from "../mentor-matcher/mentorMatcherModel";
+import { UserInformation } from "../user-information/userInformationModel";
 import { IMentorInformation } from "./mentorInformationModel";
 
 
@@ -10,8 +12,16 @@ export type CreateMentorInformation = {
   conversation_mode: string[];
 }
 
+export type MentorInformationType = {
+  id: number;
+  user_information: UserInformation;
+  mentor_information: IMentorInformation;
+  mentor_request: MentorMatcherModel;
+}
+
 export interface IMentorInformationService {
   createMentorInformation(params: CreateMentorInformation): Promise<IMentorInformation>;
   isMentorInformationExist(userId: number): Promise<boolean>;
   updateMentorInformation(params: CreateMentorInformation): Promise<IMentorInformation>;
+  getMentorInformation(userId: number, mentor_id: number): Promise<MentorInformationType>;
 }

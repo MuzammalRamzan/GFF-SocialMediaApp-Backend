@@ -1,4 +1,8 @@
-import { CreateMentorInformation, IMentorInformationService } from "./interface";
+import { MentorMatcherModel } from "../mentor-matcher/mentorMatcherModel";
+import { MentorMatcherService } from "../mentor-matcher/mentorMatcherService";
+import { UserInformation } from "../user-information/userInformationModel";
+import { User } from "../user/userModel";
+import { CreateMentorInformation, IMentorInformationService, MentorInformationType } from "./interface";
 import { IMentorInformation, MentorInformation } from "./mentorInformationModel";
 
 export class MentorInformationService implements IMentorInformationService {
@@ -46,5 +50,34 @@ export class MentorInformationService implements IMentorInformationService {
     });
 
     return mentorInformation.get();
+  }
+
+  async getMentorInformation(userId: number, mentor_id: number): Promise<MentorInformationType> {
+    const mentorInformation = await MentorInformation.findOne({
+      where: {
+        user_id: mentor_id
+      },
+      attributes: ["isPassedIRT", "industry", "role", "frequency", "conversation_mode"]
+    });
+
+    if (!mentorInformation) {
+      throw new Error("Mentor information not found");
+    }
+
+    const userInformation = await UserInformation.findOne({
+      where: {
+        user_id: mentor_id
+      },
+      attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education']
+    })
+
+    const mentor_request = await MentorMatcherService.isExist(userId, mentor_id) as any;
+
+    return {
+      id: mentor_id,
+      user_information: userInformation?.get(),
+      mentor_information: mentorInformation.get(),
+      mentor_request: mentor_request
+    };
   }
 }

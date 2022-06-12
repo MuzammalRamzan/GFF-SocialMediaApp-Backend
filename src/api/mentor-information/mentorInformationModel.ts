@@ -68,10 +68,4 @@ MentorInformation.init({
   }
 })
 
-// MentorInformation.belongsTo(User, {
-//   foreignKey: "user_id",
-//   as: 'user'
-// });
-
-
 MentorInformation.sync();
