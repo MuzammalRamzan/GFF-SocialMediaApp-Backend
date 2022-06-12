@@ -32,18 +32,24 @@ export class UserInformationService implements IUserInformationService {
         return userInformation
     }
 
-    async fetchById (user_id: number): Promise<UserInformation> {
+    async fetchById (params_user_id: number, userId: number): Promise<UserInformation> {
+        if(params_user_id !== userId){
+            throw new Error("Unauthorized")
+        }
         const userInformation = await UserInformation.findOne({
             where: {
-                user_id: user_id
+                user_id: userId
             }
         })
 
         return userInformation as any
     }
 
-    async update (id: number, params: UserInformationType): Promise<[affectedCount: number]> {
-        const updatedRow = await UserInformation.update({
+    async update (userId: number, params: UserInformationType): Promise<UserInformation> {
+        if (userId !== params.user_id){
+            throw new Error("Unauthorized")
+        }
+        await UserInformation.update({
             user_id: params.user_id,
             bio: params.bio,
             profile_url: params.profile_url,
@@ -68,17 +74,25 @@ export class UserInformationService implements IUserInformationService {
         },
         {
             where: {
-                id: id
+                user_id: userId
             }
         })
 
-        return updatedRow
+        const updatedRow = await UserInformation.findOne({
+            where: {
+                user_id: params.user_id
+            }
+        })
+        return updatedRow as UserInformation
     }
 
-    async delete (id: number): Promise<number> {
+    async delete (params_user_id: number, userId: number): Promise<number> {
+        if (params_user_id !== userId){
+            throw new Error("Unauthorized")
+        }
         const deletedRow = await UserInformation.destroy({
             where: {
-                id: id
+                user_id: userId
             }
         })
 

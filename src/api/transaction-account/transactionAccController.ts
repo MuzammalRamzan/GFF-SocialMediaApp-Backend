@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
+import { jsonErrorHandler } from '../helper/errorHandler'
 import {
 	TransactionAccountType,
 	GetTransactionAccountByIdRequest,
@@ -19,40 +20,43 @@ export class TransactionAccController {
 			const transactionAccount = await this.transactionAccService.list()
 			res.status(200).send({ transactionAccount })
 		} catch (err) {
-			throw err
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 
 	getTransactionAccountById = async (req: GetTransactionAccountByIdRequest, res: Response, next: NextFunction) => {
 		const id = +req.params.id
+		const userId = +req.user.id
 
 		try {
-			const transactionAccount = await this.transactionAccService.fetch(id)
+			const transactionAccount = await this.transactionAccService.fetch(id, userId)
 			res.status(200).send({ transactionAccount })
 		} catch (err) {
-			throw err
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 
 	createTransactionAccount = async (req: CreateTransactionAccountRequest, res: Response, next: NextFunction) => {
-		const params = req.body
+		const user_id = +req.user.id
+		const params = { ...req.body, user_id }
 
 		try {
-			const transactionAccount = await this.transactionAccService.add(params as unknown as TransactionAccountType)
+			const transactionAccount = await this.transactionAccService.add(params as TransactionAccountType)
 			res.status(200).send({ transactionAccount })
 		} catch (err) {
-			throw err
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 
 	updateTransaction = async (req: UpdateTransactionAccountRequest, res: Response, next: NextFunction) => {
 		const id = +req.params.id
-		const params = req.body
+		const user_id = +req.user.id
+		const params = { ...req.body, user_id }
 		try {
 			const transactionAccount = await this.transactionAccService.update(id, params)
 			res.status(200).send({ transactionAccount })
 		} catch (err) {
-			throw err
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 }

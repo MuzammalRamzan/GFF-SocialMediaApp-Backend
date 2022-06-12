@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
+import { jsonErrorHandler } from '../helper/errorHandler'
 import {
 	CreateLoanLedgerProfessionalInformationRequest,
 	UpdateLoanLedgerProfessionalInformationRequest,
@@ -20,7 +21,7 @@ export class LoanLedgerProfessionalInformationController {
 			const professionalInformation = await this.loanLedgerProfessionalInformationService.list()
 			res.status(200).send({ professionalInformation })
 		} catch (err) {
-			throw err
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 
@@ -30,12 +31,13 @@ export class LoanLedgerProfessionalInformationController {
 		next: NextFunction
 	) => {
 		const id = +req.params.id
+		const userId = +req.user.id
 
 		try {
-			const professionalInformation = await this.loanLedgerProfessionalInformationService.fetchById(id)
+			const professionalInformation = await this.loanLedgerProfessionalInformationService.fetchById(id, userId)
 			res.send(professionalInformation)
 		} catch (err) {
-			throw err
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 
@@ -44,13 +46,13 @@ export class LoanLedgerProfessionalInformationController {
 		res: Response,
 		next: NextFunction
 	) => {
-		const user_id = +req.params.user_id
+		const user_id = +req.user.id
 
 		try {
 			const professionalInformation = await this.loanLedgerProfessionalInformationService.fetchByUserId(user_id)
 			res.send(professionalInformation)
 		} catch (err) {
-			throw err
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 
@@ -59,13 +61,14 @@ export class LoanLedgerProfessionalInformationController {
 		res: Response,
 		next: NextFunction
 	) => {
-		const params = req.body
+		const user_id = +req.user.id
+		const params = { ...req.body, user_id }
 
 		try {
 			const professionalInformation = await this.loanLedgerProfessionalInformationService.add(params)
-			res.status(200).send({ professionalInformation })
+			res.status(200).send(professionalInformation)
 		} catch (err) {
-			throw err
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 
@@ -75,13 +78,14 @@ export class LoanLedgerProfessionalInformationController {
 		next: NextFunction
 	) => {
 		const id = +req.params.id
-		const params = req.body
+		const user_id = +req.user.id
+		const params = { ...req.body, user_id }
 
 		try {
 			const professionalInformation = await this.loanLedgerProfessionalInformationService.update(id, params)
-			res.status(200).send({ professionalInformation })
+			res.status(200).send(professionalInformation)
 		} catch (err) {
-			throw err
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 
@@ -91,12 +95,13 @@ export class LoanLedgerProfessionalInformationController {
 		next: NextFunction
 	) => {
 		const id = +req.params.id
+		const userId = +req.user.id
 
 		try {
-			const professionalInformation = await this.loanLedgerProfessionalInformationService.delete(id)
+			const professionalInformation = await this.loanLedgerProfessionalInformationService.delete(id, userId)
 			res.status(200).send({ professionalInformation })
 		} catch (err) {
-			throw err
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 }

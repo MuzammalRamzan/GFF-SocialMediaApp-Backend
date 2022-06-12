@@ -1,11 +1,12 @@
-import express from 'express';
+import express, { Application } from 'express';
+import { authMiddleware } from '../helper/authMiddleware';
 import { TransactionCategotryController } from './transactionCategoryController';
 
 const transactionCategotryController = new TransactionCategotryController()
 export const transactionCategoryRouter = express.Router();
 
-transactionCategoryRouter.post('/add', transactionCategotryController.createTransactionCategory as any)
-transactionCategoryRouter.get('/', transactionCategotryController.getAllTransactionCategories)
-transactionCategoryRouter.get('/:user_id', transactionCategotryController.getTransactionCategoriesByUserId as any)
-transactionCategoryRouter.put('/update/:id', transactionCategotryController.updateTransactionCategoryById as any)
-transactionCategoryRouter.delete('/delete/:id', transactionCategotryController.deleteTransactionCategory as any)
+transactionCategoryRouter.post('/add', authMiddleware, transactionCategotryController.createTransactionCategory as Application)
+transactionCategoryRouter.get('/', authMiddleware, transactionCategotryController.getAllTransactionCategories )
+transactionCategoryRouter.get('/user_id', authMiddleware, transactionCategotryController.getTransactionCategoriesByUserId as Application)
+transactionCategoryRouter.put('/update/:id', authMiddleware, transactionCategotryController.updateTransactionCategoryById as Application)
+transactionCategoryRouter.delete('/delete/:id', authMiddleware, transactionCategotryController.deleteTransactionCategory as Application)

@@ -1,4 +1,5 @@
 import { Request } from "express"
+import { UserType } from "../user/interface"
 import { UserInformation } from "./userInformationModel"
 
 export type UserInformationType = {
@@ -41,24 +42,28 @@ export enum ProfileRoleEnum {
 
 export interface IUserInformationService {
     add (params: UserInformationType): Promise<UserInformation>
-    fetchById (id: number): Promise<UserInformation>
-    update (id: number, params: UserInformationType): Promise<[affectedCount: number]>
-    delete (id: number): Promise<number>
+    fetchById (id: number, userId: number): Promise<UserInformation>
+    update (id: number, params: UserInformationType): Promise<UserInformation>
+    delete (id: number, userId: number): Promise<number>
 }
 
 export interface CreateUserInformationRequest extends Request {
     UserInformationType: UserInformationType
+    user:UserType
 }
 
 export interface GetUserInformationByUserIdRequest extends Request {
     user_id: number
+    user:UserType
 }
 
 export interface UpdateUserInformationRequest extends Request {
     user_id: number
     UserInformationType: UserInformationType
+    user:UserType
 }
 
 export interface DeleteUserInformationRequest extends Request {
     id: number
+    user:UserType
 }

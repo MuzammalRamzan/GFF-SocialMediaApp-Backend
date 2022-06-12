@@ -1,64 +1,78 @@
-import { Request, Response, NextFunction } from 'express';
-import { CreateTransactionCategoryRequest, 
-         DeleteTransactionCategoryRequest, 
-         GetTransactionCategoriesByUserIdRequest, 
-         UpdateTransactionCategoryByIdRequest} from './interface';
-import { TransactionCategoryService } from "./transactionCategoryService";
+import { Request, Response, NextFunction } from 'express'
+import { jsonErrorHandler } from '../helper/errorHandler'
+import {
+	CreateTransactionCategoryRequest,
+	DeleteTransactionCategoryRequest,
+	GetTransactionCategoriesByUserIdRequest,
+	UpdateTransactionCategoryByIdRequest
+} from './interface'
+import { TransactionCategoryService } from './transactionCategoryService'
 
 export class TransactionCategotryController {
-    private readonly transactionCategoryService: TransactionCategoryService
+	private readonly transactionCategoryService: TransactionCategoryService
 
-    constructor () {
-        this.transactionCategoryService = new TransactionCategoryService()
-    }
+	constructor() {
+		this.transactionCategoryService = new TransactionCategoryService()
+	}
 
-    createTransactionCategory = async (req: CreateTransactionCategoryRequest, res: Response, next: NextFunction) => {
-        const params = req.body
-        try {
-            const transactionCategory = await this.transactionCategoryService.add(params)
-            res.status(200).send(transactionCategory)
-        } catch (err) {
-            throw err
-        }
-    }
+	createTransactionCategory = async (req: CreateTransactionCategoryRequest, res: Response, next: NextFunction) => {
+		const user_id = req.user.id
+		const params = { ...req.body, user_id }
+		try {
+			const transactionCategory = await this.transactionCategoryService.add(params)
+			res.status(200).send(transactionCategory)
+		} catch (err) {
+			return jsonErrorHandler(err, req, res, () => {})
+		}
+	}
 
-    getAllTransactionCategories = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const transactionCategories = await this.transactionCategoryService.list()
-            res.status(200).send(transactionCategories)
-        } catch (err) {
-            throw err
-        }
-    }
+	getAllTransactionCategories = async (req: Request, res: Response, next: NextFunction) => {
+		try {
+			const transactionCategories = await this.transactionCategoryService.list()
+			res.status(200).send(transactionCategories)
+		} catch (err) {
+			return jsonErrorHandler(err, req, res, () => {})
+		}
+	}
 
-    getTransactionCategoriesByUserId = async (req: GetTransactionCategoriesByUserIdRequest, res: Response, next: NextFunction) => {
-        const userId = +req.params.user_id
-        try {
-            const transactionCategories = await this.transactionCategoryService.fetchByUserId(userId)
-            res.status(200).send(transactionCategories)
-        } catch (err) {
-            throw err
-        }
-    }
+	getTransactionCategoriesByUserId = async (
+		req: GetTransactionCategoriesByUserIdRequest,
+		res: Response,
+		next: NextFunction
+	) => {
+		const userId = +req.user.id
+		try {
+			const transactionCategories = await this.transactionCategoryService.fetchByUserId(userId)
+			res.status(200).send(transactionCategories)
+		} catch (err) {
+			return jsonErrorHandler(err, req, res, () => {})
+		}
+	}
 
-    updateTransactionCategoryById = async (req: UpdateTransactionCategoryByIdRequest, res: Response, next: NextFunction) => {
-        const id = +req.params.id
-        const params = req.body
-        try {
-            const transactionCategory = await this.transactionCategoryService.update(id, params)
-            res.send(transactionCategory)
-        } catch (err) {
-            throw err
-        }
-    }
+	updateTransactionCategoryById = async (
+		req: UpdateTransactionCategoryByIdRequest,
+		res: Response,
+		next: NextFunction
+	) => {
+		const user_id = +req.user.id
+		const id = +req.params.id
+		const params = { ...req.body, user_id }
+		try {
+			const transactionCategory = await this.transactionCategoryService.update(id, params)
+			res.send(transactionCategory)
+		} catch (err) {
+			return jsonErrorHandler(err, req, res, () => {})
+		}
+	}
 
-    deleteTransactionCategory = async (req: DeleteTransactionCategoryRequest, res: Response, next: NextFunction) => {
-        const id = +req.params.id
-        try {
-            const transactionCategory = await this.transactionCategoryService.delete(id)
-            res.status(200).send({transactionCategory})
-        } catch (err) {
-            throw err
-        }
-    }
+	deleteTransactionCategory = async (req: DeleteTransactionCategoryRequest, res: Response, next: NextFunction) => {
+		const userId = +req.user.id
+		const id = +req.params.id
+		try {
+			const transactionCategory = await this.transactionCategoryService.delete(id, userId)
+			res.status(200).send({ transactionCategory })
+		} catch (err) {
+			return jsonErrorHandler(err, req, res, () => {})
+		}
+	}
 }

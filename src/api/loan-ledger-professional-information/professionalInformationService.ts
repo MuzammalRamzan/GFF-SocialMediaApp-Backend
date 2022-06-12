@@ -7,13 +7,17 @@ export class LoanLedgerProfessionalInformationService implements ILoanLedgerProf
 		return professionalInformation
 	}
 
-	async fetchById(id: number): Promise<LoanLedgerProfessionalInformation> {
+	async fetchById(id: number, userId: number): Promise<LoanLedgerProfessionalInformation> {
 		const professionalInformation = await LoanLedgerProfessionalInformation.findOne({
 			where: {
-				id: id
+				id: id,
+				user_id: userId
 			}
 		})
 
+		if(!professionalInformation){
+			throw new Error("Unauthorized")
+		}
 		return professionalInformation as LoanLedgerProfessionalInformation
 	}
 
@@ -40,8 +44,19 @@ export class LoanLedgerProfessionalInformationService implements ILoanLedgerProf
 		return professionalInformation
 	}
 
-	async update(id: number, params: LoanLedgerProfessionalInformationType): Promise<[affectedCount: number]> {
-		const professionalInformation = await LoanLedgerProfessionalInformation.update(
+	async update(id: number, params: LoanLedgerProfessionalInformationType): Promise<LoanLedgerProfessionalInformation> {
+		const loan = await LoanLedgerProfessionalInformation.findOne({
+            where:{
+                id: id,
+                user_id: params.user_id
+            }
+        })
+
+        if (!loan){
+            throw new Error("Unauthorized")
+        }
+		
+		await LoanLedgerProfessionalInformation.update(
 			{
 				user_id: params.user_id,
 				employment_type: params.employment_type,
@@ -57,15 +72,24 @@ export class LoanLedgerProfessionalInformationService implements ILoanLedgerProf
 				}
 			}
 		)
-		return professionalInformation
+		const newUpdatedRow = await LoanLedgerProfessionalInformation.findOne({
+			where:{
+                id: id
+            }
+		})
+		return newUpdatedRow as LoanLedgerProfessionalInformation
 	}
 
-	async delete(id: number): Promise<number> {
-		const professionalInformation = await LoanLedgerProfessionalInformation.destroy({
+	async delete(id: number, userId: number): Promise<number> {
+		const deletedRow = await LoanLedgerProfessionalInformation.destroy({
 			where: {
-				id: id
+				id: id,
+				user_id: userId
 			}
 		})
-		return professionalInformation
+		if(!deletedRow){
+            throw new Error("Unauthorized")
+        }
+        return deletedRow
 	}
 }

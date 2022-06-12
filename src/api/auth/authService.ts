@@ -62,7 +62,7 @@ export class AuthService implements IAuthService {
                 email: email
             }
         })
-        return user?.get();
+        return user as any
     }
 
     private async checkPass (pass: string, hashedPass: string): Promise<boolean> {
