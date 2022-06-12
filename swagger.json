@@ -1375,10 +1375,270 @@
           }
         }
       }
+    },
+    "/find-friend/search": {
+      "get": {
+        "tags": ["find-friend"],
+        "description": "Search friends using name",
+        "parameters": [
+          {
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Friend name",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/components/schemas/SearchFindFriend"
+            }
+          }
+        }
+      }
+    },
+    "/find-friend/request/send": {
+      "post": {
+        "tags": ["find-friend"],
+        "description": "Send a request to a friend",
+        "parameters": [
+          {
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendFriendRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Friend request sent"
+          }
+        }
+      }
+    },
+    "/find-friend/friend-requests": {
+      "get": {
+        "tags": ["find-friend"],
+        "description": "Get all sent friend requests",
+        "parameters": [
+          {
+            "name": "auth-token",
+            "in": "header",
+            "description": "Auth Token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get all sent friend requests",
+            "schema": {
+              "$ref": "#/components/schemas/Friends"
+            }
+          }
+        }
+      }
+    },
+    "/find-friend/received-friend-requests": {
+      "get": {
+        "tags": ["find-friend"],
+        "description": "Get all received friend requests",
+        "parameters": [
+          {
+            "name": "auth-token",
+            "in": "header",
+            "description": "Auth Token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get all sent friend requests",
+            "schema": {
+              "$ref": "#/components/schemas/Friends"
+            }
+          }
+        }
+      }
+    },
+    "/find-friend/request/accept": {
+      "put": {
+        "tags": ["find-friend"],
+        "description": "Accept a friend request",
+        "parameters": [
+          {
+            "name": "auth-token",
+            "in": "header",
+            "description": "Auth Token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcceptRejectFriendRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Friend request accepted"
+          }
+        }
+      }
+    },
+    "/find-friend/request/reject": {
+      "put": {
+        "tags": ["find-friend"],
+        "description": "Reject a friend request",
+        "parameters": [
+          {
+            "name": "auth-token",
+            "in": "header",
+            "description": "Auth Token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcceptRejectFriendRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Friend request rejected"
+          }
+        }
+      }
+    },
+    "/find-friend/friends": {
+      "get": {
+        "tags": ["find-friend"],
+        "description": "Get all friends",
+        "parameters": [
+          {
+            "name": "auth-token",
+            "in": "header",
+            "description": "Auth Token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get all friends",
+            "schema": {
+              "$ref": "#/components/schemas/Friends"
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "SearchFindFriend": {
+        "type": "object",
+        "properties": {
+          "full_name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "user_information": {
+						"$ref": "#/components/schemas/UserInformation"
+					}
+        }
+      },
+      "SendFriendRequest": {
+        "required": ["user_id"],
+				"properties": {
+					"user_id": {
+						"type": "integer"
+					}
+        }
+      },
+      "Friends": {
+        "type": "array",
+        "items": {
+          "id": {
+            "type": "integer"
+          },
+          "sender_id": {
+            "type": "integer"
+          },
+          "receiver_id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          },
+          "receiver": {
+            "type": "object",
+            "properties": {
+              "full_name": {
+                "type": "string"
+              },
+              "id": {
+                "type": "integer"
+              },
+              "user_information": {
+                "$ref": "#/components/schemas/UserInformation"
+              }
+            }
+          },
+          "sender": {
+            "type": "object",
+            "properties": {
+              "full_name": {
+                "type": "string"
+              },
+              "id": {
+                "type": "integer"
+              },
+              "user_information": {
+                "$ref": "#/components/schemas/UserInformation"
+              }
+            }
+          }
+        }
+      },
+      "AcceptRejectFriendRequest": {
+        "required": ["request_id"],
+        "properties": {
+          "request_id": {
+            "type": "integer"
+          }
+        }
+      },
       "record_add_body": {
         "type": "object",
         "properties": {

@@ -2,17 +2,22 @@ import { Request } from "express"
 import { IAuthenticatedRequest } from "../helper/authMiddleware"
 import { FindFriendModel, IFriendRequest } from './findFriendModel'
 
-export enum RequestType {
+export enum RequestStatus {
   SEND = "send",
   APPROVE = "approve",
   REJECT = "reject"
+}
+
+export enum RequestType {
+  FRIEND = "friend",
+  BLOCK = "block"
 }
 
 export type FindFriend = {
   id: number
   sender_id: string
   receiver_id: string
-  request_type: RequestType
+  status: RequestStatus
   receiver?: {
     id: number
     firstname: string
@@ -25,6 +30,20 @@ export type FindFriend = {
   }
 }
 
+export interface SearchFriend {
+  id: number
+  full_name: string,
+  user_information: {
+    profile_url: string
+    bio: string
+    date_of_birth: string
+    gender: string
+    country: string
+    job_role: string
+    education: string
+  }
+}
+
 export interface IFindFriendService {
   add(sender_id: number, receiver_id: number): Promise<FindFriendModel>
   approve(request_id: number, user_id: number): Promise<FindFriendModel>
@@ -33,11 +52,12 @@ export interface IFindFriendService {
   friends(userId: number): Promise<FindFriend[]>
   getFriendRequestsBySenderId(sender_id: number): Promise<FindFriend[]>
   getFriendRequestsByReceiverId(receiver_id: number): Promise<FindFriend[]>
+  findFriend(searchTerm: string, userId: number): Promise<SearchFriend[]>
 }
 
 export interface createFindFriendRequest extends Request, IAuthenticatedRequest {
   body: {
-    receiver_id: number
+    user_id: number
   }
 }
 

@@ -14,6 +14,18 @@ export class FindFriendController {
     this.findFriendService = new FindFriendService()
   }
 
+  findFriend = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+      const searchTerm = req.query.search as string;
+      const userId = req?.user?.id as number;
+
+      const friend = await this.findFriendService.findFriend(searchTerm, userId);
+      return res.status(200).json({ friend });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   friendRequests = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
       const userId = req?.user?.id as number;
@@ -38,20 +50,19 @@ export class FindFriendController {
     try {
       const errors = validationResult(req).array({ onlyFirstError: true });
       if (errors.length) {
-        return res.status(400).json({ errors: errors, message: 'Validation error', status: 400 });
+        return res.status(400).json({ errors: errors, message: 'Validation error' });
       }
 
       const loggedInUserId = req?.user?.id as number;
 
-      const request = await this.findFriendService.findBySenderIdAndReceiverId(loggedInUserId, req.body.receiver_id);
+      const request = await this.findFriendService.findBySenderIdAndReceiverId(loggedInUserId, req.body.user_id);
       if (request) {
         return res.status(400).send({
-          message: 'Request already exists, you cannot send request twice!',
-          status: 400
+          message: 'Request already exists, you cannot send request twice!'
         });
       }
 
-      const findFriendRequest = await this.findFriendService.add(loggedInUserId, req.body.receiver_id)
+      const findFriendRequest = await this.findFriendService.add(loggedInUserId, req.body.user_id)
       return res.status(200).send({ requests: findFriendRequest })
     } catch (err) {
       console.log(err);
@@ -62,7 +73,7 @@ export class FindFriendController {
   acceptFriendRequest = async (req: acceptRejectFriendRequest, res: Response, next: NextFunction) => {
     try {
       const userId = req?.user?.id as number;
-      const id = +req.params.request_id;
+      const id = +req.body.request_id;
       const acceptFriendRequest = await this.findFriendService.approve(id, userId)
       return res.status(200).send({ requests: acceptFriendRequest })
     } catch (err: any) {
@@ -74,7 +85,7 @@ export class FindFriendController {
   rejectFriendRequest = async (req: acceptRejectFriendRequest, res: Response, next: NextFunction) => {
     try {
       const userId = req?.user?.id as number;
-      const id = +req.params.request_id;
+      const id = +req.body.request_id;
       const rejectFriendRequest = await this.findFriendService.reject(id, userId)
 
       return res.status(200).send({ requests: rejectFriendRequest })

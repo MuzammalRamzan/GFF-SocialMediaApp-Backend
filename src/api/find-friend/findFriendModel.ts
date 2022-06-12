@@ -1,13 +1,13 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../database';
-import { RequestType } from "./interface"
+import { RequestStatus, RequestType } from "./interface"
 import { User } from "../user/userModel"
 
 export interface IFriendRequest {
   id: number;
   sender_id: number;
   receiver_id: number;
-  request_type: RequestType;
+  status: RequestStatus;
 }
 
 export class FindFriendModel extends Model { }
@@ -28,9 +28,17 @@ FindFriendModel.init({
     allowNull: false,
   },
   request_type: {
-    type: DataTypes.ENUM(RequestType.SEND, RequestType.APPROVE, RequestType.REJECT),
-    defaultValue: RequestType.SEND
+    type: DataTypes.ENUM(RequestType.BLOCK, RequestType.FRIEND),
+    defaultValue: RequestType.FRIEND
   },
+  block_reason: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  status: {
+    type: DataTypes.ENUM(RequestStatus.SEND, RequestStatus.APPROVE, RequestStatus.REJECT),
+    defaultValue: RequestStatus.SEND
+  }
 },
   {
     sequelize,

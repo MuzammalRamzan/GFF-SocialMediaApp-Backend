@@ -1,5 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../database';
+import { UserInformation } from '../user-information/userInformationModel';
 
 export interface IUser {
     id: number;
@@ -50,4 +51,12 @@ User.init({
     {
         sequelize,
         tableName: 'user',
+        timestamps: true
     })
+
+User.hasOne(UserInformation, {
+    foreignKey: 'user_id',
+    as: 'user_information'
+})
+
+User.sync();

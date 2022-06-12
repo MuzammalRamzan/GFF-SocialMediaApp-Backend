@@ -1,11 +1,12 @@
 import express, { Application } from 'express';
 import { authMiddleware } from '../helper/authMiddleware';
 import { FindFriendController } from './findFriendController';
-import { createNewFriendRequestValidation } from './validation';
+import { acceptOrRejectFriendRequestValidation, createNewFriendRequestValidation } from './validation';
 
 const findFriendController = new FindFriendController()
 export const findFriendRouter = express.Router();
 
+findFriendRouter.get('/search', authMiddleware, findFriendController.findFriend as Application);
 findFriendRouter.get('/friends', authMiddleware, findFriendController.friends as Application);
 findFriendRouter.get('/friend-requests', authMiddleware, findFriendController.friendRequests as Application);
 findFriendRouter.get('/received-friend-requests', authMiddleware, findFriendController.receivedFriendRequests as Application);
@@ -17,5 +18,5 @@ findFriendRouter.post(
   findFriendController.createFindFriendRequest as Application
 );
 
-findFriendRouter.patch('/request/accept/:request_id', authMiddleware, findFriendController.acceptFriendRequest as Application)
-findFriendRouter.patch('/request/reject/:request_id', authMiddleware, findFriendController.rejectFriendRequest as Application)
+findFriendRouter.put('/request/accept', authMiddleware, acceptOrRejectFriendRequestValidation, findFriendController.acceptFriendRequest as Application)
+findFriendRouter.put('/request/reject', authMiddleware, acceptOrRejectFriendRequestValidation, findFriendController.rejectFriendRequest as Application)
