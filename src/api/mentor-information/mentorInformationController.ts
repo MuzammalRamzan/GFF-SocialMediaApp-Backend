@@ -49,7 +49,7 @@ export class MentorInformationController {
   getMentorInformation = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
       const userId = req?.user?.id || 0 as number;
-      const mentor_id = Number(req.params.mentor_id || 0);
+      const mentor_id = Number(req.query.mentor_id || 0);
 
       if(!userId || !mentor_id) {
         return res.status(400).json({

@@ -44,9 +44,107 @@
 		{
 			"name": "user-information",
 			"description": "User information related routes"
+		},
+		{
+			"name": "mentor-matcher",
+			"description": "Mentor matcher related routes"
+		},
+		{
+			"name": "mentor-information",
+			"description": "Mentor information related routes"
 		}
 	],
 	"paths": {
+		"/mentor-information": {
+			"get": {
+				"tags": ["mentor-information"],
+				"description": "Get mentor informations",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "mentor_id",
+						"in": "query",
+						"description": "Mentor id",
+						"required": true,
+						"type": "integer"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successfully get mentor details",
+						"schema": {
+							"$ref": "#/components/schemas/MentorDetail"
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["mentor-information"],
+				"description": "Get mentor informations",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "body",
+						"in": "body",
+						"description": "Mentor information",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/CreateOrUpdateMentorInformation"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successfully get mentor details",
+						"schema": {
+							"$ref": "#/components/schemas/MentorDetail"
+						}
+					}
+				}
+			},
+			"put": {
+				"tags": ["mentor-information"],
+				"description": "Get mentor informations",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "body",
+						"in": "body",
+						"description": "Mentor information",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/CreateOrUpdateMentorInformation"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successfully get mentor details",
+						"schema": {
+							"$ref": "#/components/schemas/MentorDetail"
+						}
+					}
+				}
+			}
+		},
 		"/mentor-matcher/my-mentor": {
 			"get": {
 				"tags": ["mentor-matcher"],
@@ -2121,6 +2219,20 @@
 					}
 				}
 			},
+			"MentorDetail" : {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "integer"
+					},
+					"user_information": {
+						"$ref": "#/components/schemas/UserInformation"
+					},
+					"mentor_information": {
+						"$ref": "#/components/schemas/MentorInformation"
+					}
+				}
+			},
 			"SearchMentor": {
 				"type": "array",
 				"description": "Object schema",
@@ -2172,6 +2284,38 @@
 				"properties": {
 					"request_id": {
 						"type": "integer"
+					}
+				}
+			},
+			"CreateOrUpdateMentorInformation": {
+				"required": ["isPassedIRT", "industry", "role", "conversation_mode", "frequency"],
+				"properties": {
+					"isPassedIRT": {
+						"type": "boolean"
+					},
+					"industry": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"role": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"conversation_mode": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"frequency": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
 					}
 				}
 			}
