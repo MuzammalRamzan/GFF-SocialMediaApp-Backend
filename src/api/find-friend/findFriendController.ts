@@ -104,4 +104,58 @@ export class FindFriendController {
       throw err
     }
   }
+
+  getFriendRequestById = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+      const id = Number(req?.params?.id);
+      const friendRequest = await this.findFriendService.getFriendRequestById(id)
+      return res.status(200).send({ friendRequest })
+    } catch (err) {
+      throw err
+    }
+  }
+
+  blockFriend = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+      const userId = req?.user?.id as number;
+      const id = req.body.user_id;
+      const reason = req.body.reason || "";
+      const blockFriend = await this.findFriendService.blockFriend(userId, id, reason)
+      return res.status(200).send({ blockFriend })
+    } catch (err) {
+      throw err
+    }
+  }
+
+  unblockFriend = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+      const userId = req?.user?.id as number;
+      const id = req.body.user_id;
+      const unblockFriend = await this.findFriendService.unblockFriend(userId, id)
+      return res.status(200).send({ unblockFriend })
+    } catch (err) {
+      throw err
+    }
+  }
+
+  getBlockedFriends = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+      const userId = req?.user?.id as number;
+      const blockedFriends = await this.findFriendService.getBlockedFriends(userId)
+      return res.status(200).send({ blockedFriends })
+    } catch (err) {
+      throw err
+    }
+  }
+
+  getFriendByUserId = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+      const loggedInUserId = req?.user?.id as number;
+      const userId = +req.params.user_id;
+      const friend = await this.findFriendService.getFriendByUserId(loggedInUserId, userId)
+      return res.status(200).send({ friend })
+    } catch (err) {
+      throw err
+    }
+  }
 }

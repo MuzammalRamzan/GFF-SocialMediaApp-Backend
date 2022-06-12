@@ -8,6 +8,8 @@ export interface IFriendRequest {
   sender_id: number;
   receiver_id: number;
   status: RequestStatus;
+  block_reason?: string;
+  request_type: RequestType;
 }
 
 export class FindFriendModel extends Model { }

@@ -13,24 +13,18 @@ export enum RequestType {
   BLOCK = "block"
 }
 
-export type FindFriend = {
+export type FindFriendRequest = {
   id: number
   sender_id: string
   receiver_id: string
   status: RequestStatus
-  receiver?: {
-    id: number
-    firstname: string
-    lastname: string
-  }
-  sender?: {
-    id: number
-    firstname: string
-    lastname: string
-  }
+  receiver?: FriendUser
+  sender?: FriendUser
+  request_type: RequestType
+  block_reason?: string
 }
 
-export interface SearchFriend {
+export interface FriendUser {
   id: number
   full_name: string,
   user_information: {
@@ -44,15 +38,25 @@ export interface SearchFriend {
   }
 }
 
+export type FriendRequestWithUserInformation = {
+  user: FriendUser,
+  friend_request: FindFriendRequest
+}
+
 export interface IFindFriendService {
   add(sender_id: number, receiver_id: number): Promise<FindFriendModel>
   approve(request_id: number, user_id: number): Promise<FindFriendModel>
   reject(request_id: number, user_id: number): Promise<FindFriendModel>
   findBySenderIdAndReceiverId(sender_id: number, receiver_id: number): Promise<IFriendRequest>
-  friends(userId: number): Promise<FindFriend[]>
-  getFriendRequestsBySenderId(sender_id: number): Promise<FindFriend[]>
-  getFriendRequestsByReceiverId(receiver_id: number): Promise<FindFriend[]>
-  findFriend(searchTerm: string, userId: number): Promise<SearchFriend[]>
+  friends(userId: number): Promise<FindFriendRequest[]>
+  getFriendRequestsBySenderId(sender_id: number): Promise<FindFriendRequest[]>
+  getFriendRequestsByReceiverId(receiver_id: number): Promise<FindFriendRequest[]>
+  findFriend(searchTerm: string, userId: number): Promise<FriendUser[]>
+  getFriendRequestById(id: number): Promise<FindFriendRequest>
+  blockFriend(sender_id: number, receiver_id: number, reason: string): Promise<FindFriendModel>
+  unblockFriend(sender_id: number, receiver_id: number): Promise<boolean>
+  getBlockedFriends(userId: number): Promise<FindFriendRequest[]>
+  getFriendByUserId(loggedInUserId: number, userId: number): Promise<FriendRequestWithUserInformation>
 }
 
 export interface createFindFriendRequest extends Request, IAuthenticatedRequest {
