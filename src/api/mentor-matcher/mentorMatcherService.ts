@@ -30,7 +30,7 @@ export class MentorMatcherService implements IMentorMatcherService {
         {
           model: MentorInformation,
           as: 'mentor_information',
-          attributes: ['id', 'industry', 'role', 'frequency', 'conversation_mode'],
+          attributes: ['industry', 'role', 'frequency', 'conversation_mode'],
           where: {
             [Op.or]: [
               {
@@ -112,7 +112,12 @@ export class MentorMatcherService implements IMentorMatcherService {
             {
               model: MentorInformation,
               as: 'mentor_information',
-              attributes: ['id', 'industry', 'role', 'frequency', 'conversation_mode'],
+              attributes: ['industry', 'role', 'frequency', 'conversation_mode'],
+            },
+            {
+              model: UserInformation,
+              as: 'user_information',
+              attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education']
             }
           ]
         }
@@ -218,7 +223,14 @@ export class MentorMatcherService implements IMentorMatcherService {
           model: User,
           as: 'mentee',
           attributes: ['id', 'full_name'],
-          foreignKey: 'mentee_id'
+          foreignKey: 'mentee_id',
+          include: [
+            {
+              model: UserInformation,
+              as: 'user_information',
+              attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education']
+            }
+          ]
         }
       ]
     })
@@ -249,7 +261,14 @@ export class MentorMatcherService implements IMentorMatcherService {
           model: User,
           as: 'mentee',
           attributes: ['id', 'full_name'],
-          foreignKey: 'mentee_id'
+          foreignKey: 'mentee_id',
+          include: [
+            {
+              model: UserInformation,
+              as: 'user_information',
+              attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education']
+            }
+          ]
         },
       ]
     })
@@ -280,7 +299,19 @@ export class MentorMatcherService implements IMentorMatcherService {
           model: User,
           as: 'mentor',
           attributes: ['id', 'full_name'],
-          foreignKey: 'mentor_id'
+          foreignKey: 'mentor_id',
+          include: [
+            {
+              model: MentorInformation,
+              as: 'mentor_information',
+              attributes: ['industry', 'role', 'frequency', 'conversation_mode'],
+            },
+            {
+              model: UserInformation,
+              as: 'user_information',
+              attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education']
+            }
+          ]
         }
       ]
     })
