@@ -46,6 +46,7 @@ export interface ISearchMentors {
     role: string
     frequency: string
     conversation_mode: string
+    isPassedIRT: boolean
   },
   user_information: {
     profile_url: string

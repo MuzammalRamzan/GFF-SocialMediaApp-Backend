@@ -2019,6 +2019,50 @@
 					}
 				}
 			},
+			"UserInformation": {
+				"type": "object",
+				"properties": {
+					"profile_url": { "type": "string" },
+					"bio": { "type": "string" },
+					"date_of_birth": { "type": "string" },
+					"gender": { "type": "string" },
+					"country": { "type": "string" },
+					"job_role": { "type": "string" },
+					"education": { "type": "string" }
+				}
+			},
+			"MentorInformation": {
+				"type": "object",
+				"properties": {
+					"industry": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"role": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"frequency": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"conversation_mode": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"isPassedIRT": {
+						"type": "boolean"
+					}
+				}
+			},
 			"Mentor": {
 				"type": "object",
 				"description": "Object schema",
@@ -2046,16 +2090,15 @@
 					},
 					"mentee": {
 						"type": "object",
-
 						"properties": {
 							"id": {
 								"type": "integer"
 							},
-							"firstname": {
+							"full_name": {
 								"type": "string"
 							},
-							"lastname": {
-								"type": "string"
+							"user_information": {
+								"$ref": "#/components/schemas/UserInformation"
 							}
 						}
 					},
@@ -2065,11 +2108,14 @@
 							"id": {
 								"type": "integer"
 							},
-							"firstname": {
+							"full_name": {
 								"type": "string"
 							},
-							"lastname": {
-								"type": "string"
+							"user_information": {
+								"$ref": "#/components/schemas/UserInformation"
+							},
+							"mentor_information": {
+								"$ref": "#/components/schemas/MentorInformation"
 							}
 						}
 					}
@@ -2086,15 +2132,7 @@
 							"id": {
 								"type": "integer"
 							},
-							"firstname": {
-								"type": "string"
-							},
-							"lastname": {
-								"type": "string"
-							},
-							"full_name": {
-								"type": "string"
-							}
+							"full_name": "string"
 						}
 					}
 				}

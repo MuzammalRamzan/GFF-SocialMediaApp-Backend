@@ -30,7 +30,7 @@ export class MentorMatcherService implements IMentorMatcherService {
         {
           model: MentorInformation,
           as: 'mentor_information',
-          attributes: ['industry', 'role', 'frequency', 'conversation_mode'],
+          attributes: ['industry', 'role', 'frequency', 'conversation_mode', 'isPassedIRT'],
           where: {
             [Op.or]: [
               {
@@ -82,6 +82,7 @@ export class MentorMatcherService implements IMentorMatcherService {
           role: _data.mentor_information.role.split(','),
           frequency: _data.mentor_information.frequency.split(','),
           conversation_mode: _data.mentor_information.conversation_mode.split(','),
+          isPassedIRT: _data.mentor_information.isPassedIRT
         },
         user_information: {
           profile_url: _data.user_information.profile_url,
@@ -112,7 +113,7 @@ export class MentorMatcherService implements IMentorMatcherService {
             {
               model: MentorInformation,
               as: 'mentor_information',
-              attributes: ['industry', 'role', 'frequency', 'conversation_mode'],
+              attributes: ['industry', 'role', 'frequency', 'conversation_mode', 'isPassedIRT'],
             },
             {
               model: UserInformation,
@@ -304,7 +305,7 @@ export class MentorMatcherService implements IMentorMatcherService {
             {
               model: MentorInformation,
               as: 'mentor_information',
-              attributes: ['industry', 'role', 'frequency', 'conversation_mode'],
+              attributes: ['industry', 'role', 'frequency', 'conversation_mode', 'isPassedIRT'],
             },
             {
               model: UserInformation,
