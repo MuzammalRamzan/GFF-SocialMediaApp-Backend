@@ -1,5 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../database';
+import { UserInformation } from '../user-information/userInformationModel';
 import { WarriorInformation } from '../warrior-information/warriorInformationModel';
 
 export interface IUser {
@@ -57,6 +58,12 @@ User.hasOne(WarriorInformation, {
     foreignKey: 'user_id',
     sourceKey: 'id',
     as: 'warrior_information'
+})
+
+User.hasOne(UserInformation, {
+    foreignKey: 'user_id',
+    sourceKey: 'id',
+    as: 'user_information'
 })
 
 User.sync();

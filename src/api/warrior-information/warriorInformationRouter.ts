@@ -14,7 +14,7 @@ const validation = [
   check('price_range').isArray().notEmpty().withMessage("Price range is required"),
 ];
 
-warriorInformationRouter.get('/:id', authMiddleware, controller.getByUserId);
+warriorInformationRouter.get('/:user_id', authMiddleware, controller.getByUserId);
 warriorInformationRouter.post('/', authMiddleware, validation, controller.create);
 warriorInformationRouter.put('/update/:id', authMiddleware, validation, controller.update);
 
