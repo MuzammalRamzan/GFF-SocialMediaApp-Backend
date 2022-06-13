@@ -52,7 +52,7 @@ export class UserController {
 		const email = req.params.email
 		const userId = +req.user.id
 		try {
-			const users = await this.userService.fetchByEmail(email + '', userId)
+			const users = await this.userService.fetchByEmail(email, userId)
 			res.send(users)
 		} catch (err) {
 			throw err
