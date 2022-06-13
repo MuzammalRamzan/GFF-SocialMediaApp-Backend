@@ -27,10 +27,6 @@ export class AuthController {
 		try {
 			const user = await this.authService.checkCreds(email, password)
 
-			if (!user) {
-				res.status(404).send('User email or password is incorrect')
-			}
-
 			const token = this.authService.generateJwtToken(user!.email, user!.password)
 
 			res.set('auth-token', token)
