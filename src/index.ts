@@ -15,6 +15,8 @@ import { hashtagRouter } from './api/hashtag/hashtagRouter';
 import { debtRouter } from './api/debt/debtRouter';
 import { loanLedgerProfessionalInformationRouter } from './api/loan-ledger-professional-information/professionalInformationRouter';
 import { loanLedgerPersonalInfoRouter } from './api/loan-ledger-personal-information/loanLedgerPersonalInformationRouter';
+import { mentorMatcherRouter } from './api/mentor-matcher/mentorMatcherRouter';
+import { mentorInformationRouter } from './api/mentor-information/mentorInformationRouter';
 import { mpesaRouter } from './api/mpesa-auth/mpesaRouter';
 
 const options = {
@@ -40,6 +42,8 @@ const options = {
   app.use('/debt', debtRouter)
   app.use('/loanLedgerProfessionalInformation', loanLedgerProfessionalInformationRouter)
   app.use('/loanLedgerPersonalInformation', loanLedgerPersonalInfoRouter)
+  app.use('/mentor-matcher', mentorMatcherRouter);
+  app.use('/mentor-information', mentorInformationRouter);
   app.use('/mpesa', mpesaRouter)
 
   app.listen(process.env.PORT, () => {
