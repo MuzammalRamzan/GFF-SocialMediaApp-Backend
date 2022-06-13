@@ -49,16 +49,18 @@ export class AuthService implements IAuthService {
 		return user as User
 	}
 
-	async checkCreds(email: string, password: string): Promise<UserType | undefined> {
-		const user = await this.checkEmail(email)
-		const isValid = await this.checkPass(password, user.password)
+    async checkCreds (email: string, password: string): Promise<UserType | undefined> {
+        const user = await this.checkEmail(email)
+        if(!user){
+            throw new Error("Wrong username or password!")
+        }
+        const isValid = await this.checkPass(password, user.password)
 
-		if (!isValid) {
-			return
-		}
-
-		return user
-	}
+        if (!isValid) {
+            throw new Error("Wrong username or password!")
+        }
+        return user
+    }
 
 	private async checkEmail(email: string): Promise<UserType> {
 		const user = await User.findOne({
