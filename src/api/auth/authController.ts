@@ -42,6 +42,8 @@ export class AuthController {
 				message: 'OK'
 			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '404'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}

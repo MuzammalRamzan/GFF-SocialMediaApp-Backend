@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { jsonErrorHandler } from '../helper/errorHandler'
+import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import { DebtService } from './debtService'
 import {
 	CreateDebtRequest,
@@ -21,6 +21,8 @@ export class DebtController {
 			const debts = await this.debtService.list()
 			res.status(200).send(debts)
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -33,6 +35,8 @@ export class DebtController {
 			const debt = await this.debtService.fetchById(id, userId)
 			res.status(200).send(debt)
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -44,6 +48,8 @@ export class DebtController {
 			const dueDate = await this.debtService.fetchDueDateById(id, userId)
 			res.status(200).send(dueDate)
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -56,6 +62,8 @@ export class DebtController {
 			const debt = await this.debtService.add(params)
 			res.status(200).send(debt)
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -68,6 +76,8 @@ export class DebtController {
 			const debt = await this.debtService.update(id, params)
 			res.status(200).send({ debt })
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -79,6 +89,8 @@ export class DebtController {
 			const debt = await this.debtService.delete(id, userId)
 			res.status(200).send({ debt })
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
