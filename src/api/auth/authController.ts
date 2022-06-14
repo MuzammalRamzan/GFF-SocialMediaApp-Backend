@@ -19,6 +19,7 @@ export class AuthController {
 		} catch (err) {
 			const error = err as GffError
 			error.errorCode = '400'
+			error.httpStatusCode = 400
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -44,6 +45,7 @@ export class AuthController {
 		} catch (err) {
 			const error = err as GffError
 			error.errorCode = '404'
+			error.httpStatusCode = 404
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
