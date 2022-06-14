@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { jsonErrorHandler } from '../helper/errorHandler'
+import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import { CreateTransactionRequest, UpdateTransactionRequest, DeleteTransactionRequest } from './interface'
 import { TransactionService } from './transactionService'
 
@@ -15,6 +15,8 @@ export class TransactionController {
 			const transaction = await this.transactionService.list()
 			res.status(200).send({ transaction })
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -28,6 +30,8 @@ export class TransactionController {
 			const transaction = await this.transactionService.add(params)
 			res.status(200).send({ transaction })
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -41,6 +45,8 @@ export class TransactionController {
 			const transaction = await this.transactionService.update(id, params)
 			res.status(200).send({ transaction })
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -53,6 +59,8 @@ export class TransactionController {
 			const transaction = await this.transactionService.delete(id, user_id)
 			res.status(200).send({ transaction })
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { jsonErrorHandler } from '../helper/errorHandler'
+import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import { HashtagService } from './hashtagService'
 import {
 	CreateHashtagRequest,
@@ -20,6 +20,8 @@ export class HashtagController {
 			const hashtags = await this.hashtagService.list()
 			res.status(200).send({ hashtags })
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -31,6 +33,8 @@ export class HashtagController {
 			const hashtag = await this.hashtagService.add(params)
 			res.status(200).send({ hashtag })
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -46,6 +50,8 @@ export class HashtagController {
 			const hashtags = await this.hashtagService.fetchById(id)
 			res.send(hashtags)
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -58,6 +64,8 @@ export class HashtagController {
 			const hashtag = await this.hashtagService.update(id, params)
 			res.status(200).send({ hashtag })
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -69,6 +77,8 @@ export class HashtagController {
 			const hashtag = await this.hashtagService.delete(id)
 			res.status(200).send({ hashtag })
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}

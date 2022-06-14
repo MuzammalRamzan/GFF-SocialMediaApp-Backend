@@ -1,5 +1,5 @@
 import { Response, NextFunction, Request } from 'express'
-import { jsonErrorHandler } from '../helper/errorHandler'
+import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import {
 	DeleteLoanLedgerPersonalInfoRequest,
 	GetLoanLedgerPersonalInfoByIdRequest,
@@ -26,6 +26,8 @@ export class LoanLedgerPersonalInformationController {
 			const loanLedgerPersonalInfo = await this.loanLedgerPersonalInformationService.add(params)
 			res.status(200).send(loanLedgerPersonalInfo)
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -35,6 +37,8 @@ export class LoanLedgerPersonalInformationController {
 			const loanPersonalInfos = await this.loanLedgerPersonalInformationService.list()
 			res.status(200).send(loanPersonalInfos)
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -51,6 +55,8 @@ export class LoanLedgerPersonalInformationController {
 			const userInformation = await this.loanLedgerPersonalInformationService.fetchByUserId(params_userId, userId)
 			res.status(200).send(userInformation)
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -67,6 +73,8 @@ export class LoanLedgerPersonalInformationController {
 			const loalLedgerPersonalInfo = await this.loanLedgerPersonalInformationService.fetchById(id, userId)
 			res.status(200).send(loalLedgerPersonalInfo)
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -83,6 +91,8 @@ export class LoanLedgerPersonalInformationController {
 			const loanLedgerPersonalInfo = await this.loanLedgerPersonalInformationService.update(id, params)
 			res.status(200).send(loanLedgerPersonalInfo)
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -98,6 +108,8 @@ export class LoanLedgerPersonalInformationController {
 			const userInformation = await this.loanLedgerPersonalInformationService.delete(id, userId)
 			res.send({ userInformation })
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}

@@ -1,12 +1,12 @@
 {
-	"openapi": "3.0.0",
+	"swagger": "2.0",
 	"info": {
 		"title": "GFF Backend API",
 		"description": "",
 		"version": "1.0"
 	},
 	"schemes": ["http", "https"],
-	"host": "3.232.6.9",
+	"host": "localhost:3000",
 	"basePath": "/",
 	"tags": [
 		{
@@ -44,9 +44,421 @@
 		{
 			"name": "user-information",
 			"description": "User information related routes"
+		},
+		{
+			"name": "mentor-matcher",
+			"description": "Mentor matcher related routes"
+		},
+		{
+			"name": "mentor-information",
+			"description": "Mentor information related routes"
 		}
 	],
 	"paths": {
+		"/mentor-information": {
+			"get": {
+				"tags": ["mentor-information"],
+				"description": "Get mentor informations",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "mentor_id",
+						"in": "query",
+						"description": "Mentor id",
+						"required": true,
+						"type": "integer"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successfully get mentor details",
+						"schema": {
+							"$ref": "#/components/schemas/MentorDetail"
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["mentor-information"],
+				"description": "Get mentor informations",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "body",
+						"in": "body",
+						"description": "Mentor information",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/CreateOrUpdateMentorInformation"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successfully get mentor details",
+						"schema": {
+							"$ref": "#/components/schemas/MentorDetail"
+						}
+					}
+				}
+			},
+			"put": {
+				"tags": ["mentor-information"],
+				"description": "Get mentor informations",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "body",
+						"in": "body",
+						"description": "Mentor information",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/CreateOrUpdateMentorInformation"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successfully get mentor details",
+						"schema": {
+							"$ref": "#/components/schemas/MentorDetail"
+						}
+					}
+				}
+			}
+		},
+		"/mentor-matcher/my-mentor": {
+			"get": {
+				"tags": ["mentor-matcher"],
+				"description": "Get logged in user's mentor",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successfully get mentors",
+						"schema": {
+							"$ref": "#/components/schemas/Mentor"
+						}
+					}
+				}
+			}
+		},
+		"/mentor-matcher/my-mentee": {
+			"get": {
+				"tags": ["mentor-matcher"],
+				"description": "Get logged in user's mentee",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success",
+						"schema": {
+							"$ref": "#/components/schemas/Mentor"
+						}
+					}
+				}
+			}
+		},
+		"/mentor-matcher/mentors": {
+			"get": {
+				"tags": ["mentor-matcher"],
+				"description": "Search mentors",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"name": "text",
+						"in": "query",
+						"description": "Mentor name",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "industry",
+						"in": "query",
+						"description": "Industry(comma separated value with no spaces, e.g. IT,Software)",
+						"required": false
+					},
+					{
+						"name": "role",
+						"in": "query",
+						"description": "Role(comma separated value with no spaces, e.g IT,Software)",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"name": "frequency",
+						"in": "query",
+						"description": "Frequency(comma separated value with no spaces, e.g IT,Software)",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"name": "conversation_mode",
+						"in": "query",
+						"description": "Conversation Mode(comma separated value with no spaces, e.g IT,Software)",
+						"required": false,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successfully get mentors"
+					}
+				}
+			}
+		},
+		"/mentor-matcher/request/send": {
+			"post": {
+				"tags": ["mentor-matcher"],
+				"description": "Send mentor requests",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "body",
+						"in": "body",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/CreateMentorRequest"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success"
+					}
+				}
+			}
+		},
+		"/mentor-matcher/mentor/favorite/add": {
+			"post": {
+				"tags": ["mentor-matcher"],
+				"description": "Add a Mentor favorite",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "body",
+						"in": "body",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/FavoriteOrUnfavoriteMentor"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success"
+					}
+				}
+			}
+		},
+		"/mentor-matcher/mentor/favorite/remove": {
+			"post": {
+				"tags": ["mentor-matcher"],
+				"description": "Remove a Mentor from the favorite list",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "body",
+						"in": "body",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/FavoriteOrUnfavoriteMentor"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success"
+					}
+				}
+			}
+		},
+		"/mentor-matcher/request/accept": {
+			"put": {
+				"tags": ["mentor-matcher"],
+				"description": "Accept mentor request",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "body",
+						"in": "body",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AcceptOrRejectMentorRequest"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success"
+					}
+				}
+			}
+		},
+		"/mentor-matcher/request/reject": {
+			"put": {
+				"tags": ["mentor-matcher"],
+				"description": "Reject mentor request",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "body",
+						"in": "body",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AcceptOrRejectMentorRequest"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success"
+					}
+				}
+			}
+		},
+		"/mentor-matcher/sign-contract": {
+			"put": {
+				"tags": ["mentor-matcher"],
+				"description": "Sign mentor contract.",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "body",
+						"in": "body",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/MentorContract"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success"
+					}
+				}
+			}
+		},
+		"/mentor-matcher/request/mentee": {
+			"get": {
+				"tags": ["mentor-matcher"],
+				"description": "Get sent mentors requests [for metee users]",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success",
+						"schema": {
+							"$ref": "#/components/schemas/Mentor"
+						}
+					}
+				}
+			}
+		},
+		"/mentor-matcher/request/mentor": {
+			"get": {
+				"tags": ["mentor-matcher"],
+				"description": "Get mentors requests [for mentor users]",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success",
+						"schema": {
+							"$ref": "#/components/schemas/Mentor"
+						}
+					}
+				}
+			}
+		},
 		"/debt/delete/{id}": {
 			"delete": {
 				"tags": ["debt"],
@@ -182,7 +594,7 @@
 		"/debt/": {
 			"get": {
 				"tags": ["debt"],
-				"description": "List all debts",
+				"description": "Lists all debts",
 				"responses": {
 					"200": {
 						"description": "",
@@ -248,7 +660,7 @@
 		"/hashtag/list": {
 			"get": {
 				"tags": ["hashtag"],
-				"description": "List all hashtags",
+				"description": "Lists all hashtags",
 				"responses": {
 					"200": {
 						"description": "",
@@ -267,7 +679,7 @@
 		"/userInformation/update/{id}": {
 			"put": {
 				"tags": ["user-information"],
-				"description": "Update user informations",
+				"description": "Updates user informations",
 				"parameters": [
 					{
 						"name": "id",
@@ -361,7 +773,7 @@
 		"/hashtag/{user_info_id}": {
 			"get": {
 				"tags": ["hashtag"],
-				"description": "Get hashtag by user information id",
+				"description": "Gets hashtag by user information id",
 				"parameters": [
 					{
 						"name": "user_info_id",
@@ -394,7 +806,7 @@
 		"/hashtag/delete/{id}": {
 			"delete": {
 				"tags": ["hashtag"],
-				"description": "Delete hashtag",
+				"description": "Deletes hashtag",
 				"parameters": [
 					{
 						"name": "id",
@@ -427,7 +839,7 @@
 		"/debt/dueDate/{id}": {
 			"get": {
 				"tags": ["debt"],
-				"description": "Get due date for debt",
+				"description": "Gets due date for debt",
 				"parameters": [
 					{
 						"name": "id",
@@ -448,9 +860,9 @@
 						"content": {
 							"text/html; charset=utf-8": {
 								"schema": {
-									"type": "date"
+									"type": "string"
 								},
-								"examples": "2022-05-05"
+								"examples": {}
 							}
 						}
 					}
@@ -460,12 +872,12 @@
 		"/userInformation/delete/{id}": {
 			"delete": {
 				"tags": ["user-information"],
-				"description": "Delete user infomations for user",
+				"description": "Deletes user infomations for user",
 				"parameters": [
 					{
 						"name": "id",
 						"in": "path",
-						"description": "User information ID",
+						"description": "Debt ID",
 						"required": true,
 						"style": "simple",
 						"explode": false,
@@ -493,12 +905,12 @@
 		"/userInformation/{user_id}": {
 			"get": {
 				"tags": ["user-information"],
-				"description": "Get user information by user id",
+				"description": "Gets user information by user id",
 				"parameters": [
 					{
 						"name": "user_id",
 						"in": "path",
-						"description": "User ID",
+						"description": "Debt ID",
 						"required": true,
 						"style": "simple",
 						"explode": false,
@@ -526,7 +938,7 @@
 		"/debt/add": {
 			"post": {
 				"tags": ["debt"],
-				"description": "Add new debt",
+				"description": "Adds new debt",
 				"requestBody": {
 					"content": {
 						"application/json": {
@@ -564,7 +976,7 @@
 					{
 						"name": "id",
 						"in": "path",
-						"description": "Record ID",
+						"description": "User ID",
 						"required": true,
 						"style": "simple",
 						"explode": false,
@@ -912,7 +1324,7 @@
 							},
 							"examples": {
 								"0": {
-									"value": "{\n    \"full_name\": \"Ime Prezime\",\n    \"email\": \"test2\",\n    \"password\": \"password\"\n}"
+									"value": "{\n    \"full_name\": \"Ime Prezime\"\n    \"email\": \"test2\",\n    \"password\": \"password\"\n}"
 								}
 							}
 						}
@@ -1031,7 +1443,7 @@
 					{
 						"name": "id",
 						"in": "path",
-						"description": "Transaction category ID",
+						"description": "User ID",
 						"required": true,
 						"style": "simple",
 						"explode": false,
@@ -1097,7 +1509,7 @@
 					{
 						"name": "id",
 						"in": "path",
-						"description": "Transaction ID",
+						"description": "User ID",
 						"required": true,
 						"style": "simple",
 						"explode": false,
@@ -1109,7 +1521,7 @@
 				],
 				"responses": {
 					"200": {
-						"description": "",
+						"description": "Auto generated using Swagger Inspector",
 						"content": {
 							"application/json; charset=utf-8": {
 								"schema": {
@@ -1177,7 +1589,7 @@
 					{
 						"name": "id",
 						"in": "path",
-						"description": "Transaction ID",
+						"description": "User ID",
 						"required": true,
 						"style": "simple",
 						"explode": false,
@@ -1216,53 +1628,6 @@
 				}
 			}
 		},
-		"/transactionAccount/update/{id}": {
-			"put": {
-				"tags": ["transaction-account"],
-				"description": "Update transaction account",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"description": "Transaction account ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
-					}
-				],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/update_7_body"
-							},
-							"examples": {
-								"0": {
-									"value": "{\n        \"balance\": 11.5,\n        \"account_type_id\": 1,\n        \"name\": \"Test name\",\n        \"country\": \"Croatia\",\n        \"bank_name\": \"Test bank name\",\n        \"card_owner\": \"Test owner\",\n        \"card_number\": \"Test number\",\n        \"card_expiration_date\": \"2025-11-10\",\n        \"card_cvc\": \"Test cvc\",\n        \"currency_id\": 1,\n        \"user_id\": 16,\n        \"status\": \"active\"\n    }"
-								}
-							}
-						}
-					}
-				},
-				"responses": {
-					"200": {
-						"description": "",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "string"
-								},
-								"example": "{\"transactionAccount\":1}"
-							}
-						}
-					}
-				}
-			}
-		},
 		"/transactionCategory/update/{id}": {
 			"put": {
 				"tags": ["transaction-category"],
@@ -1271,7 +1636,7 @@
 					{
 						"name": "id",
 						"in": "path",
-						"description": "Transaction category ID",
+						"description": "User ID",
 						"required": true,
 						"style": "simple",
 						"explode": false,
@@ -1355,7 +1720,7 @@
 							},
 							"examples": {
 								"0": {
-									"value": "{\n        \"name\": \"TestName3\",\n        \"user_id\": \"16\",\n        \"icon_url\": \"icon_url\",\n        \"type\": \"Income\",\n        \"is_default\": \"1\",\n        \"status\": \"active\",\n    \"colour\": \"#FF0000\"\n     }"
+									"value": "{\n        \"name\": \"TestName3\",\n        \"user_id\": \"16\",\n        \"icon_url\": \"icon_url\",\n        \"type\": \"Income\",\n        \"is_default\": \"1\",\n        \"status\": \"status\"\n    }"
 								}
 							}
 						}
@@ -1885,9 +2250,6 @@
 			"auth_signup_body": {
 				"type": "object",
 				"properties": {
-					"full_name": {
-						"type": "string"
-					},
 					"password": {
 						"type": "string"
 					},
@@ -2051,47 +2413,6 @@
 					}
 				}
 			},
-			"update_7_body": {
-				"type": "object",
-				"properties": {
-					"country": {
-						"type": "string"
-					},
-					"balance": {
-						"type": "number"
-					},
-					"card_number": {
-						"type": "string"
-					},
-					"card_expiration_date": {
-						"type": "string"
-					},
-					"user_id": {
-						"type": "integer"
-					},
-					"card_cvc": {
-						"type": "string"
-					},
-					"name": {
-						"type": "string"
-					},
-					"bank_name": {
-						"type": "string"
-					},
-					"account_type_id": {
-						"type": "integer"
-					},
-					"card_owner": {
-						"type": "string"
-					},
-					"currency_id": {
-						"type": "integer"
-					},
-					"status": {
-						"type": "string"
-					}
-				}
-			},
 			"update_id_body_2": {
 				"type": "object",
 				"properties": {
@@ -2212,6 +2533,208 @@
 					},
 					"lastname": {
 						"type": "string"
+					}
+				}
+			},
+			"UserInformation": {
+				"type": "object",
+				"properties": {
+					"profile_url": { "type": "string" },
+					"bio": { "type": "string" },
+					"date_of_birth": { "type": "string" },
+					"gender": { "type": "string" },
+					"country": { "type": "string" },
+					"job_role": { "type": "string" },
+					"education": { "type": "string" }
+				}
+			},
+			"MentorInformation": {
+				"type": "object",
+				"properties": {
+					"industry": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"role": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"frequency": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"conversation_mode": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"isPassedIRT": {
+						"type": "boolean"
+					}
+				}
+			},
+			"Mentor": {
+				"type": "object",
+				"description": "Object schema",
+				"properties": {
+					"id": {
+						"type": "integer"
+					},
+					"mentor_id": {
+						"type": "integer"
+					},
+					"mentee_id": {
+						"type": "integer"
+					},
+					"request_type": {
+						"type": "string"
+					},
+					"status": {
+						"type": "string"
+					},
+					"is_contract_signed_by_mentee": {
+						"type": "boolean"
+					},
+					"is_contract_signed_by_mentor": {
+						"type": "boolean"
+					},
+					"mentee": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer"
+							},
+							"full_name": {
+								"type": "string"
+							},
+							"user_information": {
+								"$ref": "#/components/schemas/UserInformation"
+							}
+						}
+					},
+					"mentor": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer"
+							},
+							"full_name": {
+								"type": "string"
+							},
+							"user_information": {
+								"$ref": "#/components/schemas/UserInformation"
+							},
+							"mentor_information": {
+								"$ref": "#/components/schemas/MentorInformation"
+							}
+						}
+					}
+				}
+			},
+			"MentorDetail" : {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "integer"
+					},
+					"user_information": {
+						"$ref": "#/components/schemas/UserInformation"
+					},
+					"mentor_information": {
+						"$ref": "#/components/schemas/MentorInformation"
+					}
+				}
+			},
+			"SearchMentor": {
+				"type": "array",
+				"description": "Object schema",
+				"items": {
+					"type": "object",
+					"properties": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer"
+							},
+							"full_name": "string"
+						}
+					}
+				}
+			},
+			"CreateMentorRequest": {
+				"required": ["mentor_id", "message"],
+				"properties": {
+					"mentor_id": {
+						"type": "integer"
+					},
+					"message": {
+						"type": "string"
+					}
+				}
+			},
+			"AcceptOrRejectMentorRequest": {
+				"required": ["mentee_id", "request_id"],
+				"properties": {
+					"mentee_id": {
+						"type": "integer"
+					},
+					"request_id": {
+						"type": "integer"
+					}
+				}
+			},
+			"FavoriteOrUnfavoriteMentor": {
+				"required": ["mentor_id"],
+				"properties": {
+					"mentor_id": {
+						"type": "integer"
+					}
+				}
+			},
+			"MentorContract": {
+				"required": ["request_id"],
+				"properties": {
+					"request_id": {
+						"type": "integer"
+					}
+				}
+			},
+			"CreateOrUpdateMentorInformation": {
+				"required": ["isPassedIRT", "industry", "role", "conversation_mode", "frequency"],
+				"properties": {
+					"isPassedIRT": {
+						"type": "boolean"
+					},
+					"industry": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"role": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"conversation_mode": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"frequency": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
 					}
 				}
 			}

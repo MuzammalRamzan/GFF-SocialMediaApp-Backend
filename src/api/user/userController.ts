@@ -1,6 +1,7 @@
 import { Console } from 'console'
 import { Request, Response, NextFunction } from 'express'
 import { IAuthenticatedRequest } from '../helper/authMiddleware'
+import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import {
 	DeleteUserRequest,
 	GetFullUserByUserIdRequest,
@@ -22,7 +23,9 @@ export class UserController {
 			const users = await this.userService.list()
 			res.send(users)
 		} catch (err) {
-			throw err
+			const error = err as GffError
+			error.errorCode = '401'
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 
@@ -34,7 +37,9 @@ export class UserController {
 			const users = await this.userService.fetchById(id, userId)
 			res.send(users)
 		} catch (err) {
-			throw err
+			const error = err as GffError
+			error.errorCode = '401'
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 
@@ -44,7 +49,9 @@ export class UserController {
 			const fullUser = await this.userService.fetchFullUserById(userId)
 			res.status(200).send(fullUser)
 		} catch (err) {
-			throw err
+			const error = err as GffError
+			error.errorCode = '401'
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 
@@ -55,7 +62,9 @@ export class UserController {
 			const users = await this.userService.fetchByEmail(email, userId)
 			res.send(users)
 		} catch (err) {
-			throw err
+			const error = err as GffError
+			error.errorCode = '401'
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 
@@ -68,7 +77,9 @@ export class UserController {
 			const user = await this.userService.update(paramsId, params)
 			res.send(user)
 		} catch (err) {
-			throw err
+			const error = err as GffError
+			error.errorCode = '401'
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 
@@ -79,7 +90,9 @@ export class UserController {
 			const user = await this.userService.delete(id, userId)
 			res.send({ user })
 		} catch (err) {
-			throw err
+			const error = err as GffError
+			error.errorCode = '401'
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 
@@ -90,7 +103,9 @@ export class UserController {
 			const users = await this.userService.searchFriend(search, userId)
 			res.status(200).send(users)
 		} catch (err) {
-			throw err
+			const error = err as GffError
+			error.errorCode = '401'
+			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 }

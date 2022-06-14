@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express'
-import { jsonErrorHandler } from '../helper/errorHandler'
+import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import {
 	CreateUserInformationRequest,
 	DeleteUserInformationRequest,
@@ -22,6 +22,8 @@ export class UserInformationController {
 			const userInformation = await this.userInformationService.add(params)
 			res.status(200).send(userInformation)
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -34,6 +36,8 @@ export class UserInformationController {
 			const userInformation = await this.userInformationService.fetchById(params_user_id, userId)
 			res.status(200).send(userInformation)
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -46,6 +50,8 @@ export class UserInformationController {
 			const userInformation = await this.userInformationService.update(userId, params)
 			res.status(200).send(userInformation)
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -57,6 +63,8 @@ export class UserInformationController {
 			const userInformation = await this.userInformationService.delete(params_user_id, userId)
 			res.send({ userInformation })
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
