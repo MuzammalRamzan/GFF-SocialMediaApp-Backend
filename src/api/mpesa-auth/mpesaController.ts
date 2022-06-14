@@ -12,7 +12,13 @@ export class MpesaController {
     fetch = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const response = await this.mpesaService.mpesaAuth()
-            res.status(200).send(response)
+            return res.status(200).send({
+				data: {
+					response
+				},
+				code: 200,
+				message: 'OK'
+			})
         } catch (err) {
             throw err
         }

@@ -19,7 +19,13 @@ export class DebtController {
 	getAllDebts = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const debts = await this.debtService.list()
-			res.status(200).send(debts)
+			return res.status(200).send({
+				data: {
+					debts
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
 			const error = err as GffError
 			error.errorCode = '401'
@@ -34,7 +40,13 @@ export class DebtController {
 
 		try {
 			const debt = await this.debtService.fetchById(id, userId)
-			res.status(200).send(debt)
+			return res.status(200).send({
+				data: {
+					debt
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
 			const error = err as GffError
 			error.errorCode = '401'
@@ -48,7 +60,13 @@ export class DebtController {
 		const userId = +req.user.id
 		try {
 			const dueDate = await this.debtService.fetchDueDateById(id, userId)
-			res.status(200).send(dueDate)
+			return res.status(200).send({
+				data: {
+					dueDate
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
 			const error = err as GffError
 			error.errorCode = '401'
@@ -63,7 +81,13 @@ export class DebtController {
 
 		try {
 			const debt = await this.debtService.add(params)
-			res.status(200).send(debt)
+			return res.status(200).send({
+				data: {
+					debt
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
 			const error = err as GffError
 			error.errorCode = '401'
@@ -78,7 +102,13 @@ export class DebtController {
 		const params = { ...req.body, user_id }
 		try {
 			const debt = await this.debtService.update(id, params)
-			res.status(200).send({ debt })
+			return res.status(200).send({
+				data: {
+					debt
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
 			const error = err as GffError
 			error.errorCode = '401'
@@ -92,7 +122,13 @@ export class DebtController {
 		const userId = +req.user.id
 		try {
 			const debt = await this.debtService.delete(id, userId)
-			res.status(200).send({ debt })
+			return res.status(200).send({
+				data: {
+					debt
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
 			const error = err as GffError
 			error.errorCode = '401'
