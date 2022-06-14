@@ -15,7 +15,13 @@ export class AuthController {
 		const fullName = req.body.full_name
 		try {
 			const user = await this.authService.createUser(email, fullName, pass)
-			res.status(200).send(user)
+			return res.status(200).send({
+				data: {
+					user
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
 			const error = err as GffError
 			error.errorCode = '400'
