@@ -52,6 +52,7 @@ User.init({
     {
         sequelize,
         tableName: 'user',
+        timestamps: true
     })
 
 User.hasOne(MentorInformation, {
