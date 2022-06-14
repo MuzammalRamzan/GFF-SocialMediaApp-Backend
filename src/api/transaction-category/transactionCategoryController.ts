@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { jsonErrorHandler } from '../helper/errorHandler'
+import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import {
 	CreateTransactionCategoryRequest,
 	DeleteTransactionCategoryRequest,
@@ -22,6 +22,8 @@ export class TransactionCategotryController {
 			const transactionCategory = await this.transactionCategoryService.add(params)
 			res.status(200).send(transactionCategory)
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -31,6 +33,8 @@ export class TransactionCategotryController {
 			const transactionCategories = await this.transactionCategoryService.list()
 			res.status(200).send(transactionCategories)
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -45,6 +49,8 @@ export class TransactionCategotryController {
 			const transactionCategories = await this.transactionCategoryService.fetchByUserId(userId)
 			res.status(200).send(transactionCategories)
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -61,6 +67,8 @@ export class TransactionCategotryController {
 			const transactionCategory = await this.transactionCategoryService.update(id, params)
 			res.send(transactionCategory)
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -72,6 +80,8 @@ export class TransactionCategotryController {
 			const transactionCategory = await this.transactionCategoryService.delete(id, userId)
 			res.status(200).send({ transactionCategory })
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}

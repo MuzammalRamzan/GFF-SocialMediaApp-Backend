@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { jsonErrorHandler } from '../helper/errorHandler'
+import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import {
 	TransactionAccountType,
 	GetTransactionAccountByIdRequest,
@@ -20,6 +20,8 @@ export class TransactionAccController {
 			const transactionAccount = await this.transactionAccService.list()
 			res.status(200).send({ transactionAccount })
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -32,6 +34,8 @@ export class TransactionAccController {
 			const transactionAccount = await this.transactionAccService.fetch(id, userId)
 			res.status(200).send({ transactionAccount })
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -44,6 +48,8 @@ export class TransactionAccController {
 			const transactionAccount = await this.transactionAccService.add(params as TransactionAccountType)
 			res.status(200).send({ transactionAccount })
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -56,6 +62,8 @@ export class TransactionAccController {
 			const transactionAccount = await this.transactionAccService.update(id, params)
 			res.status(200).send({ transactionAccount })
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}

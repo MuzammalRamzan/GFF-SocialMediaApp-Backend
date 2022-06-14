@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { jsonErrorHandler } from '../helper/errorHandler'
+import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import {
 	CreateRecordRequest,
 	DeleteRecordRequest,
@@ -20,6 +20,8 @@ export class RecordController {
 			const records = await this.recordService.list()
 			res.status(200).send({ records })
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -30,6 +32,8 @@ export class RecordController {
 			const records = await this.recordService.listByUserId(userId)
 			res.status(200).send(records)
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -42,6 +46,8 @@ export class RecordController {
 			const record = await this.recordService.add(params, userId)
 			res.status(200).send({ record })
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -54,6 +60,8 @@ export class RecordController {
 			const record = await this.recordService.update(id, params, userId)
 			res.status(200).send({ record })
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -64,6 +72,8 @@ export class RecordController {
 			const record = await this.recordService.delete(id)
 			res.status(200).send({ record })
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
