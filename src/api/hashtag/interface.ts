@@ -11,7 +11,7 @@ export interface IHashtagService {
     add (params:HashtagType): Promise<Hashtag>
     list (): Promise<Hashtag[]>
     fetchById (id: number): Promise<Hashtag[]>
-    update (id: number, params: HashtagType): Promise<[affectedCount: number]>
+    update (id: number, params: HashtagType): Promise<Hashtag>
     delete (id: number): Promise<number>
 }
 
