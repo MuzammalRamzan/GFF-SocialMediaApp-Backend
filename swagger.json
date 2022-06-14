@@ -1929,7 +1929,7 @@
 		"/find-friend/request/{id}": {
 			"get": {
 				"tags": ["find-friend"],
-				"description": "Delete a friend request",
+				"description": "See a friend request",
 				"parameters": [
 					{
 						"name": "auth-token",
