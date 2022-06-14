@@ -465,6 +465,13 @@
 				"description": "Delete a debt",
 				"parameters": [
 					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
 						"name": "id",
 						"in": "path",
 						"description": "Debt ID",
@@ -498,6 +505,13 @@
 				"description": "Get debt by id",
 				"parameters": [
 					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
 						"name": "id",
 						"in": "path",
 						"description": "Debt ID",
@@ -529,6 +543,15 @@
 			"post": {
 				"tags": ["hashtag"],
 				"description": "Add new hashtag",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
 				"requestBody": {
 					"content": {
 						"application/json": {
@@ -562,6 +585,15 @@
 			"post": {
 				"tags": ["user-information"],
 				"description": "Add additional user information",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
 				"requestBody": {
 					"content": {
 						"application/json": {
@@ -595,6 +627,15 @@
 			"get": {
 				"tags": ["debt"],
 				"description": "Lists all debts",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "",
@@ -615,6 +656,13 @@
 				"tags": ["hashtag"],
 				"description": "Update hashtag",
 				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
 					{
 						"name": "id",
 						"in": "path",
@@ -661,6 +709,15 @@
 			"get": {
 				"tags": ["hashtag"],
 				"description": "Lists all hashtags",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "",
@@ -681,6 +738,13 @@
 				"tags": ["user-information"],
 				"description": "Updates user informations",
 				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
 					{
 						"name": "id",
 						"in": "path",
@@ -729,6 +793,13 @@
 				"description": "Update debt by id",
 				"parameters": [
 					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
 						"name": "id",
 						"in": "path",
 						"description": "Debt ID",
@@ -776,6 +847,13 @@
 				"description": "Gets hashtag by user information id",
 				"parameters": [
 					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
 						"name": "user_info_id",
 						"in": "path",
 						"description": "User information id",
@@ -808,6 +886,13 @@
 				"tags": ["hashtag"],
 				"description": "Deletes hashtag",
 				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
 					{
 						"name": "id",
 						"in": "path",
@@ -842,6 +927,13 @@
 				"description": "Gets due date for debt",
 				"parameters": [
 					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
 						"name": "id",
 						"in": "path",
 						"description": "Debt ID",
@@ -874,6 +966,13 @@
 				"tags": ["user-information"],
 				"description": "Deletes user infomations for user",
 				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
 					{
 						"name": "id",
 						"in": "path",
@@ -908,6 +1007,13 @@
 				"description": "Gets user information by user id",
 				"parameters": [
 					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
 						"name": "user_id",
 						"in": "path",
 						"description": "Debt ID",
@@ -939,6 +1045,15 @@
 			"post": {
 				"tags": ["debt"],
 				"description": "Adds new debt",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
 				"requestBody": {
 					"content": {
 						"application/json": {
@@ -974,6 +1089,13 @@
 				"description": "Delete a record",
 				"parameters": [
 					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
 						"name": "id",
 						"in": "path",
 						"description": "User ID",
@@ -1005,6 +1127,15 @@
 			"get": {
 				"tags": ["record"],
 				"description": "Get all records",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "",
@@ -1039,6 +1170,15 @@
 			"post": {
 				"tags": ["record"],
 				"description": "Add a record",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
 				"requestBody": {
 					"content": {
 						"application/json": {
@@ -1084,6 +1224,13 @@
 				"tags": ["record"],
 				"description": "Update a record",
 				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
 					{
 						"name": "id",
 						"in": "path",
@@ -1166,6 +1313,15 @@
 			"get": {
 				"tags": ["transaction-account"],
 				"description": "List all transaction accounts",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "",
@@ -1186,6 +1342,13 @@
 				"tags": ["transaction-account"],
 				"description": "Get transaction account for id",
 				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
 					{
 						"name": "id",
 						"in": "path",
@@ -1220,6 +1383,13 @@
 				"description": "Get a user by email",
 				"parameters": [
 					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
 						"name": "email",
 						"in": "path",
 						"description": "User email",
@@ -1250,6 +1420,15 @@
 			"post": {
 				"tags": ["transaction-account"],
 				"description": "Add new transaction account",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
 				"requestBody": {
 					"content": {
 						"application/json": {
@@ -1284,6 +1463,13 @@
 				"tags": ["user"],
 				"description": "Get a user by id",
 				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
 					{
 						"name": "id",
 						"in": "path",
@@ -1368,6 +1554,15 @@
 			"get": {
 				"tags": ["transaction"],
 				"description": "List all transactions",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "",
@@ -1388,6 +1583,13 @@
 				"tags": ["transaction-category"],
 				"description": "Get a transaction category by user id",
 				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
 					{
 						"name": "user_id",
 						"in": "path",
@@ -1420,6 +1622,15 @@
 			"get": {
 				"tags": ["transaction-category"],
 				"description": "List all transaction categories",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "",
@@ -1440,6 +1651,13 @@
 				"tags": ["transaction-category"],
 				"description": "Delete a transaction category by id",
 				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
 					{
 						"name": "id",
 						"in": "path",
@@ -1474,6 +1692,13 @@
 				"description": "Delete a user",
 				"parameters": [
 					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
 						"name": "id",
 						"in": "path",
 						"description": "User ID",
@@ -1507,6 +1732,13 @@
 				"description": "Delete a transaction",
 				"parameters": [
 					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
 						"name": "id",
 						"in": "path",
 						"description": "User ID",
@@ -1539,6 +1771,13 @@
 				"tags": ["user"],
 				"description": "Update user",
 				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
 					{
 						"name": "id",
 						"in": "path",
@@ -1587,6 +1826,13 @@
 				"description": "Update transaction",
 				"parameters": [
 					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
 						"name": "id",
 						"in": "path",
 						"description": "User ID",
@@ -1633,6 +1879,13 @@
 				"tags": ["transaction-category"],
 				"description": "Update transaction category",
 				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
 					{
 						"name": "id",
 						"in": "path",
@@ -1712,6 +1965,15 @@
 			"post": {
 				"tags": ["transaction-category"],
 				"description": "Add a new transaction category",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
 				"requestBody": {
 					"content": {
 						"application/json": {
