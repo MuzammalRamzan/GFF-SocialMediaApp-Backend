@@ -21,7 +21,13 @@ export class UserController {
 	getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const users = await this.userService.list()
-			res.send(users)
+			return res.status(200).send({
+				data: {
+					users
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
 			const error = err as GffError
 			error.errorCode = '401'
@@ -36,7 +42,13 @@ export class UserController {
 
 		try {
 			const users = await this.userService.fetchById(id, userId)
-			res.send(users)
+			return res.status(200).send({
+				data: {
+					users
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
 			const error = err as GffError
 			error.errorCode = '401'
@@ -49,7 +61,13 @@ export class UserController {
 		const userId = +req.user.id
 		try {
 			const fullUser = await this.userService.fetchFullUserById(userId)
-			res.status(200).send(fullUser)
+			return res.status(200).send({
+				data: {
+					fullUser
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
 			const error = err as GffError
 			error.errorCode = '401'
@@ -63,7 +81,13 @@ export class UserController {
 		const userId = +req.user.id
 		try {
 			const users = await this.userService.fetchByEmail(email, userId)
-			res.send(users)
+			return res.status(200).send({
+				data: {
+					users
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
 			const error = err as GffError
 			error.errorCode = '401'
@@ -79,7 +103,13 @@ export class UserController {
 
 		try {
 			const user = await this.userService.update(paramsId, params)
-			res.send(user)
+			return res.status(200).send({
+				data: {
+					user
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
 			const error = err as GffError
 			error.errorCode = '401'
@@ -93,7 +123,13 @@ export class UserController {
 		const userId = +req.user.id
 		try {
 			const user = await this.userService.delete(id, userId)
-			res.send({ user })
+			return res.status(200).send({
+				data: {
+					user
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
 			const error = err as GffError
 			error.errorCode = '401'
@@ -107,7 +143,13 @@ export class UserController {
 		const userId = req?.user?.id as number
 		try {
 			const users = await this.userService.searchFriend(search, userId)
-			res.status(200).send(users)
+			return res.status(200).send({
+				data: {
+					users
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
 			const error = err as GffError
 			error.errorCode = '401'
