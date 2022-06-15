@@ -29,8 +29,14 @@ export class TransactionCategotryController {
 			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '401'
-			error.httpStatusCode = 401
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -38,6 +44,9 @@ export class TransactionCategotryController {
 	getAllTransactionCategories = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const transactionCategories = await this.transactionCategoryService.list()
+			if(!transactionCategories.length) {
+				throw new Error('No data found')
+			}
 			return res.status(200).send({
 				data: {
 					transactionCategories
@@ -47,8 +56,18 @@ export class TransactionCategotryController {
 			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '401'
-			error.httpStatusCode = 401
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else if  (error.message === 'No data found') {
+				error.errorCode = '404'
+				error.httpStatusCode = 404
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -61,6 +80,9 @@ export class TransactionCategotryController {
 		const userId = +req.user.id
 		try {
 			const transactionCategories = await this.transactionCategoryService.fetchByUserId(userId)
+			if(!transactionCategories.length) {
+				throw new Error('No data found')
+			}
 			return res.status(200).send({
 				data: {
 					transactionCategories
@@ -70,8 +92,18 @@ export class TransactionCategotryController {
 			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '401'
-			error.httpStatusCode = 401
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else if  (error.message === 'No data found') {
+				error.errorCode = '404'
+				error.httpStatusCode = 404
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -95,8 +127,14 @@ export class TransactionCategotryController {
 			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '401'
-			error.httpStatusCode = 401
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -115,8 +153,14 @@ export class TransactionCategotryController {
 			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '401'
-			error.httpStatusCode = 401
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
