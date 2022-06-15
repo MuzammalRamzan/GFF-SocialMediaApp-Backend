@@ -13,6 +13,9 @@ export class TransactionController {
 	getAllTransactions = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const transaction = await this.transactionService.list()
+			if(!transaction.length) {
+				throw new Error('No data found')
+			}
 			return res.status(200).send({
 				data: {
 					transaction
@@ -22,17 +25,25 @@ export class TransactionController {
 			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '401'
-			error.httpStatusCode = 401
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else if  (error.message === 'No data found') {
+				error.errorCode = '404'
+				error.httpStatusCode = 404
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
 
 	createTransaction = async (req: CreateTransactionRequest, res: Response, next: NextFunction) => {
 		const user_id = +req.user.id
-		console.log(user_id)
 		const params = { ...req.body, user_id }
-
 		try {
 			const transaction = await this.transactionService.add(params)
 			return res.status(200).send({
@@ -44,8 +55,14 @@ export class TransactionController {
 			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '401'
-			error.httpStatusCode = 401
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -66,8 +83,14 @@ export class TransactionController {
 			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '401'
-			error.httpStatusCode = 401
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -87,8 +110,14 @@ export class TransactionController {
 			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '401'
-			error.httpStatusCode = 401
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
