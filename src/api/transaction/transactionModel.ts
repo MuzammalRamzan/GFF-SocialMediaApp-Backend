@@ -29,6 +29,19 @@ Transaction.init(
 		status: {
 			type: DataTypes.ENUM('Active', 'Inactive', 'Deleted'),
 			allowNull: false
+		},
+		created_at: {
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.NOW,
+			allowNull: false
+		},
+		due_date: {
+			type: DataTypes.DATE,
+			allowNull: false
+		},
+		payed_at: {
+			type: DataTypes.DATE,
+			allowNull: false
 		}
 	},
 	{
