@@ -102,8 +102,8 @@ export class LoanLedgerProfessionalInformationController {
 			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '401'
-			error.httpStatusCode = 401
+			error.errorCode = '409'
+			error.httpStatusCode = 409
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}

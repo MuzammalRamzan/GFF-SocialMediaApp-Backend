@@ -12,6 +12,7 @@ LoanLedgerPersonalInformation.init({
     user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        unique: true
     },
     full_name: {
         type: DataTypes.STRING,

@@ -4,21 +4,26 @@ import { LoanLedgerPersonalInformation } from "./loanLedgerPersonalInformationMo
 export class LoanLedgerPersonalInformationService implements ILoanLedgerPersonalInformationService {
 
     async add (params: LoanLedgerPersonalInformationType): Promise<LoanLedgerPersonalInformation> {
-        const loanLedgerPersonalInformation = await LoanLedgerPersonalInformation.create({ 
-            user_id: params.user_id,
-            full_name: params.full_name,
-            national_id: params.national_id,
-            date_of_birth: params.date_of_birth,
-            registration_number: params.registration_number,
-            gender: params.gender,
-            email: params.email,
-            mobile_phone: params.mobile_phone,
-            current_residence: params.current_residence,
-            house_number: params.house_number,
-            country: params.country
-        })
-
-        return loanLedgerPersonalInformation
+        try {
+            const loanLedgerPersonalInformation = await LoanLedgerPersonalInformation.create({ 
+                user_id: params.user_id,
+                full_name: params.full_name,
+                national_id: params.national_id,
+                date_of_birth: params.date_of_birth,
+                registration_number: params.registration_number,
+                gender: params.gender,
+                email: params.email,
+                mobile_phone: params.mobile_phone,
+                current_residence: params.current_residence,
+                house_number: params.house_number,
+                country: params.country
+            })
+    
+            return loanLedgerPersonalInformation
+        }
+        catch (err) {
+            throw new Error("Personal information already exists")
+        } 
     }
 
     async list(): Promise<LoanLedgerPersonalInformation[]> {

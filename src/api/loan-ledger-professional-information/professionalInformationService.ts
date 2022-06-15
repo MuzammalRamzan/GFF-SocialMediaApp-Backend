@@ -32,17 +32,23 @@ export class LoanLedgerProfessionalInformationService implements ILoanLedgerProf
 	}
 
 	async add(params: LoanLedgerProfessionalInformationType): Promise<LoanLedgerProfessionalInformation> {
-		const professionalInformation = await LoanLedgerProfessionalInformation.create({
-			user_id: params.user_id,
-			employment_type: params.employment_type,
-			company_name: params.company_name,
-			profession: params.profession,
-			education: params.education,
-			net_monthly_salary: params.net_monthly_salary,
-			work_experience: params.work_experience
-		})
-		return professionalInformation
+		try {
+			const professionalInformation = await LoanLedgerProfessionalInformation.create({
+				user_id: params.user_id,
+				employment_type: params.employment_type,
+				company_name: params.company_name,
+				profession: params.profession,
+				education: params.education,
+				net_monthly_salary: params.net_monthly_salary,
+				work_experience: params.work_experience
+			})
+			return professionalInformation
+		}
+		catch(err) {
+			throw new Error("Professional information already exists")
+		}
 	}
+		
 
 	async update(id: number, params: LoanLedgerProfessionalInformationType): Promise<LoanLedgerProfessionalInformation> {
 		const loan = await LoanLedgerProfessionalInformation.findOne({
