@@ -16,6 +16,7 @@ import { debtRouter } from './api/debt/debtRouter';
 import { loanLedgerProfessionalInformationRouter } from './api/loan-ledger-professional-information/professionalInformationRouter';
 import { loanLedgerPersonalInfoRouter } from './api/loan-ledger-personal-information/loanLedgerPersonalInformationRouter';
 import { warriorInformationRouter } from './api/warrior-information/warriorInformationRouter';
+import { warriorRouter } from './api/wellness-warrior/wellnessWarriorRouter';
 
 const options = {
   swaggerOptions: {
@@ -40,7 +41,8 @@ const options = {
   app.use('/debt', debtRouter)
   app.use('/loanLedgerProfessionalInformation', loanLedgerProfessionalInformationRouter)
   app.use('/loanLedgerPersonalInformation', loanLedgerPersonalInfoRouter)
-  app.use('/wellness-warrior', warriorInformationRouter)
+  app.use('/warrior-information', warriorInformationRouter)
+  app.use('/wellness-warrior', warriorRouter)
 
   app.listen(process.env.PORT, () => {
     console.log(`Server running at port ${process.env.PORT}`)

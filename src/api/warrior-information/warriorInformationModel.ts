@@ -1,5 +1,16 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../../database";
+import { UserInformationType } from "../user-information/interface";
+
+export interface IWarriorInformation  {
+  id: number;
+  user_id: number;
+  specialty: string[];
+  certification: string[];
+  therapy_type: string[];
+  price_range: string[];
+  user?: UserInformationType
+}
 
 export class WarriorInformation extends Model { }
 

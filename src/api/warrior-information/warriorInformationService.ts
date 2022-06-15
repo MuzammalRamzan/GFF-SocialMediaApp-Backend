@@ -1,12 +1,13 @@
 import { UserInformation } from "../user-information/userInformationModel";
 import { User } from "../user/userModel";
-import { IWarriorInformationService, IWarriorUser, WarriorInformationType } from "./interface";
+import { WellnessWarriorService } from "../wellness-warrior/wellnessWarriorService";
+import { IWarriorInformationService, IWarriorUser, WarriorInformationParams } from "./interface";
 import { WarriorInformation } from "./warriorInformationModel";
 
 export class WarriorInformationService implements IWarriorInformationService {
   constructor() { }
 
-  private createOrUpdate = async (params: WarriorInformationType): Promise<WarriorInformation> => {
+  private createOrUpdate = async (params: WarriorInformationParams): Promise<WarriorInformation> => {
     const warriorInformation = await WarriorInformation.findOne({
       where: {
         user_id: params.user_id
@@ -51,6 +52,8 @@ export class WarriorInformationService implements IWarriorInformationService {
       throw new Error("User not found!");
     }
 
+    const wellness_warrior_request = await WellnessWarriorService.getWarriorRequestByUserId(user_id);
+
     const user = record?.get();
 
     return {
@@ -62,11 +65,12 @@ export class WarriorInformationService implements IWarriorInformationService {
         certification: user.warrior_information?.certification.split(','),
         therapy_type: user.warrior_information?.therapy_type.split(','),
         price_range: user.warrior_information?.price_range.split(','),
-      }
+      },
+      wellness_warrior_request: wellness_warrior_request
     }
   }
 
-  create = async (params: WarriorInformationType): Promise<WarriorInformation> => {
+  create = async (params: WarriorInformationParams): Promise<WarriorInformation> => {
     const warriorInformation = await this.createOrUpdate(params);
 
     await User.update({
@@ -80,7 +84,7 @@ export class WarriorInformationService implements IWarriorInformationService {
     return warriorInformation;
   }
 
-  update = async (params: WarriorInformationType): Promise<WarriorInformation | null> => {
+  update = async (params: WarriorInformationParams): Promise<WarriorInformation | null> => {
     const record = await this.createOrUpdate(params);
 
     return record ? await WarriorInformation.findOne({ where: { user_id: params.user_id } }) : null;
