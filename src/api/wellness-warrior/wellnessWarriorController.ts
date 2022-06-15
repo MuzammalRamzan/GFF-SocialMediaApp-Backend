@@ -36,10 +36,12 @@ export class WellnessWarriorController {
 
       if (isExist) {
         return res.status(400).json({
-          data: {},
+          data: {
+            request: isExist
+          },
           message: "You have already sent request to this wellness warrior!",
           code: 400
-        }); 
+        });
       }
 
       const request = await this.wellnessWarriorService.sendRequest(user_id, wellnessWarrior_id);
@@ -61,13 +63,23 @@ export class WellnessWarriorController {
       const user_id = req?.user?.id as number;
       const request_id = req.body.request_id as number;
 
+      const isExist = await WellnessWarriorService.getRequestById(request_id) as any;
+
+      if (!isExist) {
+        return res.status(400).json({
+          data: {},
+          message: "Request not found!",
+          code: 400
+        });
+      }
+
       const request = await this.wellnessWarriorService.approveRequest(user_id, request_id);
 
       return res.status(200).json({
         data: {
           request
         },
-        message: "Approve request successfully!",
+        message: request ? "Approve request successfully!" : "Request not found!",
         code: 200
       });
     } catch (err) {
@@ -80,13 +92,23 @@ export class WellnessWarriorController {
       const user_id = req?.user?.id as number;
       const request_id = req.body.request_id as number;
 
+      const isExist = await WellnessWarriorService.getRequestById(request_id) as any;
+
+      if (!isExist) {
+        return res.status(400).json({
+          data: {},
+          message: "Request not found!",
+          code: 400
+        });
+      }
+
       const request = await this.wellnessWarriorService.rejectRequest(user_id, request_id);
 
       return res.status(200).json({
         data: {
           request
         },
-        message: "Reject request successfully!",
+        message: request ? "Reject request successfully!" : "Request not found!",
         code: 200
       });
     } catch (err) {
@@ -157,10 +179,12 @@ export class WellnessWarriorController {
 
       if (isExist) {
         return res.status(400).json({
-          data: {},
+          data: {
+            favorite: isExist
+          },
           message: "You have already favorite this wellness warrior!",
           code: 400
-        }); 
+        });
       }
 
       const favorite = await this.wellnessWarriorService.favoriteWarrior(user_id, wellnessWarrior_id);
@@ -202,6 +226,24 @@ export class WellnessWarriorController {
       const user_id = req?.user?.id as number;
 
       const wellnessWarriors = await this.wellnessWarriorService.getAllFavoriteWarrior(user_id);
+
+      return res.status(200).json({
+        data: {
+          wellnessWarriors
+        },
+        message: "Get wellness warriors successfully!",
+        code: 200
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  public getMyWarriors = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+      const user_id = req?.user?.id as number;
+
+      const wellnessWarriors = await this.wellnessWarriorService.getMyWarriors(user_id);
 
       return res.status(200).json({
         data: {

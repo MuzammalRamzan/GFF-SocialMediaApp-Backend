@@ -36,6 +36,7 @@ export interface IWellnessWarriorRequest {
   warrior?: {
     id: number
     full_name: string
+    user_information?: UserInformationType
     warrior_information?: IWarriorInformation
   }
 }
@@ -43,14 +44,15 @@ export interface IWellnessWarriorRequest {
 export interface IWellnessWarriorService {
   searchWellnessWarriors(user_id: number, searchParams: ISearchWarriorParams): Promise<IWarriorUser[]>;
   sendRequest(user_id: number, warrior_id: number): Promise<IWellnessWarriorRequest>;
-  approveRequest(user_id: number, request_id: number): Promise<IWellnessWarriorRequest | null>;
-  rejectRequest(user_id: number, request_id: number): Promise<IWellnessWarriorRequest | null>;
+  approveRequest(user_id: number, request_id: number): Promise<boolean>;
+  rejectRequest(user_id: number, request_id: number): Promise<boolean>;
   getRequest(request_id: number): Promise<IWellnessWarriorRequest>;
   getAllRequest(user_id: number): Promise<IWellnessWarriorRequest[]>;
   getAllSendedRequest(user_id: number): Promise<IWellnessWarriorRequest[]>;
   favoriteWarrior(user_id: number, warrior_id: number): Promise<boolean>;
   unfavoriteWarrior(user_id: number, warrior_id: number): Promise<boolean>;
   getAllFavoriteWarrior(user_id: number): Promise<WellnessWarrior[]>;
-  isRequestExist(user_id: number, warrior_id: number): Promise<boolean>;
-  isFavoriteExist(user_id: number, warrior_id: number): Promise<boolean>;
+  isRequestExist(user_id: number, warrior_id: number): Promise<IWellnessWarriorRequest | null>;
+  isFavoriteExist(user_id: number, warrior_id: number): Promise<IWellnessWarriorRequest | null>;
+  getMyWarriors(user_id: number): Promise<IWarriorUser[]>;
 }

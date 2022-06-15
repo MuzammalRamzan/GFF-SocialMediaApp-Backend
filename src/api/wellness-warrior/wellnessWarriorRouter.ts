@@ -17,4 +17,5 @@ warriorRouter.get('/all-sended-request', authMiddleware, controller.getAllSended
 warriorRouter.post('/favorite-warrior', authMiddleware, controller.favoriteWellnessWarrior);
 warriorRouter.post('/unfavorite-warrior', authMiddleware, controller.unfavoriteWellnessWarrior);
 warriorRouter.get('/all-favorite-warrior', authMiddleware, controller.getFavoriteWellnessWarriors);
+warriorRouter.get('/my-warriors', authMiddleware, controller.getMyWarriors);
 

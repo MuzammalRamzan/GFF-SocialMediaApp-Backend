@@ -9,39 +9,62 @@ import { WellnessWarrior } from "./wellnessWarriorModel";
 export class WellnessWarriorService implements IWellnessWarriorService {
   constructor() { }
 
+  private readonly wellness_warrior_relationships = [
+    {
+      model: User,
+      as: "warrior",
+      foreignKey: "warrior_id",
+      attributes: ["id", "full_name"],
+      include: [
+        {
+          model: UserInformation,
+          as: "user_information",
+          attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education'],
+        },
+        {
+          model: WarriorInformation,
+          as: 'warrior_information',
+          attributes: ["specialty", "certification", "therapy_type", "price_range"]
+        }
+      ]
+    },
+    {
+      model: User,
+      as: "user",
+      foreignKey: "user_id",
+      attributes: ["id", "full_name"],
+      include: [
+        {
+          model: UserInformation,
+          as: "user_information",
+          attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education'],
+        }
+      ]
+    }
+  ]
+
+  private readonly user_information_relation = {
+    model: UserInformation,
+    as: "user_information",
+    attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education'],
+  }
+
   private async getById(id: number): Promise<IWellnessWarriorRequest | null> {
     const record = await WellnessWarrior.findOne({
       where: {
         id
       },
-      include: [
-        {
-          model: User,
-          as: "warrior",
-          foreignKey: "warrior_id",
-          attributes: ["id", "full_name"],
-          include: [
-            {
-              model: UserInformation,
-              as: "user_information",
-              attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education'],
-            },
-          ]
-        },
-        {
-          model: User,
-          as: "user",
-          foreignKey: "user_id",
-          attributes: ["id", "full_name"],
-          include: [
-            {
-              model: UserInformation,
-              as: "user_information",
-              attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education'],
-            }
-          ]
-        }
-      ]
+      include: this.wellness_warrior_relationships
+    });
+
+    return record ? record.get() : null;
+  }
+
+  static async getRequestById(id: number): Promise<IWellnessWarriorRequest | null> {
+    const record = await WellnessWarrior.findOne({
+      where: {
+        id
+      }
     });
 
     return record ? record.get() : null;
@@ -128,16 +151,17 @@ export class WellnessWarriorService implements IWellnessWarriorService {
     })
   }
 
-  async isRequestExist(user_id: number, warrior_id: number): Promise<boolean> {
+  async isRequestExist(user_id: number, warrior_id: number): Promise<IWellnessWarriorRequest | null> {
     const record = await WellnessWarrior.findOne({
       where: {
         user_id,
         warrior_id,
         request_type: RequestType.WARRIOR,
-      }
+      },
+      include: this.wellness_warrior_relationships
     });
 
-    return !!record;
+    return record?.get();
   }
 
   async sendRequest(user_id: number, warrior_id: number): Promise<IWellnessWarriorRequest> {
@@ -149,7 +173,7 @@ export class WellnessWarriorService implements IWellnessWarriorService {
     return record.get();
   }
 
-  async approveRequest(user_id: number, request_id: number): Promise<IWellnessWarriorRequest | null> {
+  async approveRequest(user_id: number, request_id: number): Promise<boolean> {
     const record = await WellnessWarrior.update({
       status: StatusType.APPROVE
     }, {
@@ -160,12 +184,12 @@ export class WellnessWarriorService implements IWellnessWarriorService {
         request_type: RequestType.WARRIOR
       }
     });
-
-    return await this.getById(request_id);
+    
+    return !!record[0];
 
   }
 
-  async rejectRequest(user_id: number, request_id: number): Promise<IWellnessWarriorRequest | null> {
+  async rejectRequest(user_id: number, request_id: number): Promise<boolean> {
     const record = await WellnessWarrior.update({
       status: StatusType.REJECT
     }, {
@@ -177,7 +201,7 @@ export class WellnessWarriorService implements IWellnessWarriorService {
       }
     });
 
-    return await this.getById(request_id);
+    return !!record[0];
   }
 
   async getRequest(request_id: number): Promise<IWellnessWarriorRequest> {
@@ -186,32 +210,7 @@ export class WellnessWarriorService implements IWellnessWarriorService {
         id: request_id,
         request_type: RequestType.WARRIOR
       },
-      include: [
-        {
-          model: User,
-          as: "user",
-          attributes: ["id", "full_name"],
-          include: [
-            {
-              model: UserInformation,
-              as: "user_information",
-              attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education'],
-            }
-          ]
-        },
-        {
-          model: User,
-          as: "warrior",
-          attributes: ["id", "full_name"],
-          include: [
-            {
-              model: UserInformation,
-              as: "user_information",
-              attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education'],
-            }
-          ]
-        }
-      ]
+      include: this.wellness_warrior_relationships
     });
 
     return record?.get();
@@ -223,7 +222,8 @@ export class WellnessWarriorService implements IWellnessWarriorService {
         warrior_id: user_id,
         request_type: RequestType.WARRIOR,
         status: StatusType.SEND
-      }
+      },
+      include: this.wellness_warrior_relationships
     });
 
     return records.map(record => record.get());
@@ -235,13 +235,14 @@ export class WellnessWarriorService implements IWellnessWarriorService {
         user_id,
         request_type: RequestType.WARRIOR,
         status: StatusType.SEND
-      }
+      },
+      include: this.wellness_warrior_relationships
     });
 
     return records.map(record => record.get());
   }
 
-  async isFavoriteExist(user_id: number, warrior_id: number): Promise<boolean> {
+  async isFavoriteExist(user_id: number, warrior_id: number): Promise<IWellnessWarriorRequest | null> {
     const record = await WellnessWarrior.findOne({
       where: {
         user_id,
@@ -250,7 +251,7 @@ export class WellnessWarriorService implements IWellnessWarriorService {
       }
     });
 
-    return !!record;
+    return await this.getById(record?.get().id);
   }
 
   async favoriteWarrior(user_id: number, warrior_id: number): Promise<boolean> {
@@ -279,8 +280,7 @@ export class WellnessWarriorService implements IWellnessWarriorService {
     const records = await WellnessWarrior.findAll({
       where: {
         user_id,
-        request_type: RequestType.FAVORITE,
-        status: StatusType.APPROVE
+        request_type: RequestType.FAVORITE
       },
       include: [
         {
@@ -288,13 +288,7 @@ export class WellnessWarriorService implements IWellnessWarriorService {
           as: "warrior",
           foreignKey: "warrior_id",
           attributes: ["id", "full_name"],
-          include: [
-            {
-              model: UserInformation,
-              as: "user_information",
-              attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education'],
-            }
-          ]
+          include: [this.user_information_relation]
         }
       ]
     });
@@ -337,5 +331,35 @@ export class WellnessWarriorService implements IWellnessWarriorService {
     });
 
     return record?.get();
+  }
+
+  async getMyWarriors(user_id: number): Promise<IWarriorUser[]> {
+    const records = await WellnessWarrior.findAll({
+      where: {
+        [Op.or]: [
+          {
+            user_id,
+          },
+          {
+            warrior_id: user_id,
+          }
+        ],
+        request_type: RequestType.WARRIOR,
+        status: StatusType.APPROVE
+      },
+      include: this.wellness_warrior_relationships
+    });
+
+    return records.map(record => {
+      const _record = record.get();
+      const user = _record.user;
+      const warrior = _record.warrior;
+
+      return {
+        ..._record,
+        user: _record.warrior_id === user_id ? user : null,
+        warrior: _record.user_id === user_id ? warrior : null,
+      }
+    });
   }
 }
