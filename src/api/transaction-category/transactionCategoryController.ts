@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { jsonErrorHandler } from '../helper/errorHandler'
+import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import {
 	CreateTransactionCategoryRequest,
 	DeleteTransactionCategoryRequest,
@@ -20,8 +20,17 @@ export class TransactionCategotryController {
 		const params = { ...req.body, user_id }
 		try {
 			const transactionCategory = await this.transactionCategoryService.add(params)
-			res.status(200).send(transactionCategory)
+			return res.status(200).send({
+				data: {
+					transactionCategory
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -29,8 +38,17 @@ export class TransactionCategotryController {
 	getAllTransactionCategories = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const transactionCategories = await this.transactionCategoryService.list()
-			res.status(200).send(transactionCategories)
+			return res.status(200).send({
+				data: {
+					transactionCategories
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -43,8 +61,17 @@ export class TransactionCategotryController {
 		const userId = +req.user.id
 		try {
 			const transactionCategories = await this.transactionCategoryService.fetchByUserId(userId)
-			res.status(200).send(transactionCategories)
+			return res.status(200).send({
+				data: {
+					transactionCategories
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -59,8 +86,17 @@ export class TransactionCategotryController {
 		const params = { ...req.body, user_id }
 		try {
 			const transactionCategory = await this.transactionCategoryService.update(id, params)
-			res.send(transactionCategory)
+			return res.status(200).send({
+				data: {
+					transactionCategory
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -70,8 +106,17 @@ export class TransactionCategotryController {
 		const id = +req.params.id
 		try {
 			const transactionCategory = await this.transactionCategoryService.delete(id, userId)
-			res.status(200).send({ transactionCategory })
+			return res.status(200).send({
+				data: {
+					transactionCategory
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}

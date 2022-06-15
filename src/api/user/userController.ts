@@ -1,74 +1,160 @@
-import { Request, Response, NextFunction } from 'express';
-import { IAuthenticatedRequest } from '../helper/authMiddleware';
-import { jsonErrorHandler } from '../helper/errorHandler';
-import { UserService } from './userService';
+import { Console } from 'console'
+import { Request, Response, NextFunction } from 'express'
+import { IAuthenticatedRequest } from '../helper/authMiddleware'
+import { GffError, jsonErrorHandler } from '../helper/errorHandler'
+import {
+	DeleteUserRequest,
+	GetFullUserByUserIdRequest,
+	GetUsersByEmailRequest,
+	GetUsersByIdRequest,
+	UpdateUserRequest
+} from './interface'
+import { UserService } from './userService'
 
 export class UserController {
-	private readonly userService: UserService;
+	private readonly userService: UserService
 
 	constructor() {
-		this.userService = new UserService();
+		this.userService = new UserService()
 	}
 
 	getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
 		try {
-			const users = await this.userService.list();
-			res.send(users);
+			const users = await this.userService.list()
+			return res.status(200).send({
+				data: {
+					users
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
-			return jsonErrorHandler(err, req, res, () => {});
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
+			return jsonErrorHandler(err, req, res, () => {})
 		}
-	};
+	}
 
-	getUsersById = async (req: Request, res: Response, next: NextFunction) => {
-		const id = +req.params.id;
+	getUsersById = async (req: GetUsersByIdRequest, res: Response, next: NextFunction) => {
+		const id = +req.params.id
+		const userId = +req.user.id
 
 		try {
-			const users = await this.userService.fetchById(id);
-			res.send(users);
+			const users = await this.userService.fetchById(id, userId)
+			return res.status(200).send({
+				data: {
+					users
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
-			return jsonErrorHandler(err, req, res, () => {});
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
+			return jsonErrorHandler(err, req, res, () => {})
 		}
-	};
+	}
 
-	getUsersByEmail = async (req: Request, res: Response, next: NextFunction) => {
-		const email = req.params.email;
+	getFullUserByUserId = async (req: GetFullUserByUserIdRequest, res: Response, next: NextFunction) => {
+		const userId = +req.user.id
 		try {
-			const users = await this.userService.fetchByEmail(email + '');
-			res.send(users);
+			const fullUser = await this.userService.fetchFullUserById(userId)
+			return res.status(200).send({
+				data: {
+					fullUser
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
-			return jsonErrorHandler(err, req, res, () => {});
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
+			return jsonErrorHandler(err, req, res, () => {})
 		}
-	};
+	}
 
-	updateUser = async (req: Request, res: Response, next: NextFunction) => {
-		const id = +req.params.id;
-		const params = req.body;
+	getUsersByEmail = async (req: GetUsersByEmailRequest, res: Response, next: NextFunction) => {
+		const email = req.params.email
+		const userId = +req.user.id
 		try {
-			const user = await this.userService.update(id, params);
-			res.send(user);
+			const users = await this.userService.fetchByEmail(email, userId)
+			return res.status(200).send({
+				data: {
+					users
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
-			return jsonErrorHandler(err, req, res, () => {});
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
+			return jsonErrorHandler(err, req, res, () => {})
 		}
-	};
+	}
 
-	deleteUser = async (req: Request, res: Response, next: NextFunction) => {
-		const id = +req.params.id;
+	updateUser = async (req: UpdateUserRequest, res: Response, next: NextFunction) => {
+		const paramsId = +req.params.id
+		const id = +req.user.id
+		const params = { ...req.body, id }
+
 		try {
-			const user = await this.userService.delete(id);
-			res.send({ user });
+			const user = await this.userService.update(paramsId, params)
+			return res.status(200).send({
+				data: {
+					user
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
-			return jsonErrorHandler(err, req, res, () => {});
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
+			return jsonErrorHandler(err, req, res, () => {})
 		}
-	};
+	}
+
+	deleteUser = async (req: DeleteUserRequest, res: Response, next: NextFunction) => {
+		const id = +req.params.id
+		const userId = +req.user.id
+		try {
+			const user = await this.userService.delete(id, userId)
+			return res.status(200).send({
+				data: {
+					user
+				},
+				code: 200,
+				message: 'OK'
+			})
+		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
+			return jsonErrorHandler(err, req, res, () => {})
+		}
+	}
 
 	searchFriend = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
-		const search = req.query.search as string;
-		const userId = req?.user?.id as number;
+		const search = req.query.search as string
+		const userId = req?.user?.id as number
 		try {
-			const users = await this.userService.searchFriend(search, userId);
-			res.status(200).send(users);
+			const users = await this.userService.searchFriend(search, userId)
+			return res.status(200).send({
+				data: {
+					users
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
-			return jsonErrorHandler(err, req, res, () => {});
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
+			return jsonErrorHandler(err, req, res, () => {})
 		}
-	};
+	}
 }

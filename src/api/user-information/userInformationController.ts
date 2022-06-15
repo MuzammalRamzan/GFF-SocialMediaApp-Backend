@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express'
-import { jsonErrorHandler } from '../helper/errorHandler'
+import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import {
 	CreateUserInformationRequest,
 	DeleteUserInformationRequest,
@@ -20,8 +20,17 @@ export class UserInformationController {
 		const params = { ...req.body, user_id }
 		try {
 			const userInformation = await this.userInformationService.add(params)
-			res.status(200).send(userInformation)
+			return res.status(200).send({
+				data: {
+					userInformation
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -32,8 +41,17 @@ export class UserInformationController {
 
 		try {
 			const userInformation = await this.userInformationService.fetchById(params_user_id, userId)
-			res.status(200).send(userInformation)
+			return res.status(200).send({
+				data: {
+					userInformation
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -44,8 +62,17 @@ export class UserInformationController {
 		const params = { ...req.body, user_id }
 		try {
 			const userInformation = await this.userInformationService.update(userId, params)
-			res.status(200).send(userInformation)
+			return res.status(200).send({
+				data: {
+					userInformation
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -55,8 +82,17 @@ export class UserInformationController {
 		const userId = +req.user.id
 		try {
 			const userInformation = await this.userInformationService.delete(params_user_id, userId)
-			res.send({ userInformation })
+			return res.status(200).send({
+				data: {
+					userInformation
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}

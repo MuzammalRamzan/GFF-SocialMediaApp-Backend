@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { jsonErrorHandler } from '../helper/errorHandler'
+import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import { CreateTransactionRequest, UpdateTransactionRequest, DeleteTransactionRequest } from './interface'
 import { TransactionService } from './transactionService'
 
@@ -13,8 +13,17 @@ export class TransactionController {
 	getAllTransactions = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const transaction = await this.transactionService.list()
-			res.status(200).send({ transaction })
+			return res.status(200).send({
+				data: {
+					transaction
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -26,8 +35,17 @@ export class TransactionController {
 
 		try {
 			const transaction = await this.transactionService.add(params)
-			res.status(200).send({ transaction })
+			return res.status(200).send({
+				data: {
+					transaction
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -39,8 +57,17 @@ export class TransactionController {
 
 		try {
 			const transaction = await this.transactionService.update(id, params)
-			res.status(200).send({ transaction })
+			return res.status(200).send({
+				data: {
+					transaction
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -51,8 +78,17 @@ export class TransactionController {
 
 		try {
 			const transaction = await this.transactionService.delete(id, user_id)
-			res.status(200).send({ transaction })
+			return res.status(200).send({
+				data: {
+					transaction
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}

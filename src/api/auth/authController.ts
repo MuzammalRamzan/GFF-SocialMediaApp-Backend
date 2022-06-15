@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { jsonErrorHandler } from '../helper/errorHandler'
+import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import { AuthService } from './authService'
 
 export class AuthController {
@@ -15,8 +15,17 @@ export class AuthController {
 		const fullName = req.body.full_name
 		try {
 			const user = await this.authService.createUser(email, fullName, pass)
-			res.status(200).send(user)
+			return res.status(200).send({
+				data: {
+					user
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '400'
+			error.httpStatusCode = 400
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -26,10 +35,6 @@ export class AuthController {
 		const password = req.body.password
 		try {
 			const user = await this.authService.checkCreds(email, password)
-
-			if (!user) {
-				res.status(404).send('User email or password is incorrect')
-			}
 
 			const token = this.authService.generateJwtToken(user!.email, user!.password)
 
@@ -44,6 +49,9 @@ export class AuthController {
 				message: 'OK'
 			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '404'
+			error.httpStatusCode = 404
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}

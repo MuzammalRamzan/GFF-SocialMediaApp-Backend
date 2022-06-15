@@ -32,7 +32,7 @@ export class TransactionCategoryService implements ITransactionCategoryService {
         return transactionCategories as TransactionCategory[]
     }
 
-    async update (id: number, params: TransactionCategoryType): Promise<[affectedCount: number]> {
+    async update (id: number, params: TransactionCategoryType): Promise<TransactionCategory> {
         const updatedRow = await TransactionCategory.update({
             name: params.name, 
             user_id: params.user_id, 
@@ -48,8 +48,13 @@ export class TransactionCategoryService implements ITransactionCategoryService {
                 user_id: params.user_id
             }
         })
+        
+        if (updatedRow[0] === 1){
+			const transactionAccount = await TransactionCategory.findByPk(id)
+			return transactionAccount as TransactionCategory
+		}
 
-        return updatedRow
+		throw new Error("Unauthorized")
     }
 
     async delete (id: number, userId: number): Promise<number> {

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { jsonErrorHandler } from '../helper/errorHandler'
+import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import {
 	CreateLoanLedgerProfessionalInformationRequest,
 	UpdateLoanLedgerProfessionalInformationRequest,
@@ -19,8 +19,17 @@ export class LoanLedgerProfessionalInformationController {
 	getAllLoanLedgerProfessionalInformations = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const professionalInformation = await this.loanLedgerProfessionalInformationService.list()
-			res.status(200).send({ professionalInformation })
+			return res.status(200).send({
+				data: {
+					professionalInformation
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -35,8 +44,17 @@ export class LoanLedgerProfessionalInformationController {
 
 		try {
 			const professionalInformation = await this.loanLedgerProfessionalInformationService.fetchById(id, userId)
-			res.send(professionalInformation)
+			return res.status(200).send({
+				data: {
+					professionalInformation
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -50,8 +68,17 @@ export class LoanLedgerProfessionalInformationController {
 
 		try {
 			const professionalInformation = await this.loanLedgerProfessionalInformationService.fetchByUserId(user_id)
-			res.send(professionalInformation)
+			return res.status(200).send({
+				data: {
+					professionalInformation
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -66,8 +93,17 @@ export class LoanLedgerProfessionalInformationController {
 
 		try {
 			const professionalInformation = await this.loanLedgerProfessionalInformationService.add(params)
-			res.status(200).send(professionalInformation)
+			return res.status(200).send({
+				data: {
+					professionalInformation
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -83,8 +119,17 @@ export class LoanLedgerProfessionalInformationController {
 
 		try {
 			const professionalInformation = await this.loanLedgerProfessionalInformationService.update(id, params)
-			res.status(200).send(professionalInformation)
+			return res.status(200).send({
+				data: {
+					professionalInformation
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -99,8 +144,17 @@ export class LoanLedgerProfessionalInformationController {
 
 		try {
 			const professionalInformation = await this.loanLedgerProfessionalInformationService.delete(id, userId)
-			res.status(200).send({ professionalInformation })
+			return res.status(200).send({
+				data: {
+					professionalInformation
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}

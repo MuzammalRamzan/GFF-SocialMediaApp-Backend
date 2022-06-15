@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { jsonErrorHandler } from '../helper/errorHandler'
+import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import { HashtagService } from './hashtagService'
 import {
 	CreateHashtagRequest,
@@ -18,8 +18,17 @@ export class HashtagController {
 	getAllHashtags = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const hashtags = await this.hashtagService.list()
-			res.status(200).send({ hashtags })
+			return res.status(200).send({
+				data: {
+					hashtags
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -29,8 +38,17 @@ export class HashtagController {
 
 		try {
 			const hashtag = await this.hashtagService.add(params)
-			res.status(200).send({ hashtag })
+			return res.status(200).send({
+				data: {
+					hashtag
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -44,8 +62,17 @@ export class HashtagController {
 
 		try {
 			const hashtags = await this.hashtagService.fetchById(id)
-			res.send(hashtags)
+			return res.status(200).send({
+				data: {
+					hashtags
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -56,8 +83,17 @@ export class HashtagController {
 
 		try {
 			const hashtag = await this.hashtagService.update(id, params)
-			res.status(200).send({ hashtag })
+			return res.status(200).send({
+				data: {
+					hashtag
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -67,8 +103,17 @@ export class HashtagController {
 
 		try {
 			const hashtag = await this.hashtagService.delete(id)
-			res.status(200).send({ hashtag })
+			return res.status(200).send({
+				data: {
+					hashtag
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			error.errorCode = '401'
+			error.httpStatusCode = 401
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
