@@ -49,7 +49,6 @@ export class LoanLedgerProfessionalInformationService implements ILoanLedgerProf
 		}
 	}
 		
-
 	async update(id: number, params: LoanLedgerProfessionalInformationType): Promise<LoanLedgerProfessionalInformation> {
 		const loan = await LoanLedgerProfessionalInformation.findOne({
             where:{
