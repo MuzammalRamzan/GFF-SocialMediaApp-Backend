@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { validationResult } from "express-validator";
 import { IAuthenticatedRequest } from "../helper/authMiddleware";
 import { ISearchWarriorParams } from "./interface";
 import { WellnessWarriorService } from "./wellnessWarriorService";
@@ -29,6 +30,11 @@ export class WellnessWarriorController {
 
   public sendRequest = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
+      const errors = validationResult(req).array({ onlyFirstError: true });
+      if (errors.length) {
+        return res.status(400).json({ errors: errors, message: 'Validation error', code: 400 });
+      }
+      
       const user_id = req?.user?.id as number;
       const wellnessWarrior_id = req.body.warrior_id as number;
 
@@ -60,6 +66,11 @@ export class WellnessWarriorController {
 
   public approveRequest = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
+      const errors = validationResult(req).array({ onlyFirstError: true });
+      if (errors.length) {
+        return res.status(400).json({ errors: errors, message: 'Validation error', code: 400 });
+      }
+
       const user_id = req?.user?.id as number;
       const request_id = req.body.request_id as number;
 
@@ -89,6 +100,11 @@ export class WellnessWarriorController {
 
   public rejectRequest = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
+      const errors = validationResult(req).array({ onlyFirstError: true });
+      if (errors.length) {
+        return res.status(400).json({ errors: errors, message: 'Validation error', code: 400 });
+      }
+
       const user_id = req?.user?.id as number;
       const request_id = req.body.request_id as number;
 
@@ -172,6 +188,11 @@ export class WellnessWarriorController {
 
   public favoriteWellnessWarrior = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
+      const errors = validationResult(req).array({ onlyFirstError: true });
+      if (errors.length) {
+        return res.status(400).json({ errors: errors, message: 'Validation error', code: 400 });
+      }
+
       const user_id = req?.user?.id as number;
       const wellnessWarrior_id = req.body.warrior_id as number;
 
@@ -204,6 +225,11 @@ export class WellnessWarriorController {
 
   public unfavoriteWellnessWarrior = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
+      const errors = validationResult(req).array({ onlyFirstError: true });
+      if (errors.length) {
+        return res.status(400).json({ errors: errors, message: 'Validation error', code: 400 });
+      }
+
       const user_id = req?.user?.id as number;
       const wellnessWarrior_id = req.body.warrior_id as number;
 
