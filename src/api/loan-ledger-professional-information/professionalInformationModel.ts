@@ -12,7 +12,8 @@ LoanLedgerProfessionalInformation.init(
 		},
 		user_id: {
 			type: DataTypes.INTEGER,
-			allowNull: false
+			allowNull: false,
+			unique: true
 		},
 		employment_type: {
 			type: DataTypes.STRING,
