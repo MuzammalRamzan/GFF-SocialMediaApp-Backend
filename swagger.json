@@ -162,12 +162,14 @@
                         }
                     }
                 }
-            },
-            "put": {
+            }
+        },
+        "/warrior-information": {
+            "post": {
                 "tags": [
                     "warrior-information"
                 ],
-                "description": "Update Wellness Warrior information",
+                "description": "Create Wellness Warrior information",
                 "parameters": [
                     {
                         "name": "auth-token",
@@ -229,14 +231,12 @@
                         }
                     }
                 }
-            }
-        },
-        "/warrior-information": {
-            "post": {
+            },
+            "put": {
                 "tags": [
                     "warrior-information"
                 ],
-                "description": "Create Wellness Warrior information",
+                "description": "Update Wellness Warrior information",
                 "parameters": [
                     {
                         "name": "auth-token",
