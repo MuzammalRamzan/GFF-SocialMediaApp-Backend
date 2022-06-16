@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { IAuthenticatedRequest } from "../helper/authMiddleware";
+import { WarriorInformationService } from "../warrior-information/warriorInformationService";
 import { ISearchWarriorParams } from "./interface";
 import { WellnessWarriorService } from "./wellnessWarriorService";
 
@@ -40,6 +41,11 @@ export class WellnessWarriorController {
 
       if(user_id === wellnessWarrior_id) {
         return res.status(400).json({ message: 'You can not send request to yourself', code: 400 });
+      }
+
+      const isUserWarrior = await WarriorInformationService.isUserWarrior(wellnessWarrior_id);
+      if(!isUserWarrior) {
+        return res.status(400).json({ message: 'This user is not a wellness warrior', code: 400 });
       }
 
       const isExist = await this.wellnessWarriorService.isRequestExist(user_id, wellnessWarrior_id);
@@ -216,6 +222,11 @@ export class WellnessWarriorController {
         });
       }
 
+      const isUserWarrior = await WarriorInformationService.isUserWarrior(wellnessWarrior_id);
+      if(!isUserWarrior) {
+        return res.status(400).json({ message: 'This user is not a wellness warrior', code: 400 });
+      }
+
       const isExist = await this.wellnessWarriorService.isFavoriteExist(user_id, wellnessWarrior_id);
 
       if (isExist) {
@@ -259,6 +270,11 @@ export class WellnessWarriorController {
           message: "You can't unfavorite yourself!",
           code: 400
         });
+      }
+
+      const isUserWarrior = await WarriorInformationService.isUserWarrior(wellnessWarrior_id);
+      if(!isUserWarrior) {
+        return res.status(400).json({ message: 'This user is not a wellness warrior', code: 400 });
       }
 
       const favorite = await this.wellnessWarriorService.unfavoriteWarrior(user_id, wellnessWarrior_id);

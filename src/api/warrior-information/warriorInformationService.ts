@@ -89,4 +89,15 @@ export class WarriorInformationService implements IWarriorInformationService {
 
     return record ? await WarriorInformation.findOne({ where: { user_id: params.user_id } }) : null;
   }
+
+  static isUserWarrior = async (user_id: number): Promise<boolean> => {
+    const record = await User.findOne({
+      where: {
+        id: user_id,
+        role_id: 4
+      }
+    });
+    
+    return !!record?.get();
+  }
 }
