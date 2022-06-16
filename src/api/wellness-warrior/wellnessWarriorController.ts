@@ -38,6 +38,10 @@ export class WellnessWarriorController {
       const user_id = req?.user?.id as number;
       const wellnessWarrior_id = req.body.warrior_id as number;
 
+      if(user_id === wellnessWarrior_id) {
+        return res.status(400).json({ message: 'You can not send request to yourself', code: 400 });
+      }
+
       const isExist = await this.wellnessWarriorService.isRequestExist(user_id, wellnessWarrior_id);
 
       if (isExist) {
@@ -138,6 +142,14 @@ export class WellnessWarriorController {
 
       const request = await this.wellnessWarriorService.getRequest(request_id);
 
+      if(!request) {
+        return res.status(404).json({
+          data: {},
+          message: "Request not found!",
+          code: 404
+        });
+      }
+
       return res.status(200).json({
         data: {
           request
@@ -196,6 +208,14 @@ export class WellnessWarriorController {
       const user_id = req?.user?.id as number;
       const wellnessWarrior_id = req.body.warrior_id as number;
 
+      if(user_id === wellnessWarrior_id) {
+        return res.status(400).json({
+          data: {},
+          message: "You can't favorite yourself!",
+          code: 400
+        });
+      }
+
       const isExist = await this.wellnessWarriorService.isFavoriteExist(user_id, wellnessWarrior_id);
 
       if (isExist) {
@@ -232,6 +252,14 @@ export class WellnessWarriorController {
 
       const user_id = req?.user?.id as number;
       const wellnessWarrior_id = req.body.warrior_id as number;
+
+      if(user_id === wellnessWarrior_id) {
+        return res.status(400).json({
+          data: {},
+          message: "You can't unfavorite yourself!",
+          code: 400
+        });
+      }
 
       const favorite = await this.wellnessWarriorService.unfavoriteWarrior(user_id, wellnessWarrior_id);
 

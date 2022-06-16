@@ -251,7 +251,11 @@ export class WellnessWarriorService implements IWellnessWarriorService {
       }
     });
 
-    return await this.getById(record?.get().id);
+    if(record) {
+      return await this.getById(record?.get().id);
+    } else {
+      return null;
+    }
   }
 
   async favoriteWarrior(user_id: number, warrior_id: number): Promise<boolean> {
