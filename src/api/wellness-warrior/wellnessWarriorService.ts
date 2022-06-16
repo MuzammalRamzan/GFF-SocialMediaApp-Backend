@@ -1,4 +1,5 @@
-import { Op } from "sequelize";
+import { col, fn, Op, where } from "sequelize";
+import { WELLNESS_WARRIOR_ROLE_ID } from "../../constants";
 import { UserInformation } from "../user-information/userInformationModel";
 import { User } from "../user/userModel";
 import { IWarriorUser } from "../warrior-information/interface";
@@ -79,14 +80,11 @@ export class WellnessWarriorService implements IWellnessWarriorService {
 
     const records = await User.findAll({
       where: {
-        full_name: {
-          [Op.like]: `%${searchParams.searchTerm.trim()}%`
-        },
-        role_id: 4,
-        id: {
-          [Op.not]: user_id
-        }
-
+        [Op.and]: [
+          { role_id: WELLNESS_WARRIOR_ROLE_ID },
+          { id: { [Op.not]: user_id } },
+          where(fn('lower', col('full_name')), "LIKE", `%${(searchParams.searchTerm || "").trim().toLowerCase()}%`),
+        ]
       },
       include: [
         {
