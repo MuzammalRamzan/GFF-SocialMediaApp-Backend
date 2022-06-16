@@ -8,12 +8,16 @@ export class TransactionService implements ITransactionService {
 	}
 
 	async add(params: TransactionType): Promise<Transaction> {
+		const created_at = new Date().getTime()
 		const transaction = await Transaction.create({
 			frequency: params.frequency,
 			user_id: params.user_id,
 			account_id: params.account_id,
 			category_id: params.category_id,
-			status: params.status
+			status: params.status,
+			created_at: created_at,
+			due_date: params.due_date,
+			payed_at: params.payed_at
 		})
 		return transaction
 	}
@@ -25,7 +29,9 @@ export class TransactionService implements ITransactionService {
 				user_id: params.user_id,
 				account_id: params.account_id,
 				category_id: params.category_id,
-				status: params.status
+				status: params.status,
+				due_date: params.due_date,
+				payed_at: params.payed_at
 			},
 			{
 				where: {
@@ -34,12 +40,12 @@ export class TransactionService implements ITransactionService {
 				}
 			}
 		)
-		if (updatedTransaction[0] === 1){
+		if (updatedTransaction[0] === 1) {
 			const transaction = await Transaction.findByPk(id)
 			return transaction as Transaction
 		}
 
-		throw new Error("Unauthorized")
+		throw new Error('Unauthorized')
 	}
 
 	async delete(id: number, user_id: number): Promise<number> {

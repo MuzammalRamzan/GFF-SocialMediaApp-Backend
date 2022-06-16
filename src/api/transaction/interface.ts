@@ -9,10 +9,14 @@ export type TransactionType = {
 	account_id: number
 	category_id: number
 	status: Status
+	created_at: Date
+	due_date: Date
+	payed_at: Date
 }
 
 export enum Status {
 	Active = 'Active',
+	Pending = 'Pending',
 	Inactive = 'Inactive',
 	Deleted = 'Deleted'
 }

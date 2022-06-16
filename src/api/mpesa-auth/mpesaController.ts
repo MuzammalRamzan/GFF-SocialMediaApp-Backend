@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express"
+import { GffError, jsonErrorHandler } from "../helper/errorHandler"
 import { MpesaService } from "./mpesaService"
 
 
@@ -20,7 +21,11 @@ export class MpesaController {
 				message: 'OK'
 			})
         } catch (err) {
-            throw err
+            const error = err as GffError
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+
+			return jsonErrorHandler(err, req, res, () => {})
         }
     }
 

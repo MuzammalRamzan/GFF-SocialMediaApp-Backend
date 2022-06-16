@@ -33,8 +33,18 @@ export class LoanLedgerPersonalInformationController {
 			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '401'
-			error.httpStatusCode = 401
+			if (error.message === 'Personal information already exists') {
+				error.errorCode = '409'
+				error.httpStatusCode = 409
+			}
+			else if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -42,6 +52,9 @@ export class LoanLedgerPersonalInformationController {
 	getLoanLedgerPersonalInfo = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const loanLedgerPersonalInfos = await this.loanLedgerPersonalInformationService.list()
+			if(!loanLedgerPersonalInfos.length) {
+				throw new Error("No data found")
+			} 
 			return res.status(200).send({
 				data: {
 					loanLedgerPersonalInfos
@@ -51,8 +64,18 @@ export class LoanLedgerPersonalInformationController {
 			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '401'
-			error.httpStatusCode = 401
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else if  (error.message === 'No data found') {
+				error.errorCode = '404'
+				error.httpStatusCode = 404
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -67,6 +90,9 @@ export class LoanLedgerPersonalInformationController {
 
 		try {
 			const loanLedgerPersonalInfo = await this.loanLedgerPersonalInformationService.fetchByUserId(params_userId, userId)
+			if(!loanLedgerPersonalInfo.length) {
+				throw new Error('No data found')
+			} 
 			return res.status(200).send({
 				data: {
 					loanLedgerPersonalInfo
@@ -76,8 +102,18 @@ export class LoanLedgerPersonalInformationController {
 			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '401'
-			error.httpStatusCode = 401
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else if  (error.message === 'No data found') {
+				error.errorCode = '404'
+				error.httpStatusCode = 404
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -92,6 +128,9 @@ export class LoanLedgerPersonalInformationController {
 
 		try {
 			const loalLedgerPersonalInfo = await this.loanLedgerPersonalInformationService.fetchById(id, userId)
+			if(!loalLedgerPersonalInfo) {
+				throw new Error('No data found')
+			} 
 			return res.status(200).send({
 				data: {
 					loalLedgerPersonalInfo
@@ -101,8 +140,18 @@ export class LoanLedgerPersonalInformationController {
 			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '401'
-			error.httpStatusCode = 401
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else if  (error.message === 'No data found') {
+				error.errorCode = '404'
+				error.httpStatusCode = 404
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -126,8 +175,14 @@ export class LoanLedgerPersonalInformationController {
 			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '401'
-			error.httpStatusCode = 401
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -150,8 +205,14 @@ export class LoanLedgerPersonalInformationController {
 			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '401'
-			error.httpStatusCode = 401
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
