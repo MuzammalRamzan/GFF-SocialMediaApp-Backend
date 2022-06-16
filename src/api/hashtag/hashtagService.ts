@@ -1,16 +1,25 @@
 import { IHashtagService, HashtagType } from "./interface";
 import { Hashtag } from "./hashtagModel";
+import { UserInformation } from "../user-information/userInformationModel";
 
 export class HashtagService implements IHashtagService {
-    async add(params: HashtagType): Promise<Hashtag> {
+    async add(params: HashtagType, userId: number): Promise<Hashtag> {
         let hashtagText = params.hashtag_name
         hashtagText = hashtagText.replace(/\s/g, '')
 
         hashtagText = hashtagText.charAt(0) != '#' ? '#' + hashtagText : hashtagText
 
+        const userInfo = await UserInformation.findOne({
+            where: {
+                user_id: userId
+            }
+        })
+        if (!userInfo) {
+            throw new Error ("Unauthorized")
+        }
 		const hashtag = await Hashtag.create({
             hashtag_name: hashtagText,
-            user_information_id: params.user_information_id
+            user_information_id: userInfo.get("id")
 		})
 		return hashtag
 	}
@@ -31,7 +40,7 @@ export class HashtagService implements IHashtagService {
         return hashtags as any
     }
 
-    async update (id: number, params: HashtagType): Promise<[affectedCount: number]> {
+    async update (id: number, params: HashtagType): Promise<Hashtag> {
         let hashtagText = params.hashtag_name
         hashtagText = hashtagText.replace(/\s/g, '')
         hashtagText = hashtagText.charAt(0) != '#' ? '#' + hashtagText : hashtagText
@@ -46,7 +55,13 @@ export class HashtagService implements IHashtagService {
             }
         })
 
-        return updatedRow
+        if (updatedRow[0] === 1){
+			const updatedRow = await Hashtag.findByPk(id)
+			return updatedRow as Hashtag
+
+		}
+
+        throw new Error("Unauthorized")
     }
 
     async delete (id: number): Promise<number> {

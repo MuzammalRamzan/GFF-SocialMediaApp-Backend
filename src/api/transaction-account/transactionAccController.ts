@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { jsonErrorHandler } from '../helper/errorHandler'
+import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import {
 	TransactionAccountType,
 	GetTransactionAccountByIdRequest,
@@ -18,8 +18,30 @@ export class TransactionAccController {
 	getAllTransactionAccounts = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const transactionAccount = await this.transactionAccService.list()
-			res.status(200).send({ transactionAccount })
+			if(!transactionAccount.length) {
+				throw new Error('No data found')
+			}
+			return res.status(200).send({
+				data: {
+					transactionAccount
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else if  (error.message === 'No data found') {
+				error.errorCode = '404'
+				error.httpStatusCode = 404
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -30,8 +52,30 @@ export class TransactionAccController {
 
 		try {
 			const transactionAccount = await this.transactionAccService.fetch(id, userId)
-			res.status(200).send({ transactionAccount })
+			if(!transactionAccount.length) {
+				throw new Error('No data found')
+			}
+			return res.status(200).send({
+				data: {
+					transactionAccount
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else if  (error.message === 'No data found') {
+				error.errorCode = '404'
+				error.httpStatusCode = 404
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -42,8 +86,23 @@ export class TransactionAccController {
 
 		try {
 			const transactionAccount = await this.transactionAccService.add(params as TransactionAccountType)
-			res.status(200).send({ transactionAccount })
+			return res.status(200).send({
+				data: {
+					transactionAccount
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -54,8 +113,23 @@ export class TransactionAccController {
 		const params = { ...req.body, user_id }
 		try {
 			const transactionAccount = await this.transactionAccService.update(id, params)
-			res.status(200).send({ transactionAccount })
+			return res.status(200).send({
+				data: {
+					transactionAccount
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}

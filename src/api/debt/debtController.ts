@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { jsonErrorHandler } from '../helper/errorHandler'
+import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import { DebtService } from './debtService'
 import {
 	CreateDebtRequest,
@@ -19,8 +19,30 @@ export class DebtController {
 	getAllDebts = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const debts = await this.debtService.list()
-			res.status(200).send(debts)
+			if(!debts.length) {
+				throw new Error('No data found')
+			} 
+			return res.status(200).send({
+				data: {
+					debts
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else if  (error.message === 'No data found') {
+				error.errorCode = '404'
+				error.httpStatusCode = 404
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -31,8 +53,31 @@ export class DebtController {
 
 		try {
 			const debt = await this.debtService.fetchById(id, userId)
-			res.status(200).send(debt)
+			if(!debt) {
+				throw new Error('No data found')
+			}
+			return res.status(200).send({
+				data: {
+					debt
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			
+			const error = err as GffError
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else if (error.message === 'No data found') {
+				error.errorCode = '404'
+				error.httpStatusCode = 404
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -42,8 +87,30 @@ export class DebtController {
 		const userId = +req.user.id
 		try {
 			const dueDate = await this.debtService.fetchDueDateById(id, userId)
-			res.status(200).send(dueDate)
+			if(!dueDate) {
+				throw new Error("No data found")
+			} 
+			return res.status(200).send({
+				data: {
+					dueDate
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else if  (error.message === 'No data found') {
+				error.errorCode = '404'
+				error.httpStatusCode = 404
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -54,8 +121,23 @@ export class DebtController {
 
 		try {
 			const debt = await this.debtService.add(params)
-			res.status(200).send(debt)
+			return res.status(200).send({
+				data: {
+					debt
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -66,8 +148,23 @@ export class DebtController {
 		const params = { ...req.body, user_id }
 		try {
 			const debt = await this.debtService.update(id, params)
-			res.status(200).send({ debt })
+			return res.status(200).send({
+				data: {
+					debt
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -77,8 +174,23 @@ export class DebtController {
 		const userId = +req.user.id
 		try {
 			const debt = await this.debtService.delete(id, userId)
-			res.status(200).send({ debt })
+			return res.status(200).send({
+				data: {
+					debt
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}

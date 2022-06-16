@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { jsonErrorHandler } from '../helper/errorHandler'
+import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import {
 	CreateRecordRequest,
 	DeleteRecordRequest,
@@ -18,8 +18,30 @@ export class RecordController {
 	getAllRecords = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const records = await this.recordService.list()
-			res.status(200).send({ records })
+			if(!records.length) {
+				throw new Error('No data found')
+			}
+			return res.status(200).send({
+				data: {
+					records
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else if  (error.message === 'No data found') {
+				error.errorCode = '404'
+				error.httpStatusCode = 404
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -28,8 +50,30 @@ export class RecordController {
 		const userId = +req.user.id
 		try {
 			const records = await this.recordService.listByUserId(userId)
-			res.status(200).send(records)
+			if(!records.length) {
+				throw new Error('No data found')
+			}
+			return res.status(200).send({
+				data: {
+					records
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else if  (error.message === 'No data found') {
+				error.errorCode = '404'
+				error.httpStatusCode = 404
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -40,8 +84,23 @@ export class RecordController {
 
 		try {
 			const record = await this.recordService.add(params, userId)
-			res.status(200).send({ record })
+			return res.status(200).send({
+				data: {
+					record
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -52,8 +111,23 @@ export class RecordController {
 		const params = req.body
 		try {
 			const record = await this.recordService.update(id, params, userId)
-			res.status(200).send({ record })
+			return res.status(200).send({
+				data: {
+					record
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -62,8 +136,23 @@ export class RecordController {
 		const id = +req.params.id
 		try {
 			const record = await this.recordService.delete(id)
-			res.status(200).send({ record })
+			return res.status(200).send({
+				data: {
+					record
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
+			const error = err as GffError
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
