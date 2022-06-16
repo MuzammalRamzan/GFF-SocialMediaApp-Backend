@@ -1,6 +1,6 @@
 import { IMentorMatcherService, IMentorRequest, ISarchTermParams, ISearchMentors } from "./interface";
 import { User } from "../user/userModel"
-import { Op } from "sequelize";
+import { col, fn, Op, where } from "sequelize";
 import { IMentorMatcher, MentorMatcherModel, MentorMatcherRequestStatus, MentorMatcherRequestType } from "./mentorMatcherModel";
 import { MentorInformation } from "../mentor-information/mentorInformationModel";
 import { UserInformation } from "../user-information/userInformationModel";
@@ -14,15 +14,10 @@ export class MentorMatcherService implements IMentorMatcherService {
 
     const mentors = await User.findAll({
       where: {
-        id: {
-          [Op.ne]: userId
-        },
-        [Op.or]: [
-          {
-            full_name: {
-              [Op.like]: `%${searchTerms.text?.trim()}%`
-            }
-          }
+        [Op.and]: [
+          where(fn('lower', col('full_name')), "LIKE", `%${(searchTerms.text || "").trim().toLowerCase()}%`),
+          { id: { [Op.ne]: userId } },
+          { role_id: 3 }
         ]
       },
       attributes: ['id', 'full_name'],
