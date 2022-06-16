@@ -12,7 +12,7 @@ export const signUpSchema: SchemaMap = {
                   .required(),
         
         password: Joi.string()
-                     .pattern(new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"))
+                     .pattern(new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$"))
                      .required()
     }
   }

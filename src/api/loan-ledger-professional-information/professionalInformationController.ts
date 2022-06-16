@@ -19,11 +19,30 @@ export class LoanLedgerProfessionalInformationController {
 	getAllLoanLedgerProfessionalInformations = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const professionalInformation = await this.loanLedgerProfessionalInformationService.list()
-			res.status(200).send({ professionalInformation })
+			if(!professionalInformation.length) {
+				throw new Error('No data found')
+			} 
+			return res.status(200).send({
+				data: {
+					professionalInformation
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '401'
-			error.httpStatusCode = 401
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else if  (error.message === 'No data found') {
+				error.errorCode = '404'
+				error.httpStatusCode = 404
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -38,11 +57,30 @@ export class LoanLedgerProfessionalInformationController {
 
 		try {
 			const professionalInformation = await this.loanLedgerProfessionalInformationService.fetchById(id, userId)
-			res.send(professionalInformation)
+			if(!professionalInformation) {
+				throw new Error('No data found')
+			} 
+			return res.status(200).send({
+				data: {
+					professionalInformation
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '401'
-			error.httpStatusCode = 401
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else if  (error.message === 'No data found') {
+				error.errorCode = '404'
+				error.httpStatusCode = 404
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -56,11 +94,30 @@ export class LoanLedgerProfessionalInformationController {
 
 		try {
 			const professionalInformation = await this.loanLedgerProfessionalInformationService.fetchByUserId(user_id)
-			res.send(professionalInformation)
+			if(!professionalInformation.length) {
+				throw new Error('No data found')
+			} 
+			return res.status(200).send({
+				data: {
+					professionalInformation
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '401'
-			error.httpStatusCode = 401
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else if  (error.message === 'No data found') {
+				error.errorCode = '404'
+				error.httpStatusCode = 404
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -75,11 +132,27 @@ export class LoanLedgerProfessionalInformationController {
 
 		try {
 			const professionalInformation = await this.loanLedgerProfessionalInformationService.add(params)
-			res.status(200).send(professionalInformation)
+			return res.status(200).send({
+				data: {
+					professionalInformation
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '401'
-			error.httpStatusCode = 401
+			if (error.message === 'Professional information already exists') {
+				error.errorCode = '409'
+				error.httpStatusCode = 409
+			}
+			else if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -95,11 +168,23 @@ export class LoanLedgerProfessionalInformationController {
 
 		try {
 			const professionalInformation = await this.loanLedgerProfessionalInformationService.update(id, params)
-			res.status(200).send(professionalInformation)
+			return res.status(200).send({
+				data: {
+					professionalInformation
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '401'
-			error.httpStatusCode = 401
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
@@ -114,11 +199,23 @@ export class LoanLedgerProfessionalInformationController {
 
 		try {
 			const professionalInformation = await this.loanLedgerProfessionalInformationService.delete(id, userId)
-			res.status(200).send({ professionalInformation })
+			return res.status(200).send({
+				data: {
+					professionalInformation
+				},
+				code: 200,
+				message: 'OK'
+			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '401'
-			error.httpStatusCode = 401
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
