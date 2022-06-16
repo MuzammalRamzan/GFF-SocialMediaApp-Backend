@@ -13,7 +13,13 @@ export class WarriorInformationController {
     try {
       const userId = +req.params.user_id;
       const warriorInformation = await this.warriorInformationService.getById(userId);
-      return res.status(200).json(warriorInformation);
+      return res.status(200).json({
+        data: {
+          warriorInformation
+        },
+        message: "Warrior information retrieved successfully",
+        code: 200
+      });
     } catch (error) {
       next(error);
     }
@@ -24,7 +30,13 @@ export class WarriorInformationController {
       const warriorInformation = await this.warriorInformationService.create(Object.assign(req.body, {
         user_id: req?.user?.id
       }));
-      res.status(200).json(warriorInformation);
+      res.status(200).json({
+        data: {
+          warriorInformation
+        },
+        message: "Warrior information created successfully",
+        code: 200
+      });
     } catch (err) {
       next(err);
     }
@@ -35,7 +47,13 @@ export class WarriorInformationController {
       const warriorInformation = await this.warriorInformationService.update(Object.assign(req.body, {
         user_id: req?.user?.id
       }));
-      res.status(200).json(warriorInformation);
+      res.status(200).json({
+        data: {
+          warriorInformation
+        },
+        message: "Warrior information updated successfully",
+        code: 200
+      });
     } catch (err) {
       next(err);
     }

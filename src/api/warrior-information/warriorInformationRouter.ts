@@ -16,6 +16,6 @@ const validation = [
 
 warriorInformationRouter.get('/:user_id', authMiddleware, controller.getByUserId);
 warriorInformationRouter.post('/', authMiddleware, validation, controller.create);
-warriorInformationRouter.put('/update/:id', authMiddleware, validation, controller.update);
+warriorInformationRouter.put('/:id', authMiddleware, validation, controller.update);
 
 
