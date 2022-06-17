@@ -167,10 +167,10 @@ export class MentorMatcherService implements IMentorMatcherService {
       }
     })
 
-    return mentor ? true : false;
+    return mentor?.get() ? true : false;
   }
 
-  async acceptMentorRequest(request_id: number, userId: number, mentee_id: number): Promise<boolean> {
+  async acceptMentorRequest(request_id: number, userId: number): Promise<boolean> {
     const data = await MentorMatcherModel.update(
       {
         status: MentorMatcherRequestStatus.APPROVE,
@@ -179,7 +179,6 @@ export class MentorMatcherService implements IMentorMatcherService {
         where: {
           id: request_id,
           mentor_id: userId,
-          mentee_id: mentee_id,
           status: MentorMatcherRequestStatus.SEND,
           request_type: MentorMatcherRequestType.MENTOR
         },
@@ -189,7 +188,7 @@ export class MentorMatcherService implements IMentorMatcherService {
     return data[0] ? true : false;
   }
 
-  async rejectMentorRequest(request_id: number, userId: number, mentee_id: number): Promise<boolean> {
+  async rejectMentorRequest(request_id: number, userId: number): Promise<boolean> {
     const data = await MentorMatcherModel.update(
       {
         status: MentorMatcherRequestStatus.REJECT,
@@ -198,7 +197,6 @@ export class MentorMatcherService implements IMentorMatcherService {
         where: {
           id: request_id,
           mentor_id: userId,
-          mentee_id: mentee_id,
           status: MentorMatcherRequestStatus.SEND,
           request_type: MentorMatcherRequestType.MENTOR
         },

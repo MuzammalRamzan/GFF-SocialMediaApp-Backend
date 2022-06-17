@@ -6,6 +6,18 @@ import { CreateMentorInformation, IMentorInformationService, MentorInformationTy
 import { IMentorInformation, MentorInformation } from "./mentorInformationModel";
 
 export class MentorInformationService implements IMentorInformationService {
+
+  static async isMentorExists(userId: number): Promise<boolean> {
+    const record = await User.findOne({
+      where: {
+        id: userId,
+        role_id: 3
+      }
+    });
+
+    return !!record?.get();
+  }
+
   async createMentorInformation(params: CreateMentorInformation): Promise<IMentorInformation> {
 
     const mentorInformation = await MentorInformation.create({
@@ -39,7 +51,7 @@ export class MentorInformationService implements IMentorInformationService {
       }
     });
 
-    return !!mentorInformation;
+    return !!mentorInformation?.get();
   }
 
   async updateMentorInformation(params: CreateMentorInformation): Promise<IMentorInformation> {

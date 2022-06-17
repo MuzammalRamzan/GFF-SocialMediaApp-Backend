@@ -1,6 +1,7 @@
 import { Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 import { IAuthenticatedRequest } from '../helper/authMiddleware';
+import { MentorInformationService } from '../mentor-information/mentorInformationService';
 import { ISarchTermParams, MentorMatcherAuthRequest } from './interface';
 import { MentorMatcherService } from './mentorMatcherService';
 
@@ -55,6 +56,11 @@ export class MentorMatcherController {
       const mentor_id = Number(req.body.mentor_id || 0);
       const message = req.body.message
 
+      const isMentorExists = MentorInformationService.isMentorExists(mentor_id);
+
+      if (!isMentorExists) {
+        return res.status(400).json({ message: 'Mentor does not exist' });
+      }
 
       if (mentor_id === userId) {
         return res.status(400).json({
@@ -89,16 +95,15 @@ export class MentorMatcherController {
       // check is the request from mentor ot not
 
       const userId = req?.user?.id || 0 as number;
-      const mentee_id = Number(req.body.mentee_id || 0);
       const request_id = Number(req.body.request_id || 0);
 
-      if(!mentee_id || !request_id) {
+      if(!request_id) {
         return res.status(400).json({
           message: 'Invalid request'
         });
       }
 
-      const is_approved = await this.mentorMatcherService.acceptMentorRequest(request_id, userId, mentee_id);
+      const is_approved = await this.mentorMatcherService.acceptMentorRequest(request_id, userId);
       if (!is_approved) {
         return res.status(400).json({
           message: 'Mentor request not found or already approved/rejected!',
@@ -122,16 +127,15 @@ export class MentorMatcherController {
       // check is the request from mentor ot not
 
       const userId = req?.user?.id || 0 as number;
-      const mentee_id = Number(req.body.mentee_id || 0);
       const request_id = Number(req.body.request_id || 0);
 
-      if(!mentee_id || !request_id) {
+      if(!request_id) {
         return res.status(400).json({
           message: 'Invalid request'
         })
       }
 
-      const is_approved = await this.mentorMatcherService.rejectMentorRequest(request_id, userId, mentee_id);
+      const is_approved = await this.mentorMatcherService.rejectMentorRequest(request_id, userId);
       if (!is_approved) {
         return res.status(400).json({
           message: 'Mentor request not found or already approved/rejected!',
@@ -182,6 +186,12 @@ export class MentorMatcherController {
       const userId = req?.user?.id || 0 as number;
       const mentor_id = Number(req.body.mentor_id || 0);
 
+      const isMentorExists = MentorInformationService.isMentorExists(mentor_id);
+
+      if (!isMentorExists) {
+        return res.status(400).json({ message: 'Mentor does not exist' });
+      }
+
       if (mentor_id === userId) {
         return res.status(400).json({
           message: 'You cannot remove yourself from your favorite list!',
@@ -213,6 +223,12 @@ export class MentorMatcherController {
 
       const userId = req?.user?.id || 0 as number;
       const mentor_id = Number(req.body.mentor_id || 0);
+
+      const isMentorExists = MentorInformationService.isMentorExists(mentor_id);
+
+      if (!isMentorExists) {
+        return res.status(400).json({ message: 'Mentor does not exist' });
+      }
 
       if (mentor_id === userId) {
         return res.status(400).json({
