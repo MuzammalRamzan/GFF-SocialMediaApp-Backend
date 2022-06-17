@@ -1,3 +1,4 @@
+import { MENTOR_ROLE_ID } from "../../constants";
 import { MentorMatcherModel } from "../mentor-matcher/mentorMatcherModel";
 import { MentorMatcherService } from "../mentor-matcher/mentorMatcherService";
 import { UserInformation } from "../user-information/userInformationModel";
@@ -11,7 +12,7 @@ export class MentorInformationService implements IMentorInformationService {
     const record = await User.findOne({
       where: {
         id: userId,
-        role_id: 3
+        role_id: MENTOR_ROLE_ID
       }
     });
 

@@ -4,6 +4,7 @@ import { col, fn, Op, where } from "sequelize";
 import { IMentorMatcher, MentorMatcherModel, MentorMatcherRequestStatus, MentorMatcherRequestType } from "./mentorMatcherModel";
 import { MentorInformation } from "../mentor-information/mentorInformationModel";
 import { UserInformation } from "../user-information/userInformationModel";
+import { MENTOR_ROLE_ID } from "../../constants";
 
 export class MentorMatcherService implements IMentorMatcherService {
   async findMentors(userId: number, searchTerms: ISarchTermParams): Promise<ISearchMentors[]> {
@@ -17,7 +18,7 @@ export class MentorMatcherService implements IMentorMatcherService {
         [Op.and]: [
           where(fn('lower', col('full_name')), "LIKE", `%${(searchTerms.text || "").trim().toLowerCase()}%`),
           { id: { [Op.ne]: userId } },
-          { role_id: 3 }
+          { role_id: MENTOR_ROLE_ID }
         ]
       },
       attributes: ['id', 'full_name'],
