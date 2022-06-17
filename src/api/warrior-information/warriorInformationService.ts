@@ -1,3 +1,4 @@
+import { WELLNESS_WARRIOR_ROLE_ID } from "../../constants";
 import { UserInformation } from "../user-information/userInformationModel";
 import { User } from "../user/userModel";
 import { WellnessWarriorService } from "../wellness-warrior/wellnessWarriorService";
@@ -74,7 +75,7 @@ export class WarriorInformationService implements IWarriorInformationService {
     const warriorInformation = await this.createOrUpdate(params);
 
     await User.update({
-      role_id: 4,
+      role_id: WELLNESS_WARRIOR_ROLE_ID,
     }, {
       where: {
         id: params.user_id
@@ -94,7 +95,7 @@ export class WarriorInformationService implements IWarriorInformationService {
     const record = await User.findOne({
       where: {
         id: user_id,
-        role_id: 4
+        role_id: WELLNESS_WARRIOR_ROLE_ID
       }
     });
     

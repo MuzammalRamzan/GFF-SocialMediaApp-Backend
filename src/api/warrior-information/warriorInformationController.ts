@@ -12,6 +12,16 @@ export class WarriorInformationController {
   getByUserId = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
       const userId = +req.params.user_id;
+
+      const isExists = await WarriorInformationService.isUserWarrior(userId);
+
+      if (!isExists) {
+        return res.status(404).json({
+          message: "User not found",
+          code: 404
+        })
+      }
+
       const warriorInformation = await this.warriorInformationService.getById(userId);
       return res.status(200).json({
         data: {
