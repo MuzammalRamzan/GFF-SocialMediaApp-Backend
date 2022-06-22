@@ -20,12 +20,11 @@ export class MentorInformationService implements IMentorInformationService {
   }
 
   async createMentorInformation(params: CreateMentorInformation): Promise<IMentorInformation> {
-
     const mentorInformation = await MentorInformation.create({
-      role: params.role.join(","),
-      industry: params.industry.join(","),
-      frequency: params.frequency.join(","),
-      conversation_mode: params.conversation_mode.join(","),
+      role: (params.role || []).join(","),
+      industry: (params.industry || []).join(","),
+      frequency: (params.frequency || []).join(","),
+      conversation_mode: (params.conversation_mode || []).join(","),
       user_id: params.user_id,
       isPassedIRT: params.isPassedIRT
     });
@@ -33,7 +32,7 @@ export class MentorInformationService implements IMentorInformationService {
     // make user as a mentor, change the role_id of User table.
     await User.update(
       {
-        role_id: 3
+        role_id: MENTOR_ROLE_ID
       },
       {
         where: {
