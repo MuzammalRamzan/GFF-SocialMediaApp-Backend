@@ -4597,6 +4597,242 @@
 				}
 			}
 		},
+		"/room": {
+			"post": {
+				"tags": ["chat"],
+				"description": "Create a room",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"oneOf": [
+									{ "$ref": "#/components/schemas/create_room_body1" },
+									{ "$ref": "#/components/schemas/create_room_body2" }
+								]
+							},
+							"example": {
+								"name": "room1",
+								"user_ids": ["1", "2", "3"]
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"data": {
+											"type": "object",
+											"properties": { "room": { "type": "object", "$ref": "#/components/schemas/room" } }
+										},
+										"message": { "type": "string" },
+										"code": { "type": "integer" }
+									}
+								},
+								"example": {
+									"data": {
+										"room": {
+											"id": 22,
+											"user_ids": ["16"],
+											"name": "room1",
+											"created_at": "1990-07-07T00:00:00.000Z"
+										}
+									},
+									"code": 200,
+									"message": "Room created successfully"
+								}
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"tags": ["chat"],
+				"description": "Get all room details",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"data": {
+											"type": "object",
+											"properties": {
+												"rooms": { "type": "array", "items": { "type": "object", "$ref": "#/components/schemas/room" } }
+											}
+										},
+										"message": { "type": "string" },
+										"code": { "type": "integer" }
+									}
+								},
+								"example": {
+									"data": {
+										"room": [
+											{
+												"id": 22,
+												"user_ids": ["16", "17"],
+												"name": "room1",
+												"created_at": "1990-07-07T00:00:00.000Z"
+											},
+											{
+												"id": 23,
+												"user_ids": ["17", "18"],
+												"name": "room2",
+												"created_at": "1990-07-07T00:00:00.000Z"
+											}
+										]
+									},
+									"code": 200,
+									"message": "Successfully fetched all rooms"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/room/{id}": {
+			"get": {
+				"tags": ["chat"],
+				"description": "Get room details by id",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "room_id",
+						"in": "path",
+						"description": "Room ID",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"data": {
+											"type": "object",
+											"properties": { "room": { "type": "object", "$ref": "#/components/schemas/room" } }
+										},
+										"message": { "type": "string" },
+										"code": { "type": "integer" }
+									}
+								},
+								"example": {
+									"data": {
+										"room": {
+											"id": 22,
+											"user_ids": ["16"],
+											"name": "room1",
+											"created_at": "1990-07-07T00:00:00.000Z"
+										}
+									},
+									"code": 200,
+									"message": "Successfully fetched room"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/room/join/{id}": {
+			"put": {
+				"tags": ["chat"],
+				"description": "Join a room",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "room_id",
+						"in": "path",
+						"description": "Room ID",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"data": {
+											"type": "object",
+											"properties": { "room": { "type": "object", "$ref": "#/components/schemas/room" } }
+										},
+										"message": { "type": "string" },
+										"code": { "type": "integer" }
+									}
+								},
+								"example": {
+									"data": {
+										"room": {
+											"id": 22,
+											"user_ids": ["16"],
+											"name": "room1",
+											"created_at": "1990-07-07T00:00:00.000Z"
+										}
+									},
+									"code": 200,
+									"message": "Room joined successfully"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/message/send/room/{id}": {
 			"post": {
 				"tags": ["chat"],
@@ -5259,6 +5495,37 @@
 				"type": "object",
 				"properties": {
 					"body": { "type": "string" }
+				}
+			},
+			"room": {
+				"type": "object",
+				"properties": {
+					"id": { "type": "integer" },
+					"user_ids": { "type": "array", "items": { "type": "string" } },
+					"name": { "type": "string" },
+					"created_at": { "type": "string" }
+				}
+			},
+			"create_room_body1": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"user_ids": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"create_room_body2": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string"
+					}
 				}
 			}
 		}
