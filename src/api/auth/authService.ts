@@ -17,7 +17,7 @@ export class AuthService implements IAuthService {
 		const timestamp = Date.now() / 1000
 		const token = jwt.sign(
 			{
-				exp: Math.floor(timestamp + 60 * 120),
+				expiresIn: '30d',
 				iat: timestamp,
 				email,
 				password

@@ -20,7 +20,8 @@ import { mentorInformationRouter } from './api/mentor-information/mentorInformat
 import { mpesaRouter } from './api/mpesa-auth/mpesaRouter';
 import { warriorInformationRouter } from './api/warrior-information/warriorInformationRouter';
 import { warriorRouter } from './api/wellness-warrior/wellnessWarriorRouter';
-import { mentorSettingsRouter } from './api/mentor-settings/settingsRouter'
+import { mentorSettingsRouter } from './api/mentor-settings/settingsRouter';
+import { currencyRouter } from './api/currency/currencyRouter';
 
 const options = {
 	swaggerOptions: {
@@ -51,6 +52,7 @@ const options = {
   app.use('/warrior-information', warriorInformationRouter)
   app.use('/wellness-warrior', warriorRouter)
 	app.use('/', mentorSettingsRouter)
+  app.use('/currency', currencyRouter)
 
 	app.listen(process.env.PORT, () => {
 		console.log(`Server running at port ${process.env.PORT}`)
