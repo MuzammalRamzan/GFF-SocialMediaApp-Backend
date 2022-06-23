@@ -7,8 +7,8 @@ export interface IMentorMatcherService {
   myMentors(userId: number): Promise<IMentorRequest[]>
   myMentees(userId: number): Promise<IMentorRequest[]>
   sendMentorRequest(userId: number, mentor_id: number, message: string): Promise<IMentorMatcher>
-  acceptMentorRequest(request_id: number, userId: number, mentor_id: number): Promise<boolean>
-  rejectMentorRequest(request_id: number, userId: number, mentor_id: number): Promise<boolean>
+  acceptMentorRequest(request_id: number, userId: number): Promise<boolean>
+  rejectMentorRequest(request_id: number, userId: number): Promise<boolean>
   getMentorRequests(userId: number): Promise<IMentorRequest[]>
   getMentorRequestsByMenteeId(userId: number): Promise<IMentorRequest[]>
   addMentorToFavorite(userId: number, mentor_id: number): Promise<boolean>

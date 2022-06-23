@@ -1,3 +1,4 @@
+import { MENTOR_ROLE_ID } from "../../constants";
 import { MentorMatcherModel } from "../mentor-matcher/mentorMatcherModel";
 import { MentorMatcherService } from "../mentor-matcher/mentorMatcherService";
 import { UserInformation } from "../user-information/userInformationModel";
@@ -6,13 +7,24 @@ import { CreateMentorInformation, IMentorInformationService, MentorInformationTy
 import { IMentorInformation, MentorInformation } from "./mentorInformationModel";
 
 export class MentorInformationService implements IMentorInformationService {
-  async createMentorInformation(params: CreateMentorInformation): Promise<IMentorInformation> {
 
+  static async isMentorExists(userId: number): Promise<boolean> {
+    const record = await User.findOne({
+      where: {
+        id: userId,
+        role_id: MENTOR_ROLE_ID
+      }
+    });
+
+    return !!record?.get();
+  }
+
+  async createMentorInformation(params: CreateMentorInformation): Promise<IMentorInformation> {
     const mentorInformation = await MentorInformation.create({
-      role: params.role.join(","),
-      industry: params.industry.join(","),
-      frequency: params.frequency.join(","),
-      conversation_mode: params.conversation_mode.join(","),
+      role: (params.role || []).join(","),
+      industry: (params.industry || []).join(","),
+      frequency: (params.frequency || []).join(","),
+      conversation_mode: (params.conversation_mode || []).join(","),
       user_id: params.user_id,
       isPassedIRT: params.isPassedIRT
     });
@@ -20,7 +32,7 @@ export class MentorInformationService implements IMentorInformationService {
     // make user as a mentor, change the role_id of User table.
     await User.update(
       {
-        role_id: 3
+        role_id: MENTOR_ROLE_ID
       },
       {
         where: {
@@ -39,7 +51,7 @@ export class MentorInformationService implements IMentorInformationService {
       }
     });
 
-    return !!mentorInformation;
+    return !!mentorInformation?.get();
   }
 
   async updateMentorInformation(params: CreateMentorInformation): Promise<IMentorInformation> {
