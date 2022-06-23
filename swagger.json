@@ -3950,6 +3950,136 @@
 				}
 			}
 		},
+		"/languages": {
+			"get": {
+				"tags": ["mentor-information"],
+				"description": "Get languages",
+				"responses": {
+					"200": {
+						"description": "Successfully get languages",
+						"schema": {
+							"type": "object"
+						},
+						"exmaple": {
+							"code": 200,
+							"message": "OK",
+							"data": {
+								"industries": [
+									{
+										"key": "agriculture",
+										"name": "Agriculture"
+									}
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/industries": {
+			"get": {
+				"tags": ["mentor-information"],
+				"description": "Get industries",
+				"responses": {
+					"200": {
+						"description": "Successfully get industries",
+						"schema": {
+							"type": "object"
+						},
+						"exmaple": {
+							"code": 200,
+							"message": "OK",
+							"data": {
+								"industries": [
+									{
+										"key": "agriculture",
+										"name": "Agriculture"
+									}
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/modes": {
+			"get": {
+				"tags": ["mentor-information"],
+				"description": "Get modes",
+				"responses": {
+					"200": {
+						"description": "Successfully get modes",
+						"schema": {
+							"type": "object"
+						},
+						"exmaple": {
+							"code": 200,
+							"message": "OK",
+							"data": {
+								"modes": [
+									{
+										"key": "agriculture",
+										"name": "Agriculture"
+									}
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/frequencies": {
+			"get": {
+				"tags": ["mentor-information"],
+				"description": "Get frequencies",
+				"responses": {
+					"200": {
+						"description": "Successfully get frequencies",
+						"schema": {
+							"type": "object"
+						},
+						"exmaple": {
+							"code": 200,
+							"message": "OK",
+							"data": {
+								"frequencies": [
+									{
+										"key": "agriculture",
+										"name": "Agriculture"
+									}
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/roles": {
+			"get": {
+				"tags": ["mentor-information"],
+				"description": "Get roles",
+				"responses": {
+					"200": {
+						"description": "Successfully get roles",
+						"schema": {
+							"type": "object"
+						},
+						"exmaple": {
+							"code": 200,
+							"message": "OK",
+							"data": {
+								"roles": [
+									{
+										"key": "agriculture",
+										"name": "Agriculture"
+									}
+								]
+							}
+						}
+					}
+				}
+			}
+		},
 		"/mentor-matcher/my-mentor": {
 			"get": {
 				"tags": ["mentor-matcher"],

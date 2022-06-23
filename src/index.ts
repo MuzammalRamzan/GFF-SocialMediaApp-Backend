@@ -18,7 +18,7 @@ import { loanLedgerPersonalInfoRouter } from './api/loan-ledger-personal-informa
 import { mentorMatcherRouter } from './api/mentor-matcher/mentorMatcherRouter'
 import { mentorInformationRouter } from './api/mentor-information/mentorInformationRouter'
 import { mpesaRouter } from './api/mpesa-auth/mpesaRouter'
-import { settingsRouter } from './api/settings/settingsRouter'
+import { mentorSettingsRouter } from './api/mentor-settings/settingsRouter'
 
 const options = {
 	swaggerOptions: {
@@ -46,7 +46,7 @@ const options = {
 	app.use('/mentor-matcher', mentorMatcherRouter)
 	app.use('/mentor-information', mentorInformationRouter)
 	app.use('/mpesa', mpesaRouter)
-	app.use('/settings', settingsRouter)
+	app.use('/', mentorSettingsRouter)
 
 	app.listen(process.env.PORT, () => {
 		console.log(`Server running at port ${process.env.PORT}`)

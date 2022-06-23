@@ -36,7 +36,7 @@ export class SettingsController {
 			error.errorCode = '500'
 			error.httpStatusCode = 500
 		}
-		return jsonErrorHandler(err, req, res, () => {})
+		return jsonErrorHandler(err, req, res, () => { })
 	}
 
 	getAllIndustries = async (req: Request, res: Response, next: NextFunction) => {
@@ -44,7 +44,12 @@ export class SettingsController {
 			return res.status(200).json({
 				code: 200,
 				message: 'OK',
-				data: { industries: this.settings.industries }
+				data: {
+					industries: this.settings.industries.map((item: string) => ({
+						key: item.toLowerCase(),
+						name: item
+					}))
+				}
 			})
 		} catch (err) {
 			return this.handleError(err, req, res)
@@ -56,7 +61,12 @@ export class SettingsController {
 			return res.status(200).json({
 				code: 200,
 				message: 'OK',
-				data: { roles: this.settings.roles }
+				data: {
+					roles: this.settings.roles.map((item: string) => ({
+						key: item.toLowerCase(),
+						name: item
+					}))
+				}
 			})
 		} catch (err) {
 			return this.handleError(err, req, res)
@@ -68,7 +78,12 @@ export class SettingsController {
 			return res.status(200).json({
 				code: 200,
 				message: 'OK',
-				data: { frequencies: this.settings.frequencies }
+				data: {
+					frequencies: this.settings.frequencies.map((item: string) => ({
+						key: item.toLowerCase(),
+						name: item
+					}))
+				}
 			})
 		} catch (err) {
 			return this.handleError(err, req, res)
@@ -80,7 +95,12 @@ export class SettingsController {
 			return res.status(200).json({
 				code: 200,
 				message: 'OK',
-				data: { modes: this.settings.modes }
+				data: {
+					modes: this.settings.modes.map((item: string) => ({
+						key: item.toLowerCase(),
+						name: item
+					}))
+				}
 			})
 		} catch (err) {
 			return this.handleError(err, req, res)
@@ -92,7 +112,12 @@ export class SettingsController {
 			return res.status(200).json({
 				code: 200,
 				message: 'OK',
-				data: { languages: this.settings.languages }
+				data: {
+					languages: this.settings.languages.map((item: string) => ({
+						key: item.toLowerCase(),
+						name: item
+					}))
+				}
 			})
 		} catch (err) {
 			return this.handleError(err, req, res)
