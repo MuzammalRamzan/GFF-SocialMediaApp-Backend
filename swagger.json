@@ -38,6 +38,10 @@
 			"description": "Hashtags related routes"
 		},
 		{
+			"name": "currency",
+			"description": "Currency related routes"
+		},
+		{
 			"name": "debt",
 			"description": "Debt related routes"
 		},
@@ -2081,6 +2085,136 @@
 				}
 			}
 		},
+		"/currency/{id}": {
+			"get": {
+				"tags": ["currency"],
+				"description": "Get currency by id",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Currency ID",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"currency": {
+											"id": 1,
+											"symbol": "$",
+											"name": "US Dollar"
+										}
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/currency/add": {
+			"post": {
+				"tags": ["currency"],
+				"description": "Add new currency",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/currency_add_body"
+							},
+							"examples": {
+								"0": {
+									"value": "{\n    \"symbol\": \"$\",\n    \"name\": \"US Dollar\"\n}"
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"currency": {
+											"id": 2,
+											"symbol": "$",
+											"name": "US Dollar"
+										}
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/hashtag/add": {
 			"post": {
 				"tags": ["hashtag"],
@@ -2362,6 +2496,51 @@
 								"example": {
 									"message": "Unauthorized",
 									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/currency/list": {
+			"get": {
+				"tags": ["currency"],
+				"description": "List all currencies",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"currencies": [
+											{
+												"id": 1,
+												"symbol": "$",
+												"name": "US Dollar"
+											},
+											{
+												"id": 1,
+												"symbol": "$",
+												"name": "US Dollar"
+											}
+										]
+									},
+									"code": 200,
+									"message": "OK"
 								}
 							}
 						}
@@ -2652,6 +2831,66 @@
 												"user_information_id": 1
 											}
 										]
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/currency/delete/{id}": {
+			"delete": {
+				"tags": ["currency"],
+				"description": "Delete currency",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Currency ID",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"currency": 1
 									},
 									"code": 200,
 									"message": "OK"
