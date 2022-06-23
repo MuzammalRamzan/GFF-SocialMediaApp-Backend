@@ -19,7 +19,6 @@ export class DailyDoseController {
 	}
 	createDose = async (req: createDoseRequest, res: Response, next: NextFunction) => {
     const params = req.body;
-		const userId = +req.user.id
 		try {
 			const dailyDose = await this.debtService.add(params)
 			if (params.category !== "news" && params.category != "music" && params.category != "wise-words") {

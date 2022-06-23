@@ -26,6 +26,9 @@ DailyDose.init(
     contentURL: {
       type: DataTypes.STRING
     },
+    contentBody: {
+      type: DataTypes.STRING
+    },
     keyword: {
       type: DataTypes.STRING
     },

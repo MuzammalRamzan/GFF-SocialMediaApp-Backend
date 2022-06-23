@@ -11,6 +11,7 @@ export class DailyDoseService implements IDailyDoseType {
       contentURL: params.contentURL,
       keyWord: params.keyWord,
       category: params.category,
+      contentBody:params.contentBody
     })
 		return dailyDose
     }

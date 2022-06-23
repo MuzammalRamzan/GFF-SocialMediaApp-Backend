@@ -8,8 +8,9 @@ export type DailyDoseType = {
   subtitle: string,
   image: string,
   contentURL: string,
+  contentBody:string,
   keyWord: string,
-  category:string
+  category: string,
 }
 
 export interface IDailyDoseType {

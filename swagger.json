@@ -1,92 +1,1249 @@
 {
-	"openapi": "3.0.0",
-	"info": {
-		"title": "GFF Backend API",
-		"description": "",
-		"version": "1.0"
-	},
-	"schemes": ["http", "https"],
-	"host": "3.232.6.9",
-	"basePath": "/",
-	"tags": [
-		{
-			"name": "auth",
-			"description": "Authentication related routes"
-		},
-		{
-			"name": "user",
-			"description": "App users related routes"
-		},
-		{
-			"name": "transaction-account",
-			"description": "Transaction-Account related routes"
-		},
-		{
-			"name": "transaction",
-			"description": "Transaction related routes"
-		},
-		{
-			"name": "transaction-category",
-			"description": "Transaction-Category related routes"
-		},
-		{
-			"name": "record",
-			"description": "Record related routes"
-		},
-		{
-			"name": "hashtag",
-			"description": "Hashtags related routes"
-		},
-		{
-			"name": "currency",
-			"description": "Currency related routes"
-		},
-		{
-			"name": "debt",
-			"description": "Debt related routes"
-		},
-		{
-			"name": "user-information",
-			"description": "User information related routes"
-		},
-		{
-			"name": "mentor-information",
-			"description": "Mentor information related routes"
-		},
-		{
-			"name": "warrior-information",
-			"description": "Wellness Warrior information related routes"
-		},
-		{
-			"name": "find-friend",
-			"description": "Friend finder related routes"
-		},
-		{
-			"name": "mentor-matcher",
-			"description": "Mentor matcher related routes"
-		},
-		{
-			"name": "wellness-warrior",
-			"description": "Wellness warrior related routes"
-		},
-		{
-			"name": "loan-ledger-personal-info",
-			"description": "Loan Ledger personal info related routes"
-		},
-		{
-			"name": "loan-ledger-professional-info",
-			"description": "Loan Ledger professional info related routes"
-		},
-		{
-			"name": "mpesa",
-			"description": "Mpesa related routes"
-		}
-	],
-	"paths": {
-		"/warrior-information/{user_id}": {
-			"get": {
-				"tags": ["warrior-information"],
-				"description": "Get Wellness Warrior information",
+    "openapi": "3.0.0",
+    "info": {
+        "title": "GFF Backend API",
+        "description": "",
+        "version": "1.0"
+    },
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "host": "3.232.6.9",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "auth",
+            "description": "Authentication related routes"
+        },
+        {
+            "name": "user",
+            "description": "App users related routes"
+        },
+        {
+            "name": "transaction-account",
+            "description": "Transaction-Account related routes"
+        },
+        {
+            "name": "transaction",
+            "description": "Transaction related routes"
+        },
+        {
+            "name": "transaction-category",
+            "description": "Transaction-Category related routes"
+        },
+        {
+            "name": "record",
+            "description": "Record related routes"
+        },
+        {
+            "name": "hashtag",
+            "description": "Hashtags related routes"
+        },
+        {
+            "name": "debt",
+            "description": "Debt related routes"
+        },
+        {
+            "name": "user-information",
+            "description": "User information related routes"
+        },
+        {
+            "name": "loan-ledger-personal-info",
+            "description": "Loan Ledger personal info related routes"
+        },
+        {
+            "name": "loan-ledger-professional-info",
+            "description": "Loan Ledger professional info related routes"
+        },
+        {
+            "name": "mpesa",
+            "description": "Mpesa related routes"
+        },
+        {
+            "name": "dailydose",
+            "description": "daily dose apis routes"
+        }
+    ],
+    "paths": {
+        "/user/fullUser": {
+            "get": {
+                "tags": [
+                    "user"
+                ],
+                "description": "Get full user information",
+                "parameters": [
+                    {
+                        "name": "auth-token",
+                        "in": "header",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "example": {
+                                    "data": {
+                                        "fullUser": [
+                                            {
+                                                "id": 37,
+                                                "user_id": 37,
+                                                "profile_url": null,
+                                                "bio": "Test my bio",
+                                                "date_of_birth": "2022-05-31",
+                                                "gender": "other",
+                                                "email": "test",
+                                                "phone_number": "+55555555555",
+                                                "country": "test country",
+                                                "city": "test city",
+                                                "state": "test state",
+                                                "zip_code": 10000,
+                                                "address": "Test my address ",
+                                                "employer_name": "Test employer",
+                                                "job_role": "CEO",
+                                                "education": "No education",
+                                                "other_education": "No test education",
+                                                "twitter": null,
+                                                "facebook": null,
+                                                "instagram": null,
+                                                "linkedin": null,
+                                                "tiktok": null,
+                                                "role_id": 1,
+                                                "full_name": "ime prezime",
+                                                "password": "$2b$10$Q9BzTt.cFMsuFlioq/BMYuTd5GQbCpJQU.9oAPag.JhCngu3Z7hgq",
+                                                "default_currency_id": 1,
+                                                "user_feature_id": null
+                                            }
+                                        ]
+                                    },
+                                    "code": 200,
+                                    "message": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Unauthorized",
+                                    "status": 401
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/mpesa/auth": {
+            "get": {
+                "tags": [
+                    "mpesa"
+                ],
+                "description": "Get access token for mpesa",
+                "parameters": [
+                    {
+                        "name": "auth-token",
+                        "in": "header",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "data": {
+                                        "response": {
+                                            "access_token": "BMaGQC4Ccg0AFwVA111owu3kWnAY",
+                                            "expires_in": "3599"
+                                        }
+                                    },
+                                    "code": 200,
+                                    "message": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Unauthorized",
+                                    "status": 401
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loanLedgerProfessionalInformation/update/{id}": {
+            "put": {
+                "tags": [
+                    "loan-ledger-professional-info"
+                ],
+                "description": "Update a loan ledger professional info",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Loan ledger professional information ID",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "auth-token",
+                        "in": "header",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/update_id_body_7"
+                            },
+                            "examples": {
+                                "0": {
+                                    "value": "{\r\n            \"employment_type\": \"Test employment_type2\",\r\n            \"company_name\": \"Test company_name3\",\r\n            \"profession\": \"Test profession2\",\r\n            \"education\": \"Test education2\",\r\n            \"net_monthly_salary\": 101.83,\r\n            \"work_experience\": \"Test work_experience2\"\r\n        }"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "data": {
+                                        "professionalInformation": {
+                                            "id": 10,
+                                            "user_id": 37,
+                                            "employment_type": "Test employment_type2",
+                                            "company_name": "Test company_name3",
+                                            "profession": "Test profession2",
+                                            "education": "Test education2",
+                                            "net_monthly_salary": 101.83,
+                                            "work_experience": "Test work_experience2"
+                                        }
+                                    },
+                                    "code": 200,
+                                    "message": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Unauthorized",
+                                    "status": 401
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loanLedgerProfessionalInformation/{id}": {
+            "get": {
+                "tags": [
+                    "loan-ledger-professional-info"
+                ],
+                "description": "Get loan ledger professional information by ID",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Loan ledger professional info ID",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "auth-token",
+                        "in": "header",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "data": {
+                                        "professionalInformation": {
+                                            "id": 9,
+                                            "user_id": 37,
+                                            "employment_type": "Test employment_type",
+                                            "company_name": "Test company_name",
+                                            "profession": "Test profession",
+                                            "education": "Test education",
+                                            "net_monthly_salary": 100.73,
+                                            "work_experience": "Test work_experience"
+                                        }
+                                    },
+                                    "code": 200,
+                                    "message": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Unauthorized",
+                                    "status": 401
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loanLedgerProfessionalInformation/user/{id}": {
+            "get": {
+                "tags": [
+                    "loan-ledger-professional-info"
+                ],
+                "description": "Get loan ledger informations for a user",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "auth-token",
+                        "in": "header",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "data": {
+                                        "professionalInformation": [
+                                            {
+                                                "id": 9,
+                                                "user_id": 37,
+                                                "employment_type": "Test employment_type",
+                                                "company_name": "Test company_name",
+                                                "profession": "Test profession",
+                                                "education": "Test education",
+                                                "net_monthly_salary": 100.73,
+                                                "work_experience": "Test work_experience"
+                                            }
+                                        ]
+                                    },
+                                    "code": 200,
+                                    "message": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Unauthorized",
+                                    "status": 401
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loanLedgerProfessionalInformation/add": {
+            "post": {
+                "tags": [
+                    "loan-ledger-professional-info"
+                ],
+                "description": "Add professional information for loan ledger",
+                "parameters": [
+                    {
+                        "name": "auth-token",
+                        "in": "header",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/loanLedgerProfessionalInformation_add_body"
+                            },
+                            "examples": {
+                                "0": {
+                                    "value": "{\r\n            \"user_id\": 37,\r\n            \"employment_type\": \"Test employment_type\",\r\n            \"company_name\": \"Test company_name\",\r\n            \"profession\": \"Test profession\",\r\n            \"education\": \"Test education\",\r\n            \"net_monthly_salary\": 100.73,\r\n            \"work_experience\": \"Test work_experience\"\r\n        }"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "data": {
+                                            "professionalInformation": {
+                                                "id": 10,
+                                                "user_id": 37,
+                                                "employment_type": "Test employment_type",
+                                                "company_name": "Test company_name",
+                                                "profession": "Test profession",
+                                                "education": "Test education",
+                                                "net_monthly_salary": 100.73,
+                                                "work_experience": "Test work_experience"
+                                            }
+                                        },
+                                        "code": 200,
+                                        "message": "OK"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Unauthorized",
+                                    "status": 401
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loanLedgerProfessionalInformation/list": {
+            "get": {
+                "tags": [
+                    "loan-ledger-professional-info"
+                ],
+                "description": "Get all loan ledger professional informations",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "data": {
+                                            "professionalInformation": [
+                                                {
+                                                    "id": 1,
+                                                    "user_id": 38,
+                                                    "employment_type": "Test employment_type3",
+                                                    "company_name": "Test company_name2",
+                                                    "profession": "Test profession2",
+                                                    "education": "Test education2",
+                                                    "net_monthly_salary": 100.83,
+                                                    "work_experience": "Test work_experience2"
+                                                },
+                                                {
+                                                    "id": 5,
+                                                    "user_id": 63,
+                                                    "employment_type": "Test employment_type",
+                                                    "company_name": "Test company_name",
+                                                    "profession": "Test profession",
+                                                    "education": "Test education",
+                                                    "net_monthly_salary": 500,
+                                                    "work_experience": "Test"
+                                                },
+                                                {
+                                                    "id": 9,
+                                                    "user_id": 37,
+                                                    "employment_type": "Test employment_type",
+                                                    "company_name": "Test company_name",
+                                                    "profession": "Test profession",
+                                                    "education": "Test education",
+                                                    "net_monthly_salary": 100.73,
+                                                    "work_experience": "Test work_experience"
+                                                }
+                                            ]
+                                        },
+                                        "code": 200,
+                                        "message": "OK"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loanLedgerProfessionalInformation/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "loan-ledger-professional-info"
+                ],
+                "description": "Delete a loan ledger professional information",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Loan ledger professional info ID",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "auth-token",
+                        "in": "header",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "data": {
+                                        "professionalInformation": 1
+                                    },
+                                    "code": 200,
+                                    "message": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Unauthorized",
+                                    "status": 401
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loanLedgerPersonalInformation/add": {
+            "post": {
+                "tags": [
+                    "loan-ledger-personal-info"
+                ],
+                "description": "Add personal information for loan ledger",
+                "parameters": [
+                    {
+                        "name": "auth-token",
+                        "in": "header",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMTEwMTgsImlhdCI6MTY1NTEwMzgxOC4wNywiZW1haWwiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkUTlCelR0LmNGTXN1Rmxpb3EvQk1ZdVRkNUdRYkNwSlFVLjlvQVBhZy5KaENuZ3UzWjdoZ3EifQ.eNeghc_UR9fqKyZagj3V_5DcAeu9vI1QVUIZZb3qP-Q"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/loanLedgerPersonalInformation_add_body"
+                            },
+                            "examples": {
+                                "0": {
+                                    "value": "{\n    \"user_id\": 37,\n    \"full_name\": \"Ime\",\n    \"national_id\": \"12345678\",\n    \"date_of_birth\": \"1990-09-09\",\n    \"registration_number\": \"1234567890\",\n    \"gender\": \"male\",\n    \"email\": \"testemail@email\",\n    \"mobile_phone\": \"123456789\",\n    \"current_residence\": \"Street\",\n    \"house_number\": \"15\",\n    \"country\": \"Croatia\"\n}"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "data": {
+                                        "loanLedgerPersonalInfo": {
+                                            "id": 6,
+                                            "user_id": 37,
+                                            "full_name": "Name",
+                                            "national_id": "12345678",
+                                            "date_of_birth": "1990-07-07T00:00:00.000Z",
+                                            "registration_number": "1234567890",
+                                            "gender": "male",
+                                            "email": "testemail@email",
+                                            "mobile_phone": "123456789",
+                                            "current_residence": "Street",
+                                            "house_number": "15",
+                                            "country": "Croatia"
+                                        }
+                                    },
+                                    "code": 200,
+                                    "message": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "0": {
+                                        "value": {
+                                            "message": "Unauthorized",
+                                            "status": 401
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loanLedgerPersonalInformation/list": {
+            "get": {
+                "tags": [
+                    "loan-ledger-personal-info"
+                ],
+                "description": "Get all loan ledger personal informations",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "data": {
+                                        "loanPersonalInfos": [
+                                            {
+                                                "id": 1,
+                                                "user_id": 63,
+                                                "full_name": "Name",
+                                                "national_id": "12345678",
+                                                "date_of_birth": "1990-06-06",
+                                                "registration_number": "1234567890",
+                                                "gender": "male",
+                                                "email": "email@email",
+                                                "mobile_phone": "123456789",
+                                                "current_residence": "Street",
+                                                "house_number": "15",
+                                                "country": "Croatia"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "user_id": 37,
+                                                "full_name": "Name",
+                                                "national_id": "12345678",
+                                                "date_of_birth": "1990-07-07",
+                                                "registration_number": "1234567890",
+                                                "gender": "male",
+                                                "email": "testemail@email",
+                                                "mobile_phone": "123456789",
+                                                "current_residence": "Street",
+                                                "house_number": "15",
+                                                "country": "Croatia"
+                                            }
+                                        ]
+                                    },
+                                    "code": 200,
+                                    "message": "OK"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loanLedgerPersonalInformation/{id}": {
+            "get": {
+                "tags": [
+                    "loan-ledger-personal-info"
+                ],
+                "description": "Get loan ledger personal information by ID",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Loan ledger personal info ID",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "auth-token",
+                        "in": "header",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMTEwMTgsImlhdCI6MTY1NTEwMzgxOC4wNywiZW1haWwiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkUTlCelR0LmNGTXN1Rmxpb3EvQk1ZdVRkNUdRYkNwSlFVLjlvQVBhZy5KaENuZ3UzWjdoZ3EifQ.eNeghc_UR9fqKyZagj3V_5DcAeu9vI1QVUIZZb3qP-Q"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "data": {
+                                        "loalLedgerPersonalInfo": {
+                                            "id": 2,
+                                            "user_id": 37,
+                                            "full_name": "Name",
+                                            "national_id": "12345678",
+                                            "date_of_birth": "1990-07-07",
+                                            "registration_number": "1234567890",
+                                            "gender": "male",
+                                            "email": "testemail@email",
+                                            "mobile_phone": "123456789",
+                                            "current_residence": "Street",
+                                            "house_number": "15",
+                                            "country": "Croatia"
+                                        }
+                                    },
+                                    "code": 200,
+                                    "message": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Unauthorized",
+                                    "status": 401
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loanLedgerPersonalInformation/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "loan-ledger-personal-info"
+                ],
+                "description": "Delete a loan ledger personal information",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Loan ledger personal info ID",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "auth-token",
+                        "in": "header",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMTEwMTgsImlhdCI6MTY1NTEwMzgxOC4wNywiZW1haWwiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkUTlCelR0LmNGTXN1Rmxpb3EvQk1ZdVRkNUdRYkNwSlFVLjlvQVBhZy5KaENuZ3UzWjdoZ3EifQ.eNeghc_UR9fqKyZagj3V_5DcAeu9vI1QVUIZZb3qP-Q"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "data": {
+                                        "loanLedgerPersonalInfo": 1
+                                    },
+                                    "code": 200,
+                                    "message": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Unauthorized",
+                                    "status": 401
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loanLedgerPersonalInformation/update/{id}": {
+            "put": {
+                "tags": [
+                    "loan-ledger-personal-info"
+                ],
+                "description": "Update a loan ledger personal info",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Loan ledger personal information ID",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "auth-token",
+                        "in": "header",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMTEwMTgsImlhdCI6MTY1NTEwMzgxOC4wNywiZW1haWwiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkUTlCelR0LmNGTXN1Rmxpb3EvQk1ZdVRkNUdRYkNwSlFVLjlvQVBhZy5KaENuZ3UzWjdoZ3EifQ.eNeghc_UR9fqKyZagj3V_5DcAeu9vI1QVUIZZb3qP-Q"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/update_id_body_6"
+                            },
+                            "examples": {
+                                "0": {
+                                    "value": "{\n    \"country\": \"Italy\"\n}"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "data": {
+                                        "loanLedgerPersonalInfo": {
+                                            "id": 2,
+                                            "user_id": 37,
+                                            "full_name": "Name",
+                                            "national_id": "12345678",
+                                            "date_of_birth": "1990-07-07",
+                                            "registration_number": "1234567890",
+                                            "gender": "male",
+                                            "email": "testemail@email",
+                                            "mobile_phone": "123456789",
+                                            "current_residence": "Street",
+                                            "house_number": "120",
+                                            "country": "Italy"
+                                        }
+                                    },
+                                    "code": 200,
+                                    "message": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Unauthorized",
+                                    "status": 401
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loanLedgerPersonalInformation/user/{user_id}": {
+            "get": {
+                "tags": [
+                    "loan-ledger-personal-info"
+                ],
+                "description": "Get loan ledger informations for a user",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "auth-token",
+                        "in": "header",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMTEwMTgsImlhdCI6MTY1NTEwMzgxOC4wNywiZW1haWwiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkUTlCelR0LmNGTXN1Rmxpb3EvQk1ZdVRkNUdRYkNwSlFVLjlvQVBhZy5KaENuZ3UzWjdoZ3EifQ.eNeghc_UR9fqKyZagj3V_5DcAeu9vI1QVUIZZb3qP-Q"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "data": {
+                                        "loanLedgerPersonalInfo": [
+                                            {
+                                                "id": 2,
+                                                "user_id": 37,
+                                                "full_name": "Name",
+                                                "national_id": "12345678",
+                                                "date_of_birth": "1990-07-07",
+                                                "registration_number": "1234567890",
+                                                "gender": "male",
+                                                "email": "testemail@email",
+                                                "mobile_phone": "123456789",
+                                                "current_residence": "Street",
+                                                "house_number": "15",
+                                                "country": "Croatia"
+                                            }
+                                        ]
+                                    },
+                                    "code": 200,
+                                    "message": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Unauthorized",
+                                    "status": 401
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/debt/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "debt"
+                ],
+                "description": "Delete a debt",
+                "parameters": [
+                    {
+                        "name": "auth-token",
+                        "in": "header",
+                        "description": "Auth Token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Debt ID",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "data": {
+                                        "debt": 1
+                                    },
+                                    "code": 200,
+                                    "message": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Unauthorized",
+                                    "status": 401
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/debt/{id}": {
+            "get": {
+                "tags": [
+                    "debt"
+                ],
+                "description": "Get debt by id",
+                "parameters": [
+                    {
+                        "name": "auth-token",
+                        "in": "header",
+                        "description": "Auth Token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Debt ID",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "data": {
+                                        "debt": {
+                                            "id": 1,
+                                            "amount": 300,
+                                            "due_date": "2022-07-07",
+                                            "user_id": 37
+                                        }
+                                    },
+                                    "code": 200,
+                                    "message": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Unauthorized",
+                                    "status": 401
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/hashtag/add": {
+            "post": {
+                "tags": [
+                    "hashtag"
+                ],
+                "description": "Add new hashtag",
 				"parameters": [
 					{
 						"name": "user_id",
@@ -1198,6 +2355,7 @@
 						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
 					}
 				],
+<<<<<<< HEAD
 				"responses": {
 					"200": {
 						"description": "OK",
@@ -1246,6 +2404,575 @@
 			"get": {
 				"tags": ["loan-ledger-professional-info"],
 				"description": "Get loan ledger informations for a user",
+=======
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/transactionAccount_add_body"
+                            },
+                            "examples": {
+                                "0": {
+                                    "value": "{\n        \"id\": 7,\n        \"balance\": 10.5,\n        \"account_type_id\": 1,\n        \"name\": \"Test3\",\n        \"country\": null,\n        \"bank_name\": \"adf\",\n        \"card_owner\": \"sdfsd\",\n        \"card_number\": \"af\",\n        \"card_expiration_date\": \"0000-00-00\",\n        \"card_cvc\": \"dafgg\",\n        \"currency_id\": 1,\n        \"user_id\": 16,\n        \"status\": \"active\"\n    }"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "example": {
+                                    "data": {
+                                        "transactionAccount": {
+                                            "id": 12,
+                                            "balance": 10.5,
+                                            "account_type_id": 1,
+                                            "name": "Test neme",
+                                            "country": "Croatia",
+                                            "bank_name": "Test bank name",
+                                            "card_owner": "Test owner",
+                                            "card_number": "Test number",
+                                            "card_expiration_date": "2025-03-05T00:00:00.000Z",
+                                            "card_cvc": "Test cvc",
+                                            "currency_id": 1,
+                                            "user_id": 37,
+                                            "status": "active"
+                                        }
+                                    },
+                                    "code": 200,
+                                    "message": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Unauthorized",
+                                    "status": 401
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/{id}": {
+            "get": {
+                "tags": [
+                    "user"
+                ],
+                "description": "Get a user by id",
+                "parameters": [
+                    {
+                        "name": "auth-token",
+                        "in": "header",
+                        "description": "Auth Token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "example": {
+                                    "data": {
+                                        "users": {
+                                            "id": 37,
+                                            "role_id": 1,
+                                            "full_name": "ime prezime",
+                                            "email": "test",
+                                            "password": "$2b$10$Q9BzTt.cFMsuFlioq/BMYuTd5GQbCpJQU.9oAPag.JhCngu3Z7hgq",
+                                            "default_currency_id": 1,
+                                            "user_feature_id": null
+                                        }
+                                    },
+                                    "code": 200,
+                                    "message": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Unauthorized",
+                                    "status": 401
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/signup": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "description": "",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/auth_signup_body"
+                            },
+                            "examples": {
+                                "0": {
+                                    "value": "{\n    \"full_name\": \"Ime Prezime\",\n    \"email\": \"test2\",\n    \"password\": \"password\"\n}"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "example": {
+                                    "data": {
+                                        "user": {
+                                            "user_feature_id": null,
+                                            "id": 199,
+                                            "role_id": "1",
+                                            "full_name": "Ime Prezime",
+                                            "email": "lucijan@cinnnnn.com",
+                                            "password": "$2b$10$zDEMooMlyk9uWGTMlaFrGOagCWBnSEP.Ok/DUO75mj7a1UwZ.IyCm",
+                                            "default_currency_id": "1"
+                                        }
+                                    },
+                                    "code": 200,
+                                    "message": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "0": {
+                                        "value": "{\n    \"message\": \"'body.password' with value 'vfvf' fails to match the required pattern: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/\",\n    \"field\": \"body.password\"\n} "
+                                    },
+                                    "1": {
+                                        "value": "{\n    \"message\": \"'body.email' with value 'hdhdhdrr.od' fails to match the required pattern: /^([a-zA-Z0-9_.-]+)@([a-zA-Z0-9_.-]+)\\\\.([a-zA-Z]{2,5})$/\",\n    \"field\": \"body.email\"\n}"
+                                    },
+                                    "2": {
+                                        "value": "{\n    \"message\": \"'body.full_name' length must be at least 3 characters long\",\n    \"field\": \"body.full_name\"\n}  "
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/dailyDose/add": {
+            "post": {
+                "tags": [
+                    "dailydose"
+                ],
+                "parameters": [
+					{
+                        "name": "auth-token",
+                        "in": "header",
+                        "description": "Auth Token",
+                        "required": true,
+                        "type": "string"
+                    }
+				],
+                "description": "Post api to post a new dose",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/dailydose"
+                            },
+                            "examples": {
+                                "0": {
+                                    "value": "{\n        \"title\": \"Ime Prezime\",\n        \"subtitle\": \"Ime Prezime\",\n        \"image\": \"https://abc.jpeg\",\n  \"contentURL\": \"This is content URL\",\n  \"contentBody\": \"This is content body\",\n   \"keyword\": \"abc\",\n        \"category\": \"news\"\n        }"
+                                },
+                                "1": {
+                                    "value": "{\n        \"title\": \"Ime Prezime\",\n        \"subtitle\": \"Ime Prezime\",\n        \"image\": \"https://abc.jpeg\",\n    \"category\": \"news\"\n        }"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "example": {
+                                    "data": {
+                                        "dailyDose": {
+                                            "id": 2,
+                                            "title": "Muzammil",
+                                            "subtitle": "abc",
+                                            "image": "https://image.png",
+                                            "category": "news"
+                                        }
+                                    },
+                                    "code": 200,
+                                    "message": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Unauthorized",
+                                    "status": 401
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/dailyDose/update/{id}": {
+            "put": {
+                "tags": [
+                    "dailydose"
+                ],
+                "parameters": [
+					{
+                        "name": "auth-token",
+                        "in": "header",
+                        "description": "Auth Token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Transaction category ID",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+				],
+                "description": "Put api to update dose",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/dailydose"
+                            },
+                            "examples": {
+                                "0": {
+                                    "value": "{\n        \"title\": \"Ime Prezime\",\n        \"subtitle\": \"Ime Prezime\",\n        \"image\": \"https://abc.jpeg\",\n  \"contentURL\": \"This is content URL\",\n  \"contentBody\": \"This is content body\",\n \"keyword\": \"abc\",\n        \"category\": \"news\"\n        }"
+                                },
+                                "1": {
+                                    "value": "{\n        \"title\": \"Ime Prezime\",\n        \"subtitle\": \"Ime Prezime\",\n        \"image\": \"https://abc.jpeg\",\n    \"keyword\": \"abc\",\n        \"category\": \"news\"\n        }"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "example": {
+                                    "data": {
+                                        "dailyDose": {
+                                            "id": 2,
+                                            "title": "Muzammil",
+                                            "subtitle": "abc",
+                                            "image": "https://image.png",
+                                            "category": "news"
+                                        }
+                                    },
+                                    "code": 200,
+                                    "message": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Unauthorized",
+                                    "status": 401
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/dailyDose/getByCategory": {
+            "get": {
+                "tags": [
+                    "dailydose"
+                ],
+                "parameters": [
+					{
+                        "name": "auth-token",
+                        "in": "header",
+                        "description": "Auth Token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "category",
+                        "in": "query",
+                        "description": "category name,'news', 'music', 'wise-words'",
+                        "type": "string"
+                    }
+				],
+                "description": "Get api to get data for each category",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "example": {
+                                    "data": {
+                                        "dailyDose": [
+                                            {
+                                                "id": 16,
+                                                "title": "Muzammil",
+                                                "subtitle": "abc",
+                                                "image": "https://image.png",
+                                                "contentURL": null,
+                                                "keyword": null,
+                                                "category": "news"
+                                            },
+                                            {
+                                                "id": 17,
+                                                "title": "Muzammil",
+                                                "subtitle": "abc",
+                                                "image": "https://image.png",
+                                                "contentURL": null,
+                                                "keyword": null,
+                                                "category": "news"
+                                            },
+                                            {
+                                                "id": 18,
+                                                "title": "Muzammil",
+                                                "subtitle": "abc",
+                                                "image": "https://image.png",
+                                                "contentURL": null,
+                                                "keyword": null,
+                                                "category": "news"
+                                            },
+                                            {
+                                                "id": 19,
+                                                "title": "Muzammil",
+                                                "subtitle": "abc",
+                                                "image": "https://image.png",
+                                                "contentURL": null,
+                                                "keyword": null,
+                                                "category": "news"
+                                            },
+                                            {
+                                                "id": 20,
+                                                "title": "Muzammil",
+                                                "subtitle": "abc",
+                                                "image": "https://image.png",
+                                                "contentURL": null,
+                                                "keyword": null,
+                                                "category": "news"
+                                            },
+                                            {
+                                                "id": 21,
+                                                "title": "Muzammil",
+                                                "subtitle": "abc",
+                                                "image": "https://image.png",
+                                                "contentURL": null,
+                                                "keyword": null,
+                                                "category": "news"
+                                            },
+                                            {
+                                                "id": 22,
+                                                "title": "Muzammil",
+                                                "subtitle": "abc",
+                                                "image": "https://image.png",
+                                                "contentURL": null,
+                                                "keyword": null,
+                                                "category": "news"
+                                            },
+                                            {
+                                                "id": 23,
+                                                "title": "Muzammil",
+                                                "subtitle": "abc",
+                                                "image": "https://image.png",
+                                                "contentURL": null,
+                                                "keyword": null,
+                                                "category": "wise-words"
+                                            },
+                                            {
+                                                "id": 24,
+                                                "title": "Muzammil",
+                                                "subtitle": "abc",
+                                                "image": "https://image.png",
+                                                "contentURL": null,
+                                                "keyword": null,
+                                                "category": "music"
+                                            }
+                                        ]
+                                    },
+                                    "code": 200,
+                                    "message": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Unauthorized",
+                                    "status": 401
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/dailyDose/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "dailydose"
+                ],
+                "parameters": [
+					{
+                        "name": "auth-token",
+                        "in": "header",
+                        "description": "Auth Token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "dose id",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+				],
+                "description": "delete api to delete dose",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "example": {
+                                    "data": {
+                                        "dailyDose": 1
+                                    },
+                                    "code": 200,
+                                    "message": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Unauthorized",
+                                    "status": 401
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/": {
+            "get": {
+                "tags": [
+                    "user"
+                ],
+                "description": "Get all users",
+>>>>>>> cfc2b14 (Fixed bugs reported related)
 				"parameters": [
 					{
 						"name": "id",
