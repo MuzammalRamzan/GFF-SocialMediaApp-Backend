@@ -1,9 +1,10 @@
 import { IMentorMatcherService, IMentorRequest, ISarchTermParams, ISearchMentors } from "./interface";
 import { User } from "../user/userModel"
-import { Op } from "sequelize";
+import { col, fn, Op, where } from "sequelize";
 import { IMentorMatcher, MentorMatcherModel, MentorMatcherRequestStatus, MentorMatcherRequestType } from "./mentorMatcherModel";
 import { MentorInformation } from "../mentor-information/mentorInformationModel";
 import { UserInformation } from "../user-information/userInformationModel";
+import { MENTOR_ROLE_ID } from "../../constants";
 
 export class MentorMatcherService implements IMentorMatcherService {
   async findMentors(userId: number, searchTerms: ISarchTermParams): Promise<ISearchMentors[]> {
@@ -14,15 +15,10 @@ export class MentorMatcherService implements IMentorMatcherService {
 
     const mentors = await User.findAll({
       where: {
-        id: {
-          [Op.ne]: userId
-        },
-        [Op.or]: [
-          {
-            full_name: {
-              [Op.like]: `%${searchTerms.text?.trim()}%`
-            }
-          }
+        [Op.and]: [
+          where(fn('lower', col('full_name')), "LIKE", `%${(searchTerms.text || "").trim().toLowerCase()}%`),
+          { id: { [Op.ne]: userId } },
+          { role_id: MENTOR_ROLE_ID }
         ]
       },
       attributes: ['id', 'full_name'],
@@ -172,10 +168,10 @@ export class MentorMatcherService implements IMentorMatcherService {
       }
     })
 
-    return mentor ? true : false;
+    return mentor?.get() ? true : false;
   }
 
-  async acceptMentorRequest(request_id: number, userId: number, mentee_id: number): Promise<boolean> {
+  async acceptMentorRequest(request_id: number, userId: number): Promise<boolean> {
     const data = await MentorMatcherModel.update(
       {
         status: MentorMatcherRequestStatus.APPROVE,
@@ -184,7 +180,6 @@ export class MentorMatcherService implements IMentorMatcherService {
         where: {
           id: request_id,
           mentor_id: userId,
-          mentee_id: mentee_id,
           status: MentorMatcherRequestStatus.SEND,
           request_type: MentorMatcherRequestType.MENTOR
         },
@@ -194,7 +189,7 @@ export class MentorMatcherService implements IMentorMatcherService {
     return data[0] ? true : false;
   }
 
-  async rejectMentorRequest(request_id: number, userId: number, mentee_id: number): Promise<boolean> {
+  async rejectMentorRequest(request_id: number, userId: number): Promise<boolean> {
     const data = await MentorMatcherModel.update(
       {
         status: MentorMatcherRequestStatus.REJECT,
@@ -203,7 +198,6 @@ export class MentorMatcherService implements IMentorMatcherService {
         where: {
           id: request_id,
           mentor_id: userId,
-          mentee_id: mentee_id,
           status: MentorMatcherRequestStatus.SEND,
           request_type: MentorMatcherRequestType.MENTOR
         },

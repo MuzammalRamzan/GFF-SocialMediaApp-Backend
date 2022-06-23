@@ -1,35 +1,47 @@
-import { MentorMatcherModel } from '../mentor-matcher/mentorMatcherModel'
-import { MentorMatcherService } from '../mentor-matcher/mentorMatcherService'
-import { UserInformation } from '../user-information/userInformationModel'
-import { User } from '../user/userModel'
-import { CreateMentorInformation, IMentorInformationService, MentorInformationType } from './interface'
-import { IMentorInformation, MentorInformation } from './mentorInformationModel'
+import { MENTOR_ROLE_ID } from "../../constants";
+import { MentorMatcherModel } from "../mentor-matcher/mentorMatcherModel";
+import { MentorMatcherService } from "../mentor-matcher/mentorMatcherService";
+import { UserInformation } from "../user-information/userInformationModel";
+import { User } from "../user/userModel";
+import { CreateMentorInformation, IMentorInformationService, MentorInformationType } from "./interface";
+import { IMentorInformation, MentorInformation } from "./mentorInformationModel";
 
 export class MentorInformationService implements IMentorInformationService {
-	async createMentorInformation(params: CreateMentorInformation): Promise<IMentorInformation> {
-		const mentorInformation = await MentorInformation.create({
-			role: params.role.join(','),
-			industry: params.industry.join(','),
-			frequency: params.frequency.join(','),
-			conversation_mode: params.conversation_mode.join(','),
-			languages: params.languages.join(','),
-			user_id: params.user_id,
-			isPassedIRT: params.isPassedIRT
-		})
 
-		// make user as a mentor, change the role_id of User table.
-		await User.update(
-			{
-				role_id: 3
-			},
-			{
-				where: {
-					id: params.user_id
-				}
-			}
-		)
+  static async isMentorExists(userId: number): Promise<boolean> {
+    const record = await User.findOne({
+      where: {
+        id: userId,
+        role_id: MENTOR_ROLE_ID
+      }
+    });
 
-		return mentorInformation.get()
+    return !!record?.get();
+  }
+
+  async createMentorInformation(params: CreateMentorInformation): Promise<IMentorInformation> {
+    const mentorInformation = await MentorInformation.create({
+      role: (params.role || []).join(","),
+      industry: (params.industry || []).join(","),
+      frequency: (params.frequency || []).join(","),
+      conversation_mode: (params.conversation_mode || []).join(","),
+      user_id: params.user_id,
+      isPassedIRT: params.isPassedIRT
+    });
+
+    // make user as a mentor, change the role_id of User table.
+    await User.update(
+      {
+        role_id: MENTOR_ROLE_ID
+      },
+      {
+        where: {
+          id: params.user_id
+        }
+      }
+    )
+
+		return mentorInformation.get();
 	}
 
 	async isMentorInformationExist(userId: number): Promise<boolean> {
