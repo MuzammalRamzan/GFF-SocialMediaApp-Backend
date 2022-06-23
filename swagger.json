@@ -4612,7 +4612,9 @@
 										"data": {
 											"type": "object",
 											"properties": { "industries": { "type": "array", "items": { "type": "string" } } }
-										}
+										},
+										"code": { "type": "integer" },
+										"message": { "type": "string" }
 									}
 								},
 								"example": {
@@ -4626,7 +4628,9 @@
 											"Retail trade",
 											"Real estate"
 										]
-									}
+									},
+									"message": "OK",
+									"code": 200
 								}
 							}
 						}
@@ -4649,7 +4653,9 @@
 										"data": {
 											"type": "object",
 											"properties": { "roles": { "type": "array", "items": { "type": "string" } } }
-										}
+										},
+										"code": { "type": "integer" },
+										"message": { "type": "string" }
 									}
 								},
 								"example": {
@@ -4663,7 +4669,9 @@
 											"Research and Development",
 											"Information Technology"
 										]
-									}
+									},
+									"message": "OK",
+									"code": 200
 								}
 							}
 						}
@@ -4686,13 +4694,17 @@
 										"data": {
 											"type": "object",
 											"properties": { "frequencies": { "type": "array", "items": { "type": "string" } } }
-										}
+										},
+										"code": { "type": "integer" },
+										"message": { "type": "string" }
 									}
 								},
 								"example": {
 									"data": {
 										"frequencies": ["Daily", "Weekly", "Monthly"]
-									}
+									},
+									"message": "OK",
+									"code": 200
 								}
 							}
 						}
@@ -4715,13 +4727,17 @@
 										"data": {
 											"type": "object",
 											"properties": { "modes": { "type": "array", "items": { "type": "string" } } }
-										}
+										},
+										"code": { "type": "integer" },
+										"message": { "type": "string" }
 									}
 								},
 								"example": {
 									"data": {
 										"modes": ["Audio", "Video", "Text"]
-									}
+									},
+									"message": "OK",
+									"code": 200
 								}
 							}
 						}
@@ -4744,13 +4760,17 @@
 										"data": {
 											"type": "object",
 											"properties": { "languages": { "type": "array", "items": { "type": "string" } } }
-										}
+										},
+										"code": { "type": "integer" },
+										"message": { "type": "string" }
 									}
 								},
 								"example": {
 									"data": {
 										"languages": ["English"]
-									}
+									},
+									"message": "OK",
+									"code": 200
 								}
 							}
 						}

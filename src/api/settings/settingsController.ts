@@ -29,10 +29,7 @@ export class SettingsController {
 
 	handleError = async (err: any, req: Request, res: Response) => {
 		const error = err as GffError
-		if (error.message === 'Unauthorized') {
-			error.errorCode = '401'
-			error.httpStatusCode = 401
-		} else if (error.message === 'No data found') {
+		if (error.message === 'No data found') {
 			error.errorCode = '404'
 			error.httpStatusCode = 404
 		} else {
@@ -45,6 +42,8 @@ export class SettingsController {
 	getAllIndustries = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			return res.status(200).json({
+				code: 200,
+				message: 'OK',
 				data: { industries: this.settings.industries }
 			})
 		} catch (err) {
@@ -55,6 +54,8 @@ export class SettingsController {
 	getAllRoles = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			return res.status(200).json({
+				code: 200,
+				message: 'OK',
 				data: { roles: this.settings.roles }
 			})
 		} catch (err) {
@@ -65,6 +66,8 @@ export class SettingsController {
 	getAllFrequencies = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			return res.status(200).json({
+				code: 200,
+				message: 'OK',
 				data: { frequencies: this.settings.frequencies }
 			})
 		} catch (err) {
@@ -75,6 +78,8 @@ export class SettingsController {
 	getAllModes = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			return res.status(200).json({
+				code: 200,
+				message: 'OK',
 				data: { modes: this.settings.modes }
 			})
 		} catch (err) {
@@ -85,6 +90,8 @@ export class SettingsController {
 	getAllLanguages = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			return res.status(200).json({
+				code: 200,
+				message: 'OK',
 				data: { languages: this.settings.languages }
 			})
 		} catch (err) {
