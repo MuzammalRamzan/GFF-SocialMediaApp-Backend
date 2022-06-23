@@ -1,5 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../database';
+import { WarriorInformation } from '../warrior-information/warriorInformationModel';
 import { MentorInformation } from '../mentor-information/mentorInformationModel';
 import { UserInformation } from '../user-information/userInformationModel';
 
@@ -55,6 +56,11 @@ User.init({
         timestamps: true
     })
 
+User.hasOne(WarriorInformation, {
+    foreignKey: 'user_id',
+    as: 'warrior_information'
+});
+
 User.hasOne(MentorInformation, {
     foreignKey: 'user_id',
     as: 'mentor_information'
@@ -64,3 +70,5 @@ User.hasOne(UserInformation, {
     foreignKey: 'user_id',
     as: 'user_information'
 })
+
+User.sync();
