@@ -13,19 +13,13 @@ mentorMatcherRouter.post('/request/send', authMiddleware, sendMentorRequestValid
 mentorMatcherRouter.put(
   '/request/accept',
   authMiddleware,
-  [
-    requiredMenteeId,
-    requiredRequestId
-  ],
+  requiredRequestId,
   controller.acceptMentorRequest as Application
 );
 mentorMatcherRouter.put(
   '/request/reject',
   authMiddleware,
-  [
-    requiredMenteeId,
-    requiredRequestId
-  ],
+  requiredRequestId,
   controller.rejectMentorRequest as Application
 );
 // get list of received requests

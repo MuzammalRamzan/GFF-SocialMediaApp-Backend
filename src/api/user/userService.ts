@@ -12,10 +12,15 @@ export class UserService implements IUserService {
 		this.authService = new AuthService()
 	}
 
+	static async isExists(user_id: number): Promise<boolean> {
+		const user = await User.findByPk(user_id)
+		return !!user?.get();
+	}
+
 	async fetchFullUserById(userId: number): Promise<User[]> {
 		const fullUser = await sequelize.query(
 			'SELECT * FROM `user_information` INNER JOIN `user` ON user_information.user_id = user.id WHERE user_id=' +
-				userId,
+			userId,
 			{ type: QueryTypes.SELECT }
 		)
 

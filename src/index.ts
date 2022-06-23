@@ -20,15 +20,16 @@ import { mentorInformationRouter } from './api/mentor-information/mentorInformat
 import { mpesaRouter } from './api/mpesa-auth/mpesaRouter';
 import { warriorInformationRouter } from './api/warrior-information/warriorInformationRouter';
 import { warriorRouter } from './api/wellness-warrior/wellnessWarriorRouter';
+import { mentorSettingsRouter } from './api/mentor-settings/settingsRouter'
 
 const options = {
-  swaggerOptions: {
-    filter: true
-  }
-};
+	swaggerOptions: {
+		filter: true
+	}
+}
 
-(async function main(): Promise<void> {
-  const app = Express()
+;(async function main(): Promise<void> {
+	const app = Express()
 
   app.use(bodyParser.json())
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
@@ -49,18 +50,19 @@ const options = {
   app.use('/mpesa', mpesaRouter)
   app.use('/warrior-information', warriorInformationRouter)
   app.use('/wellness-warrior', warriorRouter)
+	app.use('/', mentorSettingsRouter)
 
-  app.listen(process.env.PORT, () => {
-    console.log(`Server running at port ${process.env.PORT}`)
-  })
+	app.listen(process.env.PORT, () => {
+		console.log(`Server running at port ${process.env.PORT}`)
+	})
 
-  try {
-    await sequelize.authenticate();
-    console.log('Database connection has been established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-  }
-})().catch((err) => {
-  console.log('Error starting application $s', err.message)
-  process.exit(1)
+	try {
+		await sequelize.authenticate()
+		console.log('Database connection has been established successfully.')
+	} catch (error) {
+		console.error('Unable to connect to the database:', error)
+	}
+})().catch(err => {
+	console.log('Error starting application $s', err.message)
+	process.exit(1)
 })
