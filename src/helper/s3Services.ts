@@ -14,7 +14,7 @@ AWS.config.update({
 const s3 = new AWS.S3()
 
 class s3Service {
-	public uploadFile(file: Express.Multer.File, uploadPath?: string) {
+	public uploadFile(file: Express.Multer.File, uploadPath?: string): Promise<AWS.S3.ManagedUpload.SendData> {
 		return new Promise((resolve, reject) => {
 			s3.upload(
 				{
