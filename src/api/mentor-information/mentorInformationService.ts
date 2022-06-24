@@ -25,6 +25,7 @@ export class MentorInformationService implements IMentorInformationService {
       industry: (params.industry || []).join(","),
       frequency: (params.frequency || []).join(","),
       conversation_mode: (params.conversation_mode || []).join(","),
+			languages: (params.languages || []).join(","),
       user_id: params.user_id,
       isPassedIRT: params.isPassedIRT
     });
