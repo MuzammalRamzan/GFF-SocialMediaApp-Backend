@@ -5266,14 +5266,14 @@
 						"name": "auth-token",
 						"in": "header",
 						"description": "Auth Token",
-						"required": false,
+						"required": true,
 						"type": "string"
 					},
 					{
 						"name": "text",
 						"in": "query",
 						"description": "Mentor name",
-						"required": true,
+						"required": false,
 						"type": "string"
 					},
 					{
@@ -5300,6 +5300,13 @@
 						"name": "conversation_mode",
 						"in": "query",
 						"description": "Conversation Mode(comma separated value with no spaces, e.g IT,Software)",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"name": "languages",
+						"in": "query",
+						"description": "languages(comma separated value with no spaces, e.g IT,Software)",
 						"required": false,
 						"type": "string"
 					}
@@ -5541,7 +5548,7 @@
 						"name": "search",
 						"in": "query",
 						"description": "Friend name",
-						"required": true
+						"required": false
 					}
 				],
 				"responses": {
