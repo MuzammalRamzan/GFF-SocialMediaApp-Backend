@@ -1,7 +1,7 @@
 import { FindFriendModel, IFriendRequest } from "./findFriendModel";
 import { IFindFriendService, RequestStatus, RequestType, FindFriendRequest, FriendUser, FriendRequestWithUserInformation } from "./interface";
 import { User } from "../user/userModel"
-import { Op } from "sequelize";
+import { Op, where, fn, col } from "sequelize";
 import { UserInformation } from "../user-information/userInformationModel";
 
 export class FindFriendService implements IFindFriendService {
@@ -199,12 +199,10 @@ export class FindFriendService implements IFindFriendService {
   async findFriend(searchTerm: string, userId: number): Promise<FriendUser[]> {
     const findFriends = await User.findAll({
       where: {
-        full_name: {
-          [Op.like]: `%${searchTerm}%`
-        },
-        id: {
-          [Op.ne]: userId
-        }
+        [Op.and]: [
+          where(fn("lower", col("full_name")), 'LIKE', `%${(searchTerm || "").trim().toLowerCase()}%`),
+          { id: { [Op.ne]: userId } }
+        ]
       },
       attributes: ['id', 'full_name'],
       include: [

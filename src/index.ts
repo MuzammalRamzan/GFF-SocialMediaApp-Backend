@@ -20,15 +20,19 @@ import { mentorInformationRouter } from './api/mentor-information/mentorInformat
 import { mpesaRouter } from './api/mpesa-auth/mpesaRouter';
 import { roomRoute } from './api/chat/room/room.routes';
 import { messageRoute } from './api/chat/message/message.routes';
+import { warriorInformationRouter } from './api/warrior-information/warriorInformationRouter';
+import { warriorRouter } from './api/wellness-warrior/wellnessWarriorRouter';
+import { mentorSettingsRouter } from './api/mentor-settings/settingsRouter';
+import { currencyRouter } from './api/currency/currencyRouter';
 
 const options = {
-  swaggerOptions: {
-    filter: true
-  }
-};
+	swaggerOptions: {
+		filter: true
+	}
+}
 
-(async function main(): Promise<void> {
-  const app = Express()
+;(async function main(): Promise<void> {
+	const app = Express()
 
   app.use(bodyParser.json())
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
@@ -49,18 +53,22 @@ const options = {
   app.use('/mpesa', mpesaRouter)
   app.use('/room', roomRoute);
   app.use('/message', messageRoute);
+  app.use('/warrior-information', warriorInformationRouter)
+  app.use('/wellness-warrior', warriorRouter)
+	app.use('/', mentorSettingsRouter)
+  app.use('/currency', currencyRouter)
 
-  app.listen(process.env.PORT, () => {
-    console.log(`Server running at port ${process.env.PORT}`)
-  })
+	app.listen(process.env.PORT, () => {
+		console.log(`Server running at port ${process.env.PORT}`)
+	})
 
-  try {
-    await sequelize.authenticate();
-    console.log('Database connection has been established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-  }
-})().catch((err) => {
-  console.log('Error starting application $s', err.message)
-  process.exit(1)
+	try {
+		await sequelize.authenticate()
+		console.log('Database connection has been established successfully.')
+	} catch (error) {
+		console.error('Unable to connect to the database:', error)
+	}
+})().catch(err => {
+	console.log('Error starting application $s', err.message)
+	process.exit(1)
 })

@@ -38,12 +38,36 @@
 			"description": "Hashtags related routes"
 		},
 		{
+			"name": "currency",
+			"description": "Currency related routes"
+		},
+		{
 			"name": "debt",
 			"description": "Debt related routes"
 		},
 		{
 			"name": "user-information",
 			"description": "User information related routes"
+		},
+		{
+			"name": "mentor-information",
+			"description": "Mentor information related routes"
+		},
+		{
+			"name": "warrior-information",
+			"description": "Wellness Warrior information related routes"
+		},
+		{
+			"name": "find-friend",
+			"description": "Friend finder related routes"
+		},
+		{
+			"name": "mentor-matcher",
+			"description": "Mentor matcher related routes"
+		},
+		{
+			"name": "wellness-warrior",
+			"description": "Wellness warrior related routes"
 		},
 		{
 			"name": "loan-ledger-personal-info",
@@ -56,13 +80,871 @@
 		{
 			"name": "mpesa",
 			"description": "Mpesa related routes"
-		},
-		{
-			"name": "Chat",
-			"description": "Chat related routes"
 		}
 	],
 	"paths": {
+		"/warrior-information/{user_id}": {
+			"get": {
+				"tags": ["warrior-information"],
+				"description": "Get Wellness Warrior information",
+				"parameters": [
+					{
+						"name": "user_id",
+						"in": "path",
+						"description": "User ID",
+						"required": true,
+						"type": "integer",
+						"example": 169
+					},
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"warriorInformation": {
+											"id": 169,
+											"full_name": "undefined",
+											"user_information": {
+												"profile_url": null,
+												"bio": "Test my bio",
+												"date_of_birth": "2022-05-31",
+												"gender": "other",
+												"job_role": "CEO",
+												"education": "No education"
+											},
+											"warrior_information": {
+												"specialty": ["str"],
+												"certification": ["long string"],
+												"therapy_type": ["short"],
+												"price_range": ["12"]
+											}
+										}
+									},
+									"message": "Warrior information retrieved successfully",
+									"code": 200
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/warrior-information": {
+			"post": {
+				"tags": ["warrior-information"],
+				"description": "Create Wellness Warrior information",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json; charset=utf-8": {
+							"schema": {
+								"type": "object"
+							},
+							"example": {
+								"specialty": ["str"],
+								"certification": ["long string"],
+								"therapy_type": ["short"],
+								"price_range": ["12"]
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"warriorInformation": {
+											"id": 1,
+											"user_id": 169,
+											"specialty": "str",
+											"certification": "long string",
+											"therapy_type": "short",
+											"price_range": "12"
+										}
+									},
+									"message": "Warrior information created successfully",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"tags": ["warrior-information"],
+				"description": "Update Wellness Warrior information",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json; charset=utf-8": {
+							"schema": {
+								"type": "object"
+							},
+							"example": {
+								"specialty": ["str"],
+								"certification": ["long string"],
+								"therapy_type": ["short"],
+								"price_range": ["12"]
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"warriorInformation": {
+											"id": 1,
+											"user_id": 169,
+											"specialty": "str",
+											"certification": "long string",
+											"therapy_type": "short",
+											"price_range": "12"
+										}
+									},
+									"message": "Warrior information created successfully",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/wellness-warrior/search": {
+			"get": {
+				"tags": ["wellness-warrior"],
+				"description": "Search Wellness Warrior",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "searchTerm",
+						"in": "query",
+						"description": "Search",
+						"required": true,
+						"type": "string",
+						"example": "un"
+					},
+					{
+						"name": "specialty",
+						"in": "query",
+						"description": "Specialty",
+						"required": true,
+						"type": "string",
+						"example": "str,un,in"
+					},
+					{
+						"name": "certification",
+						"in": "query",
+						"description": "Certification",
+						"required": true,
+						"type": "string",
+						"example": "string,params"
+					},
+					{
+						"name": "therapy_type",
+						"in": "query",
+						"description": "Therapy Type",
+						"required": true,
+						"type": "string",
+						"example": "type,the"
+					},
+					{
+						"name": "price_range",
+						"in": "query",
+						"description": "Price Range",
+						"required": true,
+						"type": "string",
+						"example": "20,50,12"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"wellnessWarriors": [
+											{
+												"id": 169,
+												"full_name": "undefined",
+												"user_information": {
+													"profile_url": null,
+													"bio": "Test my bio",
+													"date_of_birth": "2022-05-31",
+													"gender": "other",
+													"country": "test country",
+													"job_role": "CEO",
+													"education": "No education"
+												},
+												"warrior_information": {
+													"specialty": ["str"],
+													"certification": ["long string"],
+													"therapy_type": ["short"],
+													"price_range": ["12"]
+												}
+											}
+										]
+									},
+									"message": "Get Wellness Warriors successfully!",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/wellness-warrior/all-sended-request": {
+			"get": {
+				"tags": ["wellness-warrior"],
+				"description": "Get all sended request",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"requests": [
+											{
+												"id": 1,
+												"user_id": 37,
+												"warrior_id": 169,
+												"status": "send",
+												"request_type": "warrior",
+												"warrior": {
+													"id": 169,
+													"full_name": "undefined",
+													"user_information": {
+														"profile_url": null,
+														"bio": "Test my bio",
+														"date_of_birth": "2022-05-31",
+														"gender": "other",
+														"country": "test country",
+														"job_role": "CEO",
+														"education": "No education"
+													},
+													"warrior_information": {
+														"specialty": "str",
+														"certification": "long string",
+														"therapy_type": "short",
+														"price_range": "12"
+													}
+												},
+												"user": {
+													"id": 37,
+													"full_name": "ime-prezime",
+													"user_information": null
+												}
+											}
+										]
+									},
+									"message": "Get requests successfully!",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/wellness-warrior/all-request": {
+			"get": {
+				"tags": ["wellness-warrior"],
+				"description": "Get all received requests",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"requests": [
+											{
+												"id": 1,
+												"user_id": 37,
+												"warrior_id": 169,
+												"status": "send",
+												"request_type": "warrior",
+												"warrior": {
+													"id": 169,
+													"full_name": "undefined",
+													"user_information": {
+														"profile_url": null,
+														"bio": "Test my bio",
+														"date_of_birth": "2022-05-31",
+														"gender": "other",
+														"country": "test country",
+														"job_role": "CEO",
+														"education": "No education"
+													},
+													"warrior_information": {
+														"specialty": "str",
+														"certification": "long string",
+														"therapy_type": "short",
+														"price_range": "12"
+													}
+												},
+												"user": {
+													"id": 37,
+													"full_name": "ime-prezime",
+													"user_information": null
+												}
+											}
+										]
+									},
+									"message": "Get requests successfully!",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/wellness-warrior/my-warriors": {
+			"get": {
+				"tags": ["wellness-warrior"],
+				"description": "Get all my warriors",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"wellnessWarriors": [
+											{
+												"id": 1,
+												"user_id": 37,
+												"warrior_id": 169,
+												"status": "approve",
+												"request_type": "warrior",
+												"warrior": {},
+												"user": {}
+											}
+										]
+									},
+									"message": "Get wellness warriors successfully!",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/wellness-warrior/all-favorite-warrior": {
+			"get": {
+				"tags": ["wellness-warrior"],
+				"description": "Get all favorite warriors",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"wellnessWarriors": [
+											{
+												"id": 3,
+												"user_id": 37,
+												"warrior_id": 169,
+												"status": "send",
+												"request_type": "favorite",
+												"warrior": {},
+												"user": {}
+											}
+										]
+									},
+									"message": "Get wellness warriors successfully!",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/wellness-warrior/favorite-warrior": {
+			"post": {
+				"tags": ["wellness-warrior"],
+				"description": "Add favorite warrior",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json; charset=utf-8": {
+							"schema": {
+								"type": "object"
+							},
+							"example": {
+								"warrior_id": 169
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"favorite": true
+									},
+									"message": "Favorite wellness warrior successfully!",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/wellness-warrior/unfavorite-warrior": {
+			"post": {
+				"tags": ["wellness-warrior"],
+				"description": "Remove favorite warrior",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json; charset=utf-8": {
+							"schema": {
+								"type": "object"
+							},
+							"example": {
+								"warrior_id": 169
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"favorite": false
+									},
+									"message": "Unfavorite wellness warrior successfully!",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/wellness-warrior/request/{request_id}": {
+			"get": {
+				"tags": ["wellness-warrior"],
+				"description": "Get request by id",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json; charset=utf-8": {
+							"schema": {
+								"type": "object"
+							},
+							"example": {
+								"request_id": 1
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"request": {
+											"id": 1,
+											"user_id": 37,
+											"warrior_id": 169,
+											"status": "approve",
+											"request_type": "warrior",
+											"warrior": {
+												"id": 169,
+												"full_name": "undefined",
+												"user_information": {
+													"profile_url": null,
+													"bio": "Test my bio",
+													"date_of_birth": "2022-05-31",
+													"gender": "other",
+													"country": "test country",
+													"job_role": "CEO",
+													"education": "No education"
+												},
+												"warrior_information": {
+													"specialty": "str",
+													"certification": "long string",
+													"therapy_type": "short",
+													"price_range": "12"
+												}
+											},
+											"user": {
+												"id": 37,
+												"full_name": "ime-prezime",
+												"user_information": null
+											}
+										}
+									},
+									"message": "Get request successfully!",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/wellness-warrior/approve-request": {
+			"post": {
+				"tags": ["wellness-warrior"],
+				"description": "Approve request",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json; charset=utf-8": {
+							"schema": {
+								"type": "object"
+							},
+							"example": {
+								"request_id": 1
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"request": true
+									},
+									"message": "Approve request successfully!",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/wellness-warrior/reject-request": {
+			"post": {
+				"tags": ["wellness-warrior"],
+				"description": "Reject request",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json; charset=utf-8": {
+							"schema": {
+								"type": "object"
+							},
+							"example": {
+								"request_id": 1
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"request": true
+									},
+									"message": "Reject request successfully!",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/wellness-warrior/send-request": {
+			"post": {
+				"tags": ["wellness-warrior"],
+				"description": "Send request",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json; charset=utf-8": {
+							"schema": {
+								"type": "object"
+							},
+							"example": {
+								"warrior_id": 169
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"request": {
+											"id": 1,
+											"user_id": 37,
+											"warrior_id": 169,
+											"status": "approve",
+											"request_type": "warrior",
+											"warrior": {
+												"id": 169,
+												"full_name": "undefined",
+												"user_information": {},
+												"warrior_information": {}
+											},
+											"user": {
+												"id": 37,
+												"full_name": "ime-prezime",
+												"user_information": {}
+											}
+										}
+									},
+									"message": "Send request successfully!",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/user/fullUser": {
 			"get": {
 				"tags": ["user"],
@@ -1203,6 +2085,136 @@
 				}
 			}
 		},
+		"/currency/{id}": {
+			"get": {
+				"tags": ["currency"],
+				"description": "Get currency by id",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Currency ID",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"currency": {
+											"id": 1,
+											"symbol": "$",
+											"name": "US Dollar"
+										}
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/currency/add": {
+			"post": {
+				"tags": ["currency"],
+				"description": "Add new currency",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/currency_add_body"
+							},
+							"examples": {
+								"0": {
+									"value": "{\n    \"symbol\": \"$\",\n    \"name\": \"US Dollar\"\n}"
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"currency": {
+											"id": 2,
+											"symbol": "$",
+											"name": "US Dollar"
+										}
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/hashtag/add": {
 			"post": {
 				"tags": ["hashtag"],
@@ -1484,6 +2496,51 @@
 								"example": {
 									"message": "Unauthorized",
 									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/currency/list": {
+			"get": {
+				"tags": ["currency"],
+				"description": "List all currencies",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"currencies": [
+											{
+												"id": 1,
+												"symbol": "$",
+												"name": "US Dollar"
+											},
+											{
+												"id": 1,
+												"symbol": "$",
+												"name": "US Dollar"
+											}
+										]
+									},
+									"code": 200,
+									"message": "OK"
 								}
 							}
 						}
@@ -1774,6 +2831,66 @@
 												"user_information_id": 1
 											}
 										]
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/currency/delete/{id}": {
+			"delete": {
+				"tags": ["currency"],
+				"description": "Delete currency",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Currency ID",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"currency": 1
 									},
 									"code": 200,
 									"message": "OK"
@@ -3891,7 +5008,7 @@
 			},
 			"post": {
 				"tags": ["mentor-information"],
-				"description": "Get mentor informations",
+				"description": "Store mentor informations",
 				"parameters": [
 					{
 						"name": "auth-token",
@@ -3899,17 +5016,24 @@
 						"description": "Auth Token",
 						"required": true,
 						"type": "string"
-					},
-					{
-						"name": "body",
-						"in": "body",
-						"description": "Mentor information",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/CreateOrUpdateMentorInformation"
-						}
 					}
 				],
+				"requestBody": {
+					"content": {
+						"application/json; charset=utf-8": {
+							"schema": {
+								"type": "object"
+							},
+							"example": {
+								"isPassedIRT": false,
+								"industry": ["str"],
+								"role": ["string"],
+								"conversation_mode": ["string"],
+								"frequency": ["string"]
+							}
+						}
+					}
+				},
 				"responses": {
 					"200": {
 						"description": "Successfully get mentor details",
@@ -3929,22 +5053,159 @@
 						"description": "Auth Token",
 						"required": true,
 						"type": "string"
-					},
-					{
-						"name": "body",
-						"in": "body",
-						"description": "Mentor information",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/CreateOrUpdateMentorInformation"
-						}
 					}
 				],
+				"requestBody": {
+					"content": {
+						"application/json; charset=utf-8": {
+							"schema": {
+								"type": "object"
+							},
+							"example": {
+								"isPassedIRT": false,
+								"industry": ["str"],
+								"role": ["string"],
+								"conversation_mode": ["string"],
+								"frequency": ["string"]
+							}
+						}
+					}
+				},
 				"responses": {
 					"200": {
 						"description": "Successfully get mentor details",
 						"schema": {
 							"$ref": "#/components/schemas/MentorDetail"
+						}
+					}
+				}
+			}
+		},
+		"/languages": {
+			"get": {
+				"tags": ["mentor-information"],
+				"description": "Get languages",
+				"responses": {
+					"200": {
+						"description": "Successfully get languages",
+						"schema": {
+							"type": "object"
+						},
+						"exmaple": {
+							"code": 200,
+							"message": "OK",
+							"data": {
+								"industries": [
+									{
+										"key": "agriculture",
+										"name": "Agriculture"
+									}
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/industries": {
+			"get": {
+				"tags": ["mentor-information"],
+				"description": "Get industries",
+				"responses": {
+					"200": {
+						"description": "Successfully get industries",
+						"schema": {
+							"type": "object"
+						},
+						"exmaple": {
+							"code": 200,
+							"message": "OK",
+							"data": {
+								"industries": [
+									{
+										"key": "agriculture",
+										"name": "Agriculture"
+									}
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/modes": {
+			"get": {
+				"tags": ["mentor-information"],
+				"description": "Get modes",
+				"responses": {
+					"200": {
+						"description": "Successfully get modes",
+						"schema": {
+							"type": "object"
+						},
+						"exmaple": {
+							"code": 200,
+							"message": "OK",
+							"data": {
+								"modes": [
+									{
+										"key": "agriculture",
+										"name": "Agriculture"
+									}
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/frequencies": {
+			"get": {
+				"tags": ["mentor-information"],
+				"description": "Get frequencies",
+				"responses": {
+					"200": {
+						"description": "Successfully get frequencies",
+						"schema": {
+							"type": "object"
+						},
+						"exmaple": {
+							"code": 200,
+							"message": "OK",
+							"data": {
+								"frequencies": [
+									{
+										"key": "agriculture",
+										"name": "Agriculture"
+									}
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/roles": {
+			"get": {
+				"tags": ["mentor-information"],
+				"description": "Get roles",
+				"responses": {
+					"200": {
+						"description": "Successfully get roles",
+						"schema": {
+							"type": "object"
+						},
+						"exmaple": {
+							"code": 200,
+							"message": "OK",
+							"data": {
+								"roles": [
+									{
+										"key": "agriculture",
+										"name": "Agriculture"
+									}
+								]
+							}
 						}
 					}
 				}
@@ -5517,6 +6778,205 @@
 						"items": {
 							"type": "string"
 						}
+					}
+				}
+			},
+			"CreateOrUpdateMentorInformation": {
+				"required": ["isPassedIRT", "industry", "role", "conversation_mode", "frequency"],
+				"properties": {
+					"isPassedIRT": {
+						"type": "boolean"
+					},
+					"industry": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"role": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"conversation_mode": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"frequency": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"UserInformation": {
+				"type": "object",
+				"properties": {
+					"profile_url": { "type": "string" },
+					"bio": { "type": "string" },
+					"date_of_birth": { "type": "string" },
+					"gender": { "type": "string" },
+					"country": { "type": "string" },
+					"job_role": { "type": "string" },
+					"education": { "type": "string" }
+				}
+			},
+			"MentorInformation": {
+				"type": "object",
+				"properties": {
+					"industry": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"role": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"frequency": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"conversation_mode": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"isPassedIRT": {
+						"type": "boolean"
+					}
+				}
+			},
+			"Mentor": {
+				"type": "object",
+				"description": "Object schema",
+				"properties": {
+					"id": {
+						"type": "integer"
+					},
+					"mentor_id": {
+						"type": "integer"
+					},
+					"mentee_id": {
+						"type": "integer"
+					},
+					"request_type": {
+						"type": "string"
+					},
+					"status": {
+						"type": "string"
+					},
+					"is_contract_signed_by_mentee": {
+						"type": "boolean"
+					},
+					"is_contract_signed_by_mentor": {
+						"type": "boolean"
+					},
+					"mentee": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer"
+							},
+							"full_name": {
+								"type": "string"
+							},
+							"user_information": {
+								"$ref": "#/components/schemas/UserInformation"
+							}
+						}
+					},
+					"mentor": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer"
+							},
+							"full_name": {
+								"type": "string"
+							},
+							"user_information": {
+								"$ref": "#/components/schemas/UserInformation"
+							},
+							"mentor_information": {
+								"$ref": "#/components/schemas/MentorInformation"
+							}
+						}
+					}
+				}
+			},
+			"MentorDetail": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "integer"
+					},
+					"user_information": {
+						"$ref": "#/components/schemas/UserInformation"
+					},
+					"mentor_information": {
+						"$ref": "#/components/schemas/MentorInformation"
+					}
+				}
+			},
+			"SearchMentor": {
+				"type": "array",
+				"description": "Object schema",
+				"items": {
+					"type": "object",
+					"properties": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer"
+							},
+							"full_name": "string"
+						}
+					}
+				}
+			},
+			"CreateMentorRequest": {
+				"required": ["mentor_id", "message"],
+				"properties": {
+					"mentor_id": {
+						"type": "integer"
+					},
+					"message": {
+						"type": "string"
+					}
+				}
+			},
+			"AcceptOrRejectMentorRequest": {
+				"required": ["request_id"],
+				"properties": {
+					"request_id": {
+						"type": "integer"
+					}
+				}
+			},
+			"FavoriteOrUnfavoriteMentor": {
+				"required": ["mentor_id"],
+				"properties": {
+					"mentor_id": {
+						"type": "integer"
+					}
+				}
+			},
+			"MentorContract": {
+				"required": ["request_id"],
+				"properties": {
+					"request_id": {
+						"type": "integer"
 					}
 				}
 			},
