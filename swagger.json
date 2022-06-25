@@ -80,6 +80,10 @@
 		{
 			"name": "mpesa",
 			"description": "Mpesa related routes"
+		},
+		{
+			"name": "uploads",
+			"description": "File upload related routes"
 		}
 	],
 	"paths": {
@@ -620,7 +624,7 @@
 						}
 					}
 				],
-                "requestBody": {
+				"requestBody": {
 					"content": {
 						"application/json; charset=utf-8": {
 							"schema": {
@@ -653,23 +657,23 @@
 				}
 			}
 		},
-        "/wellness-warrior/unfavorite-warrior": {
-            "post": {
-                "tags": ["wellness-warrior"],
-                "description": "Remove favorite warrior",
-                "parameters": [
-                    {
-                        "name": "auth-token",
-                        "in": "header",
-                        "required": true,
-                        "style": "simple",
-                        "explode": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "requestBody": {
+		"/wellness-warrior/unfavorite-warrior": {
+			"post": {
+				"tags": ["wellness-warrior"],
+				"description": "Remove favorite warrior",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
 					"content": {
 						"application/json; charset=utf-8": {
 							"schema": {
@@ -681,27 +685,27 @@
 						}
 					}
 				},
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json; charset=utf-8": {
-                                "schema": {
-                                    "type": "object"
-                                },
-                                "example": {
-                                    "data": {
-                                        "favorite": false
-                                    },
-                                    "message": "Unfavorite wellness warrior successfully!",
-                                    "code": 200
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"favorite": false
+									},
+									"message": "Unfavorite wellness warrior successfully!",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/wellness-warrior/request/{request_id}": {
 			"get": {
 				"tags": ["wellness-warrior"],
@@ -879,72 +883,72 @@
 				}
 			}
 		},
-        "/wellness-warrior/send-request": {
-            "post": {
-                "tags": ["wellness-warrior"],
-                "description": "Send request",
-                "parameters": [
-                    {
-                        "name": "auth-token",
-                        "in": "header",
-                        "required": true,
-                        "style": "simple",
-                        "explode": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/json; charset=utf-8": {
-                            "schema": {
-                                "type": "object"
-                            },
-                            "example": {
-                                "warrior_id": 169
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json; charset=utf-8": {
-                                "schema": {
-                                    "type": "object"
-                                },
-                                "example": {
-                                    "data": {
-                                        "request": {
-                                            "id": 1,
-                                            "user_id": 37,
-                                            "warrior_id": 169,
-                                            "status": "approve",
-                                            "request_type": "warrior",
-                                            "warrior": {
-                                                "id": 169,
-                                                "full_name": "undefined",
-                                                "user_information": {},
-                                                "warrior_information": {}
-                                            },
-                                            "user": {
-                                                "id": 37,
-                                                "full_name": "ime-prezime",
-                                                "user_information": {}
-                                            }
-                                        }
-                                    },
-                                    "message": "Send request successfully!",
-                                    "code": 200
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
+		"/wellness-warrior/send-request": {
+			"post": {
+				"tags": ["wellness-warrior"],
+				"description": "Send request",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json; charset=utf-8": {
+							"schema": {
+								"type": "object"
+							},
+							"example": {
+								"warrior_id": 169
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"request": {
+											"id": 1,
+											"user_id": 37,
+											"warrior_id": 169,
+											"status": "approve",
+											"request_type": "warrior",
+											"warrior": {
+												"id": 169,
+												"full_name": "undefined",
+												"user_information": {},
+												"warrior_information": {}
+											},
+											"user": {
+												"id": 37,
+												"full_name": "ime-prezime",
+												"user_information": {}
+											}
+										}
+									},
+									"message": "Send request successfully!",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/user/fullUser": {
 			"get": {
 				"tags": ["user"],
@@ -5853,6 +5857,64 @@
 						"description": "Get a friend",
 						"schema": {
 							"$ref": "#/components/schemas/Friend"
+						}
+					}
+				}
+			}
+		},
+		"/upload/avatar": {
+			"post": {
+				"tags": ["uploads"],
+				"description": "Upload user profile picture",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"avatar": { "type": "string", "format": "binary" }
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Upload profile picture response",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": { "type": "integer" },
+										"message": { "type": "string" },
+										"data": {
+											"type": "object",
+											"properties": {
+												"userInformation": { "type": "object", "$ref": "#/components/schemas/UserInformation" }
+											}
+										}
+									}
+								},
+								"exmaple": {
+									"code": 200,
+									"message": "OK",
+									"data": {
+										"userInformation": {
+											"profile_url": "uploads/user/profile_picture/259/images/RENAME.jpg"
+										}
+									}
+								}
+							}
 						}
 					}
 				}
