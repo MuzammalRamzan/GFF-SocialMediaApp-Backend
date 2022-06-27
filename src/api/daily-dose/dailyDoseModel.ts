@@ -33,8 +33,6 @@ DailyDose.init(
       type: DataTypes.ENUM,
       allowNull: false,
       values: ['news', 'music', 'wise-words']
-      
-
     },
   },
   
@@ -43,3 +41,4 @@ DailyDose.init(
 		tableName: 'dailyDose'
 	}
 )
+DailyDose.sync();
