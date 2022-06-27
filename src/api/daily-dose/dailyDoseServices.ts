@@ -1,42 +1,41 @@
-import { IDailyDoseType, DailyDoseType } from "./interface";
-import { DailyDose } from "./dailyDoseModel";
+import { IDailyDoseType, DailyDoseType } from './interface'
+import { DailyDose } from './dailyDoseModel'
 
 export class DailyDoseService implements IDailyDoseType {
-
-    async add(params: DailyDoseType): Promise<DailyDose> {
+	async add(params: DailyDoseType): Promise<DailyDose> {
 		const dailyDose = await DailyDose.create({
-      title: params.title,
-      subtitle: params.subtitle,
-      image: params.image,
-      contentURL: params.contentURL,
-      keyWord: params.keyWord,
-      category: params.category,
-      contentBody:params.contentBody
-    })
+			title: params.title,
+			subtitle: params.subtitle,
+			image: params.image,
+			contentURL: params.contentURL,
+			keyWord: params.keyWord,
+			category: params.category,
+			contentBody: params.contentBody
+		})
 		return dailyDose
-    }
-  async findByCategory(category: string): Promise<DailyDose[]> {
-    const dailyDose = await DailyDose.findAll({
-          where: {
-            category: category
-          }
-      })
+	}
+	async findByCategory(category: string): Promise<DailyDose[]> {
+		const dailyDose = await DailyDose.findAll({
+			where: {
+				category: category
+			}
+		})
 
-      if (!dailyDose){
-          throw new Error("Unauthorized")
-      }
+		if (!dailyDose) {
+			throw new Error('Unauthorized')
+		}
 
-      return dailyDose;
-  }
-  async update(paramsId: number, params: DailyDoseType): Promise<DailyDose> {
+		return dailyDose
+	}
+	async update(paramsId: number, params: DailyDoseType): Promise<DailyDose> {
 		await DailyDose.update(
 			{
-			title: params.title,
-      subtitle: params.subtitle,
-      image: params.image,
-      contentURL: params.contentURL,
-      keyWord: params.keyWord,
-      category: params.category,
+				title: params.title,
+				subtitle: params.subtitle,
+				image: params.image,
+				contentURL: params.contentURL,
+				keyWord: params.keyWord,
+				category: params.category
 			},
 			{
 				where: {
@@ -47,26 +46,26 @@ export class DailyDoseService implements IDailyDoseType {
 
 		const newUpdatedRow = await DailyDose.findByPk(paramsId)
 		return newUpdatedRow as DailyDose
-  }
-  async delete (id: number): Promise<number> {
-    const deletedRow = await DailyDose.destroy({
-        where: {
-            id: id
-        }
-    })
-    if(!deletedRow){
-        throw new Error("No data found against this ID")
-    }
+	}
+	async delete(id: number): Promise<number> {
+		const deletedRow = await DailyDose.destroy({
+			where: {
+				id: id
+			}
+		})
+		if (!deletedRow) {
+			throw new Error('No data found against this ID')
+		}
 
-    return deletedRow
-  }
-  async findAllCategory(category: string): Promise<DailyDose[]> {
-    const dailyDose = await DailyDose.findAll()
+		return deletedRow
+	}
+	async findAllCategory(category: string): Promise<DailyDose[]> {
+		const dailyDose = await DailyDose.findAll()
 
-      if (!dailyDose){
-          throw new Error("no data found")
-      }
+		if (!dailyDose) {
+			throw new Error('no data found')
+		}
 
-      return dailyDose;
-  }
+		return dailyDose
+	}
 }
