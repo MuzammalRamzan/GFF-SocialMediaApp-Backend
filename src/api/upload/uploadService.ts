@@ -5,21 +5,36 @@ import { UserInformationService } from '../user-information/userInformationServi
 import { UserInformation } from '../user-information/userInformationModel'
 
 export class UploadService implements IUploadService {
-	private readonly s3 = new s3Services()
-	private readonly UserInformation = new UserInformationService()
+	private s3: s3Services;
+	private UserInformation: UserInformationService;
 
-	async upload(file: Express.Multer.File, uploadPath?: string): Promise<AWS.S3.ManagedUpload.SendData> {
+	constructor() {
+		this.s3 = new s3Services()
+		this.UserInformation = new UserInformationService()
+	}
+
+	upload = async (file: Express.Multer.File, uploadPath?: string): Promise<AWS.S3.ManagedUpload.SendData> => {
 		return new Promise((resolve, reject) =>
 			this.s3
 				.uploadFile(file, uploadPath)
 				.then(data => resolve(data))
-				.catch(error => reject(error))
+				.catch(error => {
+					console.log(error);
+					reject(error)
+				})
 		)
 	}
 
-	async uploadAvatar(user_id: number, file: Express.Multer.File): Promise<UserInformation> {
-		const fileName = new Date() + '_' + file.originalname
-		const uploadedAvatar = await this.upload(file, `/uploads/user/profile_picture/${user_id}/images/${fileName}`)
+	uploadAvatar = async (user_id: number, file: Express.Multer.File): Promise<UserInformation> => {
+		const fileName = new Date().getTime() + '_' + file.originalname;
+		let fileNameWithoutSpace = fileName.replace(/\s/g, '_');
+
+		if (fileNameWithoutSpace.length > 200) {
+			const ext = fileNameWithoutSpace.split('.').pop();
+			fileNameWithoutSpace = fileNameWithoutSpace.substring(0, 40) + ext;
+		}
+
+		const uploadedAvatar = await this.upload(file, `/uploads/user/profile_picture/${user_id}/images/${fileNameWithoutSpace}`)
 
 		const userDetails = await this.UserInformation.updateUserProfileUrl(uploadedAvatar.Key, user_id)
 

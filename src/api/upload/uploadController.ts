@@ -19,7 +19,7 @@ export class UploadController {
 			error.errorCode = '500'
 			error.httpStatusCode = 500
 		}
-		return jsonErrorHandler(err, req, res, () => {})
+		return jsonErrorHandler(err, req, res, () => { })
 	}
 
 	uploadAvatar = async (req: IUploadRequest, res: Response, next: NextFunction) => {
@@ -38,6 +38,7 @@ export class UploadController {
 				message: 'OK'
 			})
 		} catch (error) {
+			console.log(error);
 			return this.handleError(error, req, res)
 		}
 	}

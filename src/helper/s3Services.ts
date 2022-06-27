@@ -21,7 +21,7 @@ class s3Service {
 					Body: file.buffer,
 					Key: uploadPath || '/upload/' + new Date() + '_' + file.originalname,
 					ACL: 'public-read',
-					Bucket: process.env.BUCKET_NAME || ''
+					Bucket: process.env.AWS_S3_BUCKET_NAME || ''
 				},
 				(error, data) => {
 					if (error) reject(error)
@@ -33,7 +33,7 @@ class s3Service {
 
 	public deleteFile(objects: IAwsObjectType[]) {
 		const options = {
-			Bucket: process.env.BUCKET_NAME || '',
+			Bucket: process.env.AWS_S3_BUCKET_NAME || '',
 			Delete: {
 				Objects: objects,
 				Quiet: false
