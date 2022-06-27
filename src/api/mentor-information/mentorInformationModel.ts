@@ -55,27 +55,6 @@ MentorInformation.init(
 	{
 		sequelize: sequelize,
 		tableName: 'mentor_information',
-		hooks: {
-			afterFind(instancesOrInstance: any) {
-				if (instancesOrInstance) {
-					if (Array.isArray(instancesOrInstance)) {
-						instancesOrInstance.forEach(instance => {
-							instance.industry = instance.industry.split(',')
-							instance.role = instance.role.split(',')
-							instance.frequency = instance.frequency.split(',')
-							instance.languages = instance.languages.split(',')
-							instance.conversation_mode = instance.conversation_mode.split(',')
-						})
-					} else {
-						instancesOrInstance.industry = instancesOrInstance.industry.split(',')
-						instancesOrInstance.role = instancesOrInstance.role.split(',')
-						instancesOrInstance.frequency = instancesOrInstance.frequency.split(',')
-						instancesOrInstance.languages = instancesOrInstance.languages.split(',')
-						instancesOrInstance.conversation_mode = instancesOrInstance.conversation_mode.split(',')
-					}
-				}
-			}
-		}
 	}
 )
 

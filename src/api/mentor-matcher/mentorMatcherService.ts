@@ -7,18 +7,28 @@ import { UserInformation } from "../user-information/userInformationModel";
 import { MENTOR_ROLE_ID } from "../../constants";
 
 export class MentorMatcherService implements IMentorMatcherService {
+
+  private MENTOR_INFORMATION_FIELDS = [
+    'industry', 'role', 'frequency', 'conversation_mode', 'isPassedIRT', 'languages'
+  ]
+
+  private USER_INFORMATION_FIELDS = [
+    'profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education'
+  ]
+
   async findMentors(userId: number, searchTerms: ISarchTermParams): Promise<ISearchMentors[]> {
     const _industry = searchTerms.industry?.split(',');
     const _role = searchTerms.role?.split(',');
     const _frequency = searchTerms.frequency?.split(',');
     const _conversation_mode = searchTerms.conversation_mode?.split(',');
+    const _languages = searchTerms.languages?.split(',');
 
     const mentors = await User.findAll({
       where: {
         [Op.and]: [
-          where(fn('lower', col('full_name')), "LIKE", `%${(searchTerms.text || "").trim().toLowerCase()}%`),
+          searchTerms.text ? where(fn('lower', col('full_name')), "LIKE", `%${(searchTerms.text || "").trim().toLowerCase()}%`) : { full_name: { [Op.ne]: null } },
           { id: { [Op.ne]: userId } },
-          { role_id: MENTOR_ROLE_ID }
+          { role_id: MENTOR_ROLE_ID },
         ]
       },
       attributes: ['id', 'full_name'],
@@ -26,36 +36,43 @@ export class MentorMatcherService implements IMentorMatcherService {
         {
           model: MentorInformation,
           as: 'mentor_information',
-          attributes: ['industry', 'role', 'frequency', 'conversation_mode', 'isPassedIRT'],
+          attributes: this.MENTOR_INFORMATION_FIELDS,
           where: {
             [Op.or]: [
               {
-                industry: {
-                  [Op.or]: _industry?.length && _industry?.map((item: string) => ({
+                industry: _industry?.length ? {
+                  [Op.or]: _industry?.map((item: string) => ({
                     [Op.like]: `%${item.trim()}%`
                   })),
-                }
+                } : { [Op.ne]: null }
               },
               {
-                role: {
-                  [Op.or]: _role?.length && _role?.map((item: string) => ({
+                role: _role?.length ? {
+                  [Op.or]: _role?.map((item: string) => ({
                     [Op.like]: `%${item.trim()}%`
                   })),
-                }
+                } : { [Op.ne]: null }
               },
               {
-                frequency: {
-                  [Op.or]: _frequency?.length && _frequency?.map((item: string) => ({
+                frequency: _frequency?.length ? {
+                  [Op.or]: _frequency?.map((item: string) => ({
                     [Op.like]: `%${item.trim()}%`
                   })),
-                }
+                } : { [Op.ne]: null }
               },
               {
-                conversation_mode: {
-                  [Op.or]: _conversation_mode?.length && _conversation_mode?.map((item: string) => ({
+                conversation_mode: _conversation_mode?.length ? {
+                  [Op.or]: _conversation_mode?.map((item: string) => ({
                     [Op.like]: `%${item.trim()}%`
                   })),
-                }
+                } : { [Op.ne]: null }
+              },
+              {
+                languages: _languages?.length ? {
+                  [Op.or]: _languages?.map((item: string) => ({
+                    [Op.like]: `%${item.trim()}%`
+                  })),
+                } : { [Op.ne]: null }
               },
             ]
           },
@@ -63,7 +80,7 @@ export class MentorMatcherService implements IMentorMatcherService {
         {
           model: UserInformation,
           as: 'user_information',
-          attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education']
+          attributes: this.USER_INFORMATION_FIELDS
         }
       ]
     })
@@ -74,20 +91,21 @@ export class MentorMatcherService implements IMentorMatcherService {
         id: _data.id,
         full_name: _data.full_name,
         mentor_information: {
-          industry: _data.mentor_information.industry.split(','),
-          role: _data.mentor_information.role.split(','),
-          frequency: _data.mentor_information.frequency.split(','),
-          conversation_mode: _data.mentor_information.conversation_mode.split(','),
+          industry: (_data.mentor_information.industry || '').split(',').filter((item: string) => !!item),
+          role: (_data.mentor_information.role || '').split(',').filter((item: string) => !!item),
+          frequency: (_data.mentor_information.frequency || '').split(',').filter((item: string) => !!item),
+          conversation_mode: (_data.mentor_information.conversation_mode || '').split(',').filter((item: string) => !!item),
+          languages: (_data.mentor_information.languages || '').split(',').filter((item: string) => !!item),
           isPassedIRT: _data.mentor_information.isPassedIRT
         },
         user_information: {
-          profile_url: _data.user_information.profile_url,
-          bio: _data.user_information.bio,
-          date_of_birth: _data.user_information.date_of_birth,
-          gender: _data.user_information.gender,
-          country: _data.user_information.country,
-          job_role: _data.user_information.job_role,
-          education: _data.user_information.education,
+          profile_url: _data?.user_information?.profile_url,
+          bio: _data?.user_information?.bio,
+          date_of_birth: _data?.user_information?.date_of_birth,
+          gender: _data?.user_information?.gender,
+          country: _data?.user_information?.country,
+          job_role: _data?.user_information?.job_role,
+          education: _data?.user_information?.education,
         }
       }
     });
@@ -109,12 +127,12 @@ export class MentorMatcherService implements IMentorMatcherService {
             {
               model: MentorInformation,
               as: 'mentor_information',
-              attributes: ['industry', 'role', 'frequency', 'conversation_mode', 'isPassedIRT'],
+              attributes: this.MENTOR_INFORMATION_FIELDS,
             },
             {
               model: UserInformation,
               as: 'user_information',
-              attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education']
+              attributes: this.USER_INFORMATION_FIELDS
             }
           ]
         }
@@ -223,7 +241,7 @@ export class MentorMatcherService implements IMentorMatcherService {
             {
               model: UserInformation,
               as: 'user_information',
-              attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education']
+              attributes: this.USER_INFORMATION_FIELDS
             }
           ]
         }
@@ -261,7 +279,7 @@ export class MentorMatcherService implements IMentorMatcherService {
             {
               model: UserInformation,
               as: 'user_information',
-              attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education']
+              attributes: this.USER_INFORMATION_FIELDS
             }
           ]
         },
@@ -299,12 +317,12 @@ export class MentorMatcherService implements IMentorMatcherService {
             {
               model: MentorInformation,
               as: 'mentor_information',
-              attributes: ['industry', 'role', 'frequency', 'conversation_mode', 'isPassedIRT'],
+              attributes: this.MENTOR_INFORMATION_FIELDS,
             },
             {
               model: UserInformation,
               as: 'user_information',
-              attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education']
+              attributes: this.USER_INFORMATION_FIELDS
             }
           ]
         }
