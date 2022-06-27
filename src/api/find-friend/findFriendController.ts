@@ -45,7 +45,7 @@ export class FindFriendController {
         code: 200
       })
     } catch (err) {
-      throw err
+      next(err);
     }
   }
 
@@ -61,7 +61,7 @@ export class FindFriendController {
         code: 200
       })
     } catch (err) {
-      throw err
+      next(err);
     }
   }
 
@@ -98,8 +98,7 @@ export class FindFriendController {
         code: 200
       })
     } catch (err) {
-      console.log(err);
-      throw err
+      next(err);
     }
   }
 
@@ -116,8 +115,8 @@ export class FindFriendController {
         code: 200
       })
     } catch (err: any) {
-      console.log(err);
-      throw new Error(err.message || 'Internal server error')
+      next(err);
+
     }
   }
 
@@ -135,8 +134,7 @@ export class FindFriendController {
         code: 200
       })
     } catch (err: any) {
-      console.log(err);
-      throw new Error(err.message || 'Internal server error')
+      next(err);
     }
   }
 
@@ -152,7 +150,7 @@ export class FindFriendController {
         code: 200
       })
     } catch (err) {
-      throw err
+      next(err);
     }
   }
 
@@ -168,7 +166,7 @@ export class FindFriendController {
         code: 200
       })
     } catch (err) {
-      throw err
+      next(err);
     }
   }
 
@@ -192,7 +190,7 @@ export class FindFriendController {
         code: 200
       })
     } catch (err) {
-      throw err
+      next(err);
     }
   }
 
@@ -215,7 +213,7 @@ export class FindFriendController {
         code: 200
       })
     } catch (err) {
-      throw err
+      next(err);
     }
   }
 
@@ -231,7 +229,7 @@ export class FindFriendController {
         code: 200
       })
     } catch (err) {
-      throw err
+      next(err);
     }
   }
 
@@ -254,7 +252,7 @@ export class FindFriendController {
         code: 200
       })
     } catch (err) {
-      throw err
+      next(err);
     }
   }
 }

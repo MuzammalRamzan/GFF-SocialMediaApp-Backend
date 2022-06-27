@@ -42,11 +42,12 @@ export interface ISearchMentors {
   id: number
   full_name: string
   mentor_information: {
-    industry: string
-    role: string
-    frequency: string
-    conversation_mode: string
+    industry: string[]
+    role: string[]
+    frequency: string[]
+    conversation_mode: string[]
     isPassedIRT: boolean
+    languages: string[]
   },
   user_information: {
     profile_url: string
@@ -68,5 +69,6 @@ export interface ISarchTermParams {
   role?: string;
   frequency?: string;
   conversation_mode?: string;
+  languages?: string;
   text?: string;
 }
