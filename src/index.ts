@@ -13,6 +13,8 @@ import { sequelize } from './database';
 import { userInformationRouter } from './api/user-information/userInformationRouter';
 import { hashtagRouter } from './api/hashtag/hashtagRouter';
 import { debtRouter } from './api/debt/debtRouter';
+import { dailyDoseRouter} from './api/daily-dose/dailyDoseRouter';
+
 import { loanLedgerProfessionalInformationRouter } from './api/loan-ledger-professional-information/professionalInformationRouter';
 import { loanLedgerPersonalInfoRouter } from './api/loan-ledger-personal-information/loanLedgerPersonalInformationRouter';
 import { mentorMatcherRouter } from './api/mentor-matcher/mentorMatcherRouter';
@@ -46,21 +48,17 @@ const options = {
   app.use('/userInformation', userInformationRouter)
   app.use('/hashtag', hashtagRouter)
   app.use('/debt', debtRouter)
+  app.use('/dailyDose', dailyDoseRouter)
   app.use('/loanLedgerProfessionalInformation', loanLedgerProfessionalInformationRouter)
   app.use('/loanLedgerPersonalInformation', loanLedgerPersonalInfoRouter)
   app.use('/mentor-matcher', mentorMatcherRouter);
   app.use('/mentor-information', mentorInformationRouter);
   app.use('/mpesa', mpesaRouter)
-  app.use('/room', roomRoute);
-  app.use('/message', messageRoute);
-  app.use('/warrior-information', warriorInformationRouter)
-  app.use('/wellness-warrior', warriorRouter)
-	app.use('/', mentorSettingsRouter)
-  app.use('/currency', currencyRouter)
-
-	app.listen(process.env.PORT, () => {
-		console.log(`Server running at port ${process.env.PORT}`)
-	})
+  console.log("PORT",process.env);
+  
+  app.listen(process.env.PORT, () => {
+    console.log(`Server running at port ${process.env.PORT}`)
+  })
 
 	try {
 		await sequelize.authenticate()
