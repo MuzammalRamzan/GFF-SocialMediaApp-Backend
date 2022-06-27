@@ -64,7 +64,7 @@ export class DailyDoseService implements IDailyDoseType {
     const dailyDose = await DailyDose.findAll()
 
       if (!dailyDose){
-          throw new Error("Unauthorized")
+          throw new Error("no data found")
       }
 
       return dailyDose;
