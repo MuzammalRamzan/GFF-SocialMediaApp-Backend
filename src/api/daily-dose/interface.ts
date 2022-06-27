@@ -21,3 +21,14 @@ export interface createDoseRequest extends Request {
   DebtType: DailyDoseType,
   user: UserType
 }
+export interface GetByIdRequest extends Request {
+  category: string,
+  user: UserType
+}
+export interface UpdateDoseRequest extends Request {
+  id: number
+  DebtType: DailyDoseType
+}
+export interface DeleteDoseRequest extends Request {
+  id: number
+}
