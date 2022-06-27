@@ -2,8 +2,6 @@ import { Request, Response, NextFunction } from 'express'
 import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import { DailyDoseService } from './dailyDoseServices'
 import aws from 'aws-sdk';
-// import multer, { FileFilterCallback } from 'multer';
-// import multerS3 from 'multer-s3';
 const s3 = new aws.S3();
 import {
   createDoseRequest,
