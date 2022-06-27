@@ -54,7 +54,13 @@ const options = {
   app.use('/mentor-matcher', mentorMatcherRouter);
   app.use('/mentor-information', mentorInformationRouter);
   app.use('/mpesa', mpesaRouter)
-  
+  app.use('/room', roomRoute);
+
+  app.use('/message', messageRoute);
+  app.use('/warrior-information', warriorInformationRouter)
+  app.use('/wellness-warrior', warriorRouter)
+	app.use('/', mentorSettingsRouter)
+  app.use('/currency', currencyRouter)
   app.listen(process.env.PORT, () => {
     console.log(`Server running at port ${process.env.PORT}`)
   })
