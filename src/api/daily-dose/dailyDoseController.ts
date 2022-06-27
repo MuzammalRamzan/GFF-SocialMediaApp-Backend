@@ -49,7 +49,6 @@ export class DailyDoseController {
 	}
   updateDose = async (req: UpdateDoseRequest, res: Response, next: NextFunction) => {
     const id = +req.params.id
-    console.log("id",id)
 		const params = { ...req.body}
 		try {
 			const dailyDose = await this.debtService.update(id, params)

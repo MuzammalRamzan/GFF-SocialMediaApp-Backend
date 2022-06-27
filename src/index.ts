@@ -54,7 +54,6 @@ const options = {
   app.use('/mentor-matcher', mentorMatcherRouter);
   app.use('/mentor-information', mentorInformationRouter);
   app.use('/mpesa', mpesaRouter)
-  console.log("PORT",process.env);
   
   app.listen(process.env.PORT, () => {
     console.log(`Server running at port ${process.env.PORT}`)
