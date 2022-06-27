@@ -18,6 +18,8 @@ import { loanLedgerPersonalInfoRouter } from './api/loan-ledger-personal-informa
 import { mentorMatcherRouter } from './api/mentor-matcher/mentorMatcherRouter';
 import { mentorInformationRouter } from './api/mentor-information/mentorInformationRouter';
 import { mpesaRouter } from './api/mpesa-auth/mpesaRouter';
+import { roomRoute } from './api/chat/room/room.routes';
+import { messageRoute } from './api/chat/message/message.routes';
 import { warriorInformationRouter } from './api/warrior-information/warriorInformationRouter';
 import { warriorRouter } from './api/wellness-warrior/wellnessWarriorRouter';
 import { mentorSettingsRouter } from './api/mentor-settings/settingsRouter';
@@ -49,6 +51,8 @@ const options = {
   app.use('/mentor-matcher', mentorMatcherRouter);
   app.use('/mentor-information', mentorInformationRouter);
   app.use('/mpesa', mpesaRouter)
+  app.use('/room', roomRoute);
+  app.use('/message', messageRoute);
   app.use('/warrior-information', warriorInformationRouter)
   app.use('/wellness-warrior', warriorRouter)
 	app.use('/', mentorSettingsRouter)
