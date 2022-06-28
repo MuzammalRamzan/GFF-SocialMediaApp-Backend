@@ -4657,19 +4657,7 @@
 											"education": "No education",
 											"other_education": "No test education"
 										},
-										"warriorInformation": {
-											"id": 241,
-											"full_name": "John Doe",
-											"user_information": {
-												"profile_url": null,
-												"bio": "Hello I am John Doe",
-												"date_of_birth": "2022-05-31",
-												"gender": "male",
-												"job_role": "iOS Developer",
-												"education": "No education"
-											},
-											"warrior_information": {}
-										},
+										"warriorInformation": null,
 										"mentorInformation": null
 									},
 									"message": "OK",

@@ -1,8 +1,6 @@
 import { Request } from 'express'
-import { MentorInformationType } from '../mentor-information/interface'
 import { IMentorInformation } from '../mentor-information/mentorInformationModel'
 import { UserInformation } from '../user-information/userInformationModel'
-import { IWarriorUser } from '../warrior-information/interface'
 import { User } from './userModel'
 
 export type UserType = {
@@ -24,7 +22,12 @@ export interface ISearchUser {
 export type UserInfoType = {
 	user: User
 	userInformation: UserInformation
-	warriorInformation: IWarriorUser
+	warriorInformation: {
+		specialty: string[]
+		certification: string[]
+		therapy_type: string[]
+		price_range: string[]
+	}
 	mentorInformation: IMentorInformation
 }
 

@@ -159,7 +159,8 @@ export class UserService implements IUserService {
 		const user = await this.fetchById(userId, userId)
 		user.setDataValue('password', '')
 		const userInformation = await this.userInfoService.fetchById(userId, userId)
-		const warriorInformation = await this.warriorInfoService.getById(userId)
+		const warriorInformation = (await this.warriorInfoService.getById(userId)).warrior_information
+
 		const mentorInformation = await this.mentorInfoService.getMentorInfo(userId)
 
 		return { user, userInformation, warriorInformation, mentorInformation } as UserInfoType
