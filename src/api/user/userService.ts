@@ -1,26 +1,35 @@
 import { QueryTypes } from 'sequelize'
 import { sequelize } from '../../database'
-import { ISearchUser, IUserService, UserType } from './interface'
+import { ISearchUser, IUserService, UserInfoType, UserType } from './interface'
 import { User } from './userModel'
 import { AuthService } from '../auth/authService'
 import { Op } from 'sequelize'
+import { UserInformationService } from '../user-information/userInformationService'
+import { WarriorInformationService } from '../warrior-information/warriorInformationService'
+import { MentorInformationService } from '../mentor-information/mentorInformationService'
 
 export class UserService implements IUserService {
 	private readonly authService: AuthService
+	private readonly userInfoService: UserInformationService
+	private readonly warriorInfoService: WarriorInformationService
+	private readonly mentorInfoService: MentorInformationService
 
 	constructor() {
 		this.authService = new AuthService()
+		this.userInfoService = new UserInformationService()
+		this.warriorInfoService = new WarriorInformationService()
+		this.mentorInfoService = new MentorInformationService()
 	}
 
 	static async isExists(user_id: number): Promise<boolean> {
 		const user = await User.findByPk(user_id)
-		return !!user?.get();
+		return !!user?.get()
 	}
 
 	async fetchFullUserById(userId: number): Promise<User[]> {
 		const fullUser = await sequelize.query(
 			'SELECT * FROM `user_information` INNER JOIN `user` ON user_information.user_id = user.id WHERE user_id=' +
-			userId,
+				userId,
 			{ type: QueryTypes.SELECT }
 		)
 
@@ -144,5 +153,15 @@ export class UserService implements IUserService {
 				lastname: data.lastname
 			}
 		})
+	}
+
+	async getMyInfo(userId: number): Promise<UserInfoType> {
+		const user = await this.fetchById(userId, userId)
+		user.setDataValue('password', '')
+		const userInformation = await this.userInfoService.fetchById(userId, userId)
+		const warriorInformation = await this.warriorInfoService.getById(userId)
+		const mentorInformation = await this.mentorInfoService.getMentorInfo(userId)
+
+		return { user, userInformation, warriorInformation, mentorInformation } as UserInfoType
 	}
 }

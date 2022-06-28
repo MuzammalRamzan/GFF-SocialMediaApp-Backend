@@ -6,6 +6,7 @@ const userController = new UserController()
 export const userRouter = express.Router()
 
 userRouter.get('/', userController.getAllUsers)
+userRouter.get('/my-info', authMiddleware, userController.getMyInfo as Application)
 userRouter.get('/fullUser', authMiddleware, userController.getFullUserByUserId as Application)
 userRouter.get('/:id', authMiddleware, userController.getUsersById as Application)
 userRouter.get('/email/:email', authMiddleware, userController.getUsersByEmail as Application)
