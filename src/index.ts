@@ -1,4 +1,5 @@
 import Express, { Request, Response, NextFunction } from 'express'
+import multer from 'multer'
 import bodyParser from 'body-parser'
 import swaggerUi from 'swagger-ui-express'
 import swaggerDocument from '../swagger.json'
@@ -24,6 +25,7 @@ import { warriorInformationRouter } from './api/warrior-information/warriorInfor
 import { warriorRouter } from './api/wellness-warrior/wellnessWarriorRouter'
 import { mentorSettingsRouter } from './api/mentor-settings/settingsRouter'
 import { currencyRouter } from './api/currency/currencyRouter'
+import { uploadRouter } from './api/upload/uploadRouter'
 import { GffError, jsonErrorHandler } from './api/helper/errorHandler'
 
 const options = {
@@ -32,6 +34,12 @@ const options = {
 	}
 }
 
+const storage = multer.memoryStorage()
+
+export const upload = multer({
+	storage,
+	limits: { fileSize: 1000000000 }
+})
 ;(async function main(): Promise<void> {
 	const app = Express()
 
@@ -58,6 +66,7 @@ const options = {
 	app.use('/wellness-warrior', warriorRouter)
 	app.use('/', mentorSettingsRouter)
 	app.use('/currency', currencyRouter)
+	app.use('/upload', uploadRouter)
 
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 		const error = err as GffError
