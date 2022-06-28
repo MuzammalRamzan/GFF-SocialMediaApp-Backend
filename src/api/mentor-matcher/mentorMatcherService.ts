@@ -1,10 +1,16 @@
-import { IMentorMatcherService, IMentorRequest, ISarchTermParams, ISearchMentors } from "./interface";
-import { User } from "../user/userModel"
-import { col, fn, Op, where } from "sequelize";
-import { IMentorMatcher, MentorMatcherModel, MentorMatcherRequestStatus, MentorMatcherRequestType } from "./mentorMatcherModel";
-import { MentorInformation } from "../mentor-information/mentorInformationModel";
-import { UserInformation } from "../user-information/userInformationModel";
-import { MENTOR_ROLE_ID } from "../../constants";
+import { IMentorMatcherService, IMentorRequest, ISarchTermParams, ISearchMentors } from './interface'
+import { User } from '../user/userModel'
+import { col, fn, Op, where } from 'sequelize'
+import {
+	IMentorMatcher,
+	MentorMatcherModel,
+	MentorMatcherRequestStatus,
+	MentorMatcherRequestType
+} from './mentorMatcherModel'
+import { MentorInformation } from '../mentor-information/mentorInformationModel'
+import { UserInformation } from '../user-information/userInformationModel'
+import { MENTOR_ROLE_ID } from '../../constants'
+import { GffError } from '../helper/errorHandler'
 
 export class MentorMatcherService implements IMentorMatcherService {
 
@@ -139,91 +145,93 @@ export class MentorMatcherService implements IMentorMatcherService {
       ]
     })
 
-    return mentors.map(mentor => {
-      const mentor_request = mentor.get();
-      return {
-        mentor: mentor_request.mentor.get(),
-        request_type: mentor_request.request_type,
-        status: mentor_request.status,
-        id: mentor_request.id,
-        mentor_id: mentor_request.mentor_id,
-        mentee_id: mentor_request.mentee_id,
-        is_contract_signed_by_mentor: mentor_request.is_contract_signed_by_mentor,
-        is_contract_signed_by_mentee: mentor_request.is_contract_signed_by_mentee,
-      }
-    });
-  }
+		return mentors.map(mentor => {
+			const mentor_request = mentor.get()
+			return {
+				mentor: mentor_request.mentor.get(),
+				request_type: mentor_request.request_type,
+				status: mentor_request.status,
+				id: mentor_request.id,
+				mentor_id: mentor_request.mentor_id,
+				mentee_id: mentor_request.mentee_id,
+				is_contract_signed_by_mentor: mentor_request.is_contract_signed_by_mentor,
+				is_contract_signed_by_mentee: mentor_request.is_contract_signed_by_mentee
+			}
+		})
+	}
 
-  async sendMentorRequest(userId: number, mentor_id: number, message: string): Promise<IMentorMatcher> {
-    const mentor = await MentorMatcherModel.create({
-      mentor_id: mentor_id,
-      mentee_id: userId,
-      message: message,
-      request_type: MentorMatcherRequestType.MENTOR,
-      status: MentorMatcherRequestStatus.SEND
-    })
+	async sendMentorRequest(userId: number, mentor_id: number, message: string): Promise<IMentorMatcher> {
+		const mentor = await MentorMatcherModel.create({
+			mentor_id: mentor_id,
+			mentee_id: userId,
+			message: message,
+			request_type: MentorMatcherRequestType.MENTOR,
+			status: MentorMatcherRequestStatus.SEND
+		})
 
-    return mentor.get();
-  }
+		return mentor.get()
+	}
 
-  static async isExist(userId: number, mentor_id: number): Promise<MentorMatcherModel> {
-    const mentor = await MentorMatcherModel.findOne({
-      where: {
-        mentee_id: userId,
-        mentor_id: mentor_id
-      }
-    })
+	static async isExist(userId: number, mentor_id: number): Promise<MentorMatcherModel> {
+		const mentor = await MentorMatcherModel.findOne({
+			where: {
+				mentee_id: userId,
+				mentor_id: mentor_id
+			}
+		})
 
-    return mentor?.get();
-  }
+		return mentor?.get()
+	}
 
-  async isFavoriteExist(userId: number, mentor_id: number): Promise<boolean> {
-    const mentor = await MentorMatcherModel.findOne({
-      where: {
-        mentee_id: userId,
-        mentor_id: mentor_id,
-        request_type: MentorMatcherRequestType.FAVORITE
-      }
-    })
+	async isFavoriteExist(userId: number, mentor_id: number): Promise<boolean> {
+		const mentor = await MentorMatcherModel.findOne({
+			where: {
+				mentee_id: userId,
+				mentor_id: mentor_id,
+				request_type: MentorMatcherRequestType.FAVORITE
+			}
+		})
 
-    return mentor?.get() ? true : false;
-  }
+		return mentor?.get() ? true : false
+	}
 
-  async acceptMentorRequest(request_id: number, userId: number): Promise<boolean> {
-    const data = await MentorMatcherModel.update(
-      {
-        status: MentorMatcherRequestStatus.APPROVE,
-      },
-      {
-        where: {
-          id: request_id,
-          mentor_id: userId,
-          status: MentorMatcherRequestStatus.SEND,
-          request_type: MentorMatcherRequestType.MENTOR
-        },
-        fields: ['status']
-      })
+	async acceptMentorRequest(request_id: number, userId: number): Promise<boolean> {
+		const data = await MentorMatcherModel.update(
+			{
+				status: MentorMatcherRequestStatus.APPROVE
+			},
+			{
+				where: {
+					id: request_id,
+					mentor_id: userId,
+					status: MentorMatcherRequestStatus.SEND,
+					request_type: MentorMatcherRequestType.MENTOR
+				},
+				fields: ['status']
+			}
+		)
 
-    return data[0] ? true : false;
-  }
+		return data[0] ? true : false
+	}
 
-  async rejectMentorRequest(request_id: number, userId: number): Promise<boolean> {
-    const data = await MentorMatcherModel.update(
-      {
-        status: MentorMatcherRequestStatus.REJECT,
-      },
-      {
-        where: {
-          id: request_id,
-          mentor_id: userId,
-          status: MentorMatcherRequestStatus.SEND,
-          request_type: MentorMatcherRequestType.MENTOR
-        },
-        fields: ['status']
-      })
+	async rejectMentorRequest(request_id: number, userId: number): Promise<boolean> {
+		const data = await MentorMatcherModel.update(
+			{
+				status: MentorMatcherRequestStatus.REJECT
+			},
+			{
+				where: {
+					id: request_id,
+					mentor_id: userId,
+					status: MentorMatcherRequestStatus.SEND,
+					request_type: MentorMatcherRequestType.MENTOR
+				},
+				fields: ['status']
+			}
+		)
 
-    return data[0] ? true : false;
-  }
+		return data[0] ? true : false
+	}
 
   async myMentees(userId: number): Promise<IMentorRequest[]> {
     const mentees = await MentorMatcherModel.findAll({
@@ -248,20 +256,20 @@ export class MentorMatcherService implements IMentorMatcherService {
       ]
     })
 
-    return mentees.map(mentee => {
-      const mentor_request = mentee.get();
-      return {
-        mentee: mentor_request.mentee.get(),
-        request_type: mentor_request.request_type,
-        status: mentor_request.status,
-        id: mentor_request.id,
-        mentor_id: mentor_request.mentor_id,
-        mentee_id: mentor_request.mentee_id,
-        is_contract_signed_by_mentor: mentor_request.is_contract_signed_by_mentor,
-        is_contract_signed_by_mentee: mentor_request.is_contract_signed_by_mentee,
-      }
-    });
-  }
+		return mentees.map(mentee => {
+			const mentor_request = mentee.get()
+			return {
+				mentee: mentor_request.mentee.get(),
+				request_type: mentor_request.request_type,
+				status: mentor_request.status,
+				id: mentor_request.id,
+				mentor_id: mentor_request.mentor_id,
+				mentee_id: mentor_request.mentee_id,
+				is_contract_signed_by_mentor: mentor_request.is_contract_signed_by_mentor,
+				is_contract_signed_by_mentee: mentor_request.is_contract_signed_by_mentee
+			}
+		})
+	}
 
   async getMentorRequests(userId: number): Promise<IMentorRequest[]> {
     const requests = await MentorMatcherModel.findAll({
@@ -286,20 +294,20 @@ export class MentorMatcherService implements IMentorMatcherService {
       ]
     })
 
-    return requests.map(request => {
-      const mentor_request = request.get();
-      return {
-        mentee: mentor_request.mentee.get(),
-        request_type: mentor_request.request_type,
-        status: mentor_request.status,
-        id: mentor_request.id,
-        mentor_id: mentor_request.mentor_id,
-        mentee_id: mentor_request.mentee_id,
-        is_contract_signed_by_mentor: mentor_request.is_contract_signed_by_mentor,
-        is_contract_signed_by_mentee: mentor_request.is_contract_signed_by_mentee,
-      }
-    })
-  }
+		return requests.map(request => {
+			const mentor_request = request.get()
+			return {
+				mentee: mentor_request.mentee.get(),
+				request_type: mentor_request.request_type,
+				status: mentor_request.status,
+				id: mentor_request.id,
+				mentor_id: mentor_request.mentor_id,
+				mentee_id: mentor_request.mentee_id,
+				is_contract_signed_by_mentor: mentor_request.is_contract_signed_by_mentor,
+				is_contract_signed_by_mentee: mentor_request.is_contract_signed_by_mentee
+			}
+		})
+	}
 
   async getMentorRequestsByMenteeId(userId: number): Promise<IMentorRequest[]> {
     const requests = await MentorMatcherModel.findAll({
@@ -329,96 +337,98 @@ export class MentorMatcherService implements IMentorMatcherService {
       ]
     })
 
-    return requests.map(request => {
-      const mentor_request = request.get();
-      return {
-        mentor: mentor_request.mentor.get(),
-        request_type: mentor_request.request_type,
-        status: mentor_request.status,
-        id: mentor_request.id,
-        mentor_id: mentor_request.mentor_id,
-        mentee_id: mentor_request.mentee_id,
-        is_contract_signed_by_mentor: mentor_request.is_contract_signed_by_mentor,
-        is_contract_signed_by_mentee: mentor_request.is_contract_signed_by_mentee,
-      }
-    })
-  }
+		return requests.map(request => {
+			const mentor_request = request.get()
+			return {
+				mentor: mentor_request.mentor.get(),
+				request_type: mentor_request.request_type,
+				status: mentor_request.status,
+				id: mentor_request.id,
+				mentor_id: mentor_request.mentor_id,
+				mentee_id: mentor_request.mentee_id,
+				is_contract_signed_by_mentor: mentor_request.is_contract_signed_by_mentor,
+				is_contract_signed_by_mentee: mentor_request.is_contract_signed_by_mentee
+			}
+		})
+	}
 
-  async removeMentorFromFavorite(userId: number, mentor_id: number): Promise<boolean> {
-    const data = await MentorMatcherModel.destroy({
-      where: {
-        mentor_id: mentor_id,
-        mentee_id: userId,
-        request_type: MentorMatcherRequestType.FAVORITE,
-      }
-    })
+	async removeMentorFromFavorite(userId: number, mentor_id: number): Promise<boolean> {
+		const data = await MentorMatcherModel.destroy({
+			where: {
+				mentor_id: mentor_id,
+				mentee_id: userId,
+				request_type: MentorMatcherRequestType.FAVORITE
+			}
+		})
 
-    return data ? true : false;
-  }
+		return data ? true : false
+	}
 
-  async addMentorToFavorite(userId: number, mentor_id: number): Promise<boolean> {
-    const data = await MentorMatcherModel.create({
-      mentor_id: mentor_id,
-      mentee_id: userId,
-      request_type: MentorMatcherRequestType.FAVORITE,
-    })
+	async addMentorToFavorite(userId: number, mentor_id: number): Promise<boolean> {
+		const data = await MentorMatcherModel.create({
+			mentor_id: mentor_id,
+			mentee_id: userId,
+			request_type: MentorMatcherRequestType.FAVORITE
+		})
 
-    return data ? true : false;
-  }
+		return data ? true : false
+	}
 
-  async findById(id: number, userId: number): Promise<IMentorMatcher> {
-    const data = await MentorMatcherModel.findOne({
-      where: {
-        id: id,
-        [Op.or]: [
-          {
-            mentor_id: userId
-          },
-          {
-            mentee_id: userId
-          }
-        ]
-      }
-    })
+	async findById(id: number, userId: number): Promise<IMentorMatcher> {
+		const data = await MentorMatcherModel.findOne({
+			where: {
+				id: id,
+				[Op.or]: [
+					{
+						mentor_id: userId
+					},
+					{
+						mentee_id: userId
+					}
+				]
+			}
+		})
 
-    return data?.get();
-  }
+		return data?.get()
+	}
 
-  async signContract(userId: number, request_id: number): Promise<boolean> {
-    try {
-      const request = await MentorMatcherModel.findOne({
-        where: {
-          id: request_id,
-          request_type: MentorMatcherRequestType.MENTOR,
-          status: MentorMatcherRequestStatus.APPROVE,
-          [Op.or]: [
-            {
-              mentor_id: userId
-            },
-            {
-              mentee_id: userId
-            }
-          ]
-        }
-      });
+	async signContract(userId: number, request_id: number): Promise<boolean> {
+		try {
+			const request = await MentorMatcherModel.findOne({
+				where: {
+					id: request_id,
+					request_type: MentorMatcherRequestType.MENTOR,
+					status: MentorMatcherRequestStatus.APPROVE,
+					[Op.or]: [
+						{
+							mentor_id: userId
+						},
+						{
+							mentee_id: userId
+						}
+					]
+				}
+			})
 
-      if (!request) {
-        throw new Error('Request not found');
-      }
+			if (!request) {
+				const error = new GffError('Request not found')
+				error.errorCode = '404'
+				throw error
+			}
 
-      if (request.get().mentor_id === userId) {
-        request.set('is_contract_signed_by_mentor', true)
-      }
+			if (request.get().mentor_id === userId) {
+				request.set('is_contract_signed_by_mentor', true)
+			}
 
-      if (request.get().mentee_id === userId) {
-        request.set('is_contract_signed_by_mentee', true)
-      }
+			if (request.get().mentee_id === userId) {
+				request.set('is_contract_signed_by_mentee', true)
+			}
 
-      await request.save();
+			await request.save()
 
-      return true
-    } catch (error) {
-      return false
-    }
-  }
+			return true
+		} catch (error) {
+			return false
+		}
+	}
 }

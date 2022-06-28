@@ -34,6 +34,7 @@ export const jsonErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
 	res.statusCode = httpStatusCode ?? HttpStatusCodes.INTERNAL_SERVER_ERROR
 	return res.json({
 		error: errorCode ?? 'INTERNAL_SERVER_ERROR',
-		message: err.message
+		message: err.message,
+		code: httpStatusCode ?? HttpStatusCodes.INTERNAL_SERVER_ERROR
 	})
 }
