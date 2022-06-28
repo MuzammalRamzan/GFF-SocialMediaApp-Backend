@@ -64,8 +64,8 @@ const options = {
 		if (error.message === 'No data found') {
 			error.errorCode = '404'
 			error.httpStatusCode = 404
-		} else if (error?.errorCode === '403') {
-			error.httpStatusCode = 403
+		} else if (error?.errorCode) {
+			error.httpStatusCode = +error?.errorCode
 		} else {
 			error.errorCode = '500'
 			error.httpStatusCode = 500
