@@ -1,4 +1,5 @@
 import { WELLNESS_WARRIOR_ROLE_ID } from "../../constants";
+import { GffError } from "../helper/errorHandler";
 import { UserInformation } from "../user-information/userInformationModel";
 import { User } from "../user/userModel";
 import { WellnessWarriorService } from "../wellness-warrior/wellnessWarriorService";
@@ -50,7 +51,9 @@ export class WarriorInformationService implements IWarriorInformationService {
     });
 
     if (!record) {
-      throw new Error("User not found!");
+      const error = new GffError('Wellness Warrior information not found!')
+      error.errorCode = '404'
+      throw error
     }
 
     const wellness_warrior_request = await WellnessWarriorService.getWarriorRequestByUserId(user_id);
@@ -82,7 +85,7 @@ export class WarriorInformationService implements IWarriorInformationService {
       }
     })
 
-    return warriorInformation;
+    return warriorInformation.get();
   }
 
   update = async (params: WarriorInformationParams): Promise<WarriorInformation | null> => {
@@ -98,7 +101,7 @@ export class WarriorInformationService implements IWarriorInformationService {
         role_id: WELLNESS_WARRIOR_ROLE_ID
       }
     });
-    
+
     return !!record?.get();
   }
 }

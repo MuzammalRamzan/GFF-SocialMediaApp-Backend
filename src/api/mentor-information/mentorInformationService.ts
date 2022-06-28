@@ -1,10 +1,10 @@
 import { MENTOR_ROLE_ID } from "../../constants";
-import { MentorMatcherModel } from "../mentor-matcher/mentorMatcherModel";
 import { MentorMatcherService } from "../mentor-matcher/mentorMatcherService";
 import { UserInformation } from "../user-information/userInformationModel";
 import { User } from "../user/userModel";
 import { CreateMentorInformation, IMentorInformationService, MentorInformationType } from "./interface";
 import { IMentorInformation, MentorInformation } from "./mentorInformationModel";
+import { GffError } from '../helper/errorHandler'
 
 export class MentorInformationService implements IMentorInformationService {
 
@@ -52,7 +52,7 @@ export class MentorInformationService implements IMentorInformationService {
 			}
 		})
 
-		return !!mentorInformation
+		return !!mentorInformation?.get()
 	}
 
 	async updateMentorInformation(params: CreateMentorInformation): Promise<IMentorInformation> {
@@ -63,7 +63,9 @@ export class MentorInformationService implements IMentorInformationService {
 		})
 
 		if (!mentorInformation) {
-			throw new Error('Mentor information not found')
+			const error = new GffError('Mentor information not found')
+			error.errorCode = '404'
+			throw error
 		}
 
 		await mentorInformation.update({
@@ -87,7 +89,9 @@ export class MentorInformationService implements IMentorInformationService {
 		})
 
 		if (!mentorInformation) {
-			throw new Error('Mentor information not found')
+			const error = new GffError('Mentor information not found')
+			error.errorCode = '404'
+			throw error
 		}
 
 		const userInformation = await UserInformation.findOne({
