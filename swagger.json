@@ -4604,6 +4604,83 @@
 				}
 			}
 		},
+		"/user/my-info": {
+			"get": {
+				"tags": ["user"],
+				"description": "Get all user related details",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "All user details",
+						"content": {
+							"application/json; charset=utf-8": {
+								"example": {
+									"data": {
+										"user": {
+											"id": 241,
+											"role_id": 1,
+											"full_name": "John Doe",
+											"email": "john.doe@mail.com",
+											"password": "",
+											"default_currency_id": 1,
+											"user_feature_id": null
+										},
+										"userInformation": {
+											"id": 117,
+											"user_id": 241,
+											"profile_url": null,
+											"bio": "Hello I am John Doe",
+											"date_of_birth": "2022-05-31",
+											"gender": "male",
+											"email": "email",
+											"phone_number": "+55555555555",
+											"country": "USA",
+											"city": "New York",
+											"state": "NY",
+											"zip_code": 10000,
+											"address": "Test my address",
+											"twitter": "john",
+											"facebook": "john",
+											"instagram": "john",
+											"linkedin": null,
+											"tiktok": null,
+											"employer_name": "Test employer",
+											"job_role": "iOS Developer",
+											"education": "No education",
+											"other_education": "No test education"
+										},
+										"warriorInformation": {
+											"id": 241,
+											"full_name": "John Doe",
+											"user_information": {
+												"profile_url": null,
+												"bio": "Hello I am John Doe",
+												"date_of_birth": "2022-05-31",
+												"gender": "male",
+												"job_role": "iOS Developer",
+												"education": "No education"
+											},
+											"warrior_information": {}
+										},
+										"mentorInformation": null
+									},
+									"message": "OK",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/transaction/update/{id}": {
 			"put": {
 				"tags": ["transaction"],
