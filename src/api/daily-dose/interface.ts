@@ -20,6 +20,7 @@ export interface IDailyDoseType {
 export interface createDoseRequest extends Request {
 	DebtType: DailyDoseType
 	user: UserType
+	file: Express.Multer.File
 }
 export interface GetByIdRequest extends Request {
 	category: string

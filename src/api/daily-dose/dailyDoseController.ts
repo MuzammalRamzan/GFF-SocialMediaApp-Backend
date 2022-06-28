@@ -1,22 +1,29 @@
 import { Request, Response, NextFunction } from 'express'
 import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import { DailyDoseService } from './dailyDoseServices'
-import aws from 'aws-sdk'
-const s3 = new aws.S3()
+import { UploadService } from '../uploadDailyDose/uploadServices'
+
 import { createDoseRequest, GetByIdRequest, UpdateDoseRequest, DeleteDoseRequest } from './interface'
 export class DailyDoseController {
 	private readonly debtService: DailyDoseService
+	private readonly UploadService: UploadService
 
 	constructor() {
 		this.debtService = new DailyDoseService()
+		this.UploadService = new UploadService()
 	}
 	createDose = async (req: createDoseRequest, res: Response, next: NextFunction) => {
 		const params = req.body
+		if (!req.file) {
+			throw new Error('Please upload a file')
+		}
 		try {
-			const dailyDose = await this.debtService.add(params)
+			const uploadImageInfo = await this.UploadService.upload(req.file)
+			params.image = uploadImageInfo.Key
 			if (params.category !== 'news' && params.category != 'music' && params.category != 'wise-words') {
 				throw new Error('Enum can be one of them:news,music,wise-words')
 			}
+			const dailyDose = await this.debtService.add(params)
 			return res.status(200).json({ dailyDose })
 		} catch (err) {
 			next(err)

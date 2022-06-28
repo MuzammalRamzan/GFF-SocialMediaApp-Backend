@@ -9,39 +9,39 @@ DailyDose.init(
 			type: DataTypes.INTEGER,
 			primaryKey: true,
 			autoIncrement: true,
-            allowNull: false
-    },
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    subtitle: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    image: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    contentURL: {
-      type: DataTypes.STRING
-    },
-    contentBody: {
-      type: DataTypes.STRING
-    },
-    keyword: {
-      type: DataTypes.STRING
-    },
-    category: {
-      type: DataTypes.ENUM,
-      allowNull: false,
-      values: ['news', 'music', 'wise-words']
-    },
-  },
-  
+			allowNull: false
+		},
+		title: {
+			type: DataTypes.STRING,
+			allowNull: false
+		},
+		subtitle: {
+			type: DataTypes.STRING,
+			allowNull: false
+		},
+		image: {
+			type: DataTypes.STRING,
+			allowNull: false
+		},
+		contentURL: {
+			type: DataTypes.STRING
+		},
+		contentBody: {
+			type: DataTypes.STRING
+		},
+		keyword: {
+			type: DataTypes.STRING
+		},
+		category: {
+			type: DataTypes.ENUM,
+			allowNull: false,
+			values: ['news', 'music', 'wise-words']
+		}
+	},
+
 	{
 		sequelize,
 		tableName: 'dailyDose'
 	}
 )
-DailyDose.sync();
+DailyDose.sync()

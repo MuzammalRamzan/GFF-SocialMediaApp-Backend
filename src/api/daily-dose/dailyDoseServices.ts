@@ -47,6 +47,7 @@ export class DailyDoseService implements IDailyDoseType {
 		const newUpdatedRow = await DailyDose.findByPk(paramsId)
 		return newUpdatedRow as DailyDose
 	}
+
 	async delete(id: number): Promise<number> {
 		const deletedRow = await DailyDose.destroy({
 			where: {
