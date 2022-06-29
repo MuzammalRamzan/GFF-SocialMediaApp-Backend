@@ -4669,6 +4669,126 @@
 				}
 			}
 		},
+		"/user/other-info": {
+			"get": {
+				"tags": ["user"],
+				"description": "Get Other User Information",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Other user details",
+						"content": {
+							"application/json; charset=utf-8": {
+								"example": {
+									"data": {
+										"sentFriendRequests": [
+											{
+												"id": 2,
+												"receiver": {
+													"id": 16,
+													"full_name": "Ime Prezime",
+													"user_information": {
+														"profile_url": null,
+														"bio": "Test my bio",
+														"date_of_birth": "2022-05-31",
+														"gender": "female",
+														"country": "test country",
+														"job_role": "CEO",
+														"education": "No education"
+													}
+												},
+												"sender_id": 165,
+												"receiver_id": 16,
+												"status": "send",
+												"block_reason": null,
+												"request_type": "friend"
+											}
+										],
+										"receivedFriendRequests": [
+											{
+												"id": 58,
+												"sender": {
+													"id": 211,
+													"full_name": "Jane Doe",
+													"user_information": {
+														"profile_url": "/uploads/user/profile_picture/211/images/1656510072090_user-avatar.jpeg",
+														"bio": "Hello world",
+														"date_of_birth": "2022-05-31",
+														"gender": "male",
+														"country": "test country",
+														"job_role": "CEO",
+														"education": "No education"
+													}
+												},
+												"sender_id": 211,
+												"receiver_id": 165,
+												"status": "send",
+												"block_reason": null,
+												"request_type": "friend"
+											}
+										],
+										"mentorRequests": [
+											{
+												"mentee": {
+													"id": 169,
+													"full_name": "undefined",
+													"user_information": {
+														"profile_url": null,
+														"bio": "Test my bio",
+														"date_of_birth": "2022-05-31",
+														"gender": "other",
+														"country": "test country",
+														"job_role": "CEO",
+														"education": "No education"
+													}
+												},
+												"request_type": "mentor",
+												"status": "send",
+												"id": 1,
+												"mentor_id": 165,
+												"mentee_id": 169,
+												"is_contract_signed_by_mentor": false,
+												"is_contract_signed_by_mentee": false
+											}
+										],
+										"wellnessWarriorRequests": [
+											{
+												"id": 7,
+												"user_id": 37,
+												"warrior_id": 216,
+												"status": "send",
+												"request_type": "warrior",
+												"warrior": {
+													"id": 216,
+													"full_name": "name",
+													"user_information": null,
+													"warrior_information": null
+												},
+												"user": {
+													"id": 37,
+													"full_name": "ime-prezime",
+													"user_information": null
+												}
+											}
+										]
+									},
+									"message": "OK",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/transaction/update/{id}": {
 			"put": {
 				"tags": ["transaction"],

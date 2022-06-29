@@ -1,7 +1,10 @@
 import { Request } from 'express'
+import { FindFriendRequest } from '../find-friend/interface'
 import { IMentorInformation, MentorInformation } from '../mentor-information/mentorInformationModel'
+import { IMentorRequest } from '../mentor-matcher/interface'
 import { UserInformation } from '../user-information/userInformationModel'
 import { WarriorInformation } from '../warrior-information/warriorInformationModel'
+import { IWellnessWarriorRequest } from '../wellness-warrior/interface'
 import { User } from './userModel'
 
 export type UserType = {
@@ -26,6 +29,13 @@ export interface UserInfo extends User {
 	mentor_information: MentorInformation
 }
 
+export interface OtherUserInfo {
+	sentFriendRequests: FindFriendRequest[]
+	receivedFriendRequests: FindFriendRequest[]
+	mentorRequests: IMentorRequest[]
+	wellnessWarriorRequests: IWellnessWarriorRequest[]
+}
+
 export interface IUserService {
 	list(): Promise<User[]>
 	fetchById(userId: number, id: number): Promise<User>
@@ -35,6 +45,7 @@ export interface IUserService {
 	searchFriend(search: string, userId: number): Promise<ISearchUser[]>
 	fetchFullUserById(userId: number): Promise<User[]>
 	getMyInfo(userId: number): Promise<UserInfo | null>
+	getOtherUserInfo(userId: number): Promise<OtherUserInfo | null>
 }
 
 export interface GetUsersByIdRequest extends Request {

@@ -11,6 +11,22 @@ import {
 } from './interface'
 import { UserService } from './userService'
 
+const handleError = (err: any, req: IAuthenticatedRequest, res: Response) => {
+	const error = err as GffError
+	if (error.message === 'Unauthorized') {
+		error.errorCode = '401'
+		error.httpStatusCode = 401
+	} else if (error.message === 'No data found') {
+		error.errorCode = '404'
+		error.httpStatusCode = 404
+	} else if (error?.errorCode) {
+		error.httpStatusCode = +error.errorCode
+	} else {
+		error.errorCode = '500'
+		error.httpStatusCode = 500
+	}
+	return jsonErrorHandler(error, req, res, () => {})
+}
 export class UserController {
 	private readonly userService: UserService
 
@@ -229,20 +245,17 @@ export class UserController {
 			const userInfo = await this.userService.getMyInfo(userId)
 			return res.status(200).json({ data: { ...userInfo }, message: 'OK', code: 200 })
 		} catch (err) {
-			const error = err as GffError
-			if (error.message === 'Unauthorized') {
-				error.errorCode = '401'
-				error.httpStatusCode = 401
-			} else if (error.message === 'No data found') {
-				error.errorCode = '404'
-				error.httpStatusCode = 404
-			} else if (error?.errorCode) {
-				error.httpStatusCode = +error.errorCode
-			} else {
-				error.errorCode = '500'
-				error.httpStatusCode = 500
-			}
-			return jsonErrorHandler(error, req, res, () => {})
+			return handleError(err, req, res)
+		}
+	}
+
+	getOtherUserInfo = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+		try {
+			const userId = req?.user?.id as number
+			const otherUserInfo = await this.userService.getOtherUserInfo(userId)
+			return res.status(200).json({ data: { ...otherUserInfo }, message: 'OK', code: 200 })
+		} catch (err) {
+			return handleError(err, req, res)
 		}
 	}
 }

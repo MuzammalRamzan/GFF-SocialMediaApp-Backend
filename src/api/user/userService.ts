@@ -1,6 +1,6 @@
 import { QueryTypes } from 'sequelize'
 import { sequelize } from '../../database'
-import { ISearchUser, IUserService, UserInfo, UserType } from './interface'
+import { ISearchUser, IUserService, OtherUserInfo, UserInfo, UserType } from './interface'
 import { User } from './userModel'
 import { AuthService } from '../auth/authService'
 import { Op } from 'sequelize'
@@ -10,18 +10,21 @@ import { MentorInformationService } from '../mentor-information/mentorInformatio
 import { WarriorInformation } from '../warrior-information/warriorInformationModel'
 import { UserInformation } from '../user-information/userInformationModel'
 import { MentorInformation } from '../mentor-information/mentorInformationModel'
+import { FindFriendService } from '../find-friend/findFriendService'
+import { MentorMatcherService } from '../mentor-matcher/mentorMatcherService'
+import { WellnessWarriorService } from '../wellness-warrior/wellnessWarriorService'
 
 export class UserService implements IUserService {
 	private readonly authService: AuthService
-	private readonly userInfoService: UserInformationService
-	private readonly warriorInfoService: WarriorInformationService
-	private readonly mentorInfoService: MentorInformationService
+	private readonly findFriendService: FindFriendService
+	private readonly mentorMatcherService: MentorMatcherService
+	private readonly wellnessWarriorService: WellnessWarriorService
 
 	constructor() {
 		this.authService = new AuthService()
-		this.userInfoService = new UserInformationService()
-		this.warriorInfoService = new WarriorInformationService()
-		this.mentorInfoService = new MentorInformationService()
+		this.findFriendService = new FindFriendService()
+		this.mentorMatcherService = new MentorMatcherService()
+		this.wellnessWarriorService = new WellnessWarriorService()
 	}
 
 	static async isExists(user_id: number): Promise<boolean> {
@@ -197,5 +200,14 @@ export class UserService implements IUserService {
 		}
 
 		return myInfo
+	}
+
+	async getOtherUserInfo(userId: number): Promise<OtherUserInfo | null> {
+		const sentFriendRequests = await this.findFriendService.getFriendRequestsBySenderId(userId)
+		const receivedFriendRequests = await this.findFriendService.getFriendRequestsByReceiverId(userId)
+		const mentorRequests = await this.mentorMatcherService.getMentorRequests(userId)
+		const wellnessWarriorRequests = await this.wellnessWarriorService.getAllRequest(userId)
+
+		return { sentFriendRequests, receivedFriendRequests, mentorRequests, wellnessWarriorRequests }
 	}
 }
