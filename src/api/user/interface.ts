@@ -30,6 +30,7 @@ export interface UserInfo extends User {
 }
 
 export interface OtherUserInfo {
+	userInformation: UserInfo | null
 	sentFriendRequests: FindFriendRequest[]
 	receivedFriendRequests: FindFriendRequest[]
 	mentorRequests: IMentorRequest[]

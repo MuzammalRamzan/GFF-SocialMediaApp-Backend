@@ -207,7 +207,8 @@ export class UserService implements IUserService {
 		const receivedFriendRequests = await this.findFriendService.getFriendRequestsByReceiverId(userId)
 		const mentorRequests = await this.mentorMatcherService.getMentorRequests(userId)
 		const wellnessWarriorRequests = await this.wellnessWarriorService.getAllRequest(userId)
+		const userInformation = await this.getMyInfo(userId)
 
-		return { sentFriendRequests, receivedFriendRequests, mentorRequests, wellnessWarriorRequests }
+		return { sentFriendRequests, receivedFriendRequests, mentorRequests, wellnessWarriorRequests, userInformation }
 	}
 }
