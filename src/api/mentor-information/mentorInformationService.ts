@@ -78,11 +78,11 @@ export class MentorInformationService implements IMentorInformationService {
 		}
 
 		await mentorInformation.update({
-			role: params.role.join(','),
-			industry: params.industry.join(','),
-			frequency: params.frequency.join(','),
-			conversation_mode: params.conversation_mode.join(','),
-			languages: params.languages.join(','),
+			role: (params.role || []).join(','),
+			industry: (params.industry || []).join(','),
+			frequency: (params.frequency || []).join(','),
+			conversation_mode: (params.conversation_mode || []).join(','),
+			languages: (params.languages || []).join(','),
 			isPassedIRT: params.isPassedIRT
 		})
 
