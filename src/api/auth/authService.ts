@@ -39,7 +39,7 @@ export class AuthService implements IAuthService {
 			throw new Error('User already exist')
 		}
 		const user = await User.create({
-			role_id: '1',
+			role_id: '5',
 			full_name: fullName,
 			email: email,
 			password: passwordHash,
