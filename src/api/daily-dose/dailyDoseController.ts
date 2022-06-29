@@ -1,24 +1,21 @@
 import { Request, Response, NextFunction } from 'express'
 import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import { DailyDoseService } from './dailyDoseServices'
-import { UploadService } from '../uploadDailyDose/uploadServices'
 
 import { createDoseRequest, GetByIdRequest, UpdateDoseRequest, DeleteDoseRequest } from './interface'
 export class DailyDoseController {
 	private readonly debtService: DailyDoseService
-	private readonly UploadService: UploadService
 
 	constructor() {
 		this.debtService = new DailyDoseService()
-		this.UploadService = new UploadService()
 	}
 	createDose = async (req: createDoseRequest, res: Response, next: NextFunction) => {
 		const params = req.body
-		if (!req.file) {
-			throw new Error('Please upload a file')
-		}
 		try {
-			const uploadImageInfo = await this.UploadService.upload(req.file)
+			if (!req.file) {
+				throw new Error('Please upload a file')
+			}
+			const uploadImageInfo = await this.debtService.upload(req.file)
 			params.image = uploadImageInfo.Key
 			if (params.category !== 'news' && params.category != 'music' && params.category != 'wise-words') {
 				throw new Error('Enum can be one of them:news,music,wise-words')
@@ -49,7 +46,12 @@ export class DailyDoseController {
 	updateDose = async (req: UpdateDoseRequest, res: Response, next: NextFunction) => {
 		const id = +req.params.id
 		const params = { ...req.body }
+
 		try {
+			if (req.file) {
+				const uploadImageInfo = await this.debtService.upload(req.file)
+				params.image = uploadImageInfo.Key
+			}
 			const dailyDose = await this.debtService.update(id, params)
 			return res.status(200).json({ dailyDose })
 		} catch (err) {

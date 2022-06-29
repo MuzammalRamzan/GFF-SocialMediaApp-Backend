@@ -29,6 +29,7 @@ export interface GetByIdRequest extends Request {
 export interface UpdateDoseRequest extends Request {
 	id: number
 	DebtType: DailyDoseType
+	file: Express.Multer.File
 }
 export interface DeleteDoseRequest extends Request {
 	id: number
