@@ -19,16 +19,15 @@ export interface ISearchUser {
 	lastname: string
 }
 
-export type UserInfoType = {
-	user: User
-	userInformation: UserInformation
-	warriorInformation: {
+export interface UserInfoType extends User {
+	user_information: UserInformation
+	warrior_information: {
 		specialty: string[]
 		certification: string[]
 		therapy_type: string[]
 		price_range: string[]
 	}
-	mentorInformation: IMentorInformation
+	mentor_information: IMentorInformation
 }
 
 export interface IUserService {
@@ -39,7 +38,7 @@ export interface IUserService {
 	delete(id: number, userId: number): Promise<number>
 	searchFriend(search: string, userId: number): Promise<ISearchUser[]>
 	fetchFullUserById(userId: number): Promise<User[]>
-	getMyInfo(userId: number): Promise<UserInfoType>
+	getMyInfo(userId: number): Promise<UserInfoType | null>
 }
 
 export interface GetUsersByIdRequest extends Request {

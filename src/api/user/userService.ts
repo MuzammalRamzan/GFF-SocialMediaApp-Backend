@@ -7,6 +7,9 @@ import { Op } from 'sequelize'
 import { UserInformationService } from '../user-information/userInformationService'
 import { WarriorInformationService } from '../warrior-information/warriorInformationService'
 import { MentorInformationService } from '../mentor-information/mentorInformationService'
+import { WarriorInformation } from '../warrior-information/warriorInformationModel'
+import { UserInformation } from '../user-information/userInformationModel'
+import { MentorInformation } from '../mentor-information/mentorInformationModel'
 
 export class UserService implements IUserService {
 	private readonly authService: AuthService
@@ -155,14 +158,34 @@ export class UserService implements IUserService {
 		})
 	}
 
-	async getMyInfo(userId: number): Promise<UserInfoType> {
-		const user = await this.fetchById(userId, userId)
-		user.setDataValue('password', '')
-		const userInformation = await this.userInfoService.fetchById(userId, userId)
-		const warriorInformation = (await this.warriorInfoService.getById(userId)).warrior_information
+	async getMyInfo(userId: number): Promise<null | UserInfoType> {
+		let myInfo = (await User.findOne({
+			where: { id: userId },
+			include: [
+				{ model: WarriorInformation, as: 'warrior_information' },
+				{ model: UserInformation, as: 'user_information' },
+				{ model: MentorInformation, as: 'mentor_information' }
+			],
+			attributes: { exclude: ['password'] },
+			raw: true,
+			nest: true
+		})) as any
 
-		const mentorInformation = await this.mentorInfoService.getMentorInfo(userId)
+		if (!myInfo) return null
 
-		return { user, userInformation, warriorInformation, mentorInformation } as UserInfoType
+		if (myInfo?.mentor_information) {
+			myInfo['mentor_information'] = {
+				...myInfo.mentor_information,
+				industry: (myInfo.mentor_information.industry || '').split(',').filter((item: string) => !!item),
+				role: (myInfo.mentor_information.role || '').split(',').filter((item: string) => !!item),
+				frequency: (myInfo.mentor_information.frequency || '').split(',').filter((item: string) => !!item),
+				conversation_mode: (myInfo.mentor_information.conversation_mode || '')
+					.split(',')
+					.filter((item: string) => !!item),
+				languages: (myInfo.mentor_information.languages || '').split(',').filter((item: string) => !!item)
+			}
+		}
+
+		return myInfo as UserInfoType
 	}
 }
