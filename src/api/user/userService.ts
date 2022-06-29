@@ -1,6 +1,6 @@
 import { QueryTypes } from 'sequelize'
 import { sequelize } from '../../database'
-import { ISearchUser, IUserService, UserInfoType, UserType } from './interface'
+import { ISearchUser, IUserService, UserInfo, UserType } from './interface'
 import { User } from './userModel'
 import { AuthService } from '../auth/authService'
 import { Op } from 'sequelize'
@@ -158,7 +158,7 @@ export class UserService implements IUserService {
 		})
 	}
 
-	async getMyInfo(userId: number): Promise<null | UserInfoType> {
+	async getMyInfo(userId: number): Promise<null | UserInfo> {
 		let myInfo = (await User.findOne({
 			where: { id: userId },
 			include: [
@@ -166,26 +166,36 @@ export class UserService implements IUserService {
 				{ model: UserInformation, as: 'user_information' },
 				{ model: MentorInformation, as: 'mentor_information' }
 			],
-			attributes: { exclude: ['password'] },
-			raw: true,
-			nest: true
-		})) as any
+			attributes: { exclude: ['password'] }
+		})) as UserInfo
 
 		if (!myInfo) return null
 
-		if (myInfo?.mentor_information) {
-			myInfo['mentor_information'] = {
-				...myInfo.mentor_information,
-				industry: (myInfo.mentor_information.industry || '').split(',').filter((item: string) => !!item),
-				role: (myInfo.mentor_information.role || '').split(',').filter((item: string) => !!item),
-				frequency: (myInfo.mentor_information.frequency || '').split(',').filter((item: string) => !!item),
-				conversation_mode: (myInfo.mentor_information.conversation_mode || '')
-					.split(',')
-					.filter((item: string) => !!item),
-				languages: (myInfo.mentor_information.languages || '').split(',').filter((item: string) => !!item)
+		myInfo = myInfo.get()
+
+		if (myInfo?.warrior_information) {
+			const warrior_information = myInfo.warrior_information.get({ plain: true })
+			myInfo['warrior_information'] = {
+				...warrior_information,
+				specialty: warrior_information?.specialty.split(','),
+				certification: warrior_information?.certification.split(','),
+				therapy_type: warrior_information?.therapy_type.split(','),
+				price_range: warrior_information?.price_range.split(',')
 			}
 		}
 
-		return myInfo as UserInfoType
+		if (myInfo?.mentor_information) {
+			const mentor_information = myInfo.mentor_information.get({ plain: true })
+			myInfo['mentor_information'] = {
+				...mentor_information,
+				industry: (mentor_information.industry || '').split(',').filter((item: string) => !!item),
+				role: (mentor_information.role || '').split(',').filter((item: string) => !!item),
+				frequency: (mentor_information.frequency || '').split(',').filter((item: string) => !!item),
+				conversation_mode: (mentor_information.conversation_mode || '').split(',').filter((item: string) => !!item),
+				languages: (mentor_information.languages || '').split(',').filter((item: string) => !!item)
+			}
+		}
+
+		return myInfo
 	}
 }

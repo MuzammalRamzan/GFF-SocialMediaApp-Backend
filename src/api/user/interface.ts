@@ -1,6 +1,7 @@
 import { Request } from 'express'
-import { IMentorInformation } from '../mentor-information/mentorInformationModel'
+import { IMentorInformation, MentorInformation } from '../mentor-information/mentorInformationModel'
 import { UserInformation } from '../user-information/userInformationModel'
+import { WarriorInformation } from '../warrior-information/warriorInformationModel'
 import { User } from './userModel'
 
 export type UserType = {
@@ -19,15 +20,10 @@ export interface ISearchUser {
 	lastname: string
 }
 
-export interface UserInfoType extends User {
+export interface UserInfo extends User {
 	user_information: UserInformation
-	warrior_information: {
-		specialty: string[]
-		certification: string[]
-		therapy_type: string[]
-		price_range: string[]
-	}
-	mentor_information: IMentorInformation
+	warrior_information: WarriorInformation
+	mentor_information: MentorInformation
 }
 
 export interface IUserService {
@@ -38,7 +34,7 @@ export interface IUserService {
 	delete(id: number, userId: number): Promise<number>
 	searchFriend(search: string, userId: number): Promise<ISearchUser[]>
 	fetchFullUserById(userId: number): Promise<User[]>
-	getMyInfo(userId: number): Promise<UserInfoType | null>
+	getMyInfo(userId: number): Promise<UserInfo | null>
 }
 
 export interface GetUsersByIdRequest extends Request {
