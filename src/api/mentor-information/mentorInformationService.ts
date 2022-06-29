@@ -41,7 +41,17 @@ export class MentorInformationService implements IMentorInformationService {
 			}
 		)
 
-		return mentorInformation.get()
+		let mentor_information = mentorInformation.get({ plain: true })
+		return {
+			industry: (mentor_information.industry || '').split(',').filter((item: string) => !!item),
+			role: (mentor_information.role || '').split(',').filter((item: string) => !!item),
+			frequency: (mentor_information.frequency || '').split(',').filter((item: string) => !!item),
+			conversation_mode: (mentor_information.conversation_mode || '').split(',').filter((item: string) => !!item),
+			languages: (mentor_information.languages || '').split(',').filter((item: string) => !!item),
+			isPassedIRT: mentor_information.isPassedIRT,
+			id: mentor_information.id,
+			user_id: mentor_information.user_id
+		}
 	}
 
 	async isMentorInformationExist(userId: number): Promise<boolean> {
@@ -68,15 +78,25 @@ export class MentorInformationService implements IMentorInformationService {
 		}
 
 		await mentorInformation.update({
-			role: params.role.join(','),
-			industry: params.industry.join(','),
-			frequency: params.frequency.join(','),
-			conversation_mode: params.conversation_mode.join(','),
-			languages: params.languages.join(','),
+			role: (params.role || []).join(','),
+			industry: (params.industry || []).join(','),
+			frequency: (params.frequency || []).join(','),
+			conversation_mode: (params.conversation_mode || []).join(','),
+			languages: (params.languages || []).join(','),
 			isPassedIRT: params.isPassedIRT
 		})
 
-		return mentorInformation.get()
+		let mentor_information = mentorInformation.get({ plain: true })
+		return {
+			industry: (mentor_information.industry || '').split(',').filter((item: string) => !!item),
+			role: (mentor_information.role || '').split(',').filter((item: string) => !!item),
+			frequency: (mentor_information.frequency || '').split(',').filter((item: string) => !!item),
+			conversation_mode: (mentor_information.conversation_mode || '').split(',').filter((item: string) => !!item),
+			languages: (mentor_information.languages || '').split(',').filter((item: string) => !!item),
+			isPassedIRT: mentor_information.isPassedIRT,
+			id: mentor_information.id,
+			user_id: mentor_information.user_id
+		}
 	}
 
 	async getMentorInformation(userId: number, mentor_id: number): Promise<MentorInformationType> {
