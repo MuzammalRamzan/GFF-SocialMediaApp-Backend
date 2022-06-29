@@ -50,8 +50,6 @@ export class MentorInformationController {
 				})
 			)
 
-			console.log('-->MENTOR', mentorInformation)
-
 			return res.status(200).json({
 				data: {
 					mentorInformation
