@@ -251,7 +251,7 @@ export class UserController {
 
 	getOtherUserInfo = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
 		try {
-			const userId = req?.user?.id as number
+			const userId = +req.params.id
 			const otherUserInfo = await this.userService.getOtherUserInfo(userId)
 			return res.status(200).json({ data: { ...otherUserInfo }, message: 'OK', code: 200 })
 		} catch (err) {

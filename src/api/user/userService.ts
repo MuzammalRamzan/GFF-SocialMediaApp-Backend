@@ -1,30 +1,34 @@
 import { QueryTypes } from 'sequelize'
 import { sequelize } from '../../database'
-import { ISearchUser, IUserService, OtherUserInfo, UserInfo, UserType } from './interface'
+import {
+	ISearchUser,
+	IUserService,
+	MentorRequestsType,
+	OtherUserInfo,
+	UserInfo,
+	UserType,
+	WarriorRequestsType
+} from './interface'
 import { User } from './userModel'
 import { AuthService } from '../auth/authService'
 import { Op } from 'sequelize'
-import { UserInformationService } from '../user-information/userInformationService'
-import { WarriorInformationService } from '../warrior-information/warriorInformationService'
-import { MentorInformationService } from '../mentor-information/mentorInformationService'
 import { WarriorInformation } from '../warrior-information/warriorInformationModel'
 import { UserInformation } from '../user-information/userInformationModel'
 import { MentorInformation } from '../mentor-information/mentorInformationModel'
 import { FindFriendService } from '../find-friend/findFriendService'
-import { MentorMatcherService } from '../mentor-matcher/mentorMatcherService'
-import { WellnessWarriorService } from '../wellness-warrior/wellnessWarriorService'
+import { WellnessWarrior } from '../wellness-warrior/wellnessWarriorModel'
+import { RequestType, StatusType } from '../wellness-warrior/interface'
+import { MentorMatcherModel, MentorMatcherRequestType } from '../mentor-matcher/mentorMatcherModel'
+import { MENTOR_ROLE_ID, WELLNESS_WARRIOR_ROLE_ID } from '../../constants'
+import { GffError } from '../helper/errorHandler'
 
 export class UserService implements IUserService {
 	private readonly authService: AuthService
 	private readonly findFriendService: FindFriendService
-	private readonly mentorMatcherService: MentorMatcherService
-	private readonly wellnessWarriorService: WellnessWarriorService
 
 	constructor() {
 		this.authService = new AuthService()
 		this.findFriendService = new FindFriendService()
-		this.mentorMatcherService = new MentorMatcherService()
-		this.wellnessWarriorService = new WellnessWarriorService()
 	}
 
 	static async isExists(user_id: number): Promise<boolean> {
@@ -203,12 +207,92 @@ export class UserService implements IUserService {
 	}
 
 	async getOtherUserInfo(userId: number): Promise<OtherUserInfo | null> {
+		const user = await User.findByPk(userId)
+
+		if (!user) {
+			const error = new GffError('User not found!')
+			error.errorCode = '404'
+			throw error
+		}
+
+		const userRole = +user.getDataValue('role_id')
+
+		const user_information = await this.getMyInfo(userId)
 		const sentFriendRequests = await this.findFriendService.getFriendRequestsBySenderId(userId)
 		const receivedFriendRequests = await this.findFriendService.getFriendRequestsByReceiverId(userId)
-		const mentorRequests = await this.mentorMatcherService.getMentorRequests(userId)
-		const wellnessWarriorRequests = await this.wellnessWarriorService.getAllRequest(userId)
-		const userInformation = await this.getMyInfo(userId)
 
-		return { sentFriendRequests, receivedFriendRequests, mentorRequests, wellnessWarriorRequests, userInformation }
+		const requests: { mentor_request: MentorRequestsType; warrior_request: WarriorRequestsType } = {
+			mentor_request: { sent: [], received: [] },
+			warrior_request: { sent: [], received: [] }
+		}
+
+		switch (userRole) {
+			case MENTOR_ROLE_ID: {
+				requests.mentor_request.received = await MentorMatcherModel.findAll({
+					where: {
+						mentor_id: userId,
+						request_type: MentorMatcherRequestType.MENTOR
+					},
+					include: [
+						{
+							model: User,
+							as: 'mentee',
+							foreignKey: 'mentee_id',
+							attributes: ['id', 'full_name']
+						}
+					]
+				})
+				break
+			}
+			case WELLNESS_WARRIOR_ROLE_ID: {
+				requests.warrior_request.received = await WellnessWarrior.findAll({
+					where: { warrior_id: userId, request_type: RequestType.WARRIOR },
+					include: [
+						{
+							model: User,
+							as: 'user',
+							foreignKey: 'user_id',
+							attributes: ['id', 'full_name']
+						}
+					]
+				})
+				break
+			}
+			default: {
+				requests.mentor_request.sent = await MentorMatcherModel.findAll({
+					where: { mentee_id: userId, request_type: MentorMatcherRequestType.MENTOR },
+					include: [
+						{
+							model: User,
+							as: 'mentor',
+							foreignKey: 'mentor_id',
+							attributes: ['id', 'full_name']
+						}
+					]
+				})
+
+				requests.warrior_request.sent = await WellnessWarrior.findAll({
+					where: { user_id: userId, request_type: RequestType.WARRIOR },
+					include: [
+						{
+							model: User,
+							as: 'warrior',
+							foreignKey: 'warrior_id',
+							attributes: ['id', 'full_name']
+						}
+					]
+				})
+
+				break
+			}
+		}
+
+		return {
+			user_information: user_information?.user_information,
+			warrior_information: user_information?.warrior_information,
+			mentor_information: user_information?.mentor_information,
+			friend_request: { sent: sentFriendRequests, received: receivedFriendRequests },
+			...requests
+		}
 	}
 }
