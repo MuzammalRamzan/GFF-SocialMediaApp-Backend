@@ -1,8 +1,8 @@
 import { Request } from 'express'
 import { UserType } from '../user/interface'
-import { DailyDose } from './dailyDoseModel'
+import { DailyArticle } from './dailyArticleModel'
 
-export type DailyDoseType = {
+export type DailyArticleType = {
 	id: number
 	title: string
 	subtitle: string
@@ -13,12 +13,12 @@ export type DailyDoseType = {
 	category: string
 }
 
-export interface IDailyDoseType {
-	add(params: DailyDoseType): Promise<DailyDose>
+export interface IDailyArticleType {
+	add(params: DailyArticleType): Promise<DailyArticle>
 }
 
-export interface createDoseRequest extends Request {
-	DebtType: DailyDoseType
+export interface createArticleRequest extends Request {
+	DebtType: DailyArticleType
 	user: UserType
 	file: Express.Multer.File
 }
@@ -26,12 +26,12 @@ export interface GetByIdRequest extends Request {
 	category: string
 	user: UserType
 }
-export interface UpdateDoseRequest extends Request {
+export interface UpdateArticleRequest extends Request {
 	id: number
-	DebtType: DailyDoseType
+	DebtType: DailyArticleType
 	file: Express.Multer.File
 }
-export interface DeleteDoseRequest extends Request {
+export interface DeleteArticleRequest extends Request {
 	id: number
 }
 export const categoryType = {
