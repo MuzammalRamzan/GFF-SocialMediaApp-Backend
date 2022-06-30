@@ -11,6 +11,22 @@ import {
 } from './interface'
 import { UserService } from './userService'
 
+const handleError = (err: any, req: IAuthenticatedRequest, res: Response) => {
+	const error = err as GffError
+	if (error.message === 'Unauthorized') {
+		error.errorCode = '401'
+		error.httpStatusCode = 401
+	} else if (error.message === 'No data found') {
+		error.errorCode = '404'
+		error.httpStatusCode = 404
+	} else if (error?.errorCode) {
+		error.httpStatusCode = +error.errorCode
+	} else {
+		error.errorCode = '500'
+		error.httpStatusCode = 500
+	}
+	return jsonErrorHandler(error, req, res, () => {})
+}
 export class UserController {
 	private readonly userService: UserService
 
@@ -21,7 +37,7 @@ export class UserController {
 	getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const users = await this.userService.list()
-			if(!users) {
+			if (!users) {
 				throw new Error('No data found')
 			}
 			return res.status(200).send({
@@ -36,12 +52,10 @@ export class UserController {
 			if (error.message === 'Unauthorized') {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
-			}
-			else if  (error.message === 'No data found') {
+			} else if (error.message === 'No data found') {
 				error.errorCode = '404'
 				error.httpStatusCode = 404
-			}
-			else {
+			} else {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
@@ -55,7 +69,7 @@ export class UserController {
 
 		try {
 			const users = await this.userService.fetchById(id, userId)
-			if(!users) {
+			if (!users) {
 				throw new Error('No data found')
 			}
 			return res.status(200).send({
@@ -70,12 +84,10 @@ export class UserController {
 			if (error.message === 'Unauthorized') {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
-			}
-			else if  (error.message === 'No data found') {
+			} else if (error.message === 'No data found') {
 				error.errorCode = '404'
 				error.httpStatusCode = 404
-			}
-			else {
+			} else {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
@@ -87,7 +99,7 @@ export class UserController {
 		const userId = +req.user.id
 		try {
 			const fullUser = await this.userService.fetchFullUserById(userId)
-			if(!fullUser.length) {
+			if (!fullUser.length) {
 				throw new Error('No data found')
 			}
 			return res.status(200).send({
@@ -102,12 +114,10 @@ export class UserController {
 			if (error.message === 'Unauthorized') {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
-			}
-			else if  (error.message === 'No data found') {
+			} else if (error.message === 'No data found') {
 				error.errorCode = '404'
 				error.httpStatusCode = 404
-			}
-			else {
+			} else {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
@@ -120,7 +130,7 @@ export class UserController {
 		const userId = +req.user.id
 		try {
 			const users = await this.userService.fetchByEmail(email, userId)
-			if(!users) {
+			if (!users) {
 				throw new Error('No data found')
 			}
 			return res.status(200).send({
@@ -135,12 +145,10 @@ export class UserController {
 			if (error.message === 'Unauthorized') {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
-			}
-			else if  (error.message === 'No data found') {
+			} else if (error.message === 'No data found') {
 				error.errorCode = '404'
 				error.httpStatusCode = 404
-			}
-			else {
+			} else {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
@@ -167,8 +175,7 @@ export class UserController {
 			if (error.message === 'Unauthorized') {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
-			}
-			else {
+			} else {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
@@ -193,8 +200,7 @@ export class UserController {
 			if (error.message === 'Unauthorized') {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
-			}
-			else {
+			} else {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
@@ -207,7 +213,7 @@ export class UserController {
 		const userId = req?.user?.id as number
 		try {
 			const users = await this.userService.searchFriend(search, userId)
-			if(!users.length) {
+			if (!users.length) {
 				throw new Error('No data found')
 			}
 			return res.status(200).send({
@@ -222,16 +228,34 @@ export class UserController {
 			if (error.message === 'Unauthorized') {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
-			}
-			else if  (error.message === 'No data found') {
+			} else if (error.message === 'No data found') {
 				error.errorCode = '404'
 				error.httpStatusCode = 404
-			}
-			else {
+			} else {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
 			return jsonErrorHandler(err, req, res, () => {})
+		}
+	}
+
+	getMyInfo = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+		try {
+			const userId = req?.user?.id as number
+			const userInfo = await this.userService.getMyInfo(userId)
+			return res.status(200).json({ data: { ...userInfo }, message: 'OK', code: 200 })
+		} catch (err) {
+			return handleError(err, req, res)
+		}
+	}
+
+	getOtherUserInfo = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+		try {
+			const userId = req?.user?.id as number
+			const otherUserInfo = await this.userService.getOtherUserInfo(userId)
+			return res.status(200).json({ data: { ...otherUserInfo }, message: 'OK', code: 200 })
+		} catch (err) {
+			return handleError(err, req, res)
 		}
 	}
 }

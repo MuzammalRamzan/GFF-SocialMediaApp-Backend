@@ -24,4 +24,5 @@ export interface IMentorInformationService {
 	isMentorInformationExist(userId: number): Promise<boolean>
 	updateMentorInformation(params: CreateMentorInformation): Promise<IMentorInformation>
 	getMentorInformation(userId: number, mentor_id: number): Promise<MentorInformationType>
+	getMentorInfo(mentor_id: number): Promise<IMentorInformation | null>
 }
