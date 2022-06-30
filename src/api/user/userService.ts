@@ -1,26 +1,41 @@
 import { QueryTypes } from 'sequelize'
 import { sequelize } from '../../database'
-import { ISearchUser, IUserService, UserType } from './interface'
+import { ISearchUser, IUserService, OtherUserInfo, UserInfo, UserType } from './interface'
 import { User } from './userModel'
 import { AuthService } from '../auth/authService'
 import { Op } from 'sequelize'
+import { UserInformationService } from '../user-information/userInformationService'
+import { WarriorInformationService } from '../warrior-information/warriorInformationService'
+import { MentorInformationService } from '../mentor-information/mentorInformationService'
+import { WarriorInformation } from '../warrior-information/warriorInformationModel'
+import { UserInformation } from '../user-information/userInformationModel'
+import { MentorInformation } from '../mentor-information/mentorInformationModel'
+import { FindFriendService } from '../find-friend/findFriendService'
+import { MentorMatcherService } from '../mentor-matcher/mentorMatcherService'
+import { WellnessWarriorService } from '../wellness-warrior/wellnessWarriorService'
 
 export class UserService implements IUserService {
 	private readonly authService: AuthService
+	private readonly findFriendService: FindFriendService
+	private readonly mentorMatcherService: MentorMatcherService
+	private readonly wellnessWarriorService: WellnessWarriorService
 
 	constructor() {
 		this.authService = new AuthService()
+		this.findFriendService = new FindFriendService()
+		this.mentorMatcherService = new MentorMatcherService()
+		this.wellnessWarriorService = new WellnessWarriorService()
 	}
 
 	static async isExists(user_id: number): Promise<boolean> {
 		const user = await User.findByPk(user_id)
-		return !!user?.get();
+		return !!user?.get()
 	}
 
 	async fetchFullUserById(userId: number): Promise<User[]> {
 		const fullUser = await sequelize.query(
 			'SELECT * FROM `user_information` INNER JOIN `user` ON user_information.user_id = user.id WHERE user_id=' +
-			userId,
+				userId,
 			{ type: QueryTypes.SELECT }
 		)
 
@@ -144,5 +159,56 @@ export class UserService implements IUserService {
 				lastname: data.lastname
 			}
 		})
+	}
+
+	async getMyInfo(userId: number): Promise<null | UserInfo> {
+		let myInfo = (await User.findOne({
+			where: { id: userId },
+			include: [
+				{ model: WarriorInformation, as: 'warrior_information' },
+				{ model: UserInformation, as: 'user_information' },
+				{ model: MentorInformation, as: 'mentor_information' }
+			],
+			attributes: { exclude: ['password'] }
+		})) as UserInfo
+
+		if (!myInfo) return null
+
+		myInfo = myInfo.get()
+
+		if (myInfo?.warrior_information) {
+			const warrior_information = myInfo.warrior_information.get({ plain: true })
+			myInfo['warrior_information'] = {
+				...warrior_information,
+				specialty: warrior_information?.specialty.split(','),
+				certification: warrior_information?.certification.split(','),
+				therapy_type: warrior_information?.therapy_type.split(','),
+				price_range: warrior_information?.price_range.split(',')
+			}
+		}
+
+		if (myInfo?.mentor_information) {
+			const mentor_information = myInfo.mentor_information.get({ plain: true })
+			myInfo['mentor_information'] = {
+				...mentor_information,
+				industry: (mentor_information.industry || '').split(',').filter((item: string) => !!item),
+				role: (mentor_information.role || '').split(',').filter((item: string) => !!item),
+				frequency: (mentor_information.frequency || '').split(',').filter((item: string) => !!item),
+				conversation_mode: (mentor_information.conversation_mode || '').split(',').filter((item: string) => !!item),
+				languages: (mentor_information.languages || '').split(',').filter((item: string) => !!item)
+			}
+		}
+
+		return myInfo
+	}
+
+	async getOtherUserInfo(userId: number): Promise<OtherUserInfo | null> {
+		const sentFriendRequests = await this.findFriendService.getFriendRequestsBySenderId(userId)
+		const receivedFriendRequests = await this.findFriendService.getFriendRequestsByReceiverId(userId)
+		const mentorRequests = await this.mentorMatcherService.getMentorRequests(userId)
+		const wellnessWarriorRequests = await this.wellnessWarriorService.getAllRequest(userId)
+		const userInformation = await this.getMyInfo(userId)
+
+		return { sentFriendRequests, receivedFriendRequests, mentorRequests, wellnessWarriorRequests, userInformation }
 	}
 }

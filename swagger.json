@@ -4604,6 +4604,234 @@
 				}
 			}
 		},
+		"/user/my-info": {
+			"get": {
+				"tags": ["user"],
+				"description": "Get all user related details",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "All user details",
+						"content": {
+							"application/json; charset=utf-8": {
+								"example": {
+									"data": {
+										"user": {
+											"id": 241,
+											"role_id": 1,
+											"full_name": "John Doe",
+											"email": "john.doe@mail.com",
+											"password": "",
+											"default_currency_id": 1,
+											"user_feature_id": null
+										},
+										"userInformation": {
+											"id": 117,
+											"user_id": 241,
+											"profile_url": null,
+											"bio": "Hello I am John Doe",
+											"date_of_birth": "2022-05-31",
+											"gender": "male",
+											"email": "email",
+											"phone_number": "+55555555555",
+											"country": "USA",
+											"city": "New York",
+											"state": "NY",
+											"zip_code": 10000,
+											"address": "Test my address",
+											"twitter": "john",
+											"facebook": "john",
+											"instagram": "john",
+											"linkedin": null,
+											"tiktok": null,
+											"employer_name": "Test employer",
+											"job_role": "iOS Developer",
+											"education": "No education",
+											"other_education": "No test education"
+										},
+										"warriorInformation": null,
+										"mentorInformation": null
+									},
+									"message": "OK",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/user/other-info": {
+			"get": {
+				"tags": ["user"],
+				"description": "Get Other User Information",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Other user details",
+						"content": {
+							"application/json; charset=utf-8": {
+								"example": {
+									"data": {
+										"sentFriendRequests": [
+											{
+												"id": 2,
+												"receiver": {
+													"id": 16,
+													"full_name": "Ime Prezime",
+													"user_information": {
+														"profile_url": null,
+														"bio": "Test my bio",
+														"date_of_birth": "2022-05-31",
+														"gender": "female",
+														"country": "test country",
+														"job_role": "CEO",
+														"education": "No education"
+													}
+												},
+												"sender_id": 165,
+												"receiver_id": 16,
+												"status": "send",
+												"block_reason": null,
+												"request_type": "friend"
+											}
+										],
+										"receivedFriendRequests": [
+											{
+												"id": 58,
+												"sender": {
+													"id": 211,
+													"full_name": "Jane Doe",
+													"user_information": {
+														"profile_url": "/uploads/user/profile_picture/211/images/1656510072090_user-avatar.jpeg",
+														"bio": "Hello world",
+														"date_of_birth": "2022-05-31",
+														"gender": "male",
+														"country": "test country",
+														"job_role": "CEO",
+														"education": "No education"
+													}
+												},
+												"sender_id": 211,
+												"receiver_id": 165,
+												"status": "send",
+												"block_reason": null,
+												"request_type": "friend"
+											}
+										],
+										"mentorRequests": [
+											{
+												"mentee": {
+													"id": 169,
+													"full_name": "undefined",
+													"user_information": {
+														"profile_url": null,
+														"bio": "Test my bio",
+														"date_of_birth": "2022-05-31",
+														"gender": "other",
+														"country": "test country",
+														"job_role": "CEO",
+														"education": "No education"
+													}
+												},
+												"request_type": "mentor",
+												"status": "send",
+												"id": 1,
+												"mentor_id": 165,
+												"mentee_id": 169,
+												"is_contract_signed_by_mentor": false,
+												"is_contract_signed_by_mentee": false
+											}
+										],
+										"wellnessWarriorRequests": [
+											{
+												"id": 7,
+												"user_id": 37,
+												"warrior_id": 216,
+												"status": "send",
+												"request_type": "warrior",
+												"warrior": {
+													"id": 216,
+													"full_name": "name",
+													"user_information": null,
+													"warrior_information": null
+												},
+												"user": {
+													"id": 37,
+													"full_name": "ime-prezime",
+													"user_information": null
+												}
+											}
+										],
+										"userInformation": {
+											"id": 165,
+											"role_id": 3,
+											"full_name": "undefined",
+											"email": "test2@test.com",
+											"default_currency_id": 1,
+											"user_feature_id": null,
+											"warrior_information": null,
+											"user_information": {
+												"id": 19,
+												"user_id": 165,
+												"profile_url": "/uploads/user/profile_picture/165/images/1656346391232_WhatsApp_Image_2022-06-27_at_9.52.29_AM.jpeg",
+												"bio": "params.bio",
+												"date_of_birth": "0000-00-00",
+												"gender": "",
+												"email": "params.email",
+												"phone_number": "params.phone_number",
+												"country": "params.country",
+												"city": "params.city",
+												"state": "params.state",
+												"zip_code": 0,
+												"address": "params.address",
+												"twitter": "params.twitter",
+												"facebook": "params.facebook",
+												"instagram": "params.instagram",
+												"linkedin": "params.linkedin",
+												"tiktok": "params.tiktok",
+												"employer_name": "params.employer_name",
+												"job_role": "params.job_role",
+												"education": "params.education",
+												"other_education": "params.other_educatio"
+											},
+											"mentor_information": {
+												"id": 3,
+												"user_id": 165,
+												"isPassedIRT": false,
+												"industry": ["str"],
+												"role": ["string"],
+												"frequency": ["string", "string1", "string2"],
+												"languages": [],
+												"conversation_mode": ["string"]
+											}
+										}
+									},
+									"message": "OK",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/transaction/update/{id}": {
 			"put": {
 				"tags": ["transaction"],

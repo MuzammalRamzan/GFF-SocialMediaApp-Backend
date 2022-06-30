@@ -140,4 +140,28 @@ export class MentorInformationService implements IMentorInformationService {
 			mentor_request: mentor_request
 		}
 	}
+
+	async getMentorInfo(mentor_id: number): Promise<IMentorInformation | null> {
+		const mentorInformation = await MentorInformation.findOne({
+			where: {
+				user_id: mentor_id
+			},
+			attributes: ['isPassedIRT', 'industry', 'role', 'frequency', 'conversation_mode', 'languages']
+		})
+
+		if (!mentorInformation) return null
+
+		const mentor_information = mentorInformation.get()
+
+		return {
+			industry: (mentor_information.industry || '').split(',').filter((item: string) => !!item),
+			role: (mentor_information.role || '').split(',').filter((item: string) => !!item),
+			frequency: (mentor_information.frequency || '').split(',').filter((item: string) => !!item),
+			conversation_mode: (mentor_information.conversation_mode || '').split(',').filter((item: string) => !!item),
+			languages: (mentor_information.languages || '').split(',').filter((item: string) => !!item),
+			isPassedIRT: mentor_information.isPassedIRT,
+			id: mentor_information.id,
+			user_id: mentor_information.user_id
+		}
+	}
 }
