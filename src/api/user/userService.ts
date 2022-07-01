@@ -15,6 +15,7 @@ import { MentorMatcherModel, MentorMatcherRequestType } from '../mentor-matcher/
 import { MENTOR_ROLE_ID, WELLNESS_WARRIOR_ROLE_ID } from '../../constants'
 import { GffError } from '../helper/errorHandler'
 import { FindFriendModel } from '../find-friend/findFriendModel'
+import { USER_FIELDS, USER_INFORMATION_FIELDS } from '../../helper/db.helper'
 
 export class UserService implements IUserService {
 	private readonly authService: AuthService
@@ -33,7 +34,7 @@ export class UserService implements IUserService {
 	async fetchFullUserById(userId: number): Promise<User[]> {
 		const fullUser = await sequelize.query(
 			'SELECT * FROM `user_information` INNER JOIN `user` ON user_information.user_id = user.id WHERE user_id=' +
-				userId,
+			userId,
 			{ type: QueryTypes.SELECT }
 		)
 
@@ -209,84 +210,116 @@ export class UserService implements IUserService {
 			throw error
 		}
 
-		const otherUserRole = +otherUser.getDataValue('role_id')
-
 		const user_information = await this.getMyInfo(otherUserId)
 
 		const friend_request = await FindFriendModel.findOne({
 			where: {
 				[Op.or]: [
-					{ sender_id: { [Op.eq]: otherUserId }, receiver_id: { [Op.eq]: userId } },
-					{ sender_id: { [Op.eq]: userId }, receiver_id: { [Op.eq]: otherUserId } }
+					{ sender_id: otherUserId, receiver_id: userId },
+					{ sender_id: userId, receiver_id: otherUserId }
 				],
-				request_type: FriendRequestType.FRIEND
-			}
+			},
+			include: [
+				{
+					model: User,
+					as: 'sender',
+					attributes: USER_FIELDS,
+					include: [
+						{
+							model: UserInformation,
+							as: 'user_information',
+							attributes: USER_INFORMATION_FIELDS
+						}
+					]
+				},
+				{
+					model: User,
+					as: 'receiver',
+					attributes: USER_FIELDS,
+					include: [
+						{
+							model: UserInformation,
+							as: 'user_information',
+							attributes: USER_INFORMATION_FIELDS
+						}
+					]
+				}
+			]
 		})
 
-		let mentor_request: MentorMatcherModel | null = null
-		let warrior_request: WellnessWarrior | null = null
+		const mentor_request = await MentorMatcherModel.findOne({
+			where: {
+				[Op.or]: [
+					{ mentor_id: otherUserId, mentee_id: userId },
+					{ mentor_id: userId, mentee_id: otherUserId }
+				]
+			},
+			include: [
+				{
+					model: User,
+					as: 'mentee',
+					foreignKey: 'mentee_id',
+					attributes: USER_FIELDS,
+					include: [
+						{
+							model: UserInformation,
+							as: 'user_information',
+							attributes: USER_INFORMATION_FIELDS
+						}
+					]
+				},
+				{
+					model: User,
+					as: 'mentor',
+					foreignKey: 'mentor_id',
+					attributes: USER_FIELDS,
+					include: [
+						{
+							model: UserInformation,
+							as: 'user_information',
+							attributes: USER_INFORMATION_FIELDS
+						}
+					]
+				}
+			]
+		});
 
-		switch (otherUserRole) {
-			case MENTOR_ROLE_ID: {
-				mentor_request = await MentorMatcherModel.findOne({
-					where: {
-						mentor_id: otherUserId,
-						mentee_id: userId,
-						request_type: MentorMatcherRequestType.MENTOR
-					},
+		const warrior_request = await WellnessWarrior.findOne({
+			where: {
+				[Op.or]: [
+					{ warrior_id: otherUserId, user_id: userId },
+					{ warrior_id: userId, user_id: otherUserId },
+				]
+			},
+			include: [
+				{
+					model: User,
+					as: 'user',
+					foreignKey: 'user_id',
+					attributes: USER_FIELDS,
 					include: [
 						{
-							model: User,
-							as: 'mentee',
-							foreignKey: 'mentee_id',
-							attributes: ['id', 'full_name']
+							model: UserInformation,
+							as: 'user_information',
+							attributes: USER_INFORMATION_FIELDS
 						}
 					]
-				})
-				break
-			}
-			case WELLNESS_WARRIOR_ROLE_ID: {
-				warrior_request = await WellnessWarrior.findOne({
-					where: { warrior_id: otherUserId, user_id: userId, request_type: RequestType.WARRIOR },
+				},
+				{
+					model: User,
+					as: 'warrior',
+					foreignKey: 'warrior_id',
+					attributes: USER_FIELDS,
 					include: [
 						{
-							model: User,
-							as: 'user',
-							foreignKey: 'user_id',
-							attributes: ['id', 'full_name']
+							model: UserInformation,
+							as: 'user_information',
+							attributes: USER_INFORMATION_FIELDS
 						}
 					]
-				})
-				break
-			}
-			default: {
-				mentor_request = await MentorMatcherModel.findOne({
-					where: { mentee_id: otherUserId, mentor_id: userId, request_type: MentorMatcherRequestType.MENTOR },
-					include: [
-						{
-							model: User,
-							as: 'mentor',
-							foreignKey: 'mentor_id',
-							attributes: ['id', 'full_name']
-						}
-					]
-				})
-
-				warrior_request = await WellnessWarrior.findOne({
-					where: { user_id: otherUserId, warrior_id: userId, request_type: RequestType.WARRIOR },
-					include: [
-						{
-							model: User,
-							as: 'warrior',
-							foreignKey: 'warrior_id',
-							attributes: ['id', 'full_name']
-						}
-					]
-				})
-
-				break
-			}
-		}
+				}
+			]
+		});
 
 		return {
 			user_information: user_information?.user_information,
