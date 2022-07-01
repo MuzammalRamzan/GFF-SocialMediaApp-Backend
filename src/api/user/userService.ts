@@ -1,14 +1,6 @@
 import { QueryTypes } from 'sequelize'
 import { sequelize } from '../../database'
-import {
-	ISearchUser,
-	IUserService,
-	MentorRequestsType,
-	OtherUserInfo,
-	UserInfo,
-	UserType,
-	WarriorRequestsType
-} from './interface'
+import { ISearchUser, IUserService, OtherUserInfo, UserInfo, UserType } from './interface'
 import { User } from './userModel'
 import { AuthService } from '../auth/authService'
 import { Op } from 'sequelize'
@@ -16,11 +8,13 @@ import { WarriorInformation } from '../warrior-information/warriorInformationMod
 import { UserInformation } from '../user-information/userInformationModel'
 import { MentorInformation } from '../mentor-information/mentorInformationModel'
 import { FindFriendService } from '../find-friend/findFriendService'
+import { RequestType as FriendRequestType } from '../find-friend/interface'
 import { WellnessWarrior } from '../wellness-warrior/wellnessWarriorModel'
-import { RequestType, StatusType } from '../wellness-warrior/interface'
+import { RequestType } from '../wellness-warrior/interface'
 import { MentorMatcherModel, MentorMatcherRequestType } from '../mentor-matcher/mentorMatcherModel'
 import { MENTOR_ROLE_ID, WELLNESS_WARRIOR_ROLE_ID } from '../../constants'
 import { GffError } from '../helper/errorHandler'
+import { FindFriendModel } from '../find-friend/findFriendModel'
 
 export class UserService implements IUserService {
 	private readonly authService: AuthService
@@ -169,9 +163,9 @@ export class UserService implements IUserService {
 		let myInfo = (await User.findOne({
 			where: { id: userId },
 			include: [
-				{ model: WarriorInformation, as: 'warrior_information' },
 				{ model: UserInformation, as: 'user_information' },
-				{ model: MentorInformation, as: 'mentor_information' }
+				{ model: MentorInformation, as: 'mentor_information' },
+				{ model: WarriorInformation, as: 'warrior_information' }
 			],
 			attributes: { exclude: ['password'] }
 		})) as UserInfo
@@ -206,31 +200,38 @@ export class UserService implements IUserService {
 		return myInfo
 	}
 
-	async getOtherUserInfo(userId: number): Promise<OtherUserInfo | null> {
-		const user = await User.findByPk(userId)
+	async getOtherUserInfo(userId: number, otherUserId: number): Promise<OtherUserInfo | null> {
+		const otherUser = await User.findByPk(otherUserId)
 
-		if (!user) {
+		if (!otherUser) {
 			const error = new GffError('User not found!')
 			error.errorCode = '404'
 			throw error
 		}
 
-		const userRole = +user.getDataValue('role_id')
+		const otherUserRole = +otherUser.getDataValue('role_id')
 
-		const user_information = await this.getMyInfo(userId)
-		const sentFriendRequests = await this.findFriendService.getFriendRequestsBySenderId(userId)
-		const receivedFriendRequests = await this.findFriendService.getFriendRequestsByReceiverId(userId)
+		const user_information = await this.getMyInfo(otherUserId)
 
-		const requests: { mentor_request: MentorRequestsType; warrior_request: WarriorRequestsType } = {
-			mentor_request: { sent: [], received: [] },
-			warrior_request: { sent: [], received: [] }
-		}
+		const friend_request = await FindFriendModel.findOne({
+			where: {
+				[Op.or]: [
+					{ sender_id: { [Op.eq]: otherUserId }, receiver_id: { [Op.eq]: userId } },
+					{ sender_id: { [Op.eq]: userId }, receiver_id: { [Op.eq]: otherUserId } }
+				],
+				request_type: FriendRequestType.FRIEND
+			}
+		})
 
-		switch (userRole) {
+		let mentor_request: MentorMatcherModel | null = null
+		let warrior_request: WellnessWarrior | null = null
+
+		switch (otherUserRole) {
 			case MENTOR_ROLE_ID: {
-				requests.mentor_request.received = await MentorMatcherModel.findAll({
+				mentor_request = await MentorMatcherModel.findOne({
 					where: {
-						mentor_id: userId,
+						mentor_id: otherUserId,
+						mentee_id: userId,
 						request_type: MentorMatcherRequestType.MENTOR
 					},
 					include: [
@@ -245,8 +246,8 @@ export class UserService implements IUserService {
 				break
 			}
 			case WELLNESS_WARRIOR_ROLE_ID: {
-				requests.warrior_request.received = await WellnessWarrior.findAll({
-					where: { warrior_id: userId, request_type: RequestType.WARRIOR },
+				warrior_request = await WellnessWarrior.findOne({
+					where: { warrior_id: otherUserId, user_id: userId, request_type: RequestType.WARRIOR },
 					include: [
 						{
 							model: User,
@@ -259,8 +260,8 @@ export class UserService implements IUserService {
 				break
 			}
 			default: {
-				requests.mentor_request.sent = await MentorMatcherModel.findAll({
-					where: { mentee_id: userId, request_type: MentorMatcherRequestType.MENTOR },
+				mentor_request = await MentorMatcherModel.findOne({
+					where: { mentee_id: otherUserId, mentor_id: userId, request_type: MentorMatcherRequestType.MENTOR },
 					include: [
 						{
 							model: User,
@@ -271,8 +272,8 @@ export class UserService implements IUserService {
 					]
 				})
 
-				requests.warrior_request.sent = await WellnessWarrior.findAll({
-					where: { user_id: userId, request_type: RequestType.WARRIOR },
+				warrior_request = await WellnessWarrior.findOne({
+					where: { user_id: otherUserId, warrior_id: userId, request_type: RequestType.WARRIOR },
 					include: [
 						{
 							model: User,
@@ -291,8 +292,9 @@ export class UserService implements IUserService {
 			user_information: user_information?.user_information,
 			warrior_information: user_information?.warrior_information,
 			mentor_information: user_information?.mentor_information,
-			friend_request: { sent: sentFriendRequests, received: receivedFriendRequests },
-			...requests
+			friend_request,
+			mentor_request,
+			warrior_request
 		}
 	}
 }
