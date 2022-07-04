@@ -35,7 +35,7 @@ export interface DeleteArticleRequest extends Request {
 	id: number
 }
 export const categoryType = {
-	NEWS: 'news',
-	MUSIC: 'music',
-	WISEWORD: 'wise-words'
+	NEWS: 'friend-finder',
+	MUSIC: 'budget-buster',
+	WISEWORD: 'you-should-know'
 }
