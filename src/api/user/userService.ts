@@ -200,7 +200,9 @@ export class UserService implements IUserService {
 	}
 
 	async getOtherUserInfo(userId: number, otherUserId: number): Promise<OtherUserInfo | null> {
-		const otherUser = await User.findByPk(otherUserId)
+		const otherUser = await User.findByPk(otherUserId, {
+			attributes: { exclude: ['password'] },
+		})
 
 		if (!otherUser) {
 			const error = new GffError('User not found!')
@@ -320,6 +322,7 @@ export class UserService implements IUserService {
 		});
 
 		return {
+			...otherUser.get(),
 			user_information: user_information?.user_information,
 			warrior_information: user_information?.warrior_information,
 			mentor_information: user_information?.mentor_information,
