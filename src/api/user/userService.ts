@@ -48,14 +48,12 @@ export class UserService implements IUserService {
 	}
 
 	async fetchById(id: number, userId: number): Promise<User> {
-		console.log('USER' + userId, 'ID' + id)
-		if (id != userId) {
-			throw new Error('Unauthorized')
-		}
-
 		const user = await User.findOne({
 			where: {
 				id: userId
+			},
+			attributes: {
+				exclude: ['password']
 			}
 		})
 
