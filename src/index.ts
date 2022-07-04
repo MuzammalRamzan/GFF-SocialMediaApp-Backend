@@ -14,6 +14,8 @@ import { sequelize } from './database'
 import { userInformationRouter } from './api/user-information/userInformationRouter'
 import { hashtagRouter } from './api/hashtag/hashtagRouter'
 import { debtRouter } from './api/debt/debtRouter'
+import { dailyDoseRouter } from './api/daily-dose/dailyDoseRouter'
+
 import { loanLedgerProfessionalInformationRouter } from './api/loan-ledger-professional-information/professionalInformationRouter'
 import { loanLedgerPersonalInfoRouter } from './api/loan-ledger-personal-information/loanLedgerPersonalInformationRouter'
 import { mentorMatcherRouter } from './api/mentor-matcher/mentorMatcherRouter'
@@ -55,6 +57,7 @@ export const upload = multer({
 	app.use('/userInformation', userInformationRouter)
 	app.use('/hashtag', hashtagRouter)
 	app.use('/debt', debtRouter)
+	app.use('/dailyDose', dailyDoseRouter)
 	app.use('/loanLedgerProfessionalInformation', loanLedgerProfessionalInformationRouter)
 	app.use('/loanLedgerPersonalInformation', loanLedgerPersonalInfoRouter)
 	app.use('/mentor-matcher', mentorMatcherRouter)
@@ -83,6 +86,11 @@ export const upload = multer({
 		return jsonErrorHandler(err, req, res, () => {})
 	})
 
+	app.use('/message', messageRoute)
+	app.use('/warrior-information', warriorInformationRouter)
+	app.use('/wellness-warrior', warriorRouter)
+	app.use('/', mentorSettingsRouter)
+	app.use('/currency', currencyRouter)
 	app.listen(process.env.PORT, () => {
 		console.log(`Server running at port ${process.env.PORT}`)
 	})
