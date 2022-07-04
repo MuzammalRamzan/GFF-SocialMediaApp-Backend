@@ -2385,74 +2385,6 @@
 				}
 			}
 		},
-		"/user/{id}": {
-			"get": {
-				"tags": ["user"],
-				"description": "Get a user by id",
-				"parameters": [
-					{
-						"name": "auth-token",
-						"in": "header",
-						"description": "Auth Token",
-						"required": true,
-						"type": "string"
-					},
-					{
-						"name": "id",
-						"in": "path",
-						"description": "User ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "string"
-								},
-								"example": {
-									"data": {
-										"users": {
-											"id": 37,
-											"role_id": 1,
-											"full_name": "ime prezime",
-											"email": "test",
-											"password": "$2b$10$Q9BzTt.cFMsuFlioq/BMYuTd5GQbCpJQU.9oAPag.JhCngu3Z7hgq",
-											"default_currency_id": 1,
-											"user_feature_id": null
-										}
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
-								}
-							}
-						}
-					}
-				}
-			}
-		},
 		"/auth/signup": {
 			"post": {
 				"tags": ["auth"],
@@ -6294,7 +6226,7 @@
 				}
 			}
 		},
-		"/user/other-info/{id}": {
+		"/user/{id}": {
 			"get": {
 				"tags": ["user"],
 				"description": "Get Other User details",
