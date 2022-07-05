@@ -3,8 +3,18 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { User } from '../user/userModel'
 import { UserType } from '../user/interface'
+import { UserRoleService } from '../user-role/userRoleService'
+import { CurrencyService } from '../currency/currencyService'
 
 export class AuthService implements IAuthService {
+	private readonly userRoleService: UserRoleService
+	private readonly currencyService: CurrencyService
+
+	constructor() {
+		this.userRoleService = new UserRoleService()
+		this.currencyService = new CurrencyService()
+	}
+
 	async hashPassword(password: string): Promise<string> {
 		const salt = await bcrypt.genSalt(10)
 
@@ -34,16 +44,18 @@ export class AuthService implements IAuthService {
 	async createUser(email: string, fullName: string, password: string): Promise<User> {
 		const passwordHash = await this.hashPassword(password)
 		const userEmail = await this.checkEmail(email)
+		const userRole = await this.userRoleService.fetchUserRole()
+		const defaultCurrency = await this.currencyService.fetchDefault()
 
 		if (userEmail) {
 			throw new Error('User already exist')
 		}
 		const user = await User.create({
-			role_id: '5',
+			role_id: userRole?.getDataValue('id'),
 			full_name: fullName,
 			email: email,
 			password: passwordHash,
-			default_currency_id: '1'
+			default_currency_id: defaultCurrency?.getDataValue('id')
 		})
 
 		return user as User
