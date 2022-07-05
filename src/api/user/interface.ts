@@ -1,5 +1,6 @@
 import { Request } from 'express'
 import { FindFriendModel } from '../find-friend/findFriendModel'
+import { Hashtag } from '../hashtag/hashtagModel'
 import { MentorInformation } from '../mentor-information/mentorInformationModel'
 import { MentorMatcherModel } from '../mentor-matcher/mentorMatcherModel'
 import { UserInformation } from '../user-information/userInformationModel'
@@ -27,6 +28,7 @@ export interface UserInfo extends User {
 	user_information: UserInformation
 	warrior_information: WarriorInformation
 	mentor_information: MentorInformation
+	hashtags: Hashtag[]
 }
 
 export interface OtherUserInfo {
@@ -36,6 +38,7 @@ export interface OtherUserInfo {
 	friend_request: FindFriendModel | null
 	mentor_request: MentorMatcherModel | null
 	warrior_request: WellnessWarrior | null
+	hashtags: Hashtag[]
 }
 
 export interface IUserService {
