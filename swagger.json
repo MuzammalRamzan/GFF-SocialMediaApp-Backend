@@ -5599,6 +5599,126 @@
 				}
 			}
 		},
+		"/transactionAccount/user": {
+			"get": {
+				"tags": ["transaction-account"],
+				"description": "List all transaction accounts for user",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"result": {
+										"bank": [
+											{
+											"id": 108,
+											"balance": 0,
+											"account_type_id": 1,
+											"name": "GFDFGHJss",
+											"country": "",
+											"bank_name": "",
+											"card_owner": "Dsaf",
+											"card_number": "2345 678",
+											"card_expiration_date": "0000-00-00",
+											"card_cvc": "333",
+											"currency_id": 1,
+											"user_id": 425,
+											"status": "active"
+											}
+										],
+										"card": [
+											{
+											"id": 109,
+											"balance": 0,
+											"account_type_id": 2,
+											"name": "Namee",
+											"country": "",
+											"bank_name": "",
+											"card_owner": "Name",
+											"card_number": "5678 9033 2233 2221",
+											"card_expiration_date": "0000-00-00",
+											"card_cvc": "332",
+											"currency_id": 1,
+											"user_id": 425,
+											"status": "active"
+											}
+										],
+										"manual": [
+											{
+											"id": 110,
+											"balance": 0,
+											"account_type_id": 3,
+											"name": "Ffff",
+											"country": "",
+											"bank_name": "",
+											"card_owner": "Ewe",
+											"card_number": "235",
+											"card_expiration_date": "2020-01-01",
+											"card_cvc": "323",
+											"currency_id": 1,
+											"user_id": 425,
+											"status": "active"
+											}
+										],
+										"mPesa": [
+											{
+											"id": 111,
+											"balance": 0,
+											"account_type_id": 4,
+											"name": "D",
+											"country": "",
+											"bank_name": "",
+											"card_owner": "D",
+											"card_number": "d",
+											"card_expiration_date": "0000-00-00",
+											"card_cvc": "3",
+											"currency_id": 1,
+											"user_id": 425,
+											"status": "active"
+											}
+										],
+										"wallet": [
+											{
+											"id": 112,
+											"balance": 0,
+											"account_type_id": 5,
+											"name": "Test",
+											"country": "",
+											"bank_name": "",
+											"card_owner": "",
+											"card_number": "",
+											"card_expiration_date": "0000-00-00",
+											"card_cvc": "",
+											"currency_id": 1,
+											"user_id": 425,
+											"status": "active"
+											}
+										]
+										}
+									},
+									"code": 200,
+									"message": "OK"
+									}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/transactionAccount/list": {
 			"get": {
 				"tags": ["transaction-account"],
