@@ -5,22 +5,18 @@ import { User } from '../../user/userModel'
 import { Message } from './message.model'
 
 type SubscribersType = {
-	[room_id: string]: { [user_id: string]: Response }
+	[room_id: string]: { [user_id: string]: Response | null }
 }
 
 export class MessageService {
 	private subscribers: SubscribersType = Object.create(null)
 
-	public async sendMessage(body: string, user_id: number, room_id: number): Promise<Message> {
-		const message = await Message.create({
-			body,
-			user_id,
-			room_id
-		})
+	public async sendMessage(message: string, user_id: number, room_id: number): Promise<Message> {
+		const messageObj = new Message()
 
-		this.publishMessage(body, user_id, room_id)
+		this.publishMessage(message, user_id, room_id)
 
-		return message
+		return messageObj
 	}
 
 	public async getMessages(room_id: number, from: string): Promise<Message[]> {
@@ -61,6 +57,10 @@ export class MessageService {
 		res.setHeader('Content-Type', 'application/json;charset=utf-8')
 		res.setHeader('Cache-Control', 'no-cache, must-revalidate')
 
+		if (!this.subscribers[room_id]) {
+			this.subscribers[room_id] = {}
+		}
+
 		this.subscribers[room_id][user_id] = res
 
 		req.on('close', () => {
@@ -68,13 +68,15 @@ export class MessageService {
 		})
 	}
 
-	public async publishMessage(body: string, user_id: number, room_id: number): Promise<void> {
-		let roomParticipants = Object.keys(this.subscribers[room_id]).filter(userId => +userId !== user_id)
-
-		roomParticipants.map(participantId => {
-			this.subscribers[room_id][participantId].end(JSON.stringify({ user_id, message: body }))
-		})
-
-		this.subscribers[room_id] = Object.create(null)
+	public async publishMessage(message: string, user_id: number, room_id: number): Promise<void> {
+		if (this.subscribers[room_id] && Object.keys(this.subscribers[room_id]).length) {
+			let roomParticipants = Object.keys(this.subscribers[room_id]).filter(userId => +userId !== user_id)
+			roomParticipants.map(participantId => {
+				if (this.subscribers[room_id][participantId]) {
+					this.subscribers[room_id][participantId]?.end(JSON.stringify({ user_id, message }))
+				}
+				this.subscribers[room_id][participantId] = null
+			})
+		}
 	}
 }

@@ -1,5 +1,6 @@
 import Express, { Request, Response, NextFunction } from 'express'
 import multer from 'multer'
+import cors from 'cors'
 import bodyParser from 'body-parser'
 import swaggerUi from 'swagger-ui-express'
 import swaggerDocument from '../swagger.json'
@@ -45,6 +46,7 @@ export const upload = multer({
 ;(async function main(): Promise<void> {
 	const app = Express()
 
+	app.use(cors())
 	app.use(bodyParser.json())
 	app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options))
 	app.use('/auth', authRouter)
