@@ -11,6 +11,7 @@ import { MentorInformation } from '../mentor-information/mentorInformationModel'
 import { UserInformation } from '../user-information/userInformationModel'
 import { MENTOR_ROLE_ID } from '../../constants'
 import { GffError } from '../helper/errorHandler'
+import { USER_INFORMATION_FIELDS } from '../../helper/db.helper'
 
 export class MentorMatcherService implements IMentorMatcherService {
 
@@ -18,9 +19,7 @@ export class MentorMatcherService implements IMentorMatcherService {
     'industry', 'role', 'frequency', 'conversation_mode', 'isPassedIRT', 'languages'
   ]
 
-  private USER_INFORMATION_FIELDS = [
-    'profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education'
-  ]
+  private USER_INFORMATION_FIELDS = USER_INFORMATION_FIELDS
 
   async findMentors(userId: number, searchTerms: ISarchTermParams): Promise<ISearchMentors[]> {
     const _industry = searchTerms.industry?.split(',');
