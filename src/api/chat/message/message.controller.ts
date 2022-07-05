@@ -12,25 +12,25 @@ export class MessageController {
 
 	sendMessage = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
 		try {
-			const body = req.body.body
-			const user_id = req?.user?.id as number
-			const room_id = +req.params.id
+			const message = req.body.message
+			const user_id = +req.params.userId
+			const room_id = +req.params.roomId
 
-			const isUserBelongToTheRoom = await RoomService.isUserBelongToTheRoom(room_id, user_id)
+			// const isUserBelongToTheRoom = await RoomService.isUserBelongToTheRoom(room_id, user_id)
 
-			if (!isUserBelongToTheRoom) {
-				return res.status(403).json({
-					message: 'You are not belong to the room',
-					code: 403
-				})
-			}
+			// if (!isUserBelongToTheRoom) {
+			// 	return res.status(403).json({
+			// 		message: 'You are not belong to the room',
+			// 		code: 403
+			// 	})
+			// }
 
-			const message = await this.messageService.sendMessage(body, user_id, room_id)
-			return res.status(200).json({
-				data: { message },
-				message: 'Message sent successfully',
-				code: 200
-			})
+			await this.messageService.sendMessage(message, user_id, room_id)
+			// return res.status(200).json({
+			// 	data: { message },
+			// 	message: 'Message sent successfully',
+			// 	code: 200
+			// })
 		} catch (error) {
 			next(error)
 		}
@@ -54,8 +54,8 @@ export class MessageController {
 
 	subscribeToRoom = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
 		try {
-			const user_id = req?.user?.id as number
-			const room_id = +req.params.id
+			const user_id = +req.params.userId
+			const room_id = +req.params.roomId
 
 			return this.messageService.subscribeToRoom(req, res, { user_id, room_id })
 		} catch (error) {
