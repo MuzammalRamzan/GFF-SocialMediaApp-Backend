@@ -229,15 +229,29 @@ export class FindFriendService implements IFindFriendService {
 			]
 		})
 
-		return findFriends.map(friend => {
-			const data = friend.get()
+		const friends: FriendUser[] = []
+		for (let i = 0; i < findFriends.length; i++) {
+			let friend = findFriends[i].get()
+			friend = {
+				full_name: friend.full_name,
+				id: friend.id,
+				user_information: friend?.user_information?.get()
+			} as FriendUser
 
-			return {
-				full_name: data.full_name,
-				id: data.id,
-				user_information: data?.user_information?.get()
-			}
-		})
+			const friend_request = await FindFriendModel.findOne({
+				where: {
+					[Op.or]: [
+						{ sender_id: userId, receiver_id: friend.id },
+						{ sender_id: friend.id, receiver_id: userId }
+					]
+				}
+			})
+
+			friend['friend_request'] = friend_request?.get()
+			friends.push(friend)
+		}
+
+		return friends
 	}
 
 	async getFriendRequestById(id: number): Promise<FindFriendRequest> {
