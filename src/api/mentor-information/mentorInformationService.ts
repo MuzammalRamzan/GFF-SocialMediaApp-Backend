@@ -1,17 +1,19 @@
-import { MENTOR_ROLE_ID } from '../../constants'
 import { MentorMatcherService } from '../mentor-matcher/mentorMatcherService'
 import { UserInformation } from '../user-information/userInformationModel'
 import { User } from '../user/userModel'
 import { CreateMentorInformation, IMentorInformationService, MentorInformationType } from './interface'
 import { IMentorInformation, MentorInformation } from './mentorInformationModel'
 import { GffError } from '../helper/errorHandler'
+import { UserRoleService } from '../user-role/userRoleService'
 
 export class MentorInformationService implements IMentorInformationService {
 	static async isMentorExists(userId: number): Promise<boolean> {
+		const mentorRole = await UserRoleService.fetchMentorRole();
+
 		const record = await User.findOne({
 			where: {
 				id: userId,
-				role_id: MENTOR_ROLE_ID
+				role_id: mentorRole?.get('id')
 			}
 		})
 
@@ -19,6 +21,8 @@ export class MentorInformationService implements IMentorInformationService {
 	}
 
 	async createMentorInformation(params: CreateMentorInformation): Promise<IMentorInformation> {
+		const mentorRole = await UserRoleService.fetchMentorRole();
+
 		const mentorInformation = await MentorInformation.create({
 			role: (params.role || []).join(','),
 			industry: (params.industry || []).join(','),
@@ -32,7 +36,7 @@ export class MentorInformationService implements IMentorInformationService {
 		// make user as a mentor, change the role_id of User table.
 		await User.update(
 			{
-				role_id: MENTOR_ROLE_ID
+				role_id: mentorRole?.get('id')
 			},
 			{
 				where: {
