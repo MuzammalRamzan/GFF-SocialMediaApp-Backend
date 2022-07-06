@@ -50,6 +50,7 @@ export class AuthService implements IAuthService {
 		if (userEmail) {
 			throw new Error('User already exist')
 		}
+		
 		const user = await User.create({
 			role_id: userRole?.getDataValue('id'),
 			full_name: fullName,
