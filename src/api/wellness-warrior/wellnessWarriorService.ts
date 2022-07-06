@@ -1,7 +1,7 @@
 import { col, fn, Op, where } from "sequelize";
-import { WELLNESS_WARRIOR_ROLE_ID } from "../../constants";
 import { USER_FIELDS, USER_INFORMATION_FIELDS, WELLNESS_WARRIOR_FIELDS } from "../../helper/db.helper";
 import { UserInformation } from "../user-information/userInformationModel";
+import { UserRoleService } from "../user-role/userRoleService";
 import { User } from "../user/userModel";
 import { IWarriorUser } from "../warrior-information/interface";
 import { WarriorInformation } from "../warrior-information/warriorInformationModel";
@@ -74,6 +74,8 @@ export class WellnessWarriorService implements IWellnessWarriorService {
 
   async searchWellnessWarriors(user_id: number, searchParams: ISearchWarriorParams): Promise<IWarriorUser[]> {
 
+    const warriorRole = await UserRoleService.fetchWellnessWarriorRole();
+
     const _specialty = searchParams.specialty?.split(',');
     const _certification = searchParams.certification?.split(',');
     const _therapy_type = searchParams.therapy_type?.split(',');
@@ -82,7 +84,7 @@ export class WellnessWarriorService implements IWellnessWarriorService {
     const records = await User.findAll({
       where: {
         [Op.and]: [
-          { role_id: WELLNESS_WARRIOR_ROLE_ID },
+          { role_id: warriorRole?.get('id') },
           { id: { [Op.not]: user_id } },
           where(fn('lower', col('full_name')), "LIKE", `%${(searchParams.searchTerm || "").trim().toLowerCase()}%`),
         ]

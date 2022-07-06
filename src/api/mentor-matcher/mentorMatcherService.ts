@@ -9,9 +9,9 @@ import {
 } from './mentorMatcherModel'
 import { MentorInformation } from '../mentor-information/mentorInformationModel'
 import { UserInformation } from '../user-information/userInformationModel'
-import { MENTOR_ROLE_ID } from '../../constants'
 import { GffError } from '../helper/errorHandler'
 import { USER_INFORMATION_FIELDS } from '../../helper/db.helper'
+import { UserRoleService } from '../user-role/userRoleService'
 
 export class MentorMatcherService implements IMentorMatcherService {
 
@@ -28,12 +28,14 @@ export class MentorMatcherService implements IMentorMatcherService {
     const _conversation_mode = searchTerms.conversation_mode?.split(',');
     const _languages = searchTerms.languages?.split(',');
 
+    const mentorRole = await UserRoleService.fetchMentorRole();
+
     const mentors = await User.findAll({
       where: {
         [Op.and]: [
           searchTerms.text ? where(fn('lower', col('full_name')), "LIKE", `%${(searchTerms.text || "").trim().toLowerCase()}%`) : { full_name: { [Op.ne]: null } },
           { id: { [Op.ne]: userId } },
-          { role_id: MENTOR_ROLE_ID },
+          { role_id: mentorRole?.get('id') },
         ]
       },
       attributes: ['id', 'full_name'],

@@ -1,6 +1,6 @@
-import { WELLNESS_WARRIOR_ROLE_ID } from "../../constants";
 import { GffError } from "../helper/errorHandler";
 import { UserInformation } from "../user-information/userInformationModel";
+import { UserRoleService } from "../user-role/userRoleService";
 import { User } from "../user/userModel";
 import { WellnessWarriorService } from "../wellness-warrior/wellnessWarriorService";
 import { IWarriorInformationService, IWarriorUser, WarriorInformationParams } from "./interface";
@@ -77,8 +77,10 @@ export class WarriorInformationService implements IWarriorInformationService {
   create = async (params: WarriorInformationParams): Promise<WarriorInformation> => {
     const warriorInformation = await this.createOrUpdate(params);
 
+    const warriorRole = await UserRoleService.fetchWellnessWarriorRole();
+
     await User.update({
-      role_id: WELLNESS_WARRIOR_ROLE_ID,
+      role_id: warriorRole?.get('id'),
     }, {
       where: {
         id: params.user_id
@@ -95,10 +97,11 @@ export class WarriorInformationService implements IWarriorInformationService {
   }
 
   static isUserWarrior = async (user_id: number): Promise<boolean> => {
+    const warriorRole = await UserRoleService.fetchWellnessWarriorRole();
     const record = await User.findOne({
       where: {
         id: user_id,
-        role_id: WELLNESS_WARRIOR_ROLE_ID
+        role_id: warriorRole?.get('id')
       }
     });
 

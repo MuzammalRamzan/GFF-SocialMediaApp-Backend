@@ -6,29 +6,29 @@ import { FindFriendService } from './findFriendService'
 import { acceptRejectFriendRequest, createFindFriendRequest } from './interface'
 
 export class FindFriendController {
-	private readonly findFriendService: FindFriendService
+  private readonly findFriendService: FindFriendService
 
-	constructor() {
-		this.findFriendService = new FindFriendService()
-	}
+  constructor() {
+    this.findFriendService = new FindFriendService()
+  }
 
-	findFriend = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
-		try {
-			const searchTerm = req.query.search as string
-			const userId = req?.user?.id as number
+  findFriend = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+      const searchTerm = req.query.search as string
+      const userId = req?.user?.id as number
 
-			const friend = await this.findFriendService.findFriend(searchTerm, userId)
-			return res.status(200).json({
-				data: {
-					friend
-				},
-				message: 'Friend found',
-				code: 200
-			})
-		} catch (error) {
-			next(error)
-		}
-	}
+      const friend = await this.findFriendService.findFriend(searchTerm, userId)
+      return res.status(200).json({
+        data: {
+          friend
+        },
+        message: 'Friend found',
+        code: 200
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
 
   friendRequests = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
@@ -62,29 +62,34 @@ export class FindFriendController {
     }
   }
 
-	createFindFriendRequest = async (req: createFindFriendRequest, res: Response, next: NextFunction) => {
-		try {
-			const errors = validationResult(req).array({ onlyFirstError: true })
-			if (errors.length) {
-				return res.status(400).json({ errors: errors, message: 'Validation error', code: 400 })
-			}
+  createFindFriendRequest = async (req: createFindFriendRequest, res: Response, next: NextFunction) => {
+    try {
+      const errors = validationResult(req).array({ onlyFirstError: true })
+      if (errors.length) {
+        return res.status(400).json({ errors: errors, message: 'Validation error', code: 400 })
+      }
 
-			const loggedInUserId = req?.user?.id as number
-			const user_id = req.body.user_id as number
+      const loggedInUserId = req?.user?.id as number
+      const user_id = req.body.user_id as number
 
-			const isUserExists = await UserService.isExists(user_id)
+      const isUserExists = await UserService.isExists(user_id)
 
-			if (!isUserExists) {
-				return res.status(400).json({ message: 'User not found', code: 400 })
-			}
+      if (!isUserExists) {
+        return res.status(400).json({ message: 'User not found', code: 400 })
+      }
 
-			const request = await this.findFriendService.findBySenderIdAndReceiverId(loggedInUserId, user_id)
-			if (request) {
-				return res.status(400).send({
-					message: 'Request already exists, you cannot send request twice!',
-					code: 400
-				})
-			}
+      const isBlocked = await this.findFriendService.isBlocked(loggedInUserId, user_id);
+      if (isBlocked) {
+        return res.status(400).json({
+          message: isBlocked.sender_id === loggedInUserId ? 'You have blocked this user, please unblock the friend and send a new request!' : 'You cannot send friend request to this user!',
+          code: 400
+        })
+      }
+
+      const isFriend = await this.findFriendService.areUsersFriend(loggedInUserId, user_id)
+      if (isFriend) {
+        return res.status(400).json({ message: 'Request already exists or accepted it, you cannot send request twice!', code: 400 })
+      }
 
       const findFriendRequest = await this.findFriendService.add(loggedInUserId, user_id)
       return res.status(200).send({
@@ -117,11 +122,11 @@ export class FindFriendController {
     }
   }
 
-	rejectFriendRequest = async (req: acceptRejectFriendRequest, res: Response, next: NextFunction) => {
-		try {
-			const userId = req?.user?.id as number
-			const id = +req.body.request_id
-			const rejectFriendRequest = await this.findFriendService.reject(id, userId)
+  rejectFriendRequest = async (req: acceptRejectFriendRequest, res: Response, next: NextFunction) => {
+    try {
+      const userId = req?.user?.id as number
+      const id = +req.body.request_id
+      const rejectFriendRequest = await this.findFriendService.reject(id, userId)
 
       return res.status(200).send({
         data: {
@@ -167,16 +172,16 @@ export class FindFriendController {
     }
   }
 
-	blockFriend = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
-		try {
-			const userId = req?.user?.id as number
-			const id = req.body.user_id
-			const reason = req.body.reason || ''
+  blockFriend = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+      const userId = req?.user?.id as number
+      const id = req.body.user_id
+      const reason = req.body.reason || ''
 
-			const isExists = await UserService.isExists(id)
-			if (!isExists) {
-				return res.status(404).json({ message: 'User not found', code: 404 })
-			}
+      const isExists = await UserService.isExists(id)
+      if (!isExists) {
+        return res.status(404).json({ message: 'User not found', code: 404 })
+      }
 
       const blockFriend = await this.findFriendService.blockFriend(userId, id, reason)
       return res.status(200).send({
@@ -191,15 +196,15 @@ export class FindFriendController {
     }
   }
 
-	unblockFriend = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
-		try {
-			const userId = req?.user?.id as number
-			const id = req.body.user_id
+  unblockFriend = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+      const userId = req?.user?.id as number
+      const id = req.body.user_id
 
-			const isExists = await UserService.isExists(id)
-			if (!isExists) {
-				return res.status(404).json({ message: 'User not found', code: 404 })
-			}
+      const isExists = await UserService.isExists(id)
+      if (!isExists) {
+        return res.status(404).json({ message: 'User not found', code: 404 })
+      }
 
       const unblockFriend = await this.findFriendService.unblockFriend(userId, id)
       return res.status(200).send({
@@ -230,15 +235,15 @@ export class FindFriendController {
     }
   }
 
-	getFriendByUserId = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
-		try {
-			const loggedInUserId = req?.user?.id as number
-			const userId = +req.params.user_id
+  getFriendByUserId = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+      const loggedInUserId = req?.user?.id as number
+      const userId = +req.params.user_id
 
-			const isExists = await UserService.isExists(userId)
-			if (!isExists) {
-				return res.status(404).json({ message: 'User not found', code: 404 })
-			}
+      const isExists = await UserService.isExists(userId)
+      if (!isExists) {
+        return res.status(404).json({ message: 'User not found', code: 404 })
+      }
 
       const friend = await this.findFriendService.getFriendByUserId(loggedInUserId, userId)
       return res.status(200).send({
