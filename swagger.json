@@ -2389,74 +2389,6 @@
 				}
 			}
 		},
-		"/user/{id}": {
-			"get": {
-				"tags": ["user"],
-				"description": "Get a user by id",
-				"parameters": [
-					{
-						"name": "auth-token",
-						"in": "header",
-						"description": "Auth Token",
-						"required": true,
-						"type": "string"
-					},
-					{
-						"name": "id",
-						"in": "path",
-						"description": "User ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "string"
-								},
-								"example": {
-									"data": {
-										"users": {
-											"id": 37,
-											"role_id": 1,
-											"full_name": "ime prezime",
-											"email": "test",
-											"password": "$2b$10$Q9BzTt.cFMsuFlioq/BMYuTd5GQbCpJQU.9oAPag.JhCngu3Z7hgq",
-											"default_currency_id": 1,
-											"user_feature_id": null
-										}
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
-								}
-							}
-						}
-					}
-				}
-			}
-		},
 		"/auth/signup": {
 			"post": {
 				"tags": ["auth"],
@@ -6018,74 +5950,6 @@
 				}
 			}
 		},
-		"/user/{id}": {
-			"get": {
-				"tags": ["user"],
-				"description": "Get a user by id",
-				"parameters": [
-					{
-						"name": "auth-token",
-						"in": "header",
-						"description": "Auth Token",
-						"required": true,
-						"type": "string"
-					},
-					{
-						"name": "id",
-						"in": "path",
-						"description": "User ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "string"
-								},
-								"example": {
-									"data": {
-										"users": {
-											"id": 37,
-											"role_id": 1,
-											"full_name": "ime prezime",
-											"email": "test",
-											"password": "$2b$10$Q9BzTt.cFMsuFlioq/BMYuTd5GQbCpJQU.9oAPag.JhCngu3Z7hgq",
-											"default_currency_id": 1,
-											"user_feature_id": null
-										}
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
-								}
-							}
-						}
-					}
-				}
-			}
-		},
 		"/auth/signup": {
 			"post": {
 				"tags": ["auth"],
@@ -6629,7 +6493,7 @@
 				}
 			}
 		},
-		"/user/update/{id}": {
+		"/user/update": {
 			"put": {
 				"tags": ["user"],
 				"description": "Update user",
@@ -6640,18 +6504,6 @@
 						"description": "Auth Token",
 						"required": true,
 						"type": "string"
-					},
-					{
-						"name": "id",
-						"in": "path",
-						"description": "User ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
 					}
 				],
 				"requestBody": {
@@ -6662,7 +6514,7 @@
 							},
 							"examples": {
 								"0": {
-									"value": "{\n        \"role_id\": 1,\n        \"full_name\": \"Ime Prezime\",\n        \"email\": \"mail\",\n        \"password\": \"$2b$10$M4QdxV/.ReaW3P25HBO7wumg.DJAiVIo1QF2SAjeeeiR89aXen6Dy\",\n        \"phone_number\": \"91234567\",\n        \"default_currency_id\": 1,\n        \"user_feature_id\": null\n    }"
+									"value": "{\n        \"full_name\": \"Ime Prezime\",\n        \"email\": \"mail\",\n        \"phone_number\": \"91234567\",\n        \"default_currency_id\": 1,\n        \"user_feature_id\": null\n    }"
 								}
 							}
 						}
@@ -6765,7 +6617,14 @@
 											"other_education": "No test education"
 										},
 										"warriorInformation": null,
-										"mentorInformation": null
+										"mentorInformation": null,
+										"hashtags": [
+											{
+												"id": 40,
+												"hashtag_name": "#test",
+												"user_information_id": 113
+											}
+										]
 									},
 									"message": "OK",
 									"code": 200
@@ -6776,7 +6635,7 @@
 				}
 			}
 		},
-		"/user/other-info/{id}": {
+		"/user/{id}": {
 			"get": {
 				"tags": ["user"],
 				"description": "Get Other User details",
@@ -6808,6 +6667,19 @@
 							"application/json; charset=utf-8": {
 								"example": {
 									"data": {
+										"id": 169,
+										"role_id": 4,
+										"full_name": "undefined",
+										"email": "test1@test.com",
+										"default_currency_id": 1,
+										"user_feature_id": null,
+										"hashtags": [
+											{
+												"id": 40,
+												"hashtag_name": "#test",
+												"user_information_id": 113
+											}
+										],
 										"user_information": {
 											"id": 1,
 											"user_id": 169,
