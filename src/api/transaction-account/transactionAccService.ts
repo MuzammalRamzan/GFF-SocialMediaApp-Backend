@@ -1,6 +1,8 @@
 import { ITransactionAccountService, TransactionAccountType } from './interface'
 import { TransactionAccount } from './transactionAccModel'
 
+// TODO: pull data from db with user id and join it with account types table
+
 export class TransactionAccService implements ITransactionAccountService {
 	async list(): Promise<TransactionAccount[]> {
 		const transactionAcc = await TransactionAccount.findAll()
@@ -16,6 +18,16 @@ export class TransactionAccService implements ITransactionAccountService {
 		})
 
 		return transactionAccount
+	}
+
+	async fetchForUser (userId: number): Promise<TransactionAccount[]> {
+		const accounts = await TransactionAccount.findAll({
+			where: {
+				user_id: userId
+			}
+		})
+
+		return accounts
 	}
 
 	async add(params: TransactionAccountType): Promise<TransactionAccount> {
