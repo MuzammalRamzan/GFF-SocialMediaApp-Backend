@@ -2,13 +2,15 @@ const params = new Proxy(new URLSearchParams(window.location.search), {
 	get: (searchParams, prop) => searchParams.get(prop)
 })
 
+const authToken = localStorage.getItem('auth-token')
+
 // Sending messages, a simple POST
 function PublishForm(form) {
 	function sendMessage(message) {
-		fetch('http://localhost:3000/message/send/room/1/' + params.userId, {
+		fetch('http://localhost:3000/message/send/room/2', {
 			method: 'POST',
 			body: JSON.stringify({ message }),
-			headers: { 'Content-Type': 'application/json' }
+			headers: { 'Content-Type': 'application/json', 'auth-token': authToken }
 		})
 	}
 
@@ -22,17 +24,17 @@ function PublishForm(form) {
 	}
 }
 
+function showMessage(elem, message) {
+	let messageElem = document.createElement('div')
+	messageElem.append(message)
+	elem.append(messageElem)
+}
 // Receiving messages with long polling
 function SubscribePane(elem, url) {
-	url = 'http://localhost:3000/message/room/subscribe/1/' + params.userId
-	function showMessage(message) {
-		let messageElem = document.createElement('div')
-		messageElem.append(message)
-		elem.append(messageElem)
-	}
+	url = 'http://localhost:3000/message/room/subscribe/2'
 
 	async function subscribe() {
-		let response = await fetch(url)
+		let response = await fetch(url, { headers: { 'auth-token': authToken } })
 
 		if (response.status == 502) {
 			// Connection timeout
@@ -41,17 +43,31 @@ function SubscribePane(elem, url) {
 			await subscribe()
 		} else if (response.status != 200) {
 			// Show Error
-			showMessage(response.statusText)
+			showMessage(elem, response.statusText)
 			// Reconnect in one second
 			await new Promise(resolve => setTimeout(resolve, 1000))
 			await subscribe()
 		} else {
 			// Got message
 			let message = await response.text()
-			showMessage(message)
+			showMessage(elem, message)
 			await subscribe()
 		}
 	}
 
 	subscribe()
+}
+
+function GetAllMessages(elem) {
+	async function getAll() {
+		let response = await fetch('http://localhost:3000/message/room/2?from=2022-07-06T04:22:54.000Z', {
+			headers: { 'auth-token': authToken }
+		})
+		response = await response.json()
+		if (response.code === 200) {
+			let messages = response.data.messages
+			messages.map(msg => showMessage(elem, JSON.stringify({ message: msg.body, from: msg.user_id })))
+		}
+	}
+	getAll()
 }

@@ -12,7 +12,7 @@ export class MessageService {
 	private subscribers: SubscribersType = Object.create(null)
 
 	public async sendMessage(message: string, user_id: number, room_id: number): Promise<Message> {
-		const messageObj = new Message()
+		const messageObj = await Message.create({ user_id, room_id, body: message })
 
 		this.publishMessage(message, user_id, room_id)
 
@@ -73,7 +73,7 @@ export class MessageService {
 			let roomParticipants = Object.keys(this.subscribers[room_id]).filter(userId => +userId !== user_id)
 			roomParticipants.map(participantId => {
 				if (this.subscribers[room_id][participantId]) {
-					this.subscribers[room_id][participantId]?.end(JSON.stringify({ user_id, message }))
+					this.subscribers[room_id][participantId]?.end(JSON.stringify({ from: user_id, message }))
 				}
 				this.subscribers[room_id][participantId] = null
 			})

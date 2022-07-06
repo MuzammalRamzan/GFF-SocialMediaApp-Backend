@@ -5,6 +5,6 @@ import { MessageController } from './message.controller'
 const controller = new MessageController()
 export const messageRoute = express.Router()
 
-messageRoute.post('/send/room/:roomId/:userId', controller.sendMessage as Application)
+messageRoute.post('/send/room/:roomId', authMiddleware, controller.sendMessage as Application)
 messageRoute.get('/room/:id', authMiddleware, controller.getMessages as Application)
-messageRoute.get('/room/subscribe/:roomId/:userId', controller.subscribeToRoom as Application)
+messageRoute.get('/room/subscribe/:roomId', authMiddleware, controller.subscribeToRoom as Application)
