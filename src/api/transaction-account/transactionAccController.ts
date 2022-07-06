@@ -6,7 +6,16 @@ import {
 	CreateTransactionAccountRequest,
 	UpdateTransactionAccountRequest
 } from './interface'
+import { TransactionAccount } from './transactionAccModel'
 import { TransactionAccService } from './transactionAccService'
+
+type AccountArray = {
+	bank: TransactionAccount[]
+	card: TransactionAccount[]
+	manual: TransactionAccount[]
+	mPesa: TransactionAccount[]
+	wallet: TransactionAccount[]
+}
 
 export class TransactionAccController {
 	private readonly transactionAccService: TransactionAccService
@@ -43,6 +52,53 @@ export class TransactionAccController {
 				error.httpStatusCode = 500
 			}
 			return jsonErrorHandler(err, req, res, () => {})
+		}
+	}
+
+	getAllTransactionAccountsForUser = async (req: GetTransactionAccountByIdRequest, res: Response, next: NextFunction) => {
+		const userId = +req.user.id
+		const result: AccountArray = {
+			bank: [],
+			card: [],
+			manual: [],
+			mPesa: [],
+			wallet: [],
+		}
+
+		try {
+			const accountResult = await this.transactionAccService.fetchForUser(userId)
+
+			// TODO: match results by id
+
+			accountResult.forEach((element, index) => {
+				switch (element.getDataValue('account_type_id')) {
+					case 1:
+						result.bank.push(element)
+						break
+					case 2:
+						result.card.push(element)
+						break
+					case 3:
+						result.manual.push(element)
+						break
+					case 4:
+						result.mPesa.push(element)
+						break
+					case 5:
+						result.wallet.push(element)
+						break
+				}
+			})
+
+			return res.status(200).send({
+				data: {
+					result
+				},
+				code: 200,
+				message: 'OK'
+			})
+		} catch (err) {
+			next(err)
 		}
 	}
 

@@ -34,3 +34,8 @@ export interface UpdateDoseRequest extends Request {
 export interface DeleteDoseRequest extends Request {
 	id: number
 }
+export const categoryType = {
+	NEWS: 'news',
+	MUSIC: 'music',
+	WISEWORD: 'wise-words'
+}

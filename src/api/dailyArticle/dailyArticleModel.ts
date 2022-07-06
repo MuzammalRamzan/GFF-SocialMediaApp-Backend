@@ -1,9 +1,10 @@
 import { DataTypes, Model } from 'sequelize'
 import { sequelize } from '../../database/index'
 import { categoryType } from './interface'
-export class DailyDose extends Model {}
 
-DailyDose.init(
+export class DailyArticle extends Model {}
+
+DailyArticle.init(
 	{
 		id: {
 			type: DataTypes.INTEGER,
@@ -33,14 +34,14 @@ DailyDose.init(
 			type: DataTypes.STRING
 		},
 		category: {
-			type: DataTypes.ENUM(categoryType.MUSIC, categoryType.NEWS, categoryType.WISEWORD),
+			type: DataTypes.JSON,
 			allowNull: false
 		}
 	},
 
 	{
 		sequelize,
-		tableName: 'dailyDose'
+		tableName: 'dailyArticle'
 	}
 )
-DailyDose.sync()
+DailyArticle.sync()

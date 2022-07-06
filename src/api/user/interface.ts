@@ -1,10 +1,10 @@
 import { Request } from 'express'
-import { FindFriendRequest } from '../find-friend/interface'
-import { IMentorInformation, MentorInformation } from '../mentor-information/mentorInformationModel'
-import { IMentorRequest } from '../mentor-matcher/interface'
+import { FindFriendModel } from '../find-friend/findFriendModel'
+import { MentorInformation } from '../mentor-information/mentorInformationModel'
+import { MentorMatcherModel } from '../mentor-matcher/mentorMatcherModel'
 import { UserInformation } from '../user-information/userInformationModel'
 import { WarriorInformation } from '../warrior-information/warriorInformationModel'
-import { IWellnessWarriorRequest } from '../wellness-warrior/interface'
+import { WellnessWarrior } from '../wellness-warrior/wellnessWarriorModel'
 import { User } from './userModel'
 
 export type UserType = {
@@ -30,11 +30,12 @@ export interface UserInfo extends User {
 }
 
 export interface OtherUserInfo {
-	userInformation: UserInfo | null
-	sentFriendRequests: FindFriendRequest[]
-	receivedFriendRequests: FindFriendRequest[]
-	mentorRequests: IMentorRequest[]
-	wellnessWarriorRequests: IWellnessWarriorRequest[]
+	user_information: UserInformation | undefined
+	warrior_information: WarriorInformation | undefined
+	mentor_information: MentorInformation | undefined
+	friend_request: FindFriendModel | null
+	mentor_request: MentorMatcherModel | null
+	warrior_request: WellnessWarrior | null
 }
 
 export interface IUserService {
@@ -46,7 +47,7 @@ export interface IUserService {
 	searchFriend(search: string, userId: number): Promise<ISearchUser[]>
 	fetchFullUserById(userId: number): Promise<User[]>
 	getMyInfo(userId: number): Promise<UserInfo | null>
-	getOtherUserInfo(userId: number): Promise<OtherUserInfo | null>
+	getOtherUserInfo(userId: number, otherUserId: number): Promise<OtherUserInfo | null>
 }
 
 export interface GetUsersByIdRequest extends Request {

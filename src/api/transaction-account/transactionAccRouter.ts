@@ -7,5 +7,6 @@ export const transactionAccRouter = express.Router()
 
 transactionAccRouter.get('/list', transactionAccController.getAllTransactionAccounts)
 transactionAccRouter.get('/id/:id', authMiddleware, transactionAccController.getTransactionAccountById as Application)
+transactionAccRouter.get('/user', authMiddleware, transactionAccController.getAllTransactionAccountsForUser as Application)
 transactionAccRouter.post('/add', authMiddleware, transactionAccController.createTransactionAccount as Application)
 transactionAccRouter.put('/update/:id', authMiddleware, transactionAccController.updateTransaction as Application)
