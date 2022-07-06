@@ -62,6 +62,10 @@
 			"description": "daily dose apis routes"
 		},
 		{
+			"name": "dailyArticle",
+			"description": "Daily Article apis"
+		},
+		{
 			"name": "uploads",
 			"description": "File upload related routes"
 		}
@@ -2453,9 +2457,9 @@
 				}
 			}
 		},
-		"/dailyDose/add": {
+		"/dailyArticle/add": {
 			"post": {
-				"tags": ["dailydose"],
+				"tags": ["dailyArticle"],
 				"parameters": [
 					{
 						"name": "auth-token",
@@ -2465,19 +2469,22 @@
 						"type": "string"
 					}
 				],
-				"description": "Post api to post a new dose",
+				"description": "Post api to post a new article",
 				"requestBody": {
 					"content": {
-						"application/json": {
+						"multipart/form-data": {
 							"schema": {
-								"$ref": "#/components/schemas/dailydose"
-							},
-							"examples": {
-								"0": {
-									"value": "{\n        \"title\": \"Ime Prezime\",\n        \"subtitle\": \"Ime Prezime\",\n        \"image\": \"https://abc.jpeg\",\n  \"contentURL\": \"This is content URL\",\n  \"contentBody\": \"This is content body\",\n   \"keyword\": \"abc\",\n        \"category\": \"news\"\n        }"
-								},
-								"1": {
-									"value": "{\n        \"title\": \"Ime Prezime\",\n        \"subtitle\": \"Ime Prezime\",\n        \"image\": \"https://abc.jpeg\",\n    \"category\": \"news\"\n        }"
+								"type": "object",
+								"properties": {
+									"title": { "type": "string", "format": "string" },
+									"subtitle": { "type": "string", "format": "string" },
+									"contentURL": { "type": "string", "format": "string" },
+									"contentBody": { "type": "string", "format": "string" },
+									"keyWord": { "type": "string", "format": "string" },
+									"category[0]": { "type": "string", "format": "string" },
+									"category[1]": { "type": "string", "format": "string" },
+									"category[2]": { "type": "string", "format": "string" },
+									"Image": { "type": "string", "format": "binary" }
 								}
 							}
 						}
@@ -2495,7 +2502,361 @@
 									"data": {
 										"dailyDose": {
 											"id": 2,
-											"title": "Muzammil",
+											"title": "Chirag",
+											"subtitle": "abc",
+											"image": "https://image.png",
+											"category": "news"
+										}
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/dailyArticle/update/{id}": {
+			"put": {
+				"tags": ["dailyArticle"],
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Transaction category ID",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					}
+				],
+				"description": "Put api to update article",
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"title": { "type": "string", "format": "string" },
+									"subtitle": { "type": "string", "format": "string" },
+									"contentURL": { "type": "string", "format": "string" },
+									"keyWord": { "type": "string", "format": "string" },
+									"contentBody": { "type": "string", "format": "string" },
+									"category[0]": { "type": "string", "format": "string" },
+									"category[1]": { "type": "string", "format": "string" },
+									"category[2]": { "type": "string", "format": "string" },
+									"Image": { "type": "string", "format": "binary" }
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"dailyDose": {
+											"id": 2,
+											"title": "Chirag Agrawal",
+											"subtitle": "abc",
+											"image": "https://image.png",
+											"category": "news"
+										}
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/dailyArticle/getByCategory": {
+			"get": {
+				"tags": ["dailyArticle"],
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "category",
+						"in": "query",
+						"description": "category name,'friend-finder', 'budget-buster', 'you-should-know'",
+						"type": "string"
+					}
+				],
+				"description": "Get api to get data for each category",
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"dailyDose": [
+											{
+												"id": 16,
+												"title": "Chirag Agrawal",
+												"subtitle": "abc",
+												"image": "https://image.png",
+												"contentURL": null,
+												"keyword": null,
+												"category": "news"
+											},
+											{
+												"id": 17,
+												"title": "Chirag Agrawal",
+												"subtitle": "abc",
+												"image": "https://image.png",
+												"contentURL": null,
+												"keyword": null,
+												"category": "news"
+											},
+											{
+												"id": 18,
+												"title": "Chirag Agrawal",
+												"subtitle": "abc",
+												"image": "https://image.png",
+												"contentURL": null,
+												"keyword": null,
+												"category": "news"
+											},
+											{
+												"id": 19,
+												"title": "Chirag Agrawal",
+												"subtitle": "abc",
+												"image": "https://image.png",
+												"contentURL": null,
+												"keyword": null,
+												"category": "news"
+											},
+											{
+												"id": 20,
+												"title": "Chirag Agrawal",
+												"subtitle": "abc",
+												"image": "https://image.png",
+												"contentURL": null,
+												"keyword": null,
+												"category": "news"
+											},
+											{
+												"id": 21,
+												"title": "Chirag Agrawal",
+												"subtitle": "abc",
+												"image": "https://image.png",
+												"contentURL": null,
+												"keyword": null,
+												"category": "news"
+											},
+											{
+												"id": 22,
+												"title": "Chirag Agrawal",
+												"subtitle": "abc",
+												"image": "https://image.png",
+												"contentURL": null,
+												"keyword": null,
+												"category": "news"
+											},
+											{
+												"id": 23,
+												"title": "Chirag Agrawal",
+												"subtitle": "abc",
+												"image": "https://image.png",
+												"contentURL": null,
+												"keyword": null,
+												"category": "wise-words"
+											},
+											{
+												"id": 24,
+												"title": "Chirag Agrawal",
+												"subtitle": "abc",
+												"image": "https://image.png",
+												"contentURL": null,
+												"keyword": null,
+												"category": "music"
+											}
+										]
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/dailyArticle/delete/{id}": {
+			"delete": {
+				"tags": ["dailyArticle"],
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "id",
+						"in": "path",
+						"description": "dose id",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					}
+				],
+				"description": "delete api to delete article",
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"dailyDose": 1
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/dailyDose/add": {
+			"post": {
+				"tags": ["dailydose"],
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"description": "Post api to post a new dose",
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"title": { "type": "string", "format": "string" },
+									"subtitle": { "type": "string", "format": "string" },
+									"contentURL": { "type": "string", "format": "string" },
+									"keyWord": { "type": "string", "format": "string" },
+									"category": { "type": "string", "format": "string" },
+									"contentBody": { "type": "string", "format": "string" },
+									"Image": { "type": "string", "format": "binary" }
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"dailyDose": {
+											"id": 2,
+											"title": "Chirag",
 											"subtitle": "abc",
 											"image": "https://image.png",
 											"category": "news"
@@ -2551,16 +2912,17 @@
 				"description": "Put api to update dose",
 				"requestBody": {
 					"content": {
-						"application/json": {
+						"multipart/form-data": {
 							"schema": {
-								"$ref": "#/components/schemas/dailydose"
-							},
-							"examples": {
-								"0": {
-									"value": "{\n        \"title\": \"Ime Prezime\",\n        \"subtitle\": \"Ime Prezime\",\n        \"image\": \"https://abc.jpeg\",\n  \"contentURL\": \"This is content URL\",\n  \"contentBody\": \"This is content body\",\n \"keyword\": \"abc\",\n        \"category\": \"news\"\n        }"
-								},
-								"1": {
-									"value": "{\n        \"title\": \"Ime Prezime\",\n        \"subtitle\": \"Ime Prezime\",\n        \"image\": \"https://abc.jpeg\",\n    \"keyword\": \"abc\",\n        \"category\": \"news\"\n        }"
+								"type": "object",
+								"properties": {
+									"title": { "type": "string", "format": "string" },
+									"subtitle": { "type": "string", "format": "string" },
+									"contentURL": { "type": "string", "format": "string" },
+									"keyWord": { "type": "string", "format": "string" },
+									"contentBody": { "type": "string", "format": "string" },
+									"category": { "type": "string", "format": "string" },
+									"Image": { "type": "string", "format": "binary" }
 								}
 							}
 						}
@@ -2578,7 +2940,7 @@
 									"data": {
 										"dailyDose": {
 											"id": 2,
-											"title": "Muzammil",
+											"title": "Chirag Agrawal",
 											"subtitle": "abc",
 											"image": "https://image.png",
 											"category": "news"
@@ -2639,7 +3001,7 @@
 										"dailyDose": [
 											{
 												"id": 16,
-												"title": "Muzammil",
+												"title": "Chirag Agrawal",
 												"subtitle": "abc",
 												"image": "https://image.png",
 												"contentURL": null,
@@ -2648,7 +3010,7 @@
 											},
 											{
 												"id": 17,
-												"title": "Muzammil",
+												"title": "Chirag Agrawal",
 												"subtitle": "abc",
 												"image": "https://image.png",
 												"contentURL": null,
@@ -2657,7 +3019,7 @@
 											},
 											{
 												"id": 18,
-												"title": "Muzammil",
+												"title": "Chirag Agrawal",
 												"subtitle": "abc",
 												"image": "https://image.png",
 												"contentURL": null,
@@ -2666,7 +3028,7 @@
 											},
 											{
 												"id": 19,
-												"title": "Muzammil",
+												"title": "Chirag Agrawal",
 												"subtitle": "abc",
 												"image": "https://image.png",
 												"contentURL": null,
@@ -2675,7 +3037,7 @@
 											},
 											{
 												"id": 20,
-												"title": "Muzammil",
+												"title": "Chirag Agrawal",
 												"subtitle": "abc",
 												"image": "https://image.png",
 												"contentURL": null,
@@ -2684,7 +3046,7 @@
 											},
 											{
 												"id": 21,
-												"title": "Muzammil",
+												"title": "Chirag Agrawal",
 												"subtitle": "abc",
 												"image": "https://image.png",
 												"contentURL": null,
@@ -2693,7 +3055,7 @@
 											},
 											{
 												"id": 22,
-												"title": "Muzammil",
+												"title": "Chirag Agrawal",
 												"subtitle": "abc",
 												"image": "https://image.png",
 												"contentURL": null,
@@ -2702,7 +3064,7 @@
 											},
 											{
 												"id": 23,
-												"title": "Muzammil",
+												"title": "Chirag Agrawal",
 												"subtitle": "abc",
 												"image": "https://image.png",
 												"contentURL": null,
@@ -2711,7 +3073,7 @@
 											},
 											{
 												"id": 24,
-												"title": "Muzammil",
+												"title": "Chirag Agrawal",
 												"subtitle": "abc",
 												"image": "https://image.png",
 												"contentURL": null,
@@ -5163,6 +5525,126 @@
 									"error": "404",
 									"message": "Wrong username or password!"
 								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/transactionAccount/user": {
+			"get": {
+				"tags": ["transaction-account"],
+				"description": "List all transaction accounts for user",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"result": {
+										"bank": [
+											{
+											"id": 108,
+											"balance": 0,
+											"account_type_id": 1,
+											"name": "GFDFGHJss",
+											"country": "",
+											"bank_name": "",
+											"card_owner": "Dsaf",
+											"card_number": "2345 678",
+											"card_expiration_date": "0000-00-00",
+											"card_cvc": "333",
+											"currency_id": 1,
+											"user_id": 425,
+											"status": "active"
+											}
+										],
+										"card": [
+											{
+											"id": 109,
+											"balance": 0,
+											"account_type_id": 2,
+											"name": "Namee",
+											"country": "",
+											"bank_name": "",
+											"card_owner": "Name",
+											"card_number": "5678 9033 2233 2221",
+											"card_expiration_date": "0000-00-00",
+											"card_cvc": "332",
+											"currency_id": 1,
+											"user_id": 425,
+											"status": "active"
+											}
+										],
+										"manual": [
+											{
+											"id": 110,
+											"balance": 0,
+											"account_type_id": 3,
+											"name": "Ffff",
+											"country": "",
+											"bank_name": "",
+											"card_owner": "Ewe",
+											"card_number": "235",
+											"card_expiration_date": "2020-01-01",
+											"card_cvc": "323",
+											"currency_id": 1,
+											"user_id": 425,
+											"status": "active"
+											}
+										],
+										"mPesa": [
+											{
+											"id": 111,
+											"balance": 0,
+											"account_type_id": 4,
+											"name": "D",
+											"country": "",
+											"bank_name": "",
+											"card_owner": "D",
+											"card_number": "d",
+											"card_expiration_date": "0000-00-00",
+											"card_cvc": "3",
+											"currency_id": 1,
+											"user_id": 425,
+											"status": "active"
+											}
+										],
+										"wallet": [
+											{
+											"id": 112,
+											"balance": 0,
+											"account_type_id": 5,
+											"name": "Test",
+											"country": "",
+											"bank_name": "",
+											"card_owner": "",
+											"card_number": "",
+											"card_expiration_date": "0000-00-00",
+											"card_cvc": "",
+											"currency_id": 1,
+											"user_id": 425,
+											"status": "active"
+											}
+										]
+										}
+									},
+									"code": 200,
+									"message": "OK"
+									}
 							}
 						}
 					}

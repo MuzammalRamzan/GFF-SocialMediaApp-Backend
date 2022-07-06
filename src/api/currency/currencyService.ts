@@ -22,6 +22,16 @@ export class CurrencyService implements ICurrencyService {
         return result
     }
 
+    async fetchDefault (): Promise<Currency | null> {
+        const result = await Currency.findOne({
+            where: {
+                name: 'US Dollar'
+            }
+        })
+
+        return result
+    }
+
     async add (params: CurrencyType): Promise<Currency> {
         const result = await Currency.create({
             symbol: params.symbol,
