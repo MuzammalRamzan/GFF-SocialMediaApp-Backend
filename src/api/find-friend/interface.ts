@@ -24,6 +24,11 @@ export type FindFriendRequest = {
 	block_reason?: string
 }
 
+export interface FindFriendAssociation {
+	id: number
+	findFriendAssociations: FindFriendModel
+}
+
 export interface FriendUser {
 	id: number
 	full_name: string
@@ -36,7 +41,7 @@ export interface FriendUser {
 		job_role: string
 		education: string
 	}
-	friend_request: FindFriendModel
+	userAssociations?: FindFriendAssociation
 }
 
 export type FriendRequestWithUserInformation = {

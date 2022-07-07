@@ -11,6 +11,7 @@ import { User } from '../user/userModel'
 import { Op, where, fn, col } from 'sequelize'
 import { UserInformation } from '../user-information/userInformationModel'
 import { GffError } from '../helper/errorHandler'
+import { Associations } from '../association/association.model'
 
 export class FindFriendService implements IFindFriendService {
 	async getFriendRequestsBySenderId(sender_id: number): Promise<FindFriendRequest[]> {
@@ -225,6 +226,19 @@ export class FindFriendService implements IFindFriendService {
 							[Op.ne]: null
 						}
 					}
+				},
+				{
+					model: Associations,
+					as: 'userAssociations',
+					attributes: ['id'],
+					include: [
+						{
+							model: FindFriendModel,
+							as: 'findFriendAssociations',
+							where: { [Op.or]: [{ sender_id: userId }, { receiver_id: userId }], request_type: RequestType.FRIEND },
+							required: true
+						}
+					]
 				}
 			]
 		})
@@ -235,19 +249,10 @@ export class FindFriendService implements IFindFriendService {
 			friend = {
 				full_name: friend.full_name,
 				id: friend.id,
-				user_information: friend?.user_information?.get()
+				user_information: friend?.user_information?.get(),
+				userAssociations: friend.userAssociations
 			} as FriendUser
 
-			const friend_request = await FindFriendModel.findOne({
-				where: {
-					[Op.or]: [
-						{ sender_id: userId, receiver_id: friend.id },
-						{ sender_id: friend.id, receiver_id: userId }
-					]
-				}
-			})
-
-			friend['friend_request'] = friend_request?.get()
 			friends.push(friend)
 		}
 
@@ -484,7 +489,7 @@ export class FindFriendService implements IFindFriendService {
 			}
 		})
 
-		return isBlocked?.get();
+		return isBlocked?.get()
 	}
 
 	async areUsersFriend(sender_id: number, receiver_id: number): Promise<boolean> {
@@ -494,7 +499,7 @@ export class FindFriendService implements IFindFriendService {
 					{ sender_id: sender_id, receiver_id: receiver_id },
 					{ sender_id: receiver_id, receiver_id: sender_id }
 				],
-				request_type: RequestType.FRIEND,
+				request_type: RequestType.FRIEND
 			}
 		})
 
