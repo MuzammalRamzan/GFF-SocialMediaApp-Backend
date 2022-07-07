@@ -1,4 +1,4 @@
-import { DataTypes, Model, QueryInterface } from 'sequelize'
+import { DataTypes, Model } from 'sequelize'
 import { sequelize } from '../../database/index'
 import { FindFriendModel } from '../find-friend/findFriendModel'
 import { User } from '../user/userModel'
@@ -22,7 +22,7 @@ Associations.init(
 	},
 	{
 		sequelize,
-		tableName: 'associations'
+		tableName: 'search_associations'
 	}
 )
 
