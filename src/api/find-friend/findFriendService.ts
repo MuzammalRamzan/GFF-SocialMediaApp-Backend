@@ -92,6 +92,11 @@ export class FindFriendService implements IFindFriendService {
 			request_type: RequestType.FRIEND
 		})
 
+		await Associations.bulkCreate([
+			{ user_id: sender_id, find_friend_id: SendRequest.getDataValue('id') },
+			{ user_id: receiver_id, find_friend_id: SendRequest.getDataValue('id') }
+		])
+
 		return SendRequest as FindFriendModel
 	}
 

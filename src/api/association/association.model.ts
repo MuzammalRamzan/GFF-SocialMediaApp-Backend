@@ -2,6 +2,7 @@ import { DataTypes, Model } from 'sequelize'
 import { sequelize } from '../../database/index'
 import { FindFriendModel } from '../find-friend/findFriendModel'
 import { User } from '../user/userModel'
+import { WellnessWarrior } from '../wellness-warrior/wellnessWarriorModel'
 
 export class Associations extends Model {}
 
@@ -18,6 +19,9 @@ Associations.init(
 		},
 		find_friend_id: {
 			type: DataTypes.INTEGER
+		},
+		wellness_warrior_id: {
+			type: DataTypes.INTEGER
 		}
 	},
 	{
@@ -28,5 +32,6 @@ Associations.init(
 
 User.hasOne(Associations, { foreignKey: 'user_id', as: 'userAssociations' })
 Associations.belongsTo(FindFriendModel, { foreignKey: 'find_friend_id', as: 'findFriendAssociations' })
+Associations.belongsTo(WellnessWarrior, { foreignKey: 'wellness_warrior_id', as: 'wellnessWarriorAssociations' })
 
 Associations.sync()
