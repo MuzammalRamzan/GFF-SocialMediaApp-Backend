@@ -59,7 +59,7 @@ export interface ISearchMentors {
 	}
 	mentor_matcher_request: {
 		id: number
-		mentorMatcherAssociations: IMentorRequest
+		mentor_matcher_associations: IMentorRequest
 	}
 }
 

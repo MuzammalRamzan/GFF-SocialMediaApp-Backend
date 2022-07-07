@@ -234,12 +234,12 @@ export class FindFriendService implements IFindFriendService {
 				},
 				{
 					model: Associations,
-					as: 'userAssociations',
+					as: 'user_associations',
 					attributes: ['id'],
 					include: [
 						{
 							model: FindFriendModel,
-							as: 'findFriendAssociations',
+							as: 'find_friend_associations',
 							where: { [Op.or]: [{ sender_id: userId }, { receiver_id: userId }], request_type: RequestType.FRIEND },
 							required: true
 						}
@@ -255,7 +255,7 @@ export class FindFriendService implements IFindFriendService {
 				full_name: friend.full_name,
 				id: friend.id,
 				user_information: friend?.user_information?.get(),
-				userAssociations: friend.userAssociations
+				user_associations: friend.user_associations
 			} as FriendUser
 
 			friends.push(friend)

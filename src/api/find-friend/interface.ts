@@ -26,7 +26,7 @@ export type FindFriendRequest = {
 
 export interface FindFriendAssociation {
 	id: number
-	findFriendAssociations: FindFriendModel
+	find_friend_associations: FindFriendModel
 }
 
 export interface FriendUser {
@@ -41,7 +41,7 @@ export interface FriendUser {
 		job_role: string
 		education: string
 	}
-	userAssociations?: FindFriendAssociation
+	user_associations?: FindFriendAssociation
 }
 
 export type FriendRequestWithUserInformation = {

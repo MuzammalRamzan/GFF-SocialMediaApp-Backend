@@ -140,12 +140,12 @@ export class WellnessWarriorService implements IWellnessWarriorService {
 				},
 				{
 					model: Associations,
-					as: 'userAssociations',
+					as: 'user_associations',
 					attributes: ['id'],
 					include: [
 						{
 							model: WellnessWarrior,
-							as: 'wellnessWarriorAssociations',
+							as: 'wellness_warrior_associations',
 							where: {
 								user_id,
 								request_type: RequestType.WARRIOR
@@ -170,7 +170,7 @@ export class WellnessWarriorService implements IWellnessWarriorService {
 					therapy_type: user?.warrior_information?.therapy_type?.split(','),
 					price_range: user?.warrior_information?.price_range?.split(',')
 				},
-				wellness_warrior_request: user.userAssociations
+				wellness_warrior_request: user.user_associations
 			}
 		})
 	}

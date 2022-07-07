@@ -101,12 +101,12 @@ export class MentorMatcherService implements IMentorMatcherService {
 				},
 				{
 					model: Associations,
-					as: 'userAssociations',
+					as: 'user_associations',
 					attributes: ['id'],
 					include: [
 						{
 							model: MentorMatcherModel,
-							as: 'mentorMatcherAssociations',
+							as: 'mentor_matcher_associations',
 							where: {
 								mentee_id: userId,
 								request_type: MentorMatcherRequestType.MENTOR
@@ -142,7 +142,7 @@ export class MentorMatcherService implements IMentorMatcherService {
 					job_role: _data?.user_information?.job_role,
 					education: _data?.user_information?.education
 				},
-				mentor_matcher_request: _data?.userAssociations
+				mentor_matcher_request: _data?.user_associations
 			}
 		})
 	}
