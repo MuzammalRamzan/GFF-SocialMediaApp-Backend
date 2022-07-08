@@ -22,7 +22,7 @@ Transaction.init(
 			type: DataTypes.INTEGER,
 			allowNull: false
 		},
-		ammount: {
+		amount: {
 			type: DataTypes.INTEGER,
 			allowNull: false
 		},

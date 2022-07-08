@@ -13,7 +13,7 @@ export class TransactionService implements ITransactionService {
 			frequency: params.frequency,
 			user_id: params.user_id,
 			account_id: params.account_id,
-			ammount: params.amount,
+			amount: params.amount,
 			category_id: params.category_id,
 			status: params.status,
 			created_at: created_at,

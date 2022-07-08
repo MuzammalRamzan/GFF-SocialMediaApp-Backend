@@ -6144,6 +6144,7 @@
 												"id": 1,
 												"frequency": "never",
 												"user_id": 16,
+												"amount": 160,
 												"account_id": 3,
 												"category_id": 1,
 												"status": "active"
@@ -6152,6 +6153,7 @@
 												"id": 6,
 												"frequency": "weekly",
 												"user_id": 16,
+												"amount": 160,
 												"account_id": 2,
 												"category_id": 1,
 												"status": "inactive"
@@ -6160,6 +6162,7 @@
 												"id": 7,
 												"frequency": "weekly",
 												"user_id": 17,
+												"amount": 160,
 												"account_id": 2,
 												"category_id": 1,
 												"status": "inactive"
@@ -7119,6 +7122,7 @@
 											"id": 19,
 											"frequency": "monthly",
 											"user_id": 37,
+											"amount": 160,
 											"account_id": 3,
 											"category_id": 1,
 											"status": "active"
