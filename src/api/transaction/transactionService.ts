@@ -13,6 +13,7 @@ export class TransactionService implements ITransactionService {
 			frequency: params.frequency,
 			user_id: params.user_id,
 			account_id: params.account_id,
+			amount: params.amount,
 			category_id: params.category_id,
 			status: params.status,
 			created_at: created_at,
@@ -31,7 +32,8 @@ export class TransactionService implements ITransactionService {
 				category_id: params.category_id,
 				status: params.status,
 				due_date: params.due_date,
-				payed_at: params.payed_at
+				payed_at: params.payed_at,
+				amount: params.amount,
 			},
 			{
 				where: {

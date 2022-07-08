@@ -9,7 +9,7 @@ export type TransactionCategoryType = {
     icon_url: string
     colour: string
     type: TransactionCategoryTypeEnum
-    is_default: number
+    is_default: boolean
     status: string
 }
 
