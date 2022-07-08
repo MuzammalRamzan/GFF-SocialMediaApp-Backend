@@ -47,7 +47,6 @@ export interface IUserService {
 	fetchByEmail(email: string, userId: number): Promise<User>
 	update(id: number, params: UserType): Promise<User>
 	delete(id: number, userId: number): Promise<number>
-	searchFriend(search: string, userId: number): Promise<ISearchUser[]>
 	fetchFullUserById(userId: number): Promise<User[]>
 	getMyInfo(userId: number): Promise<UserInfo | null>
 	getOtherUserInfo(userId: number, otherUserId: number): Promise<OtherUserInfo | null>
