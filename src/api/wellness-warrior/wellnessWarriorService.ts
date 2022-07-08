@@ -1,6 +1,7 @@
 import { col, fn, Op, where } from "sequelize";
-import { WELLNESS_WARRIOR_ROLE_ID } from "../../constants";
+import { USER_FIELDS, USER_INFORMATION_FIELDS, WELLNESS_WARRIOR_FIELDS } from "../../helper/db.helper";
 import { UserInformation } from "../user-information/userInformationModel";
+import { UserRoleService } from "../user-role/userRoleService";
 import { User } from "../user/userModel";
 import { IWarriorUser } from "../warrior-information/interface";
 import { WarriorInformation } from "../warrior-information/warriorInformationModel";
@@ -15,17 +16,17 @@ export class WellnessWarriorService implements IWellnessWarriorService {
       model: User,
       as: "warrior",
       foreignKey: "warrior_id",
-      attributes: ["id", "full_name"],
+      attributes: USER_FIELDS,
       include: [
         {
           model: UserInformation,
           as: "user_information",
-          attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education'],
+          attributes: USER_INFORMATION_FIELDS,
         },
         {
           model: WarriorInformation,
           as: 'warrior_information',
-          attributes: ["specialty", "certification", "therapy_type", "price_range"]
+          attributes: WELLNESS_WARRIOR_FIELDS
         }
       ]
     },
@@ -33,12 +34,12 @@ export class WellnessWarriorService implements IWellnessWarriorService {
       model: User,
       as: "user",
       foreignKey: "user_id",
-      attributes: ["id", "full_name"],
+      attributes: USER_FIELDS,
       include: [
         {
           model: UserInformation,
           as: "user_information",
-          attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education'],
+          attributes: USER_INFORMATION_FIELDS,
         }
       ]
     }
@@ -47,7 +48,7 @@ export class WellnessWarriorService implements IWellnessWarriorService {
   private readonly user_information_relation = {
     model: UserInformation,
     as: "user_information",
-    attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education'],
+    attributes: USER_INFORMATION_FIELDS,
   }
 
   private async getById(id: number): Promise<IWellnessWarriorRequest | null> {
@@ -73,6 +74,8 @@ export class WellnessWarriorService implements IWellnessWarriorService {
 
   async searchWellnessWarriors(user_id: number, searchParams: ISearchWarriorParams): Promise<IWarriorUser[]> {
 
+    const warriorRole = await UserRoleService.fetchWellnessWarriorRole();
+
     const _specialty = searchParams.specialty?.split(',');
     const _certification = searchParams.certification?.split(',');
     const _therapy_type = searchParams.therapy_type?.split(',');
@@ -81,7 +84,7 @@ export class WellnessWarriorService implements IWellnessWarriorService {
     const records = await User.findAll({
       where: {
         [Op.and]: [
-          { role_id: WELLNESS_WARRIOR_ROLE_ID },
+          { role_id: warriorRole?.get('id') },
           { id: { [Op.not]: user_id } },
           where(fn('lower', col('full_name')), "LIKE", `%${(searchParams.searchTerm || "").trim().toLowerCase()}%`),
         ]
@@ -90,7 +93,7 @@ export class WellnessWarriorService implements IWellnessWarriorService {
         {
           model: WarriorInformation,
           as: "warrior_information",
-          attributes: ["specialty", "certification", "therapy_type", "price_range"],
+          attributes: WELLNESS_WARRIOR_FIELDS,
           where: {
             [Op.or]: [
               {
@@ -127,7 +130,7 @@ export class WellnessWarriorService implements IWellnessWarriorService {
         {
           model: UserInformation,
           as: "user_information",
-          attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education'],
+          attributes: USER_INFORMATION_FIELDS,
         }
       ]
     });
@@ -289,7 +292,7 @@ export class WellnessWarriorService implements IWellnessWarriorService {
           model: User,
           as: "warrior",
           foreignKey: "warrior_id",
-          attributes: ["id", "full_name"],
+          attributes: USER_FIELDS,
           include: [this.user_information_relation]
         }
       ]
@@ -308,24 +311,24 @@ export class WellnessWarriorService implements IWellnessWarriorService {
         {
           model: User,
           as: "user",
-          attributes: ["id", "full_name"],
+          attributes: USER_FIELDS,
           include: [
             {
               model: UserInformation,
               as: "user_information",
-              attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education'],
+              attributes: USER_INFORMATION_FIELDS,
             }
           ]
         },
         {
           model: User,
           as: 'warrior',
-          attributes: ["id", "full_name"],
+          attributes: USER_FIELDS,
           include: [
             {
               model: UserInformation,
               as: "user_information",
-              attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education'],
+              attributes: USER_INFORMATION_FIELDS,
             }
           ]
         }

@@ -4,27 +4,26 @@ import { ISearchUser, IUserService, OtherUserInfo, UserInfo, UserType } from './
 import { User } from './userModel'
 import { AuthService } from '../auth/authService'
 import { Op } from 'sequelize'
-import { UserInformationService } from '../user-information/userInformationService'
-import { WarriorInformationService } from '../warrior-information/warriorInformationService'
-import { MentorInformationService } from '../mentor-information/mentorInformationService'
 import { WarriorInformation } from '../warrior-information/warriorInformationModel'
 import { UserInformation } from '../user-information/userInformationModel'
 import { MentorInformation } from '../mentor-information/mentorInformationModel'
 import { FindFriendService } from '../find-friend/findFriendService'
-import { MentorMatcherService } from '../mentor-matcher/mentorMatcherService'
-import { WellnessWarriorService } from '../wellness-warrior/wellnessWarriorService'
+import { WellnessWarrior } from '../wellness-warrior/wellnessWarriorModel'
+import { MentorMatcherModel } from '../mentor-matcher/mentorMatcherModel'
+import { GffError } from '../helper/errorHandler'
+import { FindFriendModel } from '../find-friend/findFriendModel'
+import { USER_FIELDS, USER_INFORMATION_FIELDS } from '../../helper/db.helper'
+import { HashtagService } from '../hashtag/hashtagService'
 
 export class UserService implements IUserService {
 	private readonly authService: AuthService
 	private readonly findFriendService: FindFriendService
-	private readonly mentorMatcherService: MentorMatcherService
-	private readonly wellnessWarriorService: WellnessWarriorService
+	private readonly hashtagService: HashtagService
 
 	constructor() {
 		this.authService = new AuthService()
 		this.findFriendService = new FindFriendService()
-		this.mentorMatcherService = new MentorMatcherService()
-		this.wellnessWarriorService = new WellnessWarriorService()
+		this.hashtagService = new HashtagService()
 	}
 
 	static async isExists(user_id: number): Promise<boolean> {
@@ -35,7 +34,7 @@ export class UserService implements IUserService {
 	async fetchFullUserById(userId: number): Promise<User[]> {
 		const fullUser = await sequelize.query(
 			'SELECT * FROM `user_information` INNER JOIN `user` ON user_information.user_id = user.id WHERE user_id=' +
-				userId,
+			userId,
 			{ type: QueryTypes.SELECT }
 		)
 
@@ -43,20 +42,22 @@ export class UserService implements IUserService {
 	}
 
 	async list(): Promise<User[]> {
-		const users = await User.findAll()
+		const users = await User.findAll({
+			attributes: {
+				exclude: ['password']
+			}
+		})
 
 		return users
 	}
 
 	async fetchById(id: number, userId: number): Promise<User> {
-		console.log('USER' + userId, 'ID' + id)
-		if (id != userId) {
-			throw new Error('Unauthorized')
-		}
-
 		const user = await User.findOne({
 			where: {
 				id: userId
+			},
+			attributes: {
+				exclude: ['password']
 			}
 		})
 
@@ -88,32 +89,26 @@ export class UserService implements IUserService {
 		return user as User
 	}
 
-	async update(paramsId: number, params: UserType): Promise<User> {
-		if (paramsId !== params.id) {
-			throw new Error('Unauthorized')
-		}
-		let passwordHash
-		if (params.password) {
-			passwordHash = await this.authService.hashPassword(params.password)
-		}
-
+	async update(userId: number, params: UserType): Promise<User> {
 		await User.update(
 			{
-				role_id: params.role_id,
 				full_name: params.full_name,
 				email: params.email,
-				password: passwordHash,
 				default_currency_id: params.default_currency_id,
 				user_feature_id: params.user_feature_id
 			},
 			{
 				where: {
-					id: params.id
+					id: userId
 				}
 			}
 		)
 
-		const newUpdatedRow = await User.findByPk(paramsId)
+		const newUpdatedRow = await User.findByPk(userId, {
+			attributes: {
+				exclude: ['password']
+			}
+		})
 		return newUpdatedRow as User
 	}
 
@@ -161,13 +156,13 @@ export class UserService implements IUserService {
 		})
 	}
 
-	async getMyInfo(userId: number): Promise<null | UserInfo> {
+	getMyInfo = async (userId: number): Promise<null | UserInfo> => {
 		let myInfo = (await User.findOne({
 			where: { id: userId },
 			include: [
-				{ model: WarriorInformation, as: 'warrior_information' },
 				{ model: UserInformation, as: 'user_information' },
-				{ model: MentorInformation, as: 'mentor_information' }
+				{ model: MentorInformation, as: 'mentor_information' },
+				{ model: WarriorInformation, as: 'warrior_information' }
 			],
 			attributes: { exclude: ['password'] }
 		})) as UserInfo
@@ -175,6 +170,11 @@ export class UserService implements IUserService {
 		if (!myInfo) return null
 
 		myInfo = myInfo.get()
+
+		const user_hashtags = await this.hashtagService.fetchById(userId);
+		const hashtags = user_hashtags.map(hashtag => hashtag.get());
+
+		myInfo['hashtags'] = hashtags;
 
 		if (myInfo?.warrior_information) {
 			const warrior_information = myInfo.warrior_information.get({ plain: true })
@@ -202,13 +202,141 @@ export class UserService implements IUserService {
 		return myInfo
 	}
 
-	async getOtherUserInfo(userId: number): Promise<OtherUserInfo | null> {
-		const sentFriendRequests = await this.findFriendService.getFriendRequestsBySenderId(userId)
-		const receivedFriendRequests = await this.findFriendService.getFriendRequestsByReceiverId(userId)
-		const mentorRequests = await this.mentorMatcherService.getMentorRequests(userId)
-		const wellnessWarriorRequests = await this.wellnessWarriorService.getAllRequest(userId)
-		const userInformation = await this.getMyInfo(userId)
+	getOtherUserInfo = async (userId: number, otherUserId: number): Promise<OtherUserInfo | null> => {
+		const otherUser = await User.findByPk(otherUserId, {
+			attributes: { exclude: ['password'] },
+		})
 
-		return { sentFriendRequests, receivedFriendRequests, mentorRequests, wellnessWarriorRequests, userInformation }
+		if (!otherUser) {
+			const error = new GffError('User not found!')
+			error.errorCode = '404'
+			throw error
+		}
+
+		const user_hashtags = await this.hashtagService.fetchById(otherUserId);
+
+		const hashtags = user_hashtags.map(hashtag => hashtag.get());
+
+		const user_information = await this.getMyInfo(otherUserId)
+
+		const friend_request = await FindFriendModel.findOne({
+			where: {
+				[Op.or]: [
+					{ sender_id: otherUserId, receiver_id: userId },
+					{ sender_id: userId, receiver_id: otherUserId }
+				],
+			},
+			include: [
+				{
+					model: User,
+					as: 'sender',
+					attributes: USER_FIELDS,
+					include: [
+						{
+							model: UserInformation,
+							as: 'user_information',
+							attributes: USER_INFORMATION_FIELDS
+						}
+					]
+				},
+				{
+					model: User,
+					as: 'receiver',
+					attributes: USER_FIELDS,
+					include: [
+						{
+							model: UserInformation,
+							as: 'user_information',
+							attributes: USER_INFORMATION_FIELDS
+						}
+					]
+				}
+			]
+		})
+
+		const mentor_request = await MentorMatcherModel.findOne({
+			where: {
+				[Op.or]: [
+					{ mentor_id: otherUserId, mentee_id: userId },
+					{ mentor_id: userId, mentee_id: otherUserId }
+				]
+			},
+			include: [
+				{
+					model: User,
+					as: 'mentee',
+					foreignKey: 'mentee_id',
+					attributes: USER_FIELDS,
+					include: [
+						{
+							model: UserInformation,
+							as: 'user_information',
+							attributes: USER_INFORMATION_FIELDS
+						}
+					]
+				},
+				{
+					model: User,
+					as: 'mentor',
+					foreignKey: 'mentor_id',
+					attributes: USER_FIELDS,
+					include: [
+						{
+							model: UserInformation,
+							as: 'user_information',
+							attributes: USER_INFORMATION_FIELDS
+						}
+					]
+				}
+			]
+		});
+
+		const warrior_request = await WellnessWarrior.findOne({
+			where: {
+				[Op.or]: [
+					{ warrior_id: otherUserId, user_id: userId },
+					{ warrior_id: userId, user_id: otherUserId },
+				]
+			},
+			include: [
+				{
+					model: User,
+					as: 'user',
+					foreignKey: 'user_id',
+					attributes: USER_FIELDS,
+					include: [
+						{
+							model: UserInformation,
+							as: 'user_information',
+							attributes: USER_INFORMATION_FIELDS
+						}
+					]
+				},
+				{
+					model: User,
+					as: 'warrior',
+					foreignKey: 'warrior_id',
+					attributes: USER_FIELDS,
+					include: [
+						{
+							model: UserInformation,
+							as: 'user_information',
+							attributes: USER_INFORMATION_FIELDS
+						}
+					]
+				}
+			]
+		});
+
+		return {
+			...otherUser.get(),
+			user_information: user_information?.user_information,
+			warrior_information: user_information?.warrior_information,
+			mentor_information: user_information?.mentor_information,
+			friend_request,
+			mentor_request,
+			warrior_request,
+			hashtags
+		}
 	}
 }

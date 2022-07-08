@@ -63,6 +63,7 @@ export class UserController {
 		}
 	}
 
+	// deprecated, please don't use this function.
 	getUsersById = async (req: GetUsersByIdRequest, res: Response, next: NextFunction) => {
 		const id = +req.params.id
 		const userId = +req.user.id
@@ -157,12 +158,10 @@ export class UserController {
 	}
 
 	updateUser = async (req: UpdateUserRequest, res: Response, next: NextFunction) => {
-		const paramsId = +req.params.id
-		const id = +req.user.id
-		const params = { ...req.body, id }
+		const userId = +req.user.id;
 
 		try {
-			const user = await this.userService.update(paramsId, params)
+			const user = await this.userService.update(userId, req.body)
 			return res.status(200).send({
 				data: {
 					user
@@ -249,10 +248,11 @@ export class UserController {
 		}
 	}
 
-	getOtherUserInfo = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+	getUserDetailsById = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
 		try {
-			const userId = req?.user?.id as number
-			const otherUserInfo = await this.userService.getOtherUserInfo(userId)
+			const userId = req.user?.id as number
+			const otherUserId = +req.params.id
+			const otherUserInfo = await this.userService.getOtherUserInfo(userId, otherUserId)
 			return res.status(200).json({ data: { ...otherUserInfo }, message: 'OK', code: 200 })
 		} catch (err) {
 			return handleError(err, req, res)

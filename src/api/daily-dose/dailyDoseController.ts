@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import { DailyDoseService } from './dailyDoseServices'
+import { categoryType } from './interface'
 
 import { createDoseRequest, GetByIdRequest, UpdateDoseRequest, DeleteDoseRequest } from './interface'
 export class DailyDoseController {
@@ -17,7 +18,11 @@ export class DailyDoseController {
 			}
 			const uploadImageInfo = await this.debtService.upload(req.file)
 			params.image = uploadImageInfo.Key
-			if (params.category !== 'news' && params.category != 'music' && params.category != 'wise-words') {
+			if (
+				params.category !== categoryType.MUSIC &&
+				params.category != categoryType.NEWS &&
+				params.category != categoryType.WISEWORD
+			) {
 				throw new Error('Enum can be one of them:news,music,wise-words')
 			}
 			const dailyDose = await this.debtService.add(params)

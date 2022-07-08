@@ -16,6 +16,7 @@ import { userInformationRouter } from './api/user-information/userInformationRou
 import { hashtagRouter } from './api/hashtag/hashtagRouter'
 import { debtRouter } from './api/debt/debtRouter'
 import { dailyDoseRouter } from './api/daily-dose/dailyDoseRouter'
+import { dailyArticleRouter } from './api/dailyArticle/dailyArticleRouter'
 
 import { loanLedgerProfessionalInformationRouter } from './api/loan-ledger-professional-information/professionalInformationRouter'
 import { loanLedgerPersonalInfoRouter } from './api/loan-ledger-personal-information/loanLedgerPersonalInformationRouter'
@@ -30,6 +31,9 @@ import { mentorSettingsRouter } from './api/mentor-settings/settingsRouter'
 import { currencyRouter } from './api/currency/currencyRouter'
 import { uploadRouter } from './api/upload/uploadRouter'
 import { GffError, jsonErrorHandler } from './api/helper/errorHandler'
+import { feedbackRouter } from './api/feedback/feedbackRouter'
+
+const storage = multer.memoryStorage()
 
 const options = {
 	swaggerOptions: {
@@ -37,19 +41,30 @@ const options = {
 	}
 }
 
-const storage = multer.memoryStorage()
-
 export const upload = multer({
 	storage,
 	limits: { fileSize: 1000000000 }
-})
-;(async function main(): Promise<void> {
+});
+
+(async function main(): Promise<void> {
 	const app = Express()
 
 	app.use(cors())
+	// CORS error fix
+	app.use((req: Request, res: Response, next: NextFunction) => {
+		res.setHeader('Access-Control-Allow-Origin', '*');
+		res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE');
+		res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+		if (req.method === 'OPTIONS') {
+			return res.sendStatus(200);
+		}
+		return next();
+	});
+
 	app.use(bodyParser.json())
 	app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options))
 	app.use('/auth', authRouter)
+	app.use('/upload', uploadRouter)
 	app.use('/user', userRouter)
 	app.use('/transaction', transactionRouter)
 	app.use('/transactionAccount', transactionAccRouter)
@@ -60,6 +75,7 @@ export const upload = multer({
 	app.use('/hashtag', hashtagRouter)
 	app.use('/debt', debtRouter)
 	app.use('/dailyDose', dailyDoseRouter)
+	app.use('/dailyArticle', dailyArticleRouter)
 	app.use('/loanLedgerProfessionalInformation', loanLedgerProfessionalInformationRouter)
 	app.use('/loanLedgerPersonalInformation', loanLedgerPersonalInfoRouter)
 	app.use('/mentor-matcher', mentorMatcherRouter)
@@ -71,11 +87,11 @@ export const upload = multer({
 	app.use('/wellness-warrior', warriorRouter)
 	app.use('/', mentorSettingsRouter)
 	app.use('/currency', currencyRouter)
-	app.use('/upload', uploadRouter)
+	app.use('/feedback', feedbackRouter)
 
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 		const error = err as GffError
-		if (error.message === 'No data found') {
+		if (error.message.toLowerCase() === 'no data found') {
 			error.errorCode = '404'
 			error.httpStatusCode = 404
 		} else if (error?.errorCode) {
@@ -85,14 +101,9 @@ export const upload = multer({
 			error.httpStatusCode = 500
 		}
 
-		return jsonErrorHandler(err, req, res, () => {})
+		return jsonErrorHandler(err, req, res, () => { })
 	})
 
-	app.use('/message', messageRoute)
-	app.use('/warrior-information', warriorInformationRouter)
-	app.use('/wellness-warrior', warriorRouter)
-	app.use('/', mentorSettingsRouter)
-	app.use('/currency', currencyRouter)
 	app.listen(process.env.PORT, () => {
 		console.log(`Server running at port ${process.env.PORT}`)
 	})

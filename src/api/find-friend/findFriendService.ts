@@ -455,4 +455,35 @@ export class FindFriendService implements IFindFriendService {
 			friend_request: friend_request
 		}
 	}
+
+	// is friend
+	// is blocked
+
+	async isBlocked(sender_id: number, receiver_id: number): Promise<IFriendRequest> {
+		const isBlocked = await FindFriendModel.findOne({
+			where: {
+				[Op.or]: [
+					{ sender_id: sender_id, receiver_id: receiver_id },
+					{ sender_id: receiver_id, receiver_id: sender_id }
+				],
+				request_type: RequestType.BLOCK
+			}
+		})
+
+		return isBlocked?.get();
+	}
+
+	async areUsersFriend(sender_id: number, receiver_id: number): Promise<boolean> {
+		const friendRequest = await FindFriendModel.findOne({
+			where: {
+				[Op.or]: [
+					{ sender_id: sender_id, receiver_id: receiver_id },
+					{ sender_id: receiver_id, receiver_id: sender_id }
+				],
+				request_type: RequestType.FRIEND,
+			}
+		})
+
+		return !!friendRequest?.get()
+	}
 }
