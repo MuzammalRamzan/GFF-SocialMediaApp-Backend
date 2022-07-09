@@ -31,14 +31,13 @@ export class UserService implements IUserService {
 		return !!user?.get()
 	}
 
-	async fetchFullUserById(userId: number): Promise<User[]> {
-		const fullUser = await sequelize.query(
-			'SELECT * FROM `user_information` INNER JOIN `user` ON user_information.user_id = user.id WHERE user_id=' +
-				userId,
-			{ type: QueryTypes.SELECT }
-		)
+	async fetchFullUserById(userId: number): Promise<User | null> {
+		const fullUser = await User.findByPk(userId, {
+			attributes: { exclude: ['password'] },
+			include: [{ model: UserInformation, as: 'user_information' }]
+		})
 
-		return fullUser as User[]
+		return fullUser?.get()
 	}
 
 	async list(): Promise<User[]> {

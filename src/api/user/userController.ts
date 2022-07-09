@@ -100,7 +100,7 @@ export class UserController {
 		const userId = +req.user.id
 		try {
 			const fullUser = await this.userService.fetchFullUserById(userId)
-			if (!fullUser.length) {
+			if (!fullUser) {
 				throw new Error('No data found')
 			}
 			return res.status(200).send({
