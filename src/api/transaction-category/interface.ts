@@ -33,6 +33,7 @@ export interface CreateTransactionCategoryRequest extends Request {
 
 export interface GetTransactionCategoriesByUserIdRequest extends Request {
     user: UserType
+    id: number
 }
 
 export interface UpdateTransactionCategoryByIdRequest extends Request {

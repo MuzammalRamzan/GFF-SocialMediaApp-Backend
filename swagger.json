@@ -6,7 +6,7 @@
 		"version": "1.0"
 	},
 	"schemes": ["http", "https"],
-	"host": "3.232.6.9",
+	"host": "3.125.40.16",
 	"basePath": "/",
 	"tags": [
 		{
@@ -6178,10 +6178,10 @@
 				}
 			}
 		},
-		"/transactionCategory/{user_id}": {
+		"/transactionCategory/": {
 			"get": {
 				"tags": ["transaction-category"],
-				"description": "Get a transaction category by user id",
+				"description": "List all transaction categories",
 				"parameters": [
 					{
 						"name": "auth-token",
@@ -6189,18 +6189,6 @@
 						"description": "Auth Token",
 						"required": true,
 						"type": "string"
-					},
-					{
-						"name": "user_id",
-						"in": "path",
-						"description": "User ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
 					}
 				],
 				"responses": {
@@ -6215,29 +6203,39 @@
 									"data": {
 										"transactionCategories": [
 											{
-												"id": 18,
-												"name": "Test category updated",
-												"user_id": 37,
-												"icon_url": "url",
-												"colour": "#FF0000",
-												"type": "expense",
-												"is_default": 1,
-												"status": "active"
-											},
-											{
-												"id": 21,
-												"name": "Test Category for user 37",
-												"user_id": 37,
-												"icon_url": "icon_url",
-												"colour": "#FF0000",
-												"type": "expense",
-												"is_default": 1,
-												"status": "active"
-											},
-											{
-												"id": 22,
+												"id": 1,
 												"name": "New updated name",
-												"user_id": 37,
+												"user_id": 16,
+												"icon_url": "test icon url",
+												"colour": "",
+												"type": "income",
+												"is_default": 1,
+												"status": "active"
+											},
+											{
+												"id": 3,
+												"name": "TestName",
+												"user_id": 17,
+												"icon_url": "icon_url",
+												"colour": "",
+												"type": "expense",
+												"is_default": 1,
+												"status": "active"
+											},
+											{
+												"id": 14,
+												"name": "NewName",
+												"user_id": 17,
+												"icon_url": "icon_url",
+												"colour": "",
+												"type": "income",
+												"is_default": 1,
+												"status": "active"
+											},
+											{
+												"id": 16,
+												"name": "New updated name",
+												"user_id": 16,
 												"icon_url": "test icon url",
 												"colour": "",
 												"type": "income",
@@ -6255,10 +6253,10 @@
 				}
 			}
 		},
-		"/transactionCategory/": {
+		"/transactionCategory/user/{id}": {
 			"get": {
 				"tags": ["transaction-category"],
-				"description": "List all transaction categories",
+				"description": "List all transaction categories for specific user",
 				"parameters": [
 					{
 						"name": "auth-token",
@@ -6266,6 +6264,18 @@
 						"description": "Auth Token",
 						"required": true,
 						"type": "string"
+					},
+					{
+						"name": "id",
+						"in": "path",
+						"description": "User ID",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
 					}
 				],
 				"responses": {
