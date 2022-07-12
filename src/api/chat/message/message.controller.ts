@@ -25,12 +25,12 @@ export class MessageController {
 				})
 			}
 
-			await this.messageService.sendMessage(message, user_id, room_id)
-			// return res.status(200).json({
-			// 	data: { message },
-			// 	message: 'Message sent successfully',
-			// 	code: 200
-			// })
+			const messageObj = await this.messageService.sendMessage(message, user_id, room_id)
+			return res.status(200).json({
+				data: { message: messageObj },
+				message: 'Message sent successfully',
+				code: 200
+			})
 		} catch (error) {
 			next(error)
 		}

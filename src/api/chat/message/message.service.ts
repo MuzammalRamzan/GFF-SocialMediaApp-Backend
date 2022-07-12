@@ -11,10 +11,27 @@ type SubscribersType = {
 export class MessageService {
 	private subscribers: SubscribersType = Object.create(null)
 
-	public async sendMessage(message: string, user_id: number, room_id: number): Promise<Message> {
-		const messageObj = await Message.create({ user_id, room_id, body: message })
+	public async sendMessage(message: string, user_id: number, room_id: number): Promise<Message | null> {
+		let messageObj: Message | null = await Message.create({ user_id, room_id, body: message })
 
-		this.publishMessage(message, user_id, room_id)
+		messageObj = await Message.findByPk(messageObj.getDataValue('id'), {
+			include: [
+				{
+					model: User,
+					as: 'user',
+					attributes: ['id', 'full_name'],
+					include: [
+						{
+							model: UserInformation,
+							as: 'user_information',
+							attributes: ['profile_url']
+						}
+					]
+				}
+			]
+		})
+
+		this.publishMessage(messageObj, user_id, room_id)
 
 		return messageObj
 	}
@@ -68,12 +85,14 @@ export class MessageService {
 		})
 	}
 
-	public async publishMessage(message: string, user_id: number, room_id: number): Promise<void> {
-		if (this.subscribers[room_id] && Object.keys(this.subscribers[room_id]).length) {
+	public async publishMessage(message: Message | null, user_id: number, room_id: number): Promise<void> {
+		if (message && this.subscribers[room_id] && Object.keys(this.subscribers[room_id]).length) {
 			let roomParticipants = Object.keys(this.subscribers[room_id]).filter(userId => +userId !== user_id)
 			roomParticipants.map(participantId => {
 				if (this.subscribers[room_id][participantId]) {
-					this.subscribers[room_id][participantId]?.end(JSON.stringify({ from: user_id, message }))
+					this.subscribers[room_id][participantId]?.end(
+						JSON.stringify({ code: 200, data: { message }, message: 'Received a message!' })
+					)
 				}
 				this.subscribers[room_id][participantId] = null
 			})
