@@ -57,6 +57,14 @@ export class MessageController {
 			const user_id = req?.user?.id as number
 			const room_id = +req.params.roomId
 
+			const isUserBelongToTheRoom = await RoomService.isUserBelongToTheRoom(room_id, user_id)
+			if (!isUserBelongToTheRoom) {
+				return res.status(403).json({
+					message: 'You are not belong to the room',
+					code: 403
+				})
+			}
+
 			return this.messageService.subscribeToRoom(req, res, { user_id, room_id })
 		} catch (error) {
 			next(error)
