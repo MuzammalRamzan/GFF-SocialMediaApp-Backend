@@ -77,9 +77,10 @@ export class TransactionCategotryController {
 		res: Response,
 		next: NextFunction
 	) => {
-		const userId = +req.user.id
+		const id = +req.params.id
+
 		try {
-			const transactionCategories = await this.transactionCategoryService.fetchByUserId(userId)
+			const transactionCategories = await this.transactionCategoryService.fetchByUserId(id)
 			if(!transactionCategories.length) {
 				throw new Error('No data found')
 			}
