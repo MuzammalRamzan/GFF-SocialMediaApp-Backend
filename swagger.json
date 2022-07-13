@@ -1288,6 +1288,58 @@
 			}
 		},
 		"/warrior-information": {
+			"get": {
+				"tags": ["warrior-information"],
+				"description": "Get all warriors",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"warriors": [
+											{
+												"id": 1,
+												"user_id": 169,
+												"specialty": "str",
+												"certification": "long string",
+												"therapy_type": "short",
+												"price_range": "12",
+												"user": {
+													"id": 169,
+													"role_id": 4,
+													"full_name": "undefined",
+													"email": "test1@test.com",
+													"default_currency_id": 1,
+													"user_feature_id": null
+												}
+											}
+										]
+									},
+									"message": "Warrior information created successfully",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			},
 			"post": {
 				"tags": ["warrior-information"],
 				"description": "Create Wellness Warrior information",
