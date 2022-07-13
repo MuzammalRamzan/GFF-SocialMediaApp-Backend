@@ -41,6 +41,24 @@ export class TransactionController {
 		}
 	}
 
+	getAllTransactionsForUser = async (req: DeleteTransactionRequest, res: Response, next: NextFunction) => {
+		const userId = +req.user.id
+
+		try {
+			const result = await this.transactionService.fetchForUser(userId)
+
+			return res.status(200).send({
+				data: {
+					result
+				},
+				code: 200,
+				message: 'OK'
+			})
+		} catch (err) {
+			next(err)
+		}
+	}
+
 	createTransaction = async (req: CreateTransactionRequest, res: Response, next: NextFunction) => {
 		const user_id = +req.user.id
 		const params = { ...req.body, user_id }

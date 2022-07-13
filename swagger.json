@@ -5591,6 +5591,68 @@
 				}
 			}
 		},
+		"/transaction/user": {
+			"get": {
+				"tags": ["transaction"],
+				"description": "List all transactions for user",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"transaction": [
+											{
+												"id": 1,
+												"frequency": "never",
+												"user_id": 16,
+												"amount": 160,
+												"account_id": 3,
+												"category_id": 1,
+												"status": "active"
+											},
+											{
+												"id": 6,
+												"frequency": "weekly",
+												"user_id": 16,
+												"amount": 160,
+												"account_id": 2,
+												"category_id": 1,
+												"status": "inactive"
+											},
+											{
+												"id": 7,
+												"frequency": "weekly",
+												"user_id": 17,
+												"amount": 160,
+												"account_id": 2,
+												"category_id": 1,
+												"status": "inactive"
+											}
+										]
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/transactionAccount/user": {
 			"get": {
 				"tags": ["transaction-account"],

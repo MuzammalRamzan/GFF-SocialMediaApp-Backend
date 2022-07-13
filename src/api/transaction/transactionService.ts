@@ -7,6 +7,16 @@ export class TransactionService implements ITransactionService {
 		return transactions
 	}
 
+	async fetchForUser (userId: number): Promise<Transaction[]> {
+		const transactions = await Transaction.findAll({
+			where: {
+				user_id: userId
+			}
+		})
+
+		return transactions
+	}
+
 	async add(params: TransactionType): Promise<Transaction> {
 		const created_at = new Date().getTime()
 		const transaction = await Transaction.create({
