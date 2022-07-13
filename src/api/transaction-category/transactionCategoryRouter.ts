@@ -12,7 +12,7 @@ transactionCategoryRouter.post(
 )
 transactionCategoryRouter.get('/', authMiddleware, transactionCategotryController.getAllTransactionCategories)
 transactionCategoryRouter.get(
-	'/user_id',
+	'/user/:id',
 	authMiddleware,
 	transactionCategotryController.getTransactionCategoriesByUserId as Application
 )
