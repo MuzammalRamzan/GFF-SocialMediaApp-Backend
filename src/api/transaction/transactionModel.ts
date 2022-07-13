@@ -22,6 +22,10 @@ Transaction.init(
 			type: DataTypes.INTEGER,
 			allowNull: false
 		},
+		amount: {
+			type: DataTypes.INTEGER,
+			allowNull: false
+		},
 		category_id: {
 			type: DataTypes.INTEGER,
 			allowNull: false

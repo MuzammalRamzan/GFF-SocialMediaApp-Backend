@@ -8,6 +8,7 @@ export type TransactionType = {
 	user_id: number
 	account_id: number
 	category_id: number
+	amount: number
 	status: Status
 	created_at: Date
 	due_date: Date
