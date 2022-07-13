@@ -10,3 +10,4 @@ transactionAccRouter.get('/id/:id', authMiddleware, transactionAccController.get
 transactionAccRouter.get('/user', authMiddleware, transactionAccController.getAllTransactionAccountsForUser as Application)
 transactionAccRouter.post('/add', authMiddleware, transactionAccController.createTransactionAccount as Application)
 transactionAccRouter.put('/update/:id', authMiddleware, transactionAccController.updateTransaction as Application)
+transactionAccRouter.delete('/delete/:id', authMiddleware, transactionAccController.deleteTransactionAccount as Application)
