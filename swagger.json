@@ -18,6 +18,10 @@
 			"description": "App users related routes"
 		},
 		{
+			"name": "user-information",
+			"description": "User information related routes"
+		},
+		{
 			"name": "transaction-account",
 			"description": "Transaction-Account related routes"
 		},
@@ -40,10 +44,6 @@
 		{
 			"name": "debt",
 			"description": "Debt related routes"
-		},
-		{
-			"name": "user-information",
-			"description": "User information related routes"
 		},
 		{
 			"name": "loan-ledger-personal-info",
