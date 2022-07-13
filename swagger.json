@@ -7112,7 +7112,7 @@
 							},
 							"examples": {
 								"0": {
-									"value": "{\n\n        \"frequency\": \"Weekly\",\n        \"user_id\": 16,\n        \"account_id\": 2,\n        \"category_id\": 1,\n        \"status\": \"Inactive\"\n    }"
+									"value": "{\n\n        \"frequency\": \"Weekly\",\n        \"user_id\": 16,\n        \"account_id\": 2,\n        \"category_id\": 1,\n        \"status\": \"Inactive,\"\n     \"amount\": \"160\"\n     }"
 								}
 							}
 						}
