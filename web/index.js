@@ -3,7 +3,7 @@ const authToken = localStorage.getItem('auth-token')
 // Sending messages, a simple POST
 function PublishForm(form) {
 	function sendMessage(message) {
-		fetch('http://localhost:3000/message/send/room/1', {
+		fetch('http://localhost:3000/message/send/room/2', {
 			method: 'POST',
 			body: JSON.stringify({ message }),
 			headers: { 'Content-Type': 'application/json', 'auth-token': authToken }
@@ -28,7 +28,7 @@ function showMessage(elem, message) {
 
 // Receiving messages with long polling
 function SubscribePane(elem, url) {
-	url = 'http://localhost:3000/message/room/subscribe/1'
+	url = 'http://localhost:3000/message/room/subscribe/2'
 
 	async function subscribe() {
 		let response = await fetch(url, { headers: { 'auth-token': authToken } })
@@ -46,6 +46,7 @@ function SubscribePane(elem, url) {
 			await subscribe()
 		} else {
 			// Got message
+			console.log('Get the message');
 			let message = await response.json()
 			showMessage(elem, message.data.message.body)
 			await subscribe()
@@ -57,7 +58,7 @@ function SubscribePane(elem, url) {
 
 function GetAllMessages(elem) {
 	async function getAll() {
-		let response = await fetch('http://localhost:3000/message/room/1?from=2022-07-06T04:22:54.000Z', {
+		let response = await fetch('http://localhost:3000/message/room/2?from=2022-07-06T04:22:54.000Z', {
 			headers: { 'auth-token': authToken }
 		})
 		response = await response.json()
