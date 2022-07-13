@@ -8,7 +8,7 @@ import { UserRoleService } from '../user-role/userRoleService'
 
 export class MentorInformationService implements IMentorInformationService {
 	static async isMentorExists(userId: number): Promise<boolean> {
-		const mentorRole = await UserRoleService.fetchMentorRole();
+		const mentorRole = await UserRoleService.fetchMentorRole()
 
 		const record = await User.findOne({
 			where: {
@@ -21,7 +21,7 @@ export class MentorInformationService implements IMentorInformationService {
 	}
 
 	async createMentorInformation(params: CreateMentorInformation): Promise<IMentorInformation> {
-		const mentorRole = await UserRoleService.fetchMentorRole();
+		const mentorRole = await UserRoleService.fetchMentorRole()
 
 		const mentorInformation = await MentorInformation.create({
 			role: (params.role || []).join(','),
@@ -167,5 +167,12 @@ export class MentorInformationService implements IMentorInformationService {
 			id: mentor_information.id,
 			user_id: mentor_information.user_id
 		}
+	}
+
+	async getAllMentors(): Promise<MentorInformation[]> {
+		const mentors = await MentorInformation.findAll({
+			include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } }]
+		})
+		return mentors
 	}
 }

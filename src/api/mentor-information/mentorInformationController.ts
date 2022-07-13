@@ -66,7 +66,7 @@ export class MentorInformationController {
 	getMentorInformation = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
 		try {
 			const userId = req?.user?.id || (0 as number)
-			const mentor_id = Number(req.query.mentor_id || 0)
+			const mentor_id = Number(req.params.id)
 
 			if (!userId || !mentor_id) {
 				return res.status(400).json({
@@ -82,6 +82,16 @@ export class MentorInformationController {
 				message: 'Mentor information fetched successfully',
 				code: 200
 			})
+		} catch (error) {
+			console.log(error)
+			next(error)
+		}
+	}
+
+	getAllMentors = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+		try {
+			const mentors = await this.mentorInformationService.getAllMentors()
+			return res.status(200).json({ data: { mentors }, code: 200, message: 'OK' })
 		} catch (error) {
 			console.log(error)
 			next(error)

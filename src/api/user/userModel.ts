@@ -68,6 +68,7 @@ User.hasOne(MentorInformation, {
 	foreignKey: 'user_id',
 	as: 'mentor_information'
 })
+MentorInformation.belongsTo(User, { foreignKey: 'user_id', as: 'user' })
 
 User.hasOne(UserInformation, {
 	foreignKey: 'user_id',

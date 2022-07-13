@@ -7340,7 +7340,30 @@
 				}
 			}
 		},
-		"/mentor-information": {
+		"/mentor-information/": {
+			"get": {
+				"tags": ["mentor-information"],
+				"description": "Get all mentors",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successfully get mentor details",
+						"schema": {
+							"$ref": "#/components/schemas/MentorDetail"
+						}
+					}
+				}
+			}
+		},
+		"/mentor-information/{id}": {
 			"get": {
 				"tags": ["mentor-information"],
 				"description": "Get mentor informations",
@@ -7353,11 +7376,16 @@
 						"type": "string"
 					},
 					{
-						"name": "mentor_id",
-						"in": "query",
-						"description": "Mentor id",
+						"name": "id",
+						"in": "path",
+						"description": "User id",
 						"required": true,
-						"type": "integer"
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
 					}
 				],
 				"responses": {
