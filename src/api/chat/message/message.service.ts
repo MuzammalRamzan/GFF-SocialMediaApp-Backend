@@ -13,9 +13,9 @@ export class MessageService {
 	private subscribers: SubscribersType = Object.create(null)
 
 	static filterMessageObject(message: Message | null) {
-		if(!message) return null;
-		
-		const data = message?.get();
+		if (!message) return null
+
+		const data = message?.get()
 		return {
 			id: data.id,
 			user_id: data.user_id,
@@ -50,22 +50,22 @@ export class MessageService {
 					]
 				}
 			]
-		});
+		})
 	}
 
 	public async getAllMessages(user_id: number) {
-		const roomService = new RoomService();
-		const getAllRooms = await roomService.getAllRooms(user_id);
-		const messages = [];
+		const roomService = new RoomService()
+		const getAllRooms = await roomService.getAllRooms(user_id)
+		const messages = []
 
 		for (let room of getAllRooms) {
-			const getMessages = await this.getMessagesByRoom(room.get('id') as number);
+			const getMessages = await this.getMessagesByRoom(room.get('id') as number)
 			for (let message of getMessages) {
-				messages.push(MessageService.filterMessageObject(message));
+				messages.push(MessageService.filterMessageObject(message))
 			}
 		}
 
-		return messages;
+		return messages
 	}
 
 	public async sendMessage(message: string, user_id: number, room_id: number): Promise<Message | null> {
@@ -137,12 +137,10 @@ export class MessageService {
 
 		this.subscribers[room_id][user_id] = res
 
-		// TODO:
-		// close the request after 3000 of inactivity in the chat room, frontend will send another subscribe request!
 		setTimeout(() => {
-			
-
-		}, 3000);
+			req.pause()
+			res.status(502).end()
+		}, 30000)
 
 		req.on('close', () => {
 			delete this.subscribers[room_id][user_id]
@@ -155,7 +153,11 @@ export class MessageService {
 			roomParticipants.map(participantId => {
 				if (this.subscribers[room_id][participantId]) {
 					this.subscribers[room_id][participantId]?.end(
-						JSON.stringify({ code: 200, data: { messages: [MessageService.filterMessageObject(message)] }, message: 'Received a message!' })
+						JSON.stringify({
+							code: 200,
+							data: { messages: [MessageService.filterMessageObject(message)] },
+							message: 'Received a message!'
+						})
 					)
 				}
 				this.subscribers[room_id][participantId] = null
