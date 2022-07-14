@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
+import s3Service from '../../helper/s3Services'
 import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import { IUploadRequest } from './interface'
 import { UploadService } from './uploadService'
@@ -41,5 +42,25 @@ export class UploadController {
 			console.log(error);
 			return this.handleError(error, req, res)
 		}
+	}
+
+	getFile(req: Request, res: Response, next: NextFunction) {
+		const path = String(req.query.path);
+
+		s3Service.S3.getObject({
+			Bucket: process.env.AWS_S3_BUCKET_NAME || '',
+			Key: path
+		}, (err, data) => {
+			if (err) {
+				return res.status(404).json({
+					data: {},
+					code: 404,
+					message: 'File not found'
+				})
+			}
+
+			res.setHeader('Content-Type', String(data.ContentType))
+			res.send(data.Body)
+		})
 	}
 }

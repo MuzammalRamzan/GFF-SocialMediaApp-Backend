@@ -8164,6 +8164,22 @@
 				}
 			}
 		},
+		"/upload/file": {
+			"get": {
+				"tags": ["uploads"],
+				"description": "Get uploaded file/image",
+				"parameters": [
+					
+					{
+						"name": "path",
+						"in": "query",
+						"description": "File path/URL",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		},
 		"/room": {
 			"post": {
 				"tags": ["chat"],
