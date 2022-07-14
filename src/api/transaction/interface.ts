@@ -8,6 +8,7 @@ export type TransactionType = {
 	user_id: number
 	account_id: number
 	category_id: number
+	amount: number
 	status: Status
 	created_at: Date
 	due_date: Date
@@ -46,6 +47,7 @@ export interface DeleteTransactionRequest extends Request {
 
 export interface ITransactionService {
 	list(): Promise<Transaction[]>
+	fetchForUser(userId: number): Promise<Transaction[]>
 	add(params: TransactionType): Promise<Transaction>
 	update(id: number, params: TransactionType): Promise<Transaction>
 	delete(id: number, user_id: number): Promise<number>

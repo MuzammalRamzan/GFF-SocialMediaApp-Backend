@@ -79,4 +79,15 @@ export class TransactionAccService implements ITransactionAccountService {
 		throw new Error("Unauthorized")
 		
 	}
+
+	async delete (id: number, userId: number): Promise<number> {
+        const deletedRow = await TransactionAccount.destroy({
+            where: {
+                id: id,
+                user_id: userId
+            }
+        })
+
+        return deletedRow
+    }
 }

@@ -26,8 +26,9 @@ export class MessageController {
 			}
 
 			const messageObj = await this.messageService.sendMessage(message, user_id, room_id)
+			
 			return res.status(200).json({
-				data: { message: messageObj },
+				data: { message: MessageService.filterMessageObject(messageObj) },
 				message: 'Message sent successfully',
 				code: 200
 			})
@@ -42,8 +43,11 @@ export class MessageController {
 			const from = req.query.from as string
 
 			const messages = await this.messageService.getMessages(room_id, from)
+
+			const data = messages.map(message => MessageService.filterMessageObject(message));
+
 			return res.status(200).json({
-				data: { messages },
+				data: { messages: data },
 				message: 'Messages fetched successfully',
 				code: 200
 			})
@@ -66,6 +70,23 @@ export class MessageController {
 			}
 
 			return this.messageService.subscribeToRoom(req, res, { user_id, room_id })
+		} catch (error) {
+			next(error)
+		}
+	}
+
+	getAllMessages= async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+		try {
+			const userId = req?.user?.id as number;
+			const messages = await this.messageService.getAllMessages(userId);
+
+			return res.status(200).json(
+				{
+					data: { messages },
+					message: 'Messages fetched successfully',
+					code: 200
+				}
+			);
 		} catch (error) {
 			next(error)
 		}

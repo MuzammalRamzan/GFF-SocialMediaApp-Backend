@@ -9,7 +9,7 @@ export type TransactionCategoryType = {
     icon_url: string
     colour: string
     type: TransactionCategoryTypeEnum
-    is_default: number
+    is_default: boolean
     status: string
 }
 
@@ -33,6 +33,7 @@ export interface CreateTransactionCategoryRequest extends Request {
 
 export interface GetTransactionCategoriesByUserIdRequest extends Request {
     user: UserType
+    id: number
 }
 
 export interface UpdateTransactionCategoryByIdRequest extends Request {

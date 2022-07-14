@@ -6,7 +6,7 @@
 		"version": "1.0"
 	},
 	"schemes": ["http", "https"],
-	"host": "3.232.6.9",
+	"host": "3.125.40.16",
 	"basePath": "/",
 	"tags": [
 		{
@@ -16,6 +16,10 @@
 		{
 			"name": "user",
 			"description": "App users related routes"
+		},
+		{
+			"name": "user-information",
+			"description": "User information related routes"
 		},
 		{
 			"name": "transaction-account",
@@ -40,10 +44,6 @@
 		{
 			"name": "debt",
 			"description": "Debt related routes"
-		},
-		{
-			"name": "user-information",
-			"description": "User information related routes"
 		},
 		{
 			"name": "loan-ledger-personal-info",
@@ -5531,6 +5531,128 @@
 				}
 			}
 		},
+		"/transactionAccount/delete/{id}": {
+			"delete": {
+				"tags": ["transaction-account"],
+				"description": "Delete a transaction account",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "id",
+						"in": "path",
+						"description": " transaction account ID",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"transaction-account": 1
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/transaction/user": {
+			"get": {
+				"tags": ["transaction"],
+				"description": "List all transactions for user",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"transaction": [
+											{
+												"id": 1,
+												"frequency": "never",
+												"user_id": 16,
+												"amount": 160,
+												"account_id": 3,
+												"category_id": 1,
+												"status": "active"
+											},
+											{
+												"id": 6,
+												"frequency": "weekly",
+												"user_id": 16,
+												"amount": 160,
+												"account_id": 2,
+												"category_id": 1,
+												"status": "inactive"
+											},
+											{
+												"id": 7,
+												"frequency": "weekly",
+												"user_id": 17,
+												"amount": 160,
+												"account_id": 2,
+												"category_id": 1,
+												"status": "inactive"
+											}
+										]
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/transactionAccount/user": {
 			"get": {
 				"tags": ["transaction-account"],
@@ -6144,6 +6266,7 @@
 												"id": 1,
 												"frequency": "never",
 												"user_id": 16,
+												"amount": 160,
 												"account_id": 3,
 												"category_id": 1,
 												"status": "active"
@@ -6152,6 +6275,7 @@
 												"id": 6,
 												"frequency": "weekly",
 												"user_id": 16,
+												"amount": 160,
 												"account_id": 2,
 												"category_id": 1,
 												"status": "inactive"
@@ -6160,6 +6284,7 @@
 												"id": 7,
 												"frequency": "weekly",
 												"user_id": 17,
+												"amount": 160,
 												"account_id": 2,
 												"category_id": 1,
 												"status": "inactive"
@@ -6175,10 +6300,10 @@
 				}
 			}
 		},
-		"/transactionCategory/{user_id}": {
+		"/transactionCategory/": {
 			"get": {
 				"tags": ["transaction-category"],
-				"description": "Get a transaction category by user id",
+				"description": "List all transaction categories",
 				"parameters": [
 					{
 						"name": "auth-token",
@@ -6186,18 +6311,6 @@
 						"description": "Auth Token",
 						"required": true,
 						"type": "string"
-					},
-					{
-						"name": "user_id",
-						"in": "path",
-						"description": "User ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
 					}
 				],
 				"responses": {
@@ -6212,29 +6325,39 @@
 									"data": {
 										"transactionCategories": [
 											{
-												"id": 18,
-												"name": "Test category updated",
-												"user_id": 37,
-												"icon_url": "url",
-												"colour": "#FF0000",
-												"type": "expense",
-												"is_default": 1,
-												"status": "active"
-											},
-											{
-												"id": 21,
-												"name": "Test Category for user 37",
-												"user_id": 37,
-												"icon_url": "icon_url",
-												"colour": "#FF0000",
-												"type": "expense",
-												"is_default": 1,
-												"status": "active"
-											},
-											{
-												"id": 22,
+												"id": 1,
 												"name": "New updated name",
-												"user_id": 37,
+												"user_id": 16,
+												"icon_url": "test icon url",
+												"colour": "",
+												"type": "income",
+												"is_default": 1,
+												"status": "active"
+											},
+											{
+												"id": 3,
+												"name": "TestName",
+												"user_id": 17,
+												"icon_url": "icon_url",
+												"colour": "",
+												"type": "expense",
+												"is_default": 1,
+												"status": "active"
+											},
+											{
+												"id": 14,
+												"name": "NewName",
+												"user_id": 17,
+												"icon_url": "icon_url",
+												"colour": "",
+												"type": "income",
+												"is_default": 1,
+												"status": "active"
+											},
+											{
+												"id": 16,
+												"name": "New updated name",
+												"user_id": 16,
 												"icon_url": "test icon url",
 												"colour": "",
 												"type": "income",
@@ -6252,10 +6375,10 @@
 				}
 			}
 		},
-		"/transactionCategory/": {
+		"/transactionCategory/user": {
 			"get": {
 				"tags": ["transaction-category"],
-				"description": "List all transaction categories",
+				"description": "List all transaction categories for signed user",
 				"parameters": [
 					{
 						"name": "auth-token",
@@ -7099,7 +7222,7 @@
 							},
 							"examples": {
 								"0": {
-									"value": "{\n\n        \"frequency\": \"Weekly\",\n        \"user_id\": 16,\n        \"account_id\": 2,\n        \"category_id\": 1,\n        \"status\": \"Inactive\"\n    }"
+									"value": "{\n\n        \"frequency\": \"Weekly\",\n        \"user_id\": 16,\n        \"account_id\": 2,\n        \"category_id\": 1,\n        \"status\": \"Inactive,\"\n     \"amount\": \"160\"\n     }"
 								}
 							}
 						}
@@ -7119,6 +7242,7 @@
 											"id": 19,
 											"frequency": "monthly",
 											"user_id": 37,
+											"amount": 160,
 											"account_id": 3,
 											"category_id": 1,
 											"status": "active"
@@ -8150,6 +8274,22 @@
 				}
 			}
 		},
+		"/upload/file": {
+			"get": {
+				"tags": ["uploads"],
+				"description": "Get uploaded file/image",
+				"parameters": [
+					
+					{
+						"name": "path",
+						"in": "query",
+						"description": "File path/URL",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		},
 		"/room": {
 			"post": {
 				"tags": ["chat"],
@@ -8211,7 +8351,9 @@
 						}
 					}
 				}
-			},
+			}
+		},
+		"/room/all":{
 			"get": {
 				"tags": ["chat"],
 				"description": "Get all room details",

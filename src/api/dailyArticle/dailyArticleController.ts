@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { Json } from 'sequelize/types/utils'
+import { AWS_S3_BASE_BUCKET_URL } from '../../constants'
 import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import { DailyArticleService } from './dailyArticleServices'
 
@@ -26,7 +27,7 @@ export class DailyArticleController {
 				throw new Error('Category is not passed')
 			}
 			const uploadImageInfo = await this.ArticleService.upload(req.file)
-			params.image = uploadImageInfo.Key
+			params.image = AWS_S3_BASE_BUCKET_URL + uploadImageInfo.Key
 			params.category = JSON.stringify(params.category)
 			const dailyArticle = await this.ArticleService.add(params)
 			return res.status(200).json({ dailyArticle })
@@ -58,7 +59,7 @@ export class DailyArticleController {
 		try {
 			if (req.file) {
 				const uploadImageInfo = await this.ArticleService.upload(req.file)
-				params.image = uploadImageInfo.Key
+				params.image = AWS_S3_BASE_BUCKET_URL + uploadImageInfo.Key
 			}
 			const dailyArticle = await this.ArticleService.update(id, params)
 			return res.status(200).json({ dailyArticle })

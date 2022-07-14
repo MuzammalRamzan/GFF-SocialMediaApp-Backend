@@ -10,7 +10,8 @@ export class RoomController {
 
   getAllRooms = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
-      const rooms = await this.roomService.getRooms();
+      const userId = req?.user?.id as number;
+      const rooms = await this.roomService.getAllRooms(userId);
       res.status(200).json({
         data: { rooms },
         message: "Successfully fetched all rooms",
