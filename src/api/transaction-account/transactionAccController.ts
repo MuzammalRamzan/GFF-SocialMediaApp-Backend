@@ -189,4 +189,30 @@ export class TransactionAccController {
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}
+
+	deleteTransactionAccount = async (req: GetTransactionAccountByIdRequest, res: Response, next: NextFunction) => {
+		const userId = +req.user.id
+		const id = +req.params.id
+		try {
+			const transactionAcc = await this.transactionAccService.delete(id, userId)
+			return res.status(200).send({
+				data: {
+					transactionAcc
+				},
+				code: 200,
+				message: 'OK'
+			})
+		} catch (err) {
+			const error = err as GffError
+			if (error.message === 'Unauthorized') {
+				error.errorCode = '401'
+				error.httpStatusCode = 401
+			}
+			else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
+			return jsonErrorHandler(err, req, res, () => {})
+		}
+	}
 }

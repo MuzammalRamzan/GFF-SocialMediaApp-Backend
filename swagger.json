@@ -18,6 +18,10 @@
 			"description": "App users related routes"
 		},
 		{
+			"name": "user-information",
+			"description": "User information related routes"
+		},
+		{
 			"name": "transaction-account",
 			"description": "Transaction-Account related routes"
 		},
@@ -40,10 +44,6 @@
 		{
 			"name": "debt",
 			"description": "Debt related routes"
-		},
-		{
-			"name": "user-information",
-			"description": "User information related routes"
 		},
 		{
 			"name": "loan-ledger-personal-info",
@@ -5531,6 +5531,128 @@
 				}
 			}
 		},
+		"/transactionAccount/delete/{id}": {
+			"delete": {
+				"tags": ["transaction-account"],
+				"description": "Delete a transaction account",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "id",
+						"in": "path",
+						"description": " transaction account ID",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"transaction-account": 1
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/transaction/user": {
+			"get": {
+				"tags": ["transaction"],
+				"description": "List all transactions for user",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"transaction": [
+											{
+												"id": 1,
+												"frequency": "never",
+												"user_id": 16,
+												"amount": 160,
+												"account_id": 3,
+												"category_id": 1,
+												"status": "active"
+											},
+											{
+												"id": 6,
+												"frequency": "weekly",
+												"user_id": 16,
+												"amount": 160,
+												"account_id": 2,
+												"category_id": 1,
+												"status": "inactive"
+											},
+											{
+												"id": 7,
+												"frequency": "weekly",
+												"user_id": 17,
+												"amount": 160,
+												"account_id": 2,
+												"category_id": 1,
+												"status": "inactive"
+											}
+										]
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/transactionAccount/user": {
 			"get": {
 				"tags": ["transaction-account"],
@@ -7112,7 +7234,7 @@
 							},
 							"examples": {
 								"0": {
-									"value": "{\n\n        \"frequency\": \"Weekly\",\n        \"user_id\": 16,\n        \"account_id\": 2,\n        \"category_id\": 1,\n        \"status\": \"Inactive\"\n    }"
+									"value": "{\n\n        \"frequency\": \"Weekly\",\n        \"user_id\": 16,\n        \"account_id\": 2,\n        \"category_id\": 1,\n        \"status\": \"Inactive,\"\n     \"amount\": \"160\"\n     }"
 								}
 							}
 						}
