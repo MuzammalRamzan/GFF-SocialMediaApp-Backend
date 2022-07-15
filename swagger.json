@@ -6375,10 +6375,10 @@
 				}
 			}
 		},
-		"/transactionCategory/user/{id}": {
+		"/transactionCategory/user": {
 			"get": {
 				"tags": ["transaction-category"],
-				"description": "List all transaction categories for specific user",
+				"description": "List all transaction categories for signed user",
 				"parameters": [
 					{
 						"name": "auth-token",
@@ -6386,18 +6386,6 @@
 						"description": "Auth Token",
 						"required": true,
 						"type": "string"
-					},
-					{
-						"name": "id",
-						"in": "path",
-						"description": "User ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
 					}
 				],
 				"responses": {
@@ -8286,6 +8274,22 @@
 				}
 			}
 		},
+		"/upload/file": {
+			"get": {
+				"tags": ["uploads"],
+				"description": "Get uploaded file/image",
+				"parameters": [
+					
+					{
+						"name": "path",
+						"in": "query",
+						"description": "File path/URL",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		},
 		"/room": {
 			"post": {
 				"tags": ["chat"],
@@ -8347,7 +8351,9 @@
 						}
 					}
 				}
-			},
+			}
+		},
+		"/room/all":{
 			"get": {
 				"tags": ["chat"],
 				"description": "Get all room details",

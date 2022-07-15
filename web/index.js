@@ -34,6 +34,7 @@ function SubscribePane(elem, url) {
 		let response = await fetch(url, { headers: { 'auth-token': authToken } })
 
 		if (response.status == 502) {
+			console.log('->timeout')
 			// Connection timeout
 			// happens when the connection was pending for too long
 			// let's reconnect
@@ -46,8 +47,11 @@ function SubscribePane(elem, url) {
 			await subscribe()
 		} else {
 			// Got message
+			console.log('Get the message')
 			let message = await response.json()
-			showMessage(elem, message.data.message.body)
+			if (message?.data?.messages?.length) {
+				message.data.messages.map(msg => showMessage(elem, msg.body))
+			}
 			await subscribe()
 		}
 	}
