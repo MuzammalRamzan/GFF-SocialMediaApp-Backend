@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { IAuthenticatedRequest } from '../helper/authMiddleware'
 import { GffError, jsonErrorHandler } from '../helper/errorHandler'
+import { UserRoleService } from '../user-role/userRoleService'
 import {
 	DeleteUserRequest,
 	GetFullUserByUserIdRequest,
@@ -28,22 +29,38 @@ const handleError = (err: any, req: IAuthenticatedRequest, res: Response) => {
 }
 export class UserController {
 	private readonly userService: UserService
+	private readonly roleService: UserRoleService
 
 	constructor() {
 		this.userService = new UserService()
+		this.roleService = new UserRoleService()
 	}
 
 	getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
 		try {
-			const role = req.query.role as string
+			const roleQuery = req.query.role
 
-			const users = await this.userService.list(role)
+			if (!roleQuery) {
+				const error = new GffError('Please role id as a query parameter.')
+				error.errorCode = '422'
+				throw error
+			}
+
+			const role = await this.roleService.getRoleById(+roleQuery)
+
+			if (!role) {
+				const error = new GffError("Role doesn't exist")
+				error.errorCode = '422'
+				throw error
+			}
+
+			const users = await this.userService.list(role.getDataValue('authority'))
 			if (!users) {
 				throw new Error('No data found')
 			}
 			return res.status(200).send({
 				data: {
-					[role]: users
+					[role.getDataValue('authority')]: users
 				},
 				code: 200,
 				message: 'OK'

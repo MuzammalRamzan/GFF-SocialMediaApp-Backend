@@ -2,6 +2,10 @@ import { IUserRoleService } from './interface'
 import { UserRole } from './userRoleModel'
 
 export class UserRoleService implements IUserRoleService {
+	async getRoleById(id: number): Promise<UserRole | null> {
+		return await UserRole.findByPk(id)
+	}
+
 	async fetchUserRole(): Promise<UserRole | null> {
 		const role = await UserRole.findOne({
 			where: {
