@@ -8351,7 +8351,9 @@
 						}
 					}
 				}
-			},
+			}
+		},
+		"/room/all":{
 			"get": {
 				"tags": ["chat"],
 				"description": "Get all room details",

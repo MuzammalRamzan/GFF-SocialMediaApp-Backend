@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
+import { AWS_S3_BASE_BUCKET_URL } from '../../constants'
 import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import { DailyDoseService } from './dailyDoseServices'
 import { categoryType } from './interface'
@@ -17,7 +18,7 @@ export class DailyDoseController {
 				throw new Error('Please upload a file')
 			}
 			const uploadImageInfo = await this.debtService.upload(req.file)
-			params.image = uploadImageInfo.Key
+			params.image = AWS_S3_BASE_BUCKET_URL + uploadImageInfo.Key
 			if (
 				params.category !== categoryType.MUSIC &&
 				params.category != categoryType.NEWS &&
