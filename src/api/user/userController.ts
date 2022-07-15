@@ -38,29 +38,15 @@ export class UserController {
 
 	getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
 		try {
-			const roleQuery = req.query.role
+			const roleQuery = req.query.role as string
 
-			if (!roleQuery) {
-				const error = new GffError('Please role id as a query parameter.')
-				error.errorCode = '422'
-				throw error
-			}
-
-			const role = await this.roleService.getRoleById(+roleQuery)
-
-			if (!role) {
-				const error = new GffError("Role doesn't exist")
-				error.errorCode = '422'
-				throw error
-			}
-
-			const users = await this.userService.list(role.getDataValue('authority'))
+			const users = await this.userService.list(roleQuery)
 			if (!users) {
 				throw new Error('No data found')
 			}
 			return res.status(200).send({
 				data: {
-					[role.getDataValue('authority')]: users
+					users
 				},
 				code: 200,
 				message: 'OK'

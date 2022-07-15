@@ -3,6 +3,7 @@ import { sequelize } from '../../database'
 import { WarriorInformation } from '../warrior-information/warriorInformationModel'
 import { MentorInformation } from '../mentor-information/mentorInformationModel'
 import { UserInformation } from '../user-information/userInformationModel'
+import { UserRole } from '../user-role/userRoleModel'
 
 export interface IUser {
 	id: number
@@ -57,6 +58,8 @@ User.init(
 		timestamps: true
 	}
 )
+
+User.belongsTo(UserRole, { foreignKey: 'role_id', as: 'role' })
 
 User.hasOne(WarriorInformation, {
 	foreignKey: 'user_id',

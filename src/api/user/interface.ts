@@ -42,7 +42,7 @@ export interface OtherUserInfo {
 }
 
 export interface IUserService {
-	list(role: string): Promise<User[]>
+	list(role: string): Promise<UserInfo[]>
 	fetchById(userId: number, id: number): Promise<User>
 	fetchByEmail(email: string, userId: number): Promise<User>
 	update(id: number, params: UserType): Promise<User>

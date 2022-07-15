@@ -7,29 +7,19 @@ import { Op } from 'sequelize'
 import { WarriorInformation } from '../warrior-information/warriorInformationModel'
 import { UserInformation } from '../user-information/userInformationModel'
 import { MentorInformation } from '../mentor-information/mentorInformationModel'
-import { FindFriendService } from '../find-friend/findFriendService'
 import { WellnessWarrior } from '../wellness-warrior/wellnessWarriorModel'
 import { MentorMatcherModel } from '../mentor-matcher/mentorMatcherModel'
 import { GffError } from '../helper/errorHandler'
 import { FindFriendModel } from '../find-friend/findFriendModel'
 import { USER_FIELDS, USER_INFORMATION_FIELDS } from '../../helper/db.helper'
 import { HashtagService } from '../hashtag/hashtagService'
-import { MentorInformationService } from '../mentor-information/mentorInformationService'
-import { WarriorInformationService } from '../warrior-information/warriorInformationService'
+import { UserRole } from '../user-role/userRoleModel'
 
 export class UserService implements IUserService {
-	private readonly authService: AuthService
-	private readonly findFriendService: FindFriendService
 	private readonly hashtagService: HashtagService
-	private readonly mentorInformationService: MentorInformationService
-	private readonly warriorInformationService: WarriorInformationService
 
 	constructor() {
-		this.authService = new AuthService()
-		this.findFriendService = new FindFriendService()
 		this.hashtagService = new HashtagService()
-		this.mentorInformationService = new MentorInformationService()
-		this.warriorInformationService = new WarriorInformationService()
 	}
 
 	static async isExists(user_id: number): Promise<boolean> {
@@ -47,28 +37,31 @@ export class UserService implements IUserService {
 		return fullUser as User[]
 	}
 
-	async list(role: string): Promise<User[] | []> {
-		switch (role) {
-			case 'user':
-				const users = await User.findAll({
-					attributes: {
-						exclude: ['password']
-					},
-					include: [{ model: UserInformation, as: 'user_information', attributes: ['profile_url'] }]
-				})
+	async list(role: string | undefined): Promise<UserInfo[]> {
+		const users = (await User.findAll({
+			where: { ...(role ? { role_id: role } : {}) },
+			attributes: { exclude: ['password'] },
+			include: [
+				{ model: UserRole, as: 'role' },
+				{ model: UserInformation, as: 'user_information', attributes: ['profile_url'] },
+				{ model: MentorInformation, as: 'mentor_information' },
+				{ model: WarriorInformation, as: 'warrior_information' }
+			]
+		})) as UserInfo[]
 
-				return users
-				break
-			case 'mentor':
-				return this.mentorInformationService.getAllMentors()
-				break
-			case 'warrior':
-				return this.warriorInformationService.getAll()
-				break
-			default:
-				return []
-				break
-		}
+		return users.map(user => {
+			const userInfo: UserInfo = user.get()
+
+			if (userInfo?.mentor_information) {
+				userInfo['mentor_information'] = this.parseMentorInformation(userInfo.mentor_information)
+			}
+
+			if (userInfo?.warrior_information) {
+				userInfo['warrior_information'] = this.parseWarriorInformation(userInfo.warrior_information)
+			}
+
+			return userInfo
+		})
 	}
 
 	async fetchById(id: number, userId: number): Promise<User> {
@@ -197,26 +190,11 @@ export class UserService implements IUserService {
 		myInfo['hashtags'] = hashtags
 
 		if (myInfo?.warrior_information) {
-			const warrior_information = myInfo.warrior_information.get({ plain: true })
-			myInfo['warrior_information'] = {
-				...warrior_information,
-				specialty: warrior_information?.specialty.split(','),
-				certification: warrior_information?.certification.split(','),
-				therapy_type: warrior_information?.therapy_type.split(','),
-				price_range: warrior_information?.price_range.split(',')
-			}
+			myInfo['warrior_information'] = this.parseWarriorInformation(myInfo.warrior_information)
 		}
 
 		if (myInfo?.mentor_information) {
-			const mentor_information = myInfo.mentor_information.get({ plain: true })
-			myInfo['mentor_information'] = {
-				...mentor_information,
-				industry: (mentor_information.industry || '').split(',').filter((item: string) => !!item),
-				role: (mentor_information.role || '').split(',').filter((item: string) => !!item),
-				frequency: (mentor_information.frequency || '').split(',').filter((item: string) => !!item),
-				conversation_mode: (mentor_information.conversation_mode || '').split(',').filter((item: string) => !!item),
-				languages: (mentor_information.languages || '').split(',').filter((item: string) => !!item)
-			}
+			myInfo['mentor_information'] = this.parseMentorInformation(myInfo.mentor_information)
 		}
 
 		return myInfo
@@ -357,6 +335,29 @@ export class UserService implements IUserService {
 			mentor_request,
 			warrior_request,
 			hashtags
+		}
+	}
+
+	private parseMentorInformation = (mentor: MentorInformation) => {
+		const mentor_information = mentor.toJSON()
+		return {
+			...mentor_information,
+			industry: (mentor_information.industry || '').split(',').filter((item: string) => !!item),
+			role: (mentor_information.role || '').split(',').filter((item: string) => !!item),
+			frequency: (mentor_information.frequency || '').split(',').filter((item: string) => !!item),
+			conversation_mode: (mentor_information.conversation_mode || '').split(',').filter((item: string) => !!item),
+			languages: (mentor_information.languages || '').split(',').filter((item: string) => !!item)
+		}
+	}
+
+	private parseWarriorInformation = (warrior: WarriorInformation) => {
+		const warrior_information = warrior.toJSON()
+		return {
+			...warrior_information,
+			specialty: warrior_information?.specialty.split(','),
+			certification: warrior_information?.certification.split(','),
+			therapy_type: warrior_information?.therapy_type.split(','),
+			price_range: warrior_information?.price_range.split(',')
 		}
 	}
 }
