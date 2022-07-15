@@ -2,59 +2,63 @@ import { IUserRoleService } from './interface'
 import { UserRole } from './userRoleModel'
 
 export class UserRoleService implements IUserRoleService {
-    async fetchUserRole(): Promise<UserRole | null> {
-        const role = await UserRole.findOne({
-            where: {
-                authority: 'user'
-            }
-        })
+	async fetchUserRole(): Promise<UserRole | null> {
+		const role = await UserRole.findOne({
+			where: {
+				authority: 'user'
+			}
+		})
 
-        if (!role) {
-            return null
-        }
+		if (!role) {
+			return null
+		}
 
-        return role
-    }
+		return role
+	}
 
-    static async fetchWellnessWarriorRole(): Promise<UserRole | null> {
-        const role = await UserRole.findOne({
-            where: {
-                authority: 'warrior'
-            }
-        })
+	async getAllRoles(): Promise<UserRole[]> {
+		return await UserRole.findAll()
+	}
 
-        if (!role) {
-            return null
-        }
+	static async fetchWellnessWarriorRole(): Promise<UserRole | null> {
+		const role = await UserRole.findOne({
+			where: {
+				authority: 'warrior'
+			}
+		})
 
-        return role
-    }
+		if (!role) {
+			return null
+		}
 
-    static async fetchAdminRole(): Promise<UserRole | null> {
-        const role = await UserRole.findOne({
-            where: {
-                authority: 'admin'
-            }
-        })
+		return role
+	}
 
-        if (!role) {
-            return null
-        }
+	static async fetchAdminRole(): Promise<UserRole | null> {
+		const role = await UserRole.findOne({
+			where: {
+				authority: 'admin'
+			}
+		})
 
-        return role
-    }
+		if (!role) {
+			return null
+		}
 
-    static async fetchMentorRole(): Promise<UserRole | null> {
-        const role = await UserRole.findOne({
-            where: {
-                authority: 'mentor'
-            }
-        })
+		return role
+	}
 
-        if (!role) {
-            return null
-        }
+	static async fetchMentorRole(): Promise<UserRole | null> {
+		const role = await UserRole.findOne({
+			where: {
+				authority: 'mentor'
+			}
+		})
 
-        return role;
-    }
+		if (!role) {
+			return null
+		}
+
+		return role
+	}
 }
