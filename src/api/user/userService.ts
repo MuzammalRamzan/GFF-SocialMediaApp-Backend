@@ -34,7 +34,7 @@ export class UserService implements IUserService {
 	async fetchFullUserById(userId: number): Promise<User[]> {
 		const fullUser = await sequelize.query(
 			'SELECT * FROM `user_information` INNER JOIN `user` ON user_information.user_id = user.id WHERE user_id=' +
-			userId,
+				userId,
 			{ type: QueryTypes.SELECT }
 		)
 
@@ -45,7 +45,8 @@ export class UserService implements IUserService {
 		const users = await User.findAll({
 			attributes: {
 				exclude: ['password']
-			}
+			},
+			include: [{ model: UserInformation, as: 'user_information', attributes: ['profile_url'] }]
 		})
 
 		return users
@@ -171,10 +172,10 @@ export class UserService implements IUserService {
 
 		myInfo = myInfo.get()
 
-		const user_hashtags = await this.hashtagService.fetchById(userId);
-		const hashtags = user_hashtags.map(hashtag => hashtag.get());
+		const user_hashtags = await this.hashtagService.fetchById(userId)
+		const hashtags = user_hashtags.map(hashtag => hashtag.get())
 
-		myInfo['hashtags'] = hashtags;
+		myInfo['hashtags'] = hashtags
 
 		if (myInfo?.warrior_information) {
 			const warrior_information = myInfo.warrior_information.get({ plain: true })
@@ -204,7 +205,7 @@ export class UserService implements IUserService {
 
 	getOtherUserInfo = async (userId: number, otherUserId: number): Promise<OtherUserInfo | null> => {
 		const otherUser = await User.findByPk(otherUserId, {
-			attributes: { exclude: ['password'] },
+			attributes: { exclude: ['password'] }
 		})
 
 		if (!otherUser) {
@@ -213,9 +214,9 @@ export class UserService implements IUserService {
 			throw error
 		}
 
-		const user_hashtags = await this.hashtagService.fetchById(otherUserId);
+		const user_hashtags = await this.hashtagService.fetchById(otherUserId)
 
-		const hashtags = user_hashtags.map(hashtag => hashtag.get());
+		const hashtags = user_hashtags.map(hashtag => hashtag.get())
 
 		const user_information = await this.getMyInfo(otherUserId)
 
@@ -224,7 +225,7 @@ export class UserService implements IUserService {
 				[Op.or]: [
 					{ sender_id: otherUserId, receiver_id: userId },
 					{ sender_id: userId, receiver_id: otherUserId }
-				],
+				]
 			},
 			include: [
 				{
@@ -289,13 +290,13 @@ export class UserService implements IUserService {
 					]
 				}
 			]
-		});
+		})
 
 		const warrior_request = await WellnessWarrior.findOne({
 			where: {
 				[Op.or]: [
 					{ warrior_id: otherUserId, user_id: userId },
-					{ warrior_id: userId, user_id: otherUserId },
+					{ warrior_id: userId, user_id: otherUserId }
 				]
 			},
 			include: [
@@ -326,7 +327,7 @@ export class UserService implements IUserService {
 					]
 				}
 			]
-		});
+		})
 
 		return {
 			...otherUser.get(),
