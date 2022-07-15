@@ -171,8 +171,21 @@ export class MentorInformationService implements IMentorInformationService {
 
 	async getAllMentors(): Promise<MentorInformation[]> {
 		const mentors = await MentorInformation.findAll({
-			include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } }]
+			include: [
+				{
+					model: User,
+					as: 'user',
+					attributes: { exclude: ['password'] },
+					include: [{ model: UserInformation, as: 'user_information', attributes: ['profile_url'] }]
+				}
+			]
 		})
-		return mentors
+		return mentors.map(mentor => {
+			const mentorInfo = mentor.toJSON()
+			let user = mentorInfo['user']
+			delete mentorInfo['user']
+			user = { ...user, mentor: mentorInfo }
+			return user
+		})
 	}
 }

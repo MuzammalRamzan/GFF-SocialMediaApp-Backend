@@ -1,4 +1,3 @@
-import { Console } from 'console'
 import { Request, Response, NextFunction } from 'express'
 import { IAuthenticatedRequest } from '../helper/authMiddleware'
 import { GffError, jsonErrorHandler } from '../helper/errorHandler'
@@ -36,13 +35,15 @@ export class UserController {
 
 	getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
 		try {
-			const users = await this.userService.list()
+			const role = req.query.role as string
+
+			const users = await this.userService.list(role)
 			if (!users) {
 				throw new Error('No data found')
 			}
 			return res.status(200).send({
 				data: {
-					users
+					[role]: users
 				},
 				code: 200,
 				message: 'OK'
@@ -158,7 +159,7 @@ export class UserController {
 	}
 
 	updateUser = async (req: UpdateUserRequest, res: Response, next: NextFunction) => {
-		const userId = +req.user.id;
+		const userId = +req.user.id
 
 		try {
 			const user = await this.userService.update(userId, req.body)

@@ -101,9 +101,22 @@ export class WarriorInformationService implements IWarriorInformationService {
 
 	async getAll(): Promise<WarriorInformation[]> {
 		const warriors = await WarriorInformation.findAll({
-			include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } }]
+			include: [
+				{
+					model: User,
+					as: 'user',
+					attributes: { exclude: ['password'] },
+					include: [{ model: UserInformation, as: 'user_information', attributes: ['profile_url'] }]
+				}
+			]
 		})
-		return warriors
+		return warriors.map(warrior => {
+			const warriorInfo = warrior.toJSON()
+			let user = warriorInfo['user']
+			delete warriorInfo['user']
+			user = { ...user, warrior: warriorInfo }
+			return user
+		})
 	}
 
 	static isUserWarrior = async (user_id: number): Promise<boolean> => {

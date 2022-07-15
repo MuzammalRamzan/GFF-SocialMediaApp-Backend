@@ -14,16 +14,22 @@ import { GffError } from '../helper/errorHandler'
 import { FindFriendModel } from '../find-friend/findFriendModel'
 import { USER_FIELDS, USER_INFORMATION_FIELDS } from '../../helper/db.helper'
 import { HashtagService } from '../hashtag/hashtagService'
+import { MentorInformationService } from '../mentor-information/mentorInformationService'
+import { WarriorInformationService } from '../warrior-information/warriorInformationService'
 
 export class UserService implements IUserService {
 	private readonly authService: AuthService
 	private readonly findFriendService: FindFriendService
 	private readonly hashtagService: HashtagService
+	private readonly mentorInformationService: MentorInformationService
+	private readonly warriorInformationService: WarriorInformationService
 
 	constructor() {
 		this.authService = new AuthService()
 		this.findFriendService = new FindFriendService()
 		this.hashtagService = new HashtagService()
+		this.mentorInformationService = new MentorInformationService()
+		this.warriorInformationService = new WarriorInformationService()
 	}
 
 	static async isExists(user_id: number): Promise<boolean> {
@@ -41,15 +47,28 @@ export class UserService implements IUserService {
 		return fullUser as User[]
 	}
 
-	async list(): Promise<User[]> {
-		const users = await User.findAll({
-			attributes: {
-				exclude: ['password']
-			},
-			include: [{ model: UserInformation, as: 'user_information', attributes: ['profile_url'] }]
-		})
+	async list(role: string): Promise<User[] | []> {
+		switch (role) {
+			case 'user':
+				const users = await User.findAll({
+					attributes: {
+						exclude: ['password']
+					},
+					include: [{ model: UserInformation, as: 'user_information', attributes: ['profile_url'] }]
+				})
 
-		return users
+				return users
+				break
+			case 'mentor':
+				return this.mentorInformationService.getAllMentors()
+				break
+			case 'warrior':
+				return this.warriorInformationService.getAll()
+				break
+			default:
+				return []
+				break
+		}
 	}
 
 	async fetchById(id: number, userId: number): Promise<User> {
