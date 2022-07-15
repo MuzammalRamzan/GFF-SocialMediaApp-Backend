@@ -1,5 +1,6 @@
 import { IRoomService, RoomParams } from "./interface";
 import { Room } from "./room.model";
+import { Op } from 'sequelize'
 
 export class RoomService implements IRoomService {
   constructor() { }
@@ -64,5 +65,22 @@ export class RoomService implements IRoomService {
     const user_ids = room.get().user_ids = room.get().user_ids.split(",").filter((item: number | string) => !!item).map((item: number | string) => +item);
 
     return user_ids.includes(user_id);
+  }
+
+  async getAllRooms(user_id: number): Promise<Room[]> {
+    return await Room.findAll({
+      where: {
+        user_ids: {
+          [Op.or]: [
+            {
+              [Op.like]: `%${user_id},%`
+            },
+            {
+              [Op.like]: `%,${user_id}`
+            }
+          ]
+        }
+      }
+    })
   }
 }
