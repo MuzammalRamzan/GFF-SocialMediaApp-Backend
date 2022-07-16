@@ -3,6 +3,7 @@ import AWS from 'aws-sdk'
 import s3Services from '../../helper/s3Services'
 import { UserInformationService } from '../user-information/userInformationService'
 import { UserInformation } from '../user-information/userInformationModel'
+import { AWS_S3_BASE_BUCKET_URL } from '../../constants'
 
 export class UploadService implements IUploadService {
 	private s3: s3Services;
@@ -36,7 +37,7 @@ export class UploadService implements IUploadService {
 
 		const uploadedAvatar = await this.upload(file, `/uploads/user/profile_picture/${user_id}/images/${fileNameWithoutSpace}`)
 
-		const userDetails = await this.UserInformation.updateUserProfileUrl(uploadedAvatar.Key, user_id)
+		const userDetails = await this.UserInformation.updateUserProfileUrl(AWS_S3_BASE_BUCKET_URL + uploadedAvatar.Key, user_id)
 
 		return userDetails as UserInformation
 	}

@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { Op } from 'sequelize'
 import { UserInformation } from '../../user-information/userInformationModel'
 import { User } from '../../user/userModel'
+import { RoomService } from '../room/room.service'
 import { Message } from './message.model'
 
 type SubscribersType = {
@@ -10,6 +11,62 @@ type SubscribersType = {
 
 export class MessageService {
 	private subscribers: SubscribersType = Object.create(null)
+
+	static filterMessageObject(message: Message | null) {
+		if (!message) return null
+
+		const data = message?.get()
+		return {
+			id: data.id,
+			user_id: data.user_id,
+			body: data.body,
+			room_id: data.room_id,
+			created_at: data.created_at,
+			user: {
+				id: data.user.id,
+				full_name: data.user.full_name,
+				profile_url: data.user?.user_information?.profile_url
+			}
+		}
+	}
+
+	public async getMessagesByRoom(room_id: number): Promise<Message[]> {
+		return await Message.findAll({
+			where: {
+				room_id
+			},
+			order: [['created_at', 'ASC']],
+			include: [
+				{
+					model: User,
+					as: 'user',
+					attributes: ['id', 'full_name'],
+					include: [
+						{
+							model: UserInformation,
+							as: 'user_information',
+							attributes: ['profile_url']
+						}
+					]
+				}
+			]
+		})
+	}
+
+	public async getAllMessages(user_id: number) {
+		const roomService = new RoomService()
+		const getAllRooms = await roomService.getAllRooms(user_id)
+		const messages = []
+
+		for (let room of getAllRooms) {
+			const getMessages = await this.getMessagesByRoom(room.get('id') as number)
+			for (let message of getMessages) {
+				messages.push(MessageService.filterMessageObject(message))
+			}
+		}
+
+		return messages
+	}
 
 	public async sendMessage(message: string, user_id: number, room_id: number): Promise<Message | null> {
 		let messageObj: Message | null = await Message.create({ user_id, room_id, body: message })
@@ -80,6 +137,11 @@ export class MessageService {
 
 		this.subscribers[room_id][user_id] = res
 
+		setTimeout(() => {
+			req.pause()
+			res.status(502).end()
+		}, 30000)
+
 		req.on('close', () => {
 			delete this.subscribers[room_id][user_id]
 		})
@@ -91,7 +153,11 @@ export class MessageService {
 			roomParticipants.map(participantId => {
 				if (this.subscribers[room_id][participantId]) {
 					this.subscribers[room_id][participantId]?.end(
-						JSON.stringify({ code: 200, data: { message }, message: 'Received a message!' })
+						JSON.stringify({
+							code: 200,
+							data: { messages: [MessageService.filterMessageObject(message)] },
+							message: 'Received a message!'
+						})
 					)
 				}
 				this.subscribers[room_id][participantId] = null

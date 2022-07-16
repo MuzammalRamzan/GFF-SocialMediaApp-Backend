@@ -77,7 +77,7 @@ export class TransactionCategotryController {
 		res: Response,
 		next: NextFunction
 	) => {
-		const id = +req.params.id
+		const id = +req.user.id
 
 		try {
 			const transactionCategories = await this.transactionCategoryService.fetchByUserId(id)
