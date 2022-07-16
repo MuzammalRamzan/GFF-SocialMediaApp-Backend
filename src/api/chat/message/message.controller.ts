@@ -93,7 +93,8 @@ export class MessageController {
 	getAllUnreadMessages = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
 		try {
 			const user_id = req?.user?.id as number
-			return this.messageService.getAllUnreadMessages(req, res, user_id)
+			const unreadMessages = await this.messageService.getAllUnreadMessages(user_id)
+			return res.status(200).json({ data: { unreadMessages }, code: 200, message: 'OK' })
 		} catch (error) {
 			next(error)
 		}

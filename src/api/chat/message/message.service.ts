@@ -158,18 +158,36 @@ export class MessageService implements IMessageService {
 		return unreadMessageCount
 	}
 
-	public async getAllUnreadMessages(req: Request, res: Response, user_id: number): Promise<void> {
-		res.setHeader('Content-Type', 'application/json;charset=utf-8')
-		res.setHeader('Cache-Control', 'no-cache, must-revalidate')
+	public async getAllUnreadMessages(user_id: number): Promise<(MessageType | null)[]> {
+		const unreadMessages = await Message.findAll({
+			where: { user_id: { [Op.ne]: user_id }, read: 0 },
+			include: [
+				{
+					model: Room,
+					as: 'room',
+					required: true,
+					where: {
+						user_ids: {
+							[Op.or]: [
+								{
+									[Op.like]: `%${user_id},%`
+								},
+								{
+									[Op.like]: `%,${user_id}`
+								}
+							]
+						}
+					}
+				},
+				{
+					model: User,
+					as: 'user',
+					include: [{ model: UserInformation, as: 'user_information', attributes: ['profile_url'] }]
+				}
+			]
+		})
 
-		this.unreadMessageSubscribers[user_id] = res
-
-		setTimeout(() => {
-			req.pause()
-			res.status(502).end()
-		}, 30000)
-
-		req.on('close', () => {})
+		return unreadMessages.map(msg => MessageService.filterMessageObject(msg))
 	}
 
 	public async subscribeToRoom(

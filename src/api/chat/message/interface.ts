@@ -20,7 +20,7 @@ export interface IMessageService {
 	getAllUnreadMessageCount(user_id: number): Promise<number>
 	sendMessage(message: string, user_id: number, room_id: number): Promise<Message | null>
 	getMessages(room_id: number, from: string): Promise<Message[]>
-	getAllUnreadMessages(req: Request, res: Response, user_id: number): Promise<void>
+	getAllUnreadMessages(user_id: number): Promise<(MessageType | null)[]>
 	subscribeToRoom(req: Request, res: Response, params: { user_id: number; room_id: number }): Promise<void>
 	publishMessage(message: Message | null, user_id: number, room_id: number): Promise<void>
 }
