@@ -14,6 +14,7 @@ import { FindFriendModel } from '../find-friend/findFriendModel'
 import { USER_FIELDS, USER_INFORMATION_FIELDS } from '../../helper/db.helper'
 import { HashtagService } from '../hashtag/hashtagService'
 import { UserRole } from '../user-role/userRoleModel'
+import { UserRoleService } from '../user-role/userRoleService'
 
 export class UserService implements IUserService {
 	private readonly hashtagService: HashtagService
@@ -30,7 +31,7 @@ export class UserService implements IUserService {
 	async fetchFullUserById(userId: number): Promise<User[]> {
 		const fullUser = await sequelize.query(
 			'SELECT * FROM `user_information` INNER JOIN `user` ON user_information.user_id = user.id WHERE user_id=' +
-				userId,
+			userId,
 			{ type: QueryTypes.SELECT }
 		)
 
@@ -38,12 +39,25 @@ export class UserService implements IUserService {
 	}
 
 	async list(role: string | undefined): Promise<UserInfo[]> {
+		const adminRole = await UserRoleService.fetchAdminRole();
+
 		const users = (await User.findAll({
-			where: { ...(role ? { role_id: role } : {}) },
+			where: {
+				role_id: role ? {
+					[Op.eq]: role
+				} :
+					{
+						[Op.ne]: adminRole?.get('id')
+					},
+			},
 			attributes: { exclude: ['password'] },
 			include: [
 				{ model: UserRole, as: 'role' },
-				{ model: UserInformation, as: 'user_information', attributes: ['profile_url'] },
+				{
+					model: UserInformation,
+					as: 'user_information',
+					attributes: ['profile_url', 'job_role', 'employer_name']
+				},
 				{ model: MentorInformation, as: 'mentor_information' },
 				{ model: WarriorInformation, as: 'warrior_information' }
 			]

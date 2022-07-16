@@ -1,5 +1,6 @@
 import { IUserRoleService } from './interface'
 import { UserRole } from './userRoleModel'
+import { Op } from 'sequelize'
 
 export class UserRoleService implements IUserRoleService {
 	async getRoleById(id: number): Promise<UserRole | null> {
@@ -21,7 +22,13 @@ export class UserRoleService implements IUserRoleService {
 	}
 
 	async getAllRoles(): Promise<UserRole[]> {
-		return await UserRole.findAll()
+		return await UserRole.findAll({
+			where: {
+				authority: {
+					[Op.ne]: 'admin'
+				}
+			}
+		})
 	}
 
 	static async fetchWellnessWarriorRole(): Promise<UserRole | null> {
