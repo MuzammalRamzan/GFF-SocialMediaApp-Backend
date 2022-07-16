@@ -114,4 +114,17 @@ export class MessageController {
 			next(error)
 		}
 	}
+
+	subscribeToGetNewIncomingMessageNotification = async (
+		req: IAuthenticatedRequest,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			const user_id = req?.user?.id as number
+			return this.messageService.subscribeToGetNewIncomingMessageNotification(req, res, user_id)
+		} catch (error) {
+			next(error)
+		}
+	}
 }

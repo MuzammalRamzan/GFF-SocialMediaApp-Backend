@@ -22,5 +22,6 @@ export interface IMessageService {
 	getMessages(room_id: number, from: string): Promise<Message[]>
 	getAllUnreadMessages(user_id: number): Promise<(MessageType | null)[]>
 	subscribeToRoom(req: Request, res: Response, params: { user_id: number; room_id: number }): Promise<void>
+	subscribeToGetNewIncomingMessageNotification(req: Request, res: Response, user_id: number): Promise<void>
 	publishMessage(message: Message | null, user_id: number, room_id: number): Promise<void>
 }

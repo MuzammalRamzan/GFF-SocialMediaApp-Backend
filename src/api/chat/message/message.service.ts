@@ -1,6 +1,7 @@
 import { MessageTagList } from 'aws-sdk/clients/sesv2'
 import { Request, Response } from 'express'
 import { Op } from 'sequelize'
+import { IAuthenticatedRequest } from '../../helper/authMiddleware'
 import { UserInformation } from '../../user-information/userInformationModel'
 import { User } from '../../user/userModel'
 import { Room } from '../room/room.model'
@@ -14,7 +15,7 @@ type SubscribersType = {
 
 export class MessageService implements IMessageService {
 	private subscribers: SubscribersType = Object.create(null)
-	private unreadMessageSubscribers: { [user_id: string]: Response | null } = Object.create(null)
+	private incomingMessageNotificationSubscribers: { [user_id: string]: Response | null } = Object.create(null)
 
 	private readonly roomService: RoomService
 
@@ -216,6 +217,26 @@ export class MessageService implements IMessageService {
 		})
 	}
 
+	public async subscribeToGetNewIncomingMessageNotification(
+		req: IAuthenticatedRequest,
+		res: Response,
+		user_id: number
+	): Promise<void> {
+		res.setHeader('Content-Type', 'application/json;charset=utf-8')
+		res.setHeader('Cache-Control', 'no-cache, must-revalidate')
+
+		this.incomingMessageNotificationSubscribers[user_id] = res
+
+		setTimeout(() => {
+			req.pause()
+			res.status(502).end()
+		}, 30000)
+
+		req.on('close', () => {
+			delete this.incomingMessageNotificationSubscribers[user_id]
+		})
+	}
+
 	public async publishMessage(message: Message | null, user_id: number, room_id: number): Promise<void> {
 		if (message && this.subscribers[room_id] && Object.keys(this.subscribers[room_id]).length) {
 			let roomParticipants = Object.keys(this.subscribers[room_id]).filter(userId => +userId !== user_id)
@@ -239,10 +260,11 @@ export class MessageService implements IMessageService {
 		if (message) {
 			let roomParticipants = await this.roomService.getAllUsersByRoomId(message.getDataValue('room_id'))
 
-			roomParticipants = roomParticipants.filter(userId => userId !== message.getDataValue('user_id'))
+			roomParticipants = roomParticipants.filter(userId => +userId !== message.getDataValue('user_id'))
+
 			roomParticipants.map(userId => {
-				if (this.unreadMessageSubscribers[userId]) {
-					this.unreadMessageSubscribers[userId]?.end(
+				if (this.incomingMessageNotificationSubscribers[userId]) {
+					this.incomingMessageNotificationSubscribers[userId]?.end(
 						JSON.stringify({
 							code: 200,
 							data: { messages: [MessageService.filterMessageObject(message)] },
