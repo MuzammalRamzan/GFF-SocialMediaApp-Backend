@@ -5,4 +5,4 @@ import { UserRoleController } from './userRole.controller'
 export const roleRouter = express.Router()
 const roleController = new UserRoleController()
 
-roleRouter.get('/', authMiddleware, roleController.getAllRoles as Application)
+roleRouter.get('/', roleController.getAllRoles as Application)
