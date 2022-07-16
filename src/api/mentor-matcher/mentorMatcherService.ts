@@ -10,12 +10,12 @@ import {
 import { MentorInformation } from '../mentor-information/mentorInformationModel'
 import { UserInformation } from '../user-information/userInformationModel'
 import { GffError } from '../helper/errorHandler'
-import { USER_INFORMATION_FIELDS } from '../../helper/db.helper'
+import { MENTOR_FIELDS, USER_INFORMATION_FIELDS } from '../../helper/db.helper'
 import { UserRoleService } from '../user-role/userRoleService'
 import { Associations } from '../association/association.model'
 
 export class MentorMatcherService implements IMentorMatcherService {
-	private MENTOR_INFORMATION_FIELDS = ['industry', 'role', 'frequency', 'conversation_mode', 'isPassedIRT', 'languages']
+	private MENTOR_INFORMATION_FIELDS = MENTOR_FIELDS
 
 	private USER_INFORMATION_FIELDS = USER_INFORMATION_FIELDS
 
@@ -49,46 +49,46 @@ export class MentorMatcherService implements IMentorMatcherService {
 							{
 								industry: _industry?.length
 									? {
-											[Op.or]: _industry?.map((item: string) => ({
-												[Op.like]: `%${item.trim()}%`
-											}))
-									  }
+										[Op.or]: _industry?.map((item: string) => ({
+											[Op.like]: `%${item.trim()}%`
+										}))
+									}
 									: { [Op.ne]: null }
 							},
 							{
 								role: _role?.length
 									? {
-											[Op.or]: _role?.map((item: string) => ({
-												[Op.like]: `%${item.trim()}%`
-											}))
-									  }
+										[Op.or]: _role?.map((item: string) => ({
+											[Op.like]: `%${item.trim()}%`
+										}))
+									}
 									: { [Op.ne]: null }
 							},
 							{
 								frequency: _frequency?.length
 									? {
-											[Op.or]: _frequency?.map((item: string) => ({
-												[Op.like]: `%${item.trim()}%`
-											}))
-									  }
+										[Op.or]: _frequency?.map((item: string) => ({
+											[Op.like]: `%${item.trim()}%`
+										}))
+									}
 									: { [Op.ne]: null }
 							},
 							{
 								conversation_mode: _conversation_mode?.length
 									? {
-											[Op.or]: _conversation_mode?.map((item: string) => ({
-												[Op.like]: `%${item.trim()}%`
-											}))
-									  }
+										[Op.or]: _conversation_mode?.map((item: string) => ({
+											[Op.like]: `%${item.trim()}%`
+										}))
+									}
 									: { [Op.ne]: null }
 							},
 							{
 								languages: _languages?.length
 									? {
-											[Op.or]: _languages?.map((item: string) => ({
-												[Op.like]: `%${item.trim()}%`
-											}))
-									  }
+										[Op.or]: _languages?.map((item: string) => ({
+											[Op.like]: `%${item.trim()}%`
+										}))
+									}
 									: { [Op.ne]: null }
 							}
 						]
