@@ -43,7 +43,7 @@ export class UserController {
 			const roleQuery = req.query.role as string
 
 			const pagination: PaginationType = {
-				page: +(req.query.page || 1) as number,
+				page: +(req.query.page || 0) as number,
 				pageSize: +(req.query.pageSize || PAGE_SIZE) as number
 			}
 
