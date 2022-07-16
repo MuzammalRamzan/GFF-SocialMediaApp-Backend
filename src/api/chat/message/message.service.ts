@@ -1,18 +1,21 @@
+import { MessageTagList } from 'aws-sdk/clients/sesv2'
 import { Request, Response } from 'express'
 import { Op } from 'sequelize'
 import { UserInformation } from '../../user-information/userInformationModel'
 import { User } from '../../user/userModel'
+import { Room } from '../room/room.model'
 import { RoomService } from '../room/room.service'
+import { IMessageService, MessageType } from './interface'
 import { Message } from './message.model'
 
 type SubscribersType = {
 	[room_id: string]: { [user_id: string]: Response | null }
 }
 
-export class MessageService {
+export class MessageService implements IMessageService {
 	private subscribers: SubscribersType = Object.create(null)
 
-	static filterMessageObject(message: Message | null) {
+	static filterMessageObject(message: Message | null): MessageType | null {
 		if (!message) return null
 
 		const data = message?.get()
@@ -53,7 +56,7 @@ export class MessageService {
 		})
 	}
 
-	public async getAllMessages(user_id: number) {
+	public async getAllMessages(user_id: number): Promise<(MessageType | null)[]> {
 		const roomService = new RoomService()
 		const getAllRooms = await roomService.getAllRooms(user_id)
 		const messages = []
@@ -66,6 +69,32 @@ export class MessageService {
 		}
 
 		return messages
+	}
+
+	public async getAllUnreadMessageCount(user_id: number): Promise<number> {
+		const unreadMessageCount = await Message.count({
+			where: { user_id: { [Op.ne]: user_id }, read: 0 },
+			include: [
+				{
+					model: Room,
+					as: 'room',
+					required: true,
+					where: {
+						user_ids: {
+							[Op.or]: [
+								{
+									[Op.like]: `%${user_id},%`
+								},
+								{
+									[Op.like]: `%,${user_id}`
+								}
+							]
+						}
+					}
+				}
+			]
+		})
+		return unreadMessageCount
 	}
 
 	public async sendMessage(message: string, user_id: number, room_id: number): Promise<Message | null> {

@@ -26,7 +26,7 @@ export class MessageController {
 			}
 
 			const messageObj = await this.messageService.sendMessage(message, user_id, room_id)
-			
+
 			return res.status(200).json({
 				data: { message: MessageService.filterMessageObject(messageObj) },
 				message: 'Message sent successfully',
@@ -44,7 +44,7 @@ export class MessageController {
 
 			const messages = await this.messageService.getMessages(room_id, from)
 
-			const data = messages.map(message => MessageService.filterMessageObject(message));
+			const data = messages.map(message => MessageService.filterMessageObject(message))
 
 			return res.status(200).json({
 				data: { messages: data },
@@ -75,18 +75,31 @@ export class MessageController {
 		}
 	}
 
-	getAllMessages= async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+	getAllMessages = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
 		try {
-			const userId = req?.user?.id as number;
-			const messages = await this.messageService.getAllMessages(userId);
+			const userId = req?.user?.id as number
+			const messages = await this.messageService.getAllMessages(userId)
 
-			return res.status(200).json(
-				{
-					data: { messages },
-					message: 'Messages fetched successfully',
-					code: 200
-				}
-			);
+			return res.status(200).json({
+				data: { messages },
+				message: 'Messages fetched successfully',
+				code: 200
+			})
+		} catch (error) {
+			next(error)
+		}
+	}
+
+	getAllUnreadMessageCount = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+		try {
+			const userId = req?.user?.id as number
+
+			const unreadMessageCount = await this.messageService.getAllUnreadMessageCount(userId)
+			return res.status(200).json({
+				data: { unreadMessageCount },
+				message: 'Unread message count fetched successfully',
+				code: 200
+			})
 		} catch (error) {
 			next(error)
 		}
