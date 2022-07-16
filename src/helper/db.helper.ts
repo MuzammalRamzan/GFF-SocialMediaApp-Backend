@@ -3,7 +3,7 @@ import { FindAndCountOptions } from 'sequelize/types'
 export type PaginationType = { page: number; pageSize: number }
 
 export const paginate = (query: FindAndCountOptions, pagination: PaginationType): FindAndCountOptions => {
-	const offset = (pagination.page - 1) * pagination.pageSize
+	const offset = pagination.page * pagination.pageSize
 	const limit = pagination.pageSize
 
 	return {
