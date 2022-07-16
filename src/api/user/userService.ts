@@ -14,12 +14,18 @@ import { paginate, PaginationType, USER_FIELDS, USER_INFORMATION_FIELDS } from '
 import { HashtagService } from '../hashtag/hashtagService'
 import { UserRole } from '../user-role/userRoleModel'
 import { UserRoleService } from '../user-role/userRoleService'
+import { MentorInformationService } from '../mentor-information/mentorInformationService'
+import { WarriorInformationService } from '../warrior-information/warriorInformationService'
 
 export class UserService implements IUserService {
 	private readonly hashtagService: HashtagService
+	private readonly mentorInformationService: MentorInformationService
+	private readonly warriorInformationService: WarriorInformationService
 
 	constructor() {
 		this.hashtagService = new HashtagService()
+		this.mentorInformationService = new MentorInformationService()
+		this.warriorInformationService = new WarriorInformationService()
 	}
 
 	static async isExists(user_id: number): Promise<boolean> {
@@ -72,11 +78,15 @@ export class UserService implements IUserService {
 			const userInfo: UserInfo = user.get()
 
 			if (userInfo?.mentor_information) {
-				userInfo['mentor_information'] = this.parseMentorInformation(userInfo.mentor_information)
+				userInfo['mentor_information'] = this.mentorInformationService.parseMentorInformation(
+					userInfo.mentor_information
+				)
 			}
 
 			if (userInfo?.warrior_information) {
-				userInfo['warrior_information'] = this.parseWarriorInformation(userInfo.warrior_information)
+				userInfo['warrior_information'] = this.warriorInformationService.parseWarriorInformation(
+					userInfo.warrior_information
+				)
 			}
 
 			return userInfo
@@ -213,11 +223,11 @@ export class UserService implements IUserService {
 		myInfo['hashtags'] = hashtags
 
 		if (myInfo?.warrior_information) {
-			myInfo['warrior_information'] = this.parseWarriorInformation(myInfo.warrior_information)
+			myInfo['warrior_information'] = this.warriorInformationService.parseWarriorInformation(myInfo.warrior_information)
 		}
 
 		if (myInfo?.mentor_information) {
-			myInfo['mentor_information'] = this.parseMentorInformation(myInfo.mentor_information)
+			myInfo['mentor_information'] = this.mentorInformationService.parseMentorInformation(myInfo.mentor_information)
 		}
 
 		return myInfo
@@ -358,29 +368,6 @@ export class UserService implements IUserService {
 			mentor_request,
 			warrior_request,
 			hashtags
-		}
-	}
-
-	private parseMentorInformation = (mentor: MentorInformation) => {
-		const mentor_information = mentor.toJSON()
-		return {
-			...mentor_information,
-			industry: (mentor_information.industry || '').split(',').filter((item: string) => !!item),
-			role: (mentor_information.role || '').split(',').filter((item: string) => !!item),
-			frequency: (mentor_information.frequency || '').split(',').filter((item: string) => !!item),
-			conversation_mode: (mentor_information.conversation_mode || '').split(',').filter((item: string) => !!item),
-			languages: (mentor_information.languages || '').split(',').filter((item: string) => !!item)
-		}
-	}
-
-	private parseWarriorInformation = (warrior: WarriorInformation) => {
-		const warrior_information = warrior.toJSON()
-		return {
-			...warrior_information,
-			specialty: warrior_information?.specialty.split(','),
-			certification: warrior_information?.certification.split(','),
-			therapy_type: warrior_information?.therapy_type.split(','),
-			price_range: warrior_information?.price_range.split(',')
 		}
 	}
 }

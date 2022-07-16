@@ -7,7 +7,7 @@ import { IWarriorInformationService, IWarriorUser, WarriorInformationParams } fr
 import { WarriorInformation } from './warriorInformationModel'
 
 export class WarriorInformationService implements IWarriorInformationService {
-	constructor() { }
+	constructor() {}
 
 	private createOrUpdate = async (params: WarriorInformationParams): Promise<WarriorInformation> => {
 		const warriorInformation = await WarriorInformation.findOne({
@@ -129,5 +129,16 @@ export class WarriorInformationService implements IWarriorInformationService {
 		})
 
 		return !!record?.get()
+	}
+
+	parseWarriorInformation = (warrior: WarriorInformation) => {
+		const warrior_information = warrior.toJSON()
+		return {
+			...warrior_information,
+			specialty: warrior_information?.specialty.split(','),
+			certification: warrior_information?.certification.split(','),
+			therapy_type: warrior_information?.therapy_type.split(','),
+			price_range: warrior_information?.price_range.split(',')
+		}
 	}
 }

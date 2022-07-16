@@ -188,4 +188,16 @@ export class MentorInformationService implements IMentorInformationService {
 			return user
 		})
 	}
+
+	parseMentorInformation = (mentor: MentorInformation) => {
+		const mentor_information = mentor.toJSON()
+		return {
+			...mentor_information,
+			industry: (mentor_information.industry || '').split(',').filter((item: string) => !!item),
+			role: (mentor_information.role || '').split(',').filter((item: string) => !!item),
+			frequency: (mentor_information.frequency || '').split(',').filter((item: string) => !!item),
+			conversation_mode: (mentor_information.conversation_mode || '').split(',').filter((item: string) => !!item),
+			languages: (mentor_information.languages || '').split(',').filter((item: string) => !!item)
+		}
+	}
 }
