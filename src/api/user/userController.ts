@@ -1,4 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
+import { PAGE_SIZE } from '../../constants'
+import { PaginationType } from '../../helper/db.helper'
 import { IAuthenticatedRequest } from '../helper/authMiddleware'
 import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import { UserRoleService } from '../user-role/userRoleService'
@@ -40,7 +42,12 @@ export class UserController {
 		try {
 			const roleQuery = req.query.role as string
 
-			const users = await this.userService.list(roleQuery)
+			const pagination: PaginationType = {
+				page: +(req.query.page || 1) as number,
+				pageSize: +(req.query.pageSize || PAGE_SIZE) as number
+			}
+
+			const users = await this.userService.list(roleQuery, pagination)
 			if (!users) {
 				throw new Error('No data found')
 			}

@@ -1,8 +1,7 @@
 import { QueryTypes } from 'sequelize'
 import { sequelize } from '../../database'
-import { ISearchUser, IUserService, OtherUserInfo, UserInfo, UserType } from './interface'
+import { ISearchUser, IUserService, OtherUserInfo, PaginatedUserResult, UserInfo, UserType } from './interface'
 import { User } from './userModel'
-import { AuthService } from '../auth/authService'
 import { Op } from 'sequelize'
 import { WarriorInformation } from '../warrior-information/warriorInformationModel'
 import { UserInformation } from '../user-information/userInformationModel'
@@ -11,7 +10,7 @@ import { WellnessWarrior } from '../wellness-warrior/wellnessWarriorModel'
 import { MentorMatcherModel } from '../mentor-matcher/mentorMatcherModel'
 import { GffError } from '../helper/errorHandler'
 import { FindFriendModel } from '../find-friend/findFriendModel'
-import { USER_FIELDS, USER_INFORMATION_FIELDS } from '../../helper/db.helper'
+import { paginate, PaginationType, USER_FIELDS, USER_INFORMATION_FIELDS } from '../../helper/db.helper'
 import { HashtagService } from '../hashtag/hashtagService'
 import { UserRole } from '../user-role/userRoleModel'
 import { UserRoleService } from '../user-role/userRoleService'
@@ -31,39 +30,45 @@ export class UserService implements IUserService {
 	async fetchFullUserById(userId: number): Promise<User[]> {
 		const fullUser = await sequelize.query(
 			'SELECT * FROM `user_information` INNER JOIN `user` ON user_information.user_id = user.id WHERE user_id=' +
-			userId,
+				userId,
 			{ type: QueryTypes.SELECT }
 		)
 
 		return fullUser as User[]
 	}
 
-	async list(role: string | undefined): Promise<UserInfo[]> {
-		const adminRole = await UserRoleService.fetchAdminRole();
+	async list(role: string | undefined, pagination: PaginationType): Promise<PaginatedUserResult> {
+		const adminRole = await UserRoleService.fetchAdminRole()
 
-		const users = (await User.findAll({
-			where: {
-				role_id: role ? {
-					[Op.eq]: role
-				} :
-					{
-						[Op.ne]: adminRole?.get('id')
-					},
-			},
-			attributes: { exclude: ['password'] },
-			include: [
-				{ model: UserRole, as: 'role' },
+		const users = (await User.findAndCountAll(
+			paginate(
 				{
-					model: UserInformation,
-					as: 'user_information',
-					attributes: ['profile_url', 'job_role', 'employer_name']
+					where: {
+						role_id: role
+							? {
+									[Op.eq]: role
+							  }
+							: {
+									[Op.ne]: adminRole?.get('id')
+							  }
+					},
+					attributes: { exclude: ['password'] },
+					include: [
+						{ model: UserRole, as: 'role' },
+						{
+							model: UserInformation,
+							as: 'user_information',
+							attributes: ['profile_url', 'job_role', 'employer_name']
+						},
+						{ model: MentorInformation, as: 'mentor_information' },
+						{ model: WarriorInformation, as: 'warrior_information' }
+					]
 				},
-				{ model: MentorInformation, as: 'mentor_information' },
-				{ model: WarriorInformation, as: 'warrior_information' }
-			]
-		})) as UserInfo[]
+				pagination
+			)
+		)) as PaginatedUserResult
 
-		return users.map(user => {
+		users.rows = users.rows.map(user => {
 			const userInfo: UserInfo = user.get()
 
 			if (userInfo?.mentor_information) {
@@ -76,6 +81,10 @@ export class UserService implements IUserService {
 
 			return userInfo
 		})
+
+		users.page = +pagination.page
+		users.pageSize = +pagination.pageSize
+		return users
 	}
 
 	async fetchById(id: number, userId: number): Promise<User> {
