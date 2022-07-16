@@ -11,4 +11,5 @@ export interface IRoomService {
   createRoom(params: RoomParams): Promise<Room>;
   joinRoom(room_id: number, user_id: number): Promise<Room>;
   getAllRooms(user_id: number): Promise<Room[]>;
+  getAllUsersByRoomId(room_id:number): Promise<string[]>
 }

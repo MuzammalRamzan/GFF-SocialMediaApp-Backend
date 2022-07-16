@@ -14,6 +14,13 @@ type SubscribersType = {
 
 export class MessageService implements IMessageService {
 	private subscribers: SubscribersType = Object.create(null)
+	private unreadMessageSubscribers: { [user_id: string]: Response | null } = Object.create(null)
+
+	private readonly roomService: RoomService
+
+	constructor() {
+		this.roomService = new RoomService()
+	}
 
 	static filterMessageObject(message: Message | null): MessageType | null {
 		if (!message) return null
@@ -71,32 +78,6 @@ export class MessageService implements IMessageService {
 		return messages
 	}
 
-	public async getAllUnreadMessageCount(user_id: number): Promise<number> {
-		const unreadMessageCount = await Message.count({
-			where: { user_id: { [Op.ne]: user_id }, read: 0 },
-			include: [
-				{
-					model: Room,
-					as: 'room',
-					required: true,
-					where: {
-						user_ids: {
-							[Op.or]: [
-								{
-									[Op.like]: `%${user_id},%`
-								},
-								{
-									[Op.like]: `%,${user_id}`
-								}
-							]
-						}
-					}
-				}
-			]
-		})
-		return unreadMessageCount
-	}
-
 	public async sendMessage(message: string, user_id: number, room_id: number): Promise<Message | null> {
 		let messageObj: Message | null = await Message.create({ user_id, room_id, body: message })
 
@@ -118,6 +99,7 @@ export class MessageService implements IMessageService {
 		})
 
 		this.publishMessage(messageObj, user_id, room_id)
+		this.sendMessageNotification(messageObj)
 
 		return messageObj
 	}
@@ -150,6 +132,46 @@ export class MessageService implements IMessageService {
 		})
 	}
 
+	public async getAllUnreadMessageCount(user_id: number): Promise<number> {
+		const unreadMessageCount = await Message.count({
+			where: { user_id: { [Op.ne]: user_id }, read: 0 },
+			include: [
+				{
+					model: Room,
+					as: 'room',
+					required: true,
+					where: {
+						user_ids: {
+							[Op.or]: [
+								{
+									[Op.like]: `%${user_id},%`
+								},
+								{
+									[Op.like]: `%,${user_id}`
+								}
+							]
+						}
+					}
+				}
+			]
+		})
+		return unreadMessageCount
+	}
+
+	public async getAllUnreadMessages(req: Request, res: Response, user_id: number): Promise<void> {
+		res.setHeader('Content-Type', 'application/json;charset=utf-8')
+		res.setHeader('Cache-Control', 'no-cache, must-revalidate')
+
+		this.unreadMessageSubscribers[user_id] = res
+
+		setTimeout(() => {
+			req.pause()
+			res.status(502).end()
+		}, 30000)
+
+		req.on('close', () => {})
+	}
+
 	public async subscribeToRoom(
 		req: Request,
 		res: Response,
@@ -179,6 +201,7 @@ export class MessageService implements IMessageService {
 	public async publishMessage(message: Message | null, user_id: number, room_id: number): Promise<void> {
 		if (message && this.subscribers[room_id] && Object.keys(this.subscribers[room_id]).length) {
 			let roomParticipants = Object.keys(this.subscribers[room_id]).filter(userId => +userId !== user_id)
+
 			roomParticipants.map(participantId => {
 				if (this.subscribers[room_id][participantId]) {
 					this.subscribers[room_id][participantId]?.end(
@@ -190,6 +213,25 @@ export class MessageService implements IMessageService {
 					)
 				}
 				this.subscribers[room_id][participantId] = null
+			})
+		}
+	}
+
+	public async sendMessageNotification(message: Message | null): Promise<void> {
+		if (message) {
+			let roomParticipants = await this.roomService.getAllUsersByRoomId(message.getDataValue('room_id'))
+
+			roomParticipants = roomParticipants.filter(userId => userId !== message.getDataValue('user_id'))
+			roomParticipants.map(userId => {
+				if (this.unreadMessageSubscribers[userId]) {
+					this.unreadMessageSubscribers[userId]?.end(
+						JSON.stringify({
+							code: 200,
+							data: { messages: [MessageService.filterMessageObject(message)] },
+							message: 'Received a message!'
+						})
+					)
+				}
 			})
 		}
 	}

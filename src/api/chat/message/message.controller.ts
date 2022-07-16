@@ -90,6 +90,15 @@ export class MessageController {
 		}
 	}
 
+	getAllUnreadMessages = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+		try {
+			const user_id = req?.user?.id as number
+			return this.messageService.getAllUnreadMessages(req, res, user_id)
+		} catch (error) {
+			next(error)
+		}
+	}
+
 	getAllUnreadMessageCount = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
 		try {
 			const userId = req?.user?.id as number
