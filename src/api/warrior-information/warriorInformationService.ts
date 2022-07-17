@@ -7,7 +7,7 @@ import { IWarriorInformationService, IWarriorUser, WarriorInformationParams } fr
 import { WarriorInformation } from './warriorInformationModel'
 
 export class WarriorInformationService implements IWarriorInformationService {
-	constructor() {}
+	constructor() { }
 
 	private createOrUpdate = async (params: WarriorInformationParams): Promise<WarriorInformation> => {
 		const warriorInformation = await WarriorInformation.findOne({
