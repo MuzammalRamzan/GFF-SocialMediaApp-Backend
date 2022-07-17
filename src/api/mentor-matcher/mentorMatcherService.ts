@@ -12,139 +12,168 @@ import { UserInformation } from '../user-information/userInformationModel'
 import { GffError } from '../helper/errorHandler'
 import { USER_INFORMATION_FIELDS } from '../../helper/db.helper'
 import { UserRoleService } from '../user-role/userRoleService'
+import { Associations } from '../association/association.model'
 
 export class MentorMatcherService implements IMentorMatcherService {
+	private MENTOR_INFORMATION_FIELDS = ['industry', 'role', 'frequency', 'conversation_mode', 'isPassedIRT', 'languages']
 
-  private MENTOR_INFORMATION_FIELDS = [
-    'industry', 'role', 'frequency', 'conversation_mode', 'isPassedIRT', 'languages'
-  ]
+	private USER_INFORMATION_FIELDS = USER_INFORMATION_FIELDS
 
-  private USER_INFORMATION_FIELDS = USER_INFORMATION_FIELDS
+	async findMentors(userId: number, searchTerms: ISarchTermParams): Promise<ISearchMentors[]> {
+		const _industry = searchTerms.industry?.split(',')
+		const _role = searchTerms.role?.split(',')
+		const _frequency = searchTerms.frequency?.split(',')
+		const _conversation_mode = searchTerms.conversation_mode?.split(',')
+		const _languages = searchTerms.languages?.split(',')
 
-  async findMentors(userId: number, searchTerms: ISarchTermParams): Promise<ISearchMentors[]> {
-    const _industry = searchTerms.industry?.split(',');
-    const _role = searchTerms.role?.split(',');
-    const _frequency = searchTerms.frequency?.split(',');
-    const _conversation_mode = searchTerms.conversation_mode?.split(',');
-    const _languages = searchTerms.languages?.split(',');
+		const mentorRole = await UserRoleService.fetchMentorRole()
 
-    const mentorRole = await UserRoleService.fetchMentorRole();
+		const mentors = await User.findAll({
+			where: {
+				[Op.and]: [
+					searchTerms.text
+						? where(fn('lower', col('full_name')), 'LIKE', `%${(searchTerms.text || '').trim().toLowerCase()}%`)
+						: { full_name: { [Op.ne]: null } },
+					{ id: { [Op.ne]: userId } },
+					{ role_id: mentorRole?.get('id') }
+				]
+			},
+			attributes: ['id', 'full_name'],
+			include: [
+				{
+					model: MentorInformation,
+					as: 'mentor_information',
+					attributes: this.MENTOR_INFORMATION_FIELDS,
+					where: {
+						[Op.or]: [
+							{
+								industry: _industry?.length
+									? {
+											[Op.or]: _industry?.map((item: string) => ({
+												[Op.like]: `%${item.trim()}%`
+											}))
+									  }
+									: { [Op.ne]: null }
+							},
+							{
+								role: _role?.length
+									? {
+											[Op.or]: _role?.map((item: string) => ({
+												[Op.like]: `%${item.trim()}%`
+											}))
+									  }
+									: { [Op.ne]: null }
+							},
+							{
+								frequency: _frequency?.length
+									? {
+											[Op.or]: _frequency?.map((item: string) => ({
+												[Op.like]: `%${item.trim()}%`
+											}))
+									  }
+									: { [Op.ne]: null }
+							},
+							{
+								conversation_mode: _conversation_mode?.length
+									? {
+											[Op.or]: _conversation_mode?.map((item: string) => ({
+												[Op.like]: `%${item.trim()}%`
+											}))
+									  }
+									: { [Op.ne]: null }
+							},
+							{
+								languages: _languages?.length
+									? {
+											[Op.or]: _languages?.map((item: string) => ({
+												[Op.like]: `%${item.trim()}%`
+											}))
+									  }
+									: { [Op.ne]: null }
+							}
+						]
+					}
+				},
+				{
+					model: UserInformation,
+					as: 'user_information',
+					attributes: this.USER_INFORMATION_FIELDS
+				},
+				{
+					model: Associations,
+					as: 'user_associations',
+					attributes: ['id'],
+					include: [
+						{
+							model: MentorMatcherModel,
+							as: 'mentor_matcher_associations',
+							where: {
+								mentee_id: userId,
+								request_type: MentorMatcherRequestType.MENTOR
+							},
+							required: true
+						}
+					]
+				}
+			]
+		})
 
-    const mentors = await User.findAll({
-      where: {
-        [Op.and]: [
-          searchTerms.text ? where(fn('lower', col('full_name')), "LIKE", `%${(searchTerms.text || "").trim().toLowerCase()}%`) : { full_name: { [Op.ne]: null } },
-          { id: { [Op.ne]: userId } },
-          { role_id: mentorRole?.get('id') },
-        ]
-      },
-      attributes: ['id', 'full_name'],
-      include: [
-        {
-          model: MentorInformation,
-          as: 'mentor_information',
-          attributes: this.MENTOR_INFORMATION_FIELDS,
-          where: {
-            [Op.or]: [
-              {
-                industry: _industry?.length ? {
-                  [Op.or]: _industry?.map((item: string) => ({
-                    [Op.like]: `%${item.trim()}%`
-                  })),
-                } : { [Op.ne]: null }
-              },
-              {
-                role: _role?.length ? {
-                  [Op.or]: _role?.map((item: string) => ({
-                    [Op.like]: `%${item.trim()}%`
-                  })),
-                } : { [Op.ne]: null }
-              },
-              {
-                frequency: _frequency?.length ? {
-                  [Op.or]: _frequency?.map((item: string) => ({
-                    [Op.like]: `%${item.trim()}%`
-                  })),
-                } : { [Op.ne]: null }
-              },
-              {
-                conversation_mode: _conversation_mode?.length ? {
-                  [Op.or]: _conversation_mode?.map((item: string) => ({
-                    [Op.like]: `%${item.trim()}%`
-                  })),
-                } : { [Op.ne]: null }
-              },
-              {
-                languages: _languages?.length ? {
-                  [Op.or]: _languages?.map((item: string) => ({
-                    [Op.like]: `%${item.trim()}%`
-                  })),
-                } : { [Op.ne]: null }
-              },
-            ]
-          },
-        },
-        {
-          model: UserInformation,
-          as: 'user_information',
-          attributes: this.USER_INFORMATION_FIELDS
-        }
-      ]
-    })
+		return mentors.map(mentor => {
+			const _data = mentor.get()
+			return {
+				id: _data.id,
+				full_name: _data.full_name,
+				mentor_information: {
+					industry: (_data.mentor_information?.industry || '').split(',').filter((item: string) => !!item),
+					role: (_data.mentor_information?.role || '').split(',').filter((item: string) => !!item),
+					frequency: (_data.mentor_information?.frequency || '').split(',').filter((item: string) => !!item),
+					conversation_mode: (_data.mentor_information?.conversation_mode || '')
+						.split(',')
+						.filter((item: string) => !!item),
+					languages: (_data.mentor_information?.languages || '').split(',').filter((item: string) => !!item),
+					isPassedIRT: _data.mentor_information?.isPassedIRT
+				},
+				user_information: {
+					profile_url: _data?.user_information?.profile_url,
+					bio: _data?.user_information?.bio,
+					date_of_birth: _data?.user_information?.date_of_birth,
+					gender: _data?.user_information?.gender,
+					country: _data?.user_information?.country,
+					job_role: _data?.user_information?.job_role,
+					education: _data?.user_information?.education
+				},
+				mentor_matcher_request: _data?.user_associations
+			}
+		})
+	}
 
-    return mentors.map((mentor) => {
-      const _data = mentor.get();
-      return {
-        id: _data.id,
-        full_name: _data.full_name,
-        mentor_information: {
-          industry: (_data.mentor_information.industry || '').split(',').filter((item: string) => !!item),
-          role: (_data.mentor_information.role || '').split(',').filter((item: string) => !!item),
-          frequency: (_data.mentor_information.frequency || '').split(',').filter((item: string) => !!item),
-          conversation_mode: (_data.mentor_information.conversation_mode || '').split(',').filter((item: string) => !!item),
-          languages: (_data.mentor_information.languages || '').split(',').filter((item: string) => !!item),
-          isPassedIRT: _data.mentor_information.isPassedIRT
-        },
-        user_information: {
-          profile_url: _data?.user_information?.profile_url,
-          bio: _data?.user_information?.bio,
-          date_of_birth: _data?.user_information?.date_of_birth,
-          gender: _data?.user_information?.gender,
-          country: _data?.user_information?.country,
-          job_role: _data?.user_information?.job_role,
-          education: _data?.user_information?.education,
-        }
-      }
-    });
-  }
-
-  async myMentors(userId: number): Promise<IMentorRequest[]> {
-    const mentors = await MentorMatcherModel.findAll({
-      where: {
-        mentee_id: userId,
-        status: MentorMatcherRequestStatus.APPROVE
-      },
-      include: [
-        {
-          model: User,
-          as: 'mentor',
-          attributes: ['id', 'full_name'],
-          foreignKey: 'mentor_id',
-          include: [
-            {
-              model: MentorInformation,
-              as: 'mentor_information',
-              attributes: this.MENTOR_INFORMATION_FIELDS,
-            },
-            {
-              model: UserInformation,
-              as: 'user_information',
-              attributes: this.USER_INFORMATION_FIELDS
-            }
-          ]
-        }
-      ]
-    })
+	async myMentors(userId: number): Promise<IMentorRequest[]> {
+		const mentors = await MentorMatcherModel.findAll({
+			where: {
+				mentee_id: userId,
+				status: MentorMatcherRequestStatus.APPROVE
+			},
+			include: [
+				{
+					model: User,
+					as: 'mentor',
+					attributes: ['id', 'full_name'],
+					foreignKey: 'mentor_id',
+					include: [
+						{
+							model: MentorInformation,
+							as: 'mentor_information',
+							attributes: this.MENTOR_INFORMATION_FIELDS
+						},
+						{
+							model: UserInformation,
+							as: 'user_information',
+							attributes: this.USER_INFORMATION_FIELDS
+						}
+					]
+				}
+			]
+		})
 
 		return mentors.map(mentor => {
 			const mentor_request = mentor.get()
@@ -169,6 +198,11 @@ export class MentorMatcherService implements IMentorMatcherService {
 			request_type: MentorMatcherRequestType.MENTOR,
 			status: MentorMatcherRequestStatus.SEND
 		})
+
+		await Associations.bulkCreate([
+			{ user_id: mentor_id, mentor_matcher_id: mentor.getDataValue('id') },
+			{ user_id: userId, mentor_matcher_id: mentor.getDataValue('id') }
+		])
 
 		return mentor.get()
 	}
@@ -234,28 +268,28 @@ export class MentorMatcherService implements IMentorMatcherService {
 		return data[0] ? true : false
 	}
 
-  async myMentees(userId: number): Promise<IMentorRequest[]> {
-    const mentees = await MentorMatcherModel.findAll({
-      where: {
-        mentor_id: userId,
-        status: MentorMatcherRequestStatus.APPROVE
-      },
-      include: [
-        {
-          model: User,
-          as: 'mentee',
-          attributes: ['id', 'full_name'],
-          foreignKey: 'mentee_id',
-          include: [
-            {
-              model: UserInformation,
-              as: 'user_information',
-              attributes: this.USER_INFORMATION_FIELDS
-            }
-          ]
-        }
-      ]
-    })
+	async myMentees(userId: number): Promise<IMentorRequest[]> {
+		const mentees = await MentorMatcherModel.findAll({
+			where: {
+				mentor_id: userId,
+				status: MentorMatcherRequestStatus.APPROVE
+			},
+			include: [
+				{
+					model: User,
+					as: 'mentee',
+					attributes: ['id', 'full_name'],
+					foreignKey: 'mentee_id',
+					include: [
+						{
+							model: UserInformation,
+							as: 'user_information',
+							attributes: this.USER_INFORMATION_FIELDS
+						}
+					]
+				}
+			]
+		})
 
 		return mentees.map(mentee => {
 			const mentor_request = mentee.get()
@@ -272,28 +306,28 @@ export class MentorMatcherService implements IMentorMatcherService {
 		})
 	}
 
-  async getMentorRequests(userId: number): Promise<IMentorRequest[]> {
-    const requests = await MentorMatcherModel.findAll({
-      where: {
-        mentor_id: userId,
-        status: MentorMatcherRequestStatus.SEND
-      },
-      include: [
-        {
-          model: User,
-          as: 'mentee',
-          attributes: ['id', 'full_name'],
-          foreignKey: 'mentee_id',
-          include: [
-            {
-              model: UserInformation,
-              as: 'user_information',
-              attributes: this.USER_INFORMATION_FIELDS
-            }
-          ]
-        },
-      ]
-    })
+	async getMentorRequests(userId: number): Promise<IMentorRequest[]> {
+		const requests = await MentorMatcherModel.findAll({
+			where: {
+				mentor_id: userId,
+				status: MentorMatcherRequestStatus.SEND
+			},
+			include: [
+				{
+					model: User,
+					as: 'mentee',
+					attributes: ['id', 'full_name'],
+					foreignKey: 'mentee_id',
+					include: [
+						{
+							model: UserInformation,
+							as: 'user_information',
+							attributes: this.USER_INFORMATION_FIELDS
+						}
+					]
+				}
+			]
+		})
 
 		return requests.map(request => {
 			const mentor_request = request.get()
@@ -310,33 +344,33 @@ export class MentorMatcherService implements IMentorMatcherService {
 		})
 	}
 
-  async getMentorRequestsByMenteeId(userId: number): Promise<IMentorRequest[]> {
-    const requests = await MentorMatcherModel.findAll({
-      where: {
-        mentee_id: userId,
-        status: MentorMatcherRequestStatus.SEND
-      },
-      include: [
-        {
-          model: User,
-          as: 'mentor',
-          attributes: ['id', 'full_name'],
-          foreignKey: 'mentor_id',
-          include: [
-            {
-              model: MentorInformation,
-              as: 'mentor_information',
-              attributes: this.MENTOR_INFORMATION_FIELDS,
-            },
-            {
-              model: UserInformation,
-              as: 'user_information',
-              attributes: this.USER_INFORMATION_FIELDS
-            }
-          ]
-        }
-      ]
-    })
+	async getMentorRequestsByMenteeId(userId: number): Promise<IMentorRequest[]> {
+		const requests = await MentorMatcherModel.findAll({
+			where: {
+				mentee_id: userId,
+				status: MentorMatcherRequestStatus.SEND
+			},
+			include: [
+				{
+					model: User,
+					as: 'mentor',
+					attributes: ['id', 'full_name'],
+					foreignKey: 'mentor_id',
+					include: [
+						{
+							model: MentorInformation,
+							as: 'mentor_information',
+							attributes: this.MENTOR_INFORMATION_FIELDS
+						},
+						{
+							model: UserInformation,
+							as: 'user_information',
+							attributes: this.USER_INFORMATION_FIELDS
+						}
+					]
+				}
+			]
+		})
 
 		return requests.map(request => {
 			const mentor_request = request.get()

@@ -47,6 +47,7 @@ export interface DeleteTransactionRequest extends Request {
 
 export interface ITransactionService {
 	list(): Promise<Transaction[]>
+	fetchForUser(userId: number): Promise<Transaction[]>
 	add(params: TransactionType): Promise<Transaction>
 	update(id: number, params: TransactionType): Promise<Transaction>
 	delete(id: number, user_id: number): Promise<number>

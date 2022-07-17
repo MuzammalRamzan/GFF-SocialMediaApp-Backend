@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<script src="index.js"></script>
+		<title>Chat</title>
+	</head>
+	<body>
+		<form name="publish">
+			<input type="text" name="message" />
+			<input type="submit" value="Send" />
+		</form>
+		<div id="subscribe"></div>
+	</body>
+
+	<script>
+		new PublishForm(document.forms.publish, 'publish')
+		// random url parameter to avoid any caching issues
+		new SubscribePane(document.getElementById('subscribe'), 'subscribe?random=' + Math.random())
+		// fetch all messages on load
+		new GetAllMessages(document.getElementById('subscribe'))
+	</script>
+</html>

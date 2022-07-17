@@ -6,7 +6,7 @@
 		"version": "1.0"
 	},
 	"schemes": ["http", "https"],
-	"host": "3.232.6.9",
+	"host": "3.125.40.16",
 	"basePath": "/",
 	"tags": [
 		{
@@ -16,6 +16,10 @@
 		{
 			"name": "user",
 			"description": "App users related routes"
+		},
+		{
+			"name": "user-information",
+			"description": "User information related routes"
 		},
 		{
 			"name": "transaction-account",
@@ -40,10 +44,6 @@
 		{
 			"name": "debt",
 			"description": "Debt related routes"
-		},
-		{
-			"name": "user-information",
-			"description": "User information related routes"
 		},
 		{
 			"name": "loan-ledger-personal-info",
@@ -5531,6 +5531,128 @@
 				}
 			}
 		},
+		"/transactionAccount/delete/{id}": {
+			"delete": {
+				"tags": ["transaction-account"],
+				"description": "Delete a transaction account",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "id",
+						"in": "path",
+						"description": " transaction account ID",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"transaction-account": 1
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/transaction/user": {
+			"get": {
+				"tags": ["transaction"],
+				"description": "List all transactions for user",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"transaction": [
+											{
+												"id": 1,
+												"frequency": "never",
+												"user_id": 16,
+												"amount": 160,
+												"account_id": 3,
+												"category_id": 1,
+												"status": "active"
+											},
+											{
+												"id": 6,
+												"frequency": "weekly",
+												"user_id": 16,
+												"amount": 160,
+												"account_id": 2,
+												"category_id": 1,
+												"status": "inactive"
+											},
+											{
+												"id": 7,
+												"frequency": "weekly",
+												"user_id": 17,
+												"amount": 160,
+												"account_id": 2,
+												"category_id": 1,
+												"status": "inactive"
+											}
+										]
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/transactionAccount/user": {
 			"get": {
 				"tags": ["transaction-account"],
@@ -5555,96 +5677,96 @@
 								"example": {
 									"data": {
 										"result": {
-										"bank": [
-											{
-											"id": 108,
-											"balance": 0,
-											"account_type_id": 1,
-											"name": "GFDFGHJss",
-											"country": "",
-											"bank_name": "",
-											"card_owner": "Dsaf",
-											"card_number": "2345 678",
-											"card_expiration_date": "0000-00-00",
-											"card_cvc": "333",
-											"currency_id": 1,
-											"user_id": 425,
-											"status": "active"
-											}
-										],
-										"card": [
-											{
-											"id": 109,
-											"balance": 0,
-											"account_type_id": 2,
-											"name": "Namee",
-											"country": "",
-											"bank_name": "",
-											"card_owner": "Name",
-											"card_number": "5678 9033 2233 2221",
-											"card_expiration_date": "0000-00-00",
-											"card_cvc": "332",
-											"currency_id": 1,
-											"user_id": 425,
-											"status": "active"
-											}
-										],
-										"manual": [
-											{
-											"id": 110,
-											"balance": 0,
-											"account_type_id": 3,
-											"name": "Ffff",
-											"country": "",
-											"bank_name": "",
-											"card_owner": "Ewe",
-											"card_number": "235",
-											"card_expiration_date": "2020-01-01",
-											"card_cvc": "323",
-											"currency_id": 1,
-											"user_id": 425,
-											"status": "active"
-											}
-										],
-										"mPesa": [
-											{
-											"id": 111,
-											"balance": 0,
-											"account_type_id": 4,
-											"name": "D",
-											"country": "",
-											"bank_name": "",
-											"card_owner": "D",
-											"card_number": "d",
-											"card_expiration_date": "0000-00-00",
-											"card_cvc": "3",
-											"currency_id": 1,
-											"user_id": 425,
-											"status": "active"
-											}
-										],
-										"wallet": [
-											{
-											"id": 112,
-											"balance": 0,
-											"account_type_id": 5,
-											"name": "Test",
-											"country": "",
-											"bank_name": "",
-											"card_owner": "",
-											"card_number": "",
-											"card_expiration_date": "0000-00-00",
-											"card_cvc": "",
-											"currency_id": 1,
-											"user_id": 425,
-											"status": "active"
-											}
-										]
+											"bank": [
+												{
+													"id": 108,
+													"balance": 0,
+													"account_type_id": 1,
+													"name": "GFDFGHJss",
+													"country": "",
+													"bank_name": "",
+													"card_owner": "Dsaf",
+													"card_number": "2345 678",
+													"card_expiration_date": "0000-00-00",
+													"card_cvc": "333",
+													"currency_id": 1,
+													"user_id": 425,
+													"status": "active"
+												}
+											],
+											"card": [
+												{
+													"id": 109,
+													"balance": 0,
+													"account_type_id": 2,
+													"name": "Namee",
+													"country": "",
+													"bank_name": "",
+													"card_owner": "Name",
+													"card_number": "5678 9033 2233 2221",
+													"card_expiration_date": "0000-00-00",
+													"card_cvc": "332",
+													"currency_id": 1,
+													"user_id": 425,
+													"status": "active"
+												}
+											],
+											"manual": [
+												{
+													"id": 110,
+													"balance": 0,
+													"account_type_id": 3,
+													"name": "Ffff",
+													"country": "",
+													"bank_name": "",
+													"card_owner": "Ewe",
+													"card_number": "235",
+													"card_expiration_date": "2020-01-01",
+													"card_cvc": "323",
+													"currency_id": 1,
+													"user_id": 425,
+													"status": "active"
+												}
+											],
+											"mPesa": [
+												{
+													"id": 111,
+													"balance": 0,
+													"account_type_id": 4,
+													"name": "D",
+													"country": "",
+													"bank_name": "",
+													"card_owner": "D",
+													"card_number": "d",
+													"card_expiration_date": "0000-00-00",
+													"card_cvc": "3",
+													"currency_id": 1,
+													"user_id": 425,
+													"status": "active"
+												}
+											],
+											"wallet": [
+												{
+													"id": 112,
+													"balance": 0,
+													"account_type_id": 5,
+													"name": "Test",
+													"country": "",
+													"bank_name": "",
+													"card_owner": "",
+													"card_number": "",
+													"card_expiration_date": "0000-00-00",
+													"card_cvc": "",
+													"currency_id": 1,
+													"user_id": 425,
+													"status": "active"
+												}
+											]
 										}
 									},
 									"code": 200,
 									"message": "OK"
-									}
+								}
 							}
 						}
 					}
@@ -6178,10 +6300,10 @@
 				}
 			}
 		},
-		"/transactionCategory/{user_id}": {
+		"/transactionCategory/": {
 			"get": {
 				"tags": ["transaction-category"],
-				"description": "Get a transaction category by user id",
+				"description": "List all transaction categories",
 				"parameters": [
 					{
 						"name": "auth-token",
@@ -6189,18 +6311,6 @@
 						"description": "Auth Token",
 						"required": true,
 						"type": "string"
-					},
-					{
-						"name": "user_id",
-						"in": "path",
-						"description": "User ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
 					}
 				],
 				"responses": {
@@ -6215,29 +6325,39 @@
 									"data": {
 										"transactionCategories": [
 											{
-												"id": 18,
-												"name": "Test category updated",
-												"user_id": 37,
-												"icon_url": "url",
-												"colour": "#FF0000",
-												"type": "expense",
-												"is_default": 1,
-												"status": "active"
-											},
-											{
-												"id": 21,
-												"name": "Test Category for user 37",
-												"user_id": 37,
-												"icon_url": "icon_url",
-												"colour": "#FF0000",
-												"type": "expense",
-												"is_default": 1,
-												"status": "active"
-											},
-											{
-												"id": 22,
+												"id": 1,
 												"name": "New updated name",
-												"user_id": 37,
+												"user_id": 16,
+												"icon_url": "test icon url",
+												"colour": "",
+												"type": "income",
+												"is_default": 1,
+												"status": "active"
+											},
+											{
+												"id": 3,
+												"name": "TestName",
+												"user_id": 17,
+												"icon_url": "icon_url",
+												"colour": "",
+												"type": "expense",
+												"is_default": 1,
+												"status": "active"
+											},
+											{
+												"id": 14,
+												"name": "NewName",
+												"user_id": 17,
+												"icon_url": "icon_url",
+												"colour": "",
+												"type": "income",
+												"is_default": 1,
+												"status": "active"
+											},
+											{
+												"id": 16,
+												"name": "New updated name",
+												"user_id": 16,
 												"icon_url": "test icon url",
 												"colour": "",
 												"type": "income",
@@ -6255,10 +6375,10 @@
 				}
 			}
 		},
-		"/transactionCategory/": {
+		"/transactionCategory/user": {
 			"get": {
 				"tags": ["transaction-category"],
-				"description": "List all transaction categories",
+				"description": "List all transaction categories for signed user",
 				"parameters": [
 					{
 						"name": "auth-token",
@@ -7102,7 +7222,7 @@
 							},
 							"examples": {
 								"0": {
-									"value": "{\n\n        \"frequency\": \"Weekly\",\n        \"user_id\": 16,\n        \"account_id\": 2,\n        \"category_id\": 1,\n        \"status\": \"Inactive\"\n    }"
+									"value": "{\n\n        \"frequency\": \"Weekly\",\n        \"user_id\": 16,\n        \"account_id\": 2,\n        \"category_id\": 1,\n        \"status\": \"Inactive,\"\n     \"amount\": \"160\"\n     }"
 								}
 							}
 						}
@@ -8154,6 +8274,22 @@
 				}
 			}
 		},
+		"/upload/file": {
+			"get": {
+				"tags": ["uploads"],
+				"description": "Get uploaded file/image",
+				"parameters": [
+					
+					{
+						"name": "path",
+						"in": "query",
+						"description": "File path/URL",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		},
 		"/room": {
 			"post": {
 				"tags": ["chat"],
@@ -8215,7 +8351,9 @@
 						}
 					}
 				}
-			},
+			}
+		},
+		"/room/all":{
 			"get": {
 				"tags": ["chat"],
 				"description": "Get all room details",
@@ -8403,7 +8541,7 @@
 						"type": "string"
 					},
 					{
-						"name": "room_id",
+						"name": "id",
 						"in": "path",
 						"description": "Room ID",
 						"required": true,
@@ -8432,15 +8570,20 @@
 								"example": {
 									"data": {
 										"message": {
-											"id": 22,
-											"user_id": 16,
-											"body": "Hi, there !",
-											"room_id": 11,
-											"created_at": "1990-07-07T00:00:00.000Z"
+											"id": 11,
+											"user_id": 259,
+											"body": "Hey",
+											"room_id": 1,
+											"created_at": "2022-07-12T15:27:29.000Z",
+											"user": {
+												"id": 259,
+												"full_name": "Ime Prezime",
+												"user_information": null
+											}
 										}
 									},
-									"code": 200,
-									"message": "Message sent successfully"
+									"message": "Message sent successfully",
+									"code": 200
 								}
 							}
 						}
@@ -8461,7 +8604,75 @@
 						"type": "string"
 					},
 					{
-						"name": "room_id",
+						"name": "id",
+						"in": "path",
+						"description": "Room ID",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					},
+					{
+						"name": "from",
+						"in": "query",
+						"description": "From Date",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string",
+							"format": "date"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"example": {
+									"data": {
+										"message": [
+											{
+												"id": 11,
+												"user_id": 259,
+												"body": "Hey",
+												"room_id": 1,
+												"created_at": "2022-07-12T15:27:29.000Z",
+												"user": {
+													"id": 259,
+													"full_name": "Ime Prezime",
+													"user_information": null
+												}
+											}
+										]
+									},
+									"code": 200,
+									"message": "Messages fetched successfully"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/message/room/subscribe/{id}": {
+			"get": {
+				"tags": ["chat"],
+				"description": "Subscribe to room to send and get messages",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "id",
 						"in": "path",
 						"description": "Room ID",
 						"required": true,
@@ -8480,25 +8691,21 @@
 							"application/json; charset=utf-8": {
 								"example": {
 									"data": {
-										"message": [
-											{
-												"id": 22,
-												"user_id": 16,
-												"body": "Hi, there !",
-												"room_id": 11,
-												"created_at": "1990-07-07T00:00:00.000Z"
-											},
-											{
-												"id": 23,
-												"user_id": 16,
-												"body": "Hi, there !",
-												"room_id": 11,
-												"created_at": "1990-07-08T00:00:00.000Z"
+										"message": {
+											"id": 11,
+											"user_id": 259,
+											"body": "Hey",
+											"room_id": 1,
+											"created_at": "2022-07-12T15:27:29.000Z",
+											"user": {
+												"id": 259,
+												"full_name": "Ime Prezime",
+												"user_information": null
 											}
-										]
+										}
 									},
 									"code": 200,
-									"message": "Messages fetched successfully"
+									"message": "Received a message!"
 								}
 							}
 						}
@@ -9051,7 +9258,7 @@
 			"send_message_body": {
 				"type": "object",
 				"properties": {
-					"body": { "type": "string" }
+					"message": { "type": "string" }
 				}
 			},
 			"room": {
