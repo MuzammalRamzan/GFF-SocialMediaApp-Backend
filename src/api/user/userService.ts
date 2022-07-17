@@ -83,12 +83,6 @@ export class UserService implements IUserService {
 				)
 			}
 
-			if (userInfo?.warrior_information) {
-				userInfo['warrior_information'] = this.warriorInformationService.parseWarriorInformation(
-					userInfo.warrior_information
-				)
-			}
-
 			return userInfo
 		})
 
@@ -221,10 +215,6 @@ export class UserService implements IUserService {
 		const hashtags = user_hashtags.map(hashtag => hashtag.get())
 
 		myInfo['hashtags'] = hashtags
-
-		if (myInfo?.warrior_information) {
-			myInfo['warrior_information'] = this.warriorInformationService.parseWarriorInformation(myInfo.warrior_information)
-		}
 
 		if (myInfo?.mentor_information) {
 			myInfo['mentor_information'] = this.mentorInformationService.parseMentorInformation(myInfo.mentor_information)
