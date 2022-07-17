@@ -9,7 +9,7 @@ messageRoute.get('/all', authMiddleware, controller.getAllMessages as Applicatio
 messageRoute.get('/unread', authMiddleware, controller.getAllUnreadMessages as Application)
 messageRoute.get('/unread/count', authMiddleware, controller.getAllUnreadMessageCount as Application)
 messageRoute.get(
-	'/new/subscribe',
+	'/subscribe',
 	authMiddleware,
 	controller.subscribeToGetNewIncomingMessageNotification as Application
 )

@@ -34,7 +34,7 @@ function SubscribePane(elem, url) {
 	async function subscribe() {
 		let response = await fetch(url, { headers: { 'auth-token': authToken } })
 
-		if (response.status == 502) {
+		if (response.status == 201) {
 			console.log('->timeout')
 			// Connection timeout
 			// happens when the connection was pending for too long
@@ -62,12 +62,12 @@ function SubscribePane(elem, url) {
 
 // Receiving new incoming message notification with long polling
 function SubscribeToGetUnreadMessageNotification() {
-	const url = 'http://localhost:3000/message/new/subscribe'
+	const url = 'http://localhost:3000/message/subscribe'
 
 	async function subscribe() {
 		let response = await fetch(url, { headers: { 'auth-token': authToken } })
 
-		if (response.status == 502) {
+		if (response.status == 201) {
 			console.log('->timeout')
 			// Connection timeout
 			// happens when the connection was pending for too long

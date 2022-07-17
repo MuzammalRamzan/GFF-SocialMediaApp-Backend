@@ -209,7 +209,7 @@ export class MessageService implements IMessageService {
 
 		setTimeout(() => {
 			req.pause()
-			res.status(502).end()
+			res.status(201).end()
 		}, 30000)
 
 		req.on('close', () => {
@@ -229,7 +229,7 @@ export class MessageService implements IMessageService {
 
 		setTimeout(() => {
 			req.pause()
-			res.status(502).end()
+			res.status(201).end()
 		}, 30000)
 
 		req.on('close', () => {
