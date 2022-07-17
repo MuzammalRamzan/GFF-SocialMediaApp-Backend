@@ -11,6 +11,7 @@ import { User } from '../user/userModel'
 import { Op, where, fn, col } from 'sequelize'
 import { UserInformation } from '../user-information/userInformationModel'
 import { GffError } from '../helper/errorHandler'
+import { Associations } from '../association/association.model'
 
 export class FindFriendService implements IFindFriendService {
 	async getFriendRequestsBySenderId(sender_id: number): Promise<FindFriendRequest[]> {
@@ -90,6 +91,11 @@ export class FindFriendService implements IFindFriendService {
 			receiver_id: receiver_id,
 			request_type: RequestType.FRIEND
 		})
+
+		await Associations.bulkCreate([
+			{ user_id: sender_id, find_friend_id: SendRequest.getDataValue('id') },
+			{ user_id: receiver_id, find_friend_id: SendRequest.getDataValue('id') }
+		])
 
 		return SendRequest as FindFriendModel
 	}
@@ -225,19 +231,37 @@ export class FindFriendService implements IFindFriendService {
 							[Op.ne]: null
 						}
 					}
+				},
+				{
+					model: Associations,
+					as: 'user_associations',
+					attributes: ['id'],
+					include: [
+						{
+							model: FindFriendModel,
+							as: 'find_friend_associations',
+							where: { [Op.or]: [{ sender_id: userId }, { receiver_id: userId }], request_type: RequestType.FRIEND },
+							required: true
+						}
+					]
 				}
 			]
 		})
 
-		return findFriends.map(friend => {
-			const data = friend.get()
+		const friends: FriendUser[] = []
+		for (let i = 0; i < findFriends.length; i++) {
+			let friend = findFriends[i].get()
+			friend = {
+				full_name: friend.full_name,
+				id: friend.id,
+				user_information: friend?.user_information?.get(),
+				user_associations: friend.user_associations
+			} as FriendUser
 
-			return {
-				full_name: data.full_name,
-				id: data.id,
-				user_information: data?.user_information?.get()
-			}
-		})
+			friends.push(friend)
+		}
+
+		return friends
 	}
 
 	async getFriendRequestById(id: number): Promise<FindFriendRequest> {
@@ -470,7 +494,7 @@ export class FindFriendService implements IFindFriendService {
 			}
 		})
 
-		return isBlocked?.get();
+		return isBlocked?.get()
 	}
 
 	async areUsersFriend(sender_id: number, receiver_id: number): Promise<boolean> {
@@ -480,7 +504,7 @@ export class FindFriendService implements IFindFriendService {
 					{ sender_id: sender_id, receiver_id: receiver_id },
 					{ sender_id: receiver_id, receiver_id: sender_id }
 				],
-				request_type: RequestType.FRIEND,
+				request_type: RequestType.FRIEND
 			}
 		})
 
