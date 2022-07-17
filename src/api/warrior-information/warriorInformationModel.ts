@@ -30,28 +30,32 @@ WarriorInformation.init(
 			type: DataTypes.STRING,
 			allowNull: true,
 			get() {
-				return (this.getDataValue('specialty') || '').split(',')
+				let arr: string[] = (this.getDataValue('specialty') || '').split(',')
+				return arr.filter(str => !!str)
 			}
 		},
 		certification: {
 			type: DataTypes.STRING,
 			allowNull: true,
 			get() {
-				return (this.getDataValue('certification') || '').split(',')
+				let arr: string[] = (this.getDataValue('certification') || '').split(',')
+				return arr.filter(str => !!str)
 			}
 		},
 		therapy_type: {
 			type: DataTypes.STRING,
 			allowNull: true,
 			get() {
-				return (this.getDataValue('therapy_type') || '').split(',')
+				let arr: string[] = (this.getDataValue('therapy_type') || '').split(',')
+				return arr.filter(str => !!str)
 			}
 		},
 		price_range: {
 			type: DataTypes.STRING,
 			allowNull: true,
 			get() {
-				return (this.getDataValue('price_range') || '').split(',')
+				let arr: string[] = (this.getDataValue('price_range') || '').split(',')
+				return arr.filter(str => !!str)
 			}
 		}
 	},
