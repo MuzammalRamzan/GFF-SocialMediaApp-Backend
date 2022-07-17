@@ -74,17 +74,7 @@ export class UserService implements IUserService {
 			)
 		)) as PaginatedUserResult
 
-		users.rows = users.rows.map(user => {
-			const userInfo: UserInfo = user.get()
-
-			if (userInfo?.mentor_information) {
-				userInfo['mentor_information'] = this.mentorInformationService.parseMentorInformation(
-					userInfo.mentor_information
-				)
-			}
-
-			return userInfo
-		})
+		users.rows = users.rows.map(user => user.toJSON())
 
 		users.page = +pagination.page
 		users.pageSize = +pagination.pageSize
@@ -215,10 +205,6 @@ export class UserService implements IUserService {
 		const hashtags = user_hashtags.map(hashtag => hashtag.get())
 
 		myInfo['hashtags'] = hashtags
-
-		if (myInfo?.mentor_information) {
-			myInfo['mentor_information'] = this.mentorInformationService.parseMentorInformation(myInfo.mentor_information)
-		}
 
 		return myInfo
 	}

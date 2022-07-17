@@ -45,17 +45,7 @@ export class MentorInformationService implements IMentorInformationService {
 			}
 		)
 
-		let mentor_information = mentorInformation.get({ plain: true })
-		return {
-			industry: (mentor_information.industry || '').split(',').filter((item: string) => !!item),
-			role: (mentor_information.role || '').split(',').filter((item: string) => !!item),
-			frequency: (mentor_information.frequency || '').split(',').filter((item: string) => !!item),
-			conversation_mode: (mentor_information.conversation_mode || '').split(',').filter((item: string) => !!item),
-			languages: (mentor_information.languages || '').split(',').filter((item: string) => !!item),
-			isPassedIRT: mentor_information.isPassedIRT,
-			id: mentor_information.id,
-			user_id: mentor_information.user_id
-		}
+		return mentorInformation.toJSON()
 	}
 
 	async isMentorInformationExist(userId: number): Promise<boolean> {
@@ -90,17 +80,7 @@ export class MentorInformationService implements IMentorInformationService {
 			isPassedIRT: params.isPassedIRT
 		})
 
-		let mentor_information = mentorInformation.get({ plain: true })
-		return {
-			industry: (mentor_information.industry || '').split(',').filter((item: string) => !!item),
-			role: (mentor_information.role || '').split(',').filter((item: string) => !!item),
-			frequency: (mentor_information.frequency || '').split(',').filter((item: string) => !!item),
-			conversation_mode: (mentor_information.conversation_mode || '').split(',').filter((item: string) => !!item),
-			languages: (mentor_information.languages || '').split(',').filter((item: string) => !!item),
-			isPassedIRT: mentor_information.isPassedIRT,
-			id: mentor_information.id,
-			user_id: mentor_information.user_id
-		}
+		return mentorInformation.toJSON()
 	}
 
 	async getMentorInformation(userId: number, mentor_id: number): Promise<MentorInformationType> {
@@ -126,21 +106,10 @@ export class MentorInformationService implements IMentorInformationService {
 
 		const mentor_request = (await MentorMatcherService.isExist(userId, mentor_id)) as any
 
-		const mentor_information = mentorInformation.get()
-
 		return {
 			id: mentor_id,
 			user_information: userInformation?.get(),
-			mentor_information: {
-				industry: (mentor_information.industry || '').split(',').filter((item: string) => !!item),
-				role: (mentor_information.role || '').split(',').filter((item: string) => !!item),
-				frequency: (mentor_information.frequency || '').split(',').filter((item: string) => !!item),
-				conversation_mode: (mentor_information.conversation_mode || '').split(',').filter((item: string) => !!item),
-				languages: (mentor_information.languages || '').split(',').filter((item: string) => !!item),
-				isPassedIRT: mentor_information.isPassedIRT,
-				id: mentor_information.id,
-				user_id: mentor_information.user_id
-			},
+			mentor_information: mentorInformation.toJSON(),
 			mentor_request: mentor_request
 		}
 	}
@@ -155,18 +124,7 @@ export class MentorInformationService implements IMentorInformationService {
 
 		if (!mentorInformation) return null
 
-		const mentor_information = mentorInformation.get()
-
-		return {
-			industry: (mentor_information.industry || '').split(',').filter((item: string) => !!item),
-			role: (mentor_information.role || '').split(',').filter((item: string) => !!item),
-			frequency: (mentor_information.frequency || '').split(',').filter((item: string) => !!item),
-			conversation_mode: (mentor_information.conversation_mode || '').split(',').filter((item: string) => !!item),
-			languages: (mentor_information.languages || '').split(',').filter((item: string) => !!item),
-			isPassedIRT: mentor_information.isPassedIRT,
-			id: mentor_information.id,
-			user_id: mentor_information.user_id
-		}
+		return mentorInformation.toJSON()
 	}
 
 	async getAllMentors(): Promise<MentorInformation[]> {
@@ -187,17 +145,5 @@ export class MentorInformationService implements IMentorInformationService {
 			user = { ...user, mentor: mentorInfo }
 			return user
 		})
-	}
-
-	parseMentorInformation = (mentor: MentorInformation) => {
-		const mentor_information = mentor.toJSON()
-		return {
-			...mentor_information,
-			industry: (mentor_information.industry || '').split(',').filter((item: string) => !!item),
-			role: (mentor_information.role || '').split(',').filter((item: string) => !!item),
-			frequency: (mentor_information.frequency || '').split(',').filter((item: string) => !!item),
-			conversation_mode: (mentor_information.conversation_mode || '').split(',').filter((item: string) => !!item),
-			languages: (mentor_information.languages || '').split(',').filter((item: string) => !!item)
-		}
 	}
 }
