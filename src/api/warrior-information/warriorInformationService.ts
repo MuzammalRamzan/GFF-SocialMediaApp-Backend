@@ -64,12 +64,7 @@ export class WarriorInformationService implements IWarriorInformationService {
 			id: user.id,
 			full_name: user.full_name,
 			user_information: user.user_information,
-			warrior_information: {
-				specialty: user.warrior_information?.specialty.split(','),
-				certification: user.warrior_information?.certification.split(','),
-				therapy_type: user.warrior_information?.therapy_type.split(','),
-				price_range: user.warrior_information?.price_range.split(',')
-			},
+			warrior_information: user.warrior_information,
 			wellness_warrior_request: wellness_warrior_request
 		}
 	}
@@ -99,9 +94,28 @@ export class WarriorInformationService implements IWarriorInformationService {
 		return record ? await WarriorInformation.findOne({ where: { user_id: params.user_id } }) : null
 	}
 
+	async getAll(): Promise<WarriorInformation[]> {
+		const warriors = await WarriorInformation.findAll({
+			include: [
+				{
+					model: User,
+					as: 'user',
+					attributes: { exclude: ['password'] },
+					include: [{ model: UserInformation, as: 'user_information', attributes: ['profile_url'] }]
+				}
+			]
+		})
+		return warriors.map(warrior => {
+			const warriorInfo = warrior.toJSON()
+			let user = warriorInfo['user']
+			delete warriorInfo['user']
+			user = { ...user, warrior: warriorInfo }
+			return user
+		})
+	}
+
 	static isUserWarrior = async (user_id: number): Promise<boolean> => {
 		const warriorRole = await UserRoleService.fetchWellnessWarriorRole()
-
 		const record = await User.findOne({
 			where: {
 				id: user_id,

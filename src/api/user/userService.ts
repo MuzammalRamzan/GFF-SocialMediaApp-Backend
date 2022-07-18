@@ -1,29 +1,31 @@
 import { QueryTypes } from 'sequelize'
 import { sequelize } from '../../database'
-import { ISearchUser, IUserService, OtherUserInfo, UserInfo, UserType } from './interface'
+import { ISearchUser, IUserService, OtherUserInfo, PaginatedUserResult, UserInfo, UserType } from './interface'
 import { User } from './userModel'
-import { AuthService } from '../auth/authService'
 import { Op } from 'sequelize'
 import { WarriorInformation } from '../warrior-information/warriorInformationModel'
 import { UserInformation } from '../user-information/userInformationModel'
 import { MentorInformation } from '../mentor-information/mentorInformationModel'
-import { FindFriendService } from '../find-friend/findFriendService'
 import { WellnessWarrior } from '../wellness-warrior/wellnessWarriorModel'
 import { MentorMatcherModel } from '../mentor-matcher/mentorMatcherModel'
 import { GffError } from '../helper/errorHandler'
 import { FindFriendModel } from '../find-friend/findFriendModel'
-import { USER_FIELDS, USER_INFORMATION_FIELDS } from '../../helper/db.helper'
+import { paginate, PaginationType, USER_FIELDS, USER_INFORMATION_FIELDS } from '../../helper/db.helper'
 import { HashtagService } from '../hashtag/hashtagService'
+import { UserRole } from '../user-role/userRoleModel'
+import { UserRoleService } from '../user-role/userRoleService'
+import { MentorInformationService } from '../mentor-information/mentorInformationService'
+import { WarriorInformationService } from '../warrior-information/warriorInformationService'
 
 export class UserService implements IUserService {
-	private readonly authService: AuthService
-	private readonly findFriendService: FindFriendService
 	private readonly hashtagService: HashtagService
+	private readonly mentorInformationService: MentorInformationService
+	private readonly warriorInformationService: WarriorInformationService
 
 	constructor() {
-		this.authService = new AuthService()
-		this.findFriendService = new FindFriendService()
 		this.hashtagService = new HashtagService()
+		this.mentorInformationService = new MentorInformationService()
+		this.warriorInformationService = new WarriorInformationService()
 	}
 
 	static async isExists(user_id: number): Promise<boolean> {
@@ -41,13 +43,41 @@ export class UserService implements IUserService {
 		return fullUser as User[]
 	}
 
-	async list(): Promise<User[]> {
-		const users = await User.findAll({
-			attributes: {
-				exclude: ['password']
-			}
-		})
+	async list(role: string | undefined, pagination: PaginationType): Promise<PaginatedUserResult> {
+		const adminRole = await UserRoleService.fetchAdminRole()
 
+		const users = (await User.findAndCountAll(
+			paginate(
+				{
+					where: {
+						role_id: role
+							? {
+									[Op.eq]: role
+							  }
+							: {
+									[Op.ne]: adminRole?.get('id')
+							  }
+					},
+					attributes: { exclude: ['password'] },
+					include: [
+						{ model: UserRole, as: 'role' },
+						{
+							model: UserInformation,
+							as: 'user_information',
+							attributes: ['profile_url', 'job_role', 'employer_name']
+						},
+						{ model: MentorInformation, as: 'mentor_information' },
+						{ model: WarriorInformation, as: 'warrior_information' }
+					]
+				},
+				pagination
+			)
+		)) as PaginatedUserResult
+
+		users.rows = users.rows.map(user => user.toJSON())
+
+		users.page = +pagination.page
+		users.pageSize = +pagination.pageSize
 		return users
 	}
 
@@ -182,29 +212,6 @@ export class UserService implements IUserService {
 		const hashtags = user_hashtags.map(hashtag => hashtag.get())
 
 		myInfo['hashtags'] = hashtags
-
-		if (myInfo?.warrior_information) {
-			const warrior_information = myInfo.warrior_information.get({ plain: true })
-			myInfo['warrior_information'] = {
-				...warrior_information,
-				specialty: warrior_information?.specialty.split(','),
-				certification: warrior_information?.certification.split(','),
-				therapy_type: warrior_information?.therapy_type.split(','),
-				price_range: warrior_information?.price_range.split(',')
-			}
-		}
-
-		if (myInfo?.mentor_information) {
-			const mentor_information = myInfo.mentor_information.get({ plain: true })
-			myInfo['mentor_information'] = {
-				...mentor_information,
-				industry: (mentor_information.industry || '').split(',').filter((item: string) => !!item),
-				role: (mentor_information.role || '').split(',').filter((item: string) => !!item),
-				frequency: (mentor_information.frequency || '').split(',').filter((item: string) => !!item),
-				conversation_mode: (mentor_information.conversation_mode || '').split(',').filter((item: string) => !!item),
-				languages: (mentor_information.languages || '').split(',').filter((item: string) => !!item)
-			}
-		}
 
 		return myInfo
 	}

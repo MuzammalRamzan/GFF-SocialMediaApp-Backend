@@ -32,6 +32,7 @@ import { currencyRouter } from './api/currency/currencyRouter'
 import { uploadRouter } from './api/upload/uploadRouter'
 import { GffError, jsonErrorHandler } from './api/helper/errorHandler'
 import { feedbackRouter } from './api/feedback/feedbackRouter'
+import { roleRouter } from './api/user-role/userRole.routes'
 
 const storage = multer.memoryStorage()
 
@@ -44,28 +45,28 @@ const options = {
 export const upload = multer({
 	storage,
 	limits: { fileSize: 1000000000 }
-});
-
-(async function main(): Promise<void> {
+})
+;(async function main(): Promise<void> {
 	const app = Express()
 
 	app.use(cors())
 	// CORS error fix
 	app.use((req: Request, res: Response, next: NextFunction) => {
-		res.setHeader('Access-Control-Allow-Origin', '*');
-		res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE');
-		res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+		res.setHeader('Access-Control-Allow-Origin', '*')
+		res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE')
+		res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
 		if (req.method === 'OPTIONS') {
-			return res.sendStatus(200);
+			return res.sendStatus(200)
 		}
-		return next();
-	});
+		return next()
+	})
 
 	app.use(bodyParser.json())
 	app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options))
 	app.use('/auth', authRouter)
 	app.use('/upload', uploadRouter)
 	app.use('/user', userRouter)
+	app.use('/role', roleRouter)
 	app.use('/transaction', transactionRouter)
 	app.use('/transactionAccount', transactionAccRouter)
 	app.use('/transactionCategory', transactionCategoryRouter)
@@ -101,7 +102,7 @@ export const upload = multer({
 			error.httpStatusCode = 500
 		}
 
-		return jsonErrorHandler(err, req, res, () => { })
+		return jsonErrorHandler(err, req, res, () => {})
 	})
 
 	app.listen(process.env.PORT, () => {
