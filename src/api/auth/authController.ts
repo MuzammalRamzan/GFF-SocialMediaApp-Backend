@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
+import { Messages } from '../../constants/messages'
 import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import { AuthService } from './authService'
 
@@ -36,6 +37,13 @@ export class AuthController {
 		try {
 			const user = await this.authService.checkCreds(email, password)
 
+			if (user?.deactivated) {
+				const err = new GffError(Messages.ACCOUNT_DEACTIVATED)
+				err.errorCode = '401'
+				err.httpStatusCode = +err.errorCode
+				throw err
+			}
+
 			const token = this.authService.generateJwtToken(user!.email, user!.password)
 
 			res.set('auth-token', token)
@@ -50,8 +58,12 @@ export class AuthController {
 			})
 		} catch (err) {
 			const error = err as GffError
-			error.errorCode = '404'
-			error.httpStatusCode = 404
+			if (!error?.errorCode) {
+				error.errorCode = '404'
+			}
+			if (!error?.httpStatusCode) {
+				error.httpStatusCode = 404
+			}
 			return jsonErrorHandler(err, req, res, () => {})
 		}
 	}

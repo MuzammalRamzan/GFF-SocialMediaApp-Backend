@@ -13,3 +13,4 @@ userRouter.get('/email/:email', authMiddleware, userController.getUsersByEmail a
 userRouter.put('/update', authMiddleware, userController.updateUser as Application)
 userRouter.delete('/delete/:id', authMiddleware, userController.deleteUser as Application)
 userRouter.get('/friend/search', authMiddleware, userController.searchFriend)
+userRouter.put('/deactivate/:id', userController.deactivateUserAccount as Application)

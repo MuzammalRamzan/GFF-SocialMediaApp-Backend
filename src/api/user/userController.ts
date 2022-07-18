@@ -158,7 +158,7 @@ export class UserController {
 	}
 
 	updateUser = async (req: UpdateUserRequest, res: Response, next: NextFunction) => {
-		const userId = +req.user.id;
+		const userId = +req.user.id
 
 		try {
 			const user = await this.userService.update(userId, req.body)
@@ -256,6 +256,16 @@ export class UserController {
 			return res.status(200).json({ data: { ...otherUserInfo }, message: 'OK', code: 200 })
 		} catch (err) {
 			return handleError(err, req, res)
+		}
+	}
+
+	deactivateUserAccount = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+		try {
+			const userId = +req.params?.id as number
+			const user = await this.userService.deactivateUserAccount(userId)
+			return res.status(200).json({ data: { user }, code: 200, message: 'OK' })
+		} catch (err) {
+			next(err)
 		}
 	}
 }

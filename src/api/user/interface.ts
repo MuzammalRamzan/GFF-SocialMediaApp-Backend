@@ -16,6 +16,7 @@ export type UserType = {
 	password: string
 	role_id: number
 	user_feature_id: number
+	deactivated?: boolean
 }
 
 export interface ISearchUser {
@@ -51,6 +52,7 @@ export interface IUserService {
 	fetchFullUserById(userId: number): Promise<User[]>
 	getMyInfo(userId: number): Promise<UserInfo | null>
 	getOtherUserInfo(userId: number, otherUserId: number): Promise<OtherUserInfo | null>
+	deactivateUserAccount(userId: number): Promise<User>
 }
 
 export interface GetUsersByIdRequest extends Request {
