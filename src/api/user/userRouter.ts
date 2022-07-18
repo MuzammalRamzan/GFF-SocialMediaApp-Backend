@@ -1,4 +1,5 @@
 import express, { Application } from 'express'
+import { adminMiddleware } from '../helper/AdminMiddleware'
 import { authMiddleware } from '../helper/authMiddleware'
 import { UserController } from './userController'
 
@@ -13,4 +14,4 @@ userRouter.get('/email/:email', authMiddleware, userController.getUsersByEmail a
 userRouter.put('/update', authMiddleware, userController.updateUser as Application)
 userRouter.delete('/delete/:id', authMiddleware, userController.deleteUser as Application)
 userRouter.get('/friend/search', authMiddleware, userController.searchFriend)
-userRouter.put('/deactivate/:id', userController.deactivateUserAccount as Application)
+userRouter.put('/deactivate/:id', authMiddleware, adminMiddleware, userController.deactivateUserAccount as Application)
