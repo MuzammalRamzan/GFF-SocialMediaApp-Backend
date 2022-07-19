@@ -41,7 +41,7 @@ export class UserInformationController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -51,7 +51,7 @@ export class UserInformationController {
 
 		try {
 			const userInformation = await this.userInformationService.fetchById(params_user_id, userId)
-			if(!userInformation) {
+			if (!userInformation) {
 				throw new Error('No data found')
 			}
 			return res.status(200).send({
@@ -67,7 +67,7 @@ export class UserInformationController {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
 			}
-			else if  (error.message === 'No data found') {
+			else if (error.message === 'No data found') {
 				error.errorCode = '404'
 				error.httpStatusCode = 404
 			}
@@ -75,16 +75,19 @@ export class UserInformationController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
 	updateUserInformation = async (req: UpdateUserInformationRequest, res: Response, next: NextFunction) => {
-		const userId = +req.params.user_id
-		const user_id = +req.user.id
-		const params = { ...req.body, user_id }
+		const userId = +req.user.id;
+
+		delete req.body.user_id;
+		delete req.body.email;
+
+
 		try {
-			const userInformation = await this.userInformationService.update(userId, params)
+			const userInformation = await this.userInformationService.update(userId, req.body)
 			return res.status(200).send({
 				data: {
 					userInformation
@@ -102,7 +105,7 @@ export class UserInformationController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -128,7 +131,7 @@ export class UserInformationController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 }
