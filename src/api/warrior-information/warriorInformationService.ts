@@ -1,3 +1,4 @@
+import { USER_FIELDS, USER_INFORMATION_FIELDS } from '../../helper/db.helper'
 import { GffError } from '../helper/errorHandler'
 import { UserInformation } from '../user-information/userInformationModel'
 import { UserRoleService } from '../user-role/userRoleService'
@@ -7,7 +8,7 @@ import { IWarriorInformationService, IWarriorUser, WarriorInformationParams } fr
 import { WarriorInformation } from './warriorInformationModel'
 
 export class WarriorInformationService implements IWarriorInformationService {
-	constructor() {}
+	constructor() { }
 
 	private createOrUpdate = async (params: WarriorInformationParams): Promise<WarriorInformation> => {
 		const warriorInformation = await WarriorInformation.findOne({
@@ -35,7 +36,7 @@ export class WarriorInformationService implements IWarriorInformationService {
 			where: {
 				id: user_id
 			},
-			attributes: ['id', 'full_name'],
+			attributes: USER_FIELDS,
 			include: [
 				{
 					model: WarriorInformation,
@@ -45,7 +46,7 @@ export class WarriorInformationService implements IWarriorInformationService {
 				{
 					model: UserInformation,
 					as: 'user_information',
-					attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'job_role', 'education']
+					attributes: USER_INFORMATION_FIELDS
 				}
 			]
 		})
