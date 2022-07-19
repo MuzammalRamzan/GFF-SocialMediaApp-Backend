@@ -4526,7 +4526,7 @@
 				}
 			}
 		},
-		"/userInformation/update/{id}": {
+		"/userInformation/update": {
 			"put": {
 				"tags": ["user-information"],
 				"description": "Update user informations",
@@ -4537,18 +4537,6 @@
 						"description": "Auth Token",
 						"required": true,
 						"type": "string"
-					},
-					{
-						"name": "id",
-						"in": "path",
-						"description": "User information ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
 					}
 				],
 				"requestBody": {
@@ -4559,7 +4547,7 @@
 							},
 							"examples": {
 								"0": {
-									"value": "{\n    \"user_id\": 39,\n    \"profile_url\": null,\n    \"bio\": \"Test my bio\",\n    \"date_of_birth\": \"2022-05-31\",\n    \"gender\": \"male\",\n    \"email\": \"email\",\n    \"phone_number\": \"+55555555555\",\n    \"country\": \"test country\",\n    \"city\": \"test city\",\n    \"state\": \"test state\",\n    \"zip_code\": 10000,\n    \"address\": \"Test my address \",\n    \"twitter\": \"frfrfrfrfrf\",\n    \"facebook\": null,\n    \"instagram\": null,\n    \"linkedin\": null,\n    \"tiktok\": null,\n    \"employer_name\": \"Test employer\",\n    \"job_role\": \"CEO\",\n    \"education\": \"No education\",\n    \"other_education\": \"No test education\"\n}"
+									"value": "{\n    \"profile_url\": null,\n    \"bio\": \"Test my bio\",\n    \"date_of_birth\": \"2022-05-31\",\n    \"gender\": \"male\",\n    \"email\": \"email\",\n    \"phone_number\": \"+55555555555\",\n    \"country\": \"test country\",\n    \"city\": \"test city\",\n    \"state\": \"test state\",\n    \"zip_code\": 10000,\n    \"address\": \"Test my address \",\n    \"twitter\": \"frfrfrfrfrf\",\n    \"facebook\": null,\n    \"instagram\": null,\n    \"linkedin\": null,\n    \"tiktok\": null,\n    \"employer_name\": \"Test employer\",\n    \"job_role\": \"CEO\",\n    \"education\": \"No education\",\n    \"other_education\": \"No test education\"\n}"
 								}
 							}
 						}
