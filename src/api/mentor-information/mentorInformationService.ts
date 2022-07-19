@@ -5,10 +5,11 @@ import { CreateMentorInformation, IMentorInformationService, MentorInformationTy
 import { IMentorInformation, MentorInformation } from './mentorInformationModel'
 import { GffError } from '../helper/errorHandler'
 import { UserRoleService } from '../user-role/userRoleService'
+import { USER_INFORMATION_FIELDS } from '../../helper/db.helper'
 
 export class MentorInformationService implements IMentorInformationService {
 	static async isMentorExists(userId: number): Promise<boolean> {
-		const mentorRole = await UserRoleService.fetchMentorRole();
+		const mentorRole = await UserRoleService.fetchMentorRole()
 
 		const record = await User.findOne({
 			where: {
@@ -21,7 +22,7 @@ export class MentorInformationService implements IMentorInformationService {
 	}
 
 	async createMentorInformation(params: CreateMentorInformation): Promise<IMentorInformation> {
-		const mentorRole = await UserRoleService.fetchMentorRole();
+		const mentorRole = await UserRoleService.fetchMentorRole()
 
 		const mentorInformation = await MentorInformation.create({
 			role: (params.role || []).join(','),
@@ -45,17 +46,7 @@ export class MentorInformationService implements IMentorInformationService {
 			}
 		)
 
-		let mentor_information = mentorInformation.get({ plain: true })
-		return {
-			industry: (mentor_information.industry || '').split(',').filter((item: string) => !!item),
-			role: (mentor_information.role || '').split(',').filter((item: string) => !!item),
-			frequency: (mentor_information.frequency || '').split(',').filter((item: string) => !!item),
-			conversation_mode: (mentor_information.conversation_mode || '').split(',').filter((item: string) => !!item),
-			languages: (mentor_information.languages || '').split(',').filter((item: string) => !!item),
-			isPassedIRT: mentor_information.isPassedIRT,
-			id: mentor_information.id,
-			user_id: mentor_information.user_id
-		}
+		return mentorInformation.toJSON()
 	}
 
 	async isMentorInformationExist(userId: number): Promise<boolean> {
@@ -90,17 +81,7 @@ export class MentorInformationService implements IMentorInformationService {
 			isPassedIRT: params.isPassedIRT
 		})
 
-		let mentor_information = mentorInformation.get({ plain: true })
-		return {
-			industry: (mentor_information.industry || '').split(',').filter((item: string) => !!item),
-			role: (mentor_information.role || '').split(',').filter((item: string) => !!item),
-			frequency: (mentor_information.frequency || '').split(',').filter((item: string) => !!item),
-			conversation_mode: (mentor_information.conversation_mode || '').split(',').filter((item: string) => !!item),
-			languages: (mentor_information.languages || '').split(',').filter((item: string) => !!item),
-			isPassedIRT: mentor_information.isPassedIRT,
-			id: mentor_information.id,
-			user_id: mentor_information.user_id
-		}
+		return mentorInformation.toJSON()
 	}
 
 	async getMentorInformation(userId: number, mentor_id: number): Promise<MentorInformationType> {
@@ -121,26 +102,15 @@ export class MentorInformationService implements IMentorInformationService {
 			where: {
 				user_id: mentor_id
 			},
-			attributes: ['profile_url', 'bio', 'date_of_birth', 'gender', 'country', 'job_role', 'education']
+			attributes: USER_INFORMATION_FIELDS
 		})
 
 		const mentor_request = (await MentorMatcherService.isExist(userId, mentor_id)) as any
 
-		const mentor_information = mentorInformation.get()
-
 		return {
 			id: mentor_id,
 			user_information: userInformation?.get(),
-			mentor_information: {
-				industry: (mentor_information.industry || '').split(',').filter((item: string) => !!item),
-				role: (mentor_information.role || '').split(',').filter((item: string) => !!item),
-				frequency: (mentor_information.frequency || '').split(',').filter((item: string) => !!item),
-				conversation_mode: (mentor_information.conversation_mode || '').split(',').filter((item: string) => !!item),
-				languages: (mentor_information.languages || '').split(',').filter((item: string) => !!item),
-				isPassedIRT: mentor_information.isPassedIRT,
-				id: mentor_information.id,
-				user_id: mentor_information.user_id
-			},
+			mentor_information: mentorInformation.toJSON(),
 			mentor_request: mentor_request
 		}
 	}
@@ -155,17 +125,26 @@ export class MentorInformationService implements IMentorInformationService {
 
 		if (!mentorInformation) return null
 
-		const mentor_information = mentorInformation.get()
+		return mentorInformation.toJSON()
+	}
 
-		return {
-			industry: (mentor_information.industry || '').split(',').filter((item: string) => !!item),
-			role: (mentor_information.role || '').split(',').filter((item: string) => !!item),
-			frequency: (mentor_information.frequency || '').split(',').filter((item: string) => !!item),
-			conversation_mode: (mentor_information.conversation_mode || '').split(',').filter((item: string) => !!item),
-			languages: (mentor_information.languages || '').split(',').filter((item: string) => !!item),
-			isPassedIRT: mentor_information.isPassedIRT,
-			id: mentor_information.id,
-			user_id: mentor_information.user_id
-		}
+	async getAllMentors(): Promise<MentorInformation[]> {
+		const mentors = await MentorInformation.findAll({
+			include: [
+				{
+					model: User,
+					as: 'user',
+					attributes: { exclude: ['password'] },
+					include: [{ model: UserInformation, as: 'user_information', attributes: ['profile_url'] }]
+				}
+			]
+		})
+		return mentors.map(mentor => {
+			const mentorInfo = mentor.toJSON()
+			let user = mentorInfo['user']
+			delete mentorInfo['user']
+			user = { ...user, mentor: mentorInfo }
+			return user
+		})
 	}
 }

@@ -1,4 +1,5 @@
 import { Request } from 'express'
+import { PaginationType } from '../../helper/db.helper'
 import { FindFriendModel } from '../find-friend/findFriendModel'
 import { Hashtag } from '../hashtag/hashtagModel'
 import { MentorInformation } from '../mentor-information/mentorInformationModel'
@@ -41,8 +42,10 @@ export interface OtherUserInfo {
 	hashtags: Hashtag[]
 }
 
+export type PaginatedUserResult = { rows: User[]; count: number; page?: number; pageSize?: number }
+
 export interface IUserService {
-	list(): Promise<User[]>
+	list(role: string | undefined, pagination: PaginationType): Promise<PaginatedUserResult>
 	fetchById(userId: number, id: number): Promise<User>
 	fetchByEmail(email: string, userId: number): Promise<User>
 	update(id: number, params: UserType): Promise<User>

@@ -33,28 +33,48 @@ MentorInformation.init(
 		},
 		industry: {
 			type: DataTypes.STRING,
-			defaultValue: ''
+			defaultValue: '',
+			get() {
+				let arr: string[] = (this.getDataValue('industry') || '').split(',')
+				return arr.filter(str => !!str)
+			}
 		},
 		role: {
 			type: DataTypes.STRING,
-			defaultValue: ''
+			defaultValue: '',
+			get() {
+				let arr: string[] = (this.getDataValue('role') || '').split(',')
+				return arr.filter(str => !!str)
+			}
 		},
 		frequency: {
 			type: DataTypes.STRING,
-			defaultValue: ''
+			defaultValue: '',
+			get() {
+				let arr: string[] = (this.getDataValue('frequency') || '').split(',')
+				return arr.filter(str => !!str)
+			}
 		},
 		languages: {
 			type: DataTypes.STRING,
-			defaultValue: ''
+			defaultValue: '',
+			get() {
+				let arr: string[] = (this.getDataValue('languages') || '').split(',')
+				return arr.filter(str => !!str)
+			}
 		},
 		conversation_mode: {
 			type: DataTypes.STRING,
-			defaultValue: ''
+			defaultValue: '',
+			get() {
+				let arr: string[] = (this.getDataValue('conversation_mode') || '').split(',')
+				return arr.filter(str => !!str)
+			}
 		}
 	},
 	{
 		sequelize: sequelize,
-		tableName: 'mentor_information',
+		tableName: 'mentor_information'
 	}
 )
 
