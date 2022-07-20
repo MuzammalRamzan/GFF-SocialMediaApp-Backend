@@ -1,6 +1,6 @@
 import { MentorMatcherModel } from '../mentor-matcher/mentorMatcherModel'
 import { UserInformation } from '../user-information/userInformationModel'
-import { IMentorInformation } from './mentorInformationModel'
+import { IMentorInformation, MentorInformation } from './mentorInformationModel'
 
 export type CreateMentorInformation = {
 	user_id: number
@@ -25,4 +25,5 @@ export interface IMentorInformationService {
 	updateMentorInformation(params: CreateMentorInformation): Promise<IMentorInformation>
 	getMentorInformation(userId: number, mentor_id: number): Promise<MentorInformationType>
 	getMentorInfo(mentor_id: number): Promise<IMentorInformation | null>
+	getAllMentors(): Promise<MentorInformation[]>
 }

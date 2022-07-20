@@ -157,22 +157,7 @@ export class WellnessWarriorService implements IWellnessWarriorService {
 			]
 		})
 
-		return records.map(record => {
-			const user = record.get()
-
-			return {
-				id: user.id,
-				full_name: user.full_name,
-				user_information: user.user_information,
-				warrior_information: {
-					specialty: user?.warrior_information?.specialty?.split(','),
-					certification: user?.warrior_information?.certification?.split(','),
-					therapy_type: user?.warrior_information?.therapy_type?.split(','),
-					price_range: user?.warrior_information?.price_range?.split(',')
-				},
-				wellness_warrior_request: user.user_associations
-			}
-		})
+		return records.map(record => record?.toJSON())
 	}
 
 	async isRequestExist(user_id: number, warrior_id: number): Promise<IWellnessWarriorRequest | null> {

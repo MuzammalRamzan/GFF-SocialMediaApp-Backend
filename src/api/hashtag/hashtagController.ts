@@ -18,9 +18,6 @@ export class HashtagController {
 	getAllHashtags = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const hashtags = await this.hashtagService.list()
-			if(!hashtags.length) {
-				throw new Error("No data found")
-			} 
 			return res.status(200).send({
 				data: {
 					hashtags
@@ -34,7 +31,7 @@ export class HashtagController {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
 			}
-			else if  (error.message === 'No data found') {
+			else if (error.message === 'No data found') {
 				error.errorCode = '404'
 				error.httpStatusCode = 404
 			}
@@ -42,16 +39,15 @@ export class HashtagController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
 	createHashtag = async (req: CreateHashtagRequest, res: Response, next: NextFunction) => {
 		const userId = +req.user.id
-		const params = req.body
-
+		const hashtag_name = req.body.hashtag_name;
 		try {
-			const hashtag = await this.hashtagService.add(params, userId)
+			const hashtag = await this.hashtagService.add(hashtag_name, userId)
 			return res.status(200).send({
 				data: {
 					hashtag
@@ -69,7 +65,7 @@ export class HashtagController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -78,11 +74,11 @@ export class HashtagController {
 		res: Response,
 		next: NextFunction
 	) => {
-		const id = +req.params.user_info_id
+		const id = +req.params.user_id
 
 		try {
 			const hashtags = await this.hashtagService.fetchById(id)
-			if(!hashtags.length) {
+			if (!hashtags.length) {
 				throw new Error('No data found')
 			}
 			return res.status(200).send({
@@ -98,7 +94,7 @@ export class HashtagController {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
 			}
-			else if  (error.message === 'No data found') {
+			else if (error.message === 'No data found') {
 				error.errorCode = '404'
 				error.httpStatusCode = 404
 			}
@@ -106,7 +102,7 @@ export class HashtagController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -133,7 +129,7 @@ export class HashtagController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -159,7 +155,7 @@ export class HashtagController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 }

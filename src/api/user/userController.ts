@@ -1,7 +1,9 @@
-import { Console } from 'console'
 import { Request, Response, NextFunction } from 'express'
+import { PAGE_SIZE } from '../../constants'
+import { PaginationType } from '../../helper/db.helper'
 import { IAuthenticatedRequest } from '../helper/authMiddleware'
 import { GffError, jsonErrorHandler } from '../helper/errorHandler'
+import { UserRoleService } from '../user-role/userRoleService'
 import {
 	DeleteUserRequest,
 	GetFullUserByUserIdRequest,
@@ -29,14 +31,23 @@ const handleError = (err: any, req: IAuthenticatedRequest, res: Response) => {
 }
 export class UserController {
 	private readonly userService: UserService
+	private readonly roleService: UserRoleService
 
 	constructor() {
 		this.userService = new UserService()
+		this.roleService = new UserRoleService()
 	}
 
 	getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
 		try {
-			const users = await this.userService.list()
+			const roleQuery = req.query.role as string
+
+			const pagination: PaginationType = {
+				page: +(req.query.page || 0) as number,
+				pageSize: +(req.query.pageSize || PAGE_SIZE) as number
+			}
+
+			const users = await this.userService.list(roleQuery, pagination)
 			if (!users) {
 				throw new Error('No data found')
 			}
@@ -225,6 +236,16 @@ export class UserController {
 			return res.status(200).json({ data: { ...otherUserInfo }, message: 'OK', code: 200 })
 		} catch (err) {
 			return handleError(err, req, res)
+		}
+	}
+
+	deactivateUserAccount = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+		try {
+			const userId = +req.params?.id as number
+			const user = await this.userService.deactivateUserAccount(userId)
+			return res.status(200).json({ data: { user }, code: 200, message: 'OK' })
+		} catch (err) {
+			next(err)
 		}
 	}
 }

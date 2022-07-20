@@ -8,5 +8,6 @@ export const authRouter = express.Router();
 
 authRouter.post('/signup', validate(signUpSchema), authController.signUp)
 authRouter.post('/login', authController.logIn)
+authRouter.post('/admin/login', authController.adminLogIn)
 
 
