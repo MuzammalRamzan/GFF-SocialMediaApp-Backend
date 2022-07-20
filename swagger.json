@@ -1211,82 +1211,6 @@
 				}
 			}
 		},
-		"/hashtag/add": {
-			"post": {
-				"tags": ["hashtag"],
-				"description": "Add new hashtag",
-				"parameters": [
-					{
-						"name": "user_id",
-						"in": "path",
-						"description": "User ID",
-						"required": true,
-						"type": "integer",
-						"example": 169
-					},
-					{
-						"name": "auth-token",
-						"in": "header",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "string"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"data": {
-										"warriorInformation": {
-											"id": 169,
-											"full_name": "undefined",
-											"user_information": {
-												"profile_url": null,
-												"bio": "Test my bio",
-												"date_of_birth": "2022-05-31",
-												"gender": "other",
-												"job_role": "CEO",
-												"education": "No education"
-											},
-											"warrior_information": {
-												"specialty": ["str"],
-												"certification": ["long string"],
-												"therapy_type": ["short"],
-												"price_range": ["12"]
-											}
-										}
-									},
-									"message": "Warrior information retrieved successfully",
-									"code": 200
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
-								}
-							}
-						}
-					}
-				}
-			}
-		},
 		"/warrior-information": {
 			"get": {
 				"tags": ["warrior-information"],
@@ -4225,7 +4149,7 @@
 							},
 							"examples": {
 								"0": {
-									"value": "{\n    \"hashtag_name\": \" testni hashtag\",\n    \"user_information_id\": 2\n}"
+									"value": "{\n    \"hashtag_name\": \" testni hashtag\"\n}"
 								}
 							}
 						}
