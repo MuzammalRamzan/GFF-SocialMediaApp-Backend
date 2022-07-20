@@ -50,7 +50,8 @@ User.init(
 			type: DataTypes.INTEGER,
 			allowNull: true,
 			defaultValue: null
-		}
+		},
+		deactivated: { type: DataTypes.BOOLEAN, defaultValue: 0 }
 	},
 	{
 		sequelize,

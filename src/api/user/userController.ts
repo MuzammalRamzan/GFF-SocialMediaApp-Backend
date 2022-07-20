@@ -269,4 +269,14 @@ export class UserController {
 			return handleError(err, req, res)
 		}
 	}
+
+	deactivateUserAccount = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+		try {
+			const userId = +req.params?.id as number
+			const user = await this.userService.deactivateUserAccount(userId)
+			return res.status(200).json({ data: { user }, code: 200, message: 'OK' })
+		} catch (err) {
+			next(err)
+		}
+	}
 }
