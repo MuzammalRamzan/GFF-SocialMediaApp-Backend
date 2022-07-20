@@ -26,3 +26,5 @@ export const USER_INFORMATION_FIELDS = [
 export const USER_FIELDS = ['id', 'full_name']
 
 export const WELLNESS_WARRIOR_FIELDS = ['specialty', 'certification', 'therapy_type', 'price_range']
+
+export const MENTOR_FIELDS = ['industry', 'role', 'frequency', 'conversation_mode', 'isPassedIRT', 'languages']
