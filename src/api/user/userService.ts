@@ -186,6 +186,13 @@ export class UserService implements IUserService {
 		})
 	}
 
+	deactivateUserAccount = async (userId: number): Promise<User> => {
+		await User.update({ deactivated: 1 }, { where: { id: userId } })
+
+		const user = await User.findByPk(userId, { attributes: ['deactivated', 'id'] })
+		return user as User
+	}
+
 	getMyInfo = async (userId: number): Promise<null | UserInfo> => {
 		let myInfo = (await User.findOne({
 			where: { id: userId },
