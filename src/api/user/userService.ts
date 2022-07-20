@@ -174,19 +174,6 @@ export class UserService implements IUserService {
 
 		myInfo['hashtags'] = hashtags
 
-		if (myInfo?.warrior_information) {
-			const warrior_information = myInfo.warrior_information.get({ plain: true })
-			myInfo['warrior_information'] = {
-				...warrior_information,
-				specialty: warrior_information?.specialty.split(','),
-				certification: warrior_information?.certification.split(','),
-				therapy_type: warrior_information?.therapy_type.split(','),
-				price_range: warrior_information?.price_range.split(',')
-			}
-		}
-
-		myInfo['hashtags'] = hashtags
-
 		return myInfo
 	}
 
