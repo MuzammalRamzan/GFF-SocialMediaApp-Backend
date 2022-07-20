@@ -27,7 +27,7 @@ const handleError = (err: any, req: IAuthenticatedRequest, res: Response) => {
 		error.errorCode = '500'
 		error.httpStatusCode = 500
 	}
-	return jsonErrorHandler(error, req, res, () => {})
+	return jsonErrorHandler(error, req, res, () => { })
 }
 export class UserController {
 	private readonly userService: UserService
@@ -70,7 +70,7 @@ export class UserController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -103,7 +103,7 @@ export class UserController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -133,7 +133,7 @@ export class UserController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -164,7 +164,7 @@ export class UserController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -189,7 +189,7 @@ export class UserController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -214,7 +214,7 @@ export class UserController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -245,7 +245,7 @@ export class UserController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
