@@ -4168,7 +4168,7 @@
 										"hashtag": {
 											"id": 18,
 											"hashtag_name": "#test2",
-											"user_information_id": 2
+											"user_id": 2
 										}
 									},
 									"code": 200,
@@ -4371,7 +4371,7 @@
 							},
 							"examples": {
 								"0": {
-									"value": "{\n            \"hashtag_name\": \"#hashtagagain\",\n            \"user_information_id\": 1\n        }"
+									"value": "{\n            \"hashtag_name\": \"#hashtagagain\",\n            \"user_id\": 1\n        }"
 								}
 							}
 						}
@@ -4390,7 +4390,7 @@
 										"hashtag": {
 											"id": 5,
 											"hashtag_name": "#BBB",
-											"user_information_id": 1
+											"user_id": 1
 										}
 									},
 									"code": 200,
@@ -4488,22 +4488,22 @@
 											{
 												"id": 1,
 												"hashtag_name": "#test",
-												"user_information_id": 1
+												"user_id": 1
 											},
 											{
 												"id": 5,
 												"hashtag_name": "#hashtagagain",
-												"user_information_id": 1
+												"user_id": 1
 											},
 											{
 												"id": 6,
 												"hashtag_name": "#testagain",
-												"user_information_id": 1
+												"user_id": 1
 											},
 											{
 												"id": 13,
 												"hashtag_name": "#hashtagagain",
-												"user_information_id": 2
+												"user_id": 2
 											}
 										]
 									},
@@ -4719,17 +4719,17 @@
 											{
 												"id": 5,
 												"hashtag_name": "#hashtagagain",
-												"user_information_id": 1
+												"user_id": 1
 											},
 											{
 												"id": 6,
 												"hashtag_name": "#testagain",
-												"user_information_id": 1
+												"user_id": 1
 											},
 											{
 												"id": 14,
 												"hashtag_name": "#hashtag_andii",
-												"user_information_id": 1
+												"user_id": 1
 											}
 										]
 									},
@@ -6626,7 +6626,7 @@
 											{
 												"id": 40,
 												"hashtag_name": "#test",
-												"user_information_id": 113
+												"user_id": 113
 											}
 										]
 									},
@@ -6681,7 +6681,7 @@
 											{
 												"id": 40,
 												"hashtag_name": "#test",
-												"user_information_id": 113
+												"user_id": 113
 											}
 										],
 										"user_information": {
@@ -8876,7 +8876,7 @@
 			"hashtag_add_body": {
 				"type": "object",
 				"properties": {
-					"user_information_id": {
+					"user_id": {
 						"type": "integer"
 					},
 					"hashtag_name": {
@@ -8986,7 +8986,7 @@
 			"update_id_body_2": {
 				"type": "object",
 				"properties": {
-					"user_information_id": {
+					"user_id": {
 						"type": "integer"
 					},
 					"hashtag_name": {

@@ -3,15 +3,15 @@ import { Hashtag } from "./hashtagModel";
 import { UserInformation } from "../user-information/userInformationModel";
 
 export class HashtagService implements IHashtagService {
-    async add(params: HashtagType, userId: number): Promise<Hashtag> {
-        let hashtagText = params.hashtag_name
+    async add(hashtag_name: string, userId: number): Promise<Hashtag> {
+        let hashtagText = hashtag_name
         hashtagText = hashtagText.replace(/\s/g, '')
 
         hashtagText = hashtagText.charAt(0) != '#' ? '#' + hashtagText : hashtagText
 
         const hashtag = await Hashtag.create({
             hashtag_name: hashtagText,
-            user_information_id: userId
+            user_id: userId
         })
         return hashtag
     }
@@ -25,11 +25,11 @@ export class HashtagService implements IHashtagService {
     async fetchById(id: number): Promise<Hashtag[]> {
         const hashtags = await Hashtag.findAll({
             where: {
-                user_information_id: id
+                user_id: id
             }
         })
 
-        return hashtags as any
+        return hashtags;
     }
 
     async update(id: number, params: HashtagType): Promise<Hashtag> {

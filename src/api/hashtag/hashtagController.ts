@@ -45,10 +45,9 @@ export class HashtagController {
 
 	createHashtag = async (req: CreateHashtagRequest, res: Response, next: NextFunction) => {
 		const userId = +req.user.id
-		const params = req.body
-
+		const hashtag_name = req.body.hashtag_name;
 		try {
-			const hashtag = await this.hashtagService.add(params, userId)
+			const hashtag = await this.hashtagService.add(hashtag_name, userId)
 			return res.status(200).send({
 				data: {
 					hashtag
