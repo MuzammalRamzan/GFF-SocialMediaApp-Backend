@@ -123,16 +123,7 @@ export class MentorMatcherService implements IMentorMatcherService {
 			return {
 				id: _data.id,
 				full_name: _data.full_name,
-				mentor_information: {
-					industry: (_data.mentor_information?.industry || '').split(',').filter((item: string) => !!item),
-					role: (_data.mentor_information?.role || '').split(',').filter((item: string) => !!item),
-					frequency: (_data.mentor_information?.frequency || '').split(',').filter((item: string) => !!item),
-					conversation_mode: (_data.mentor_information?.conversation_mode || '')
-						.split(',')
-						.filter((item: string) => !!item),
-					languages: (_data.mentor_information?.languages || '').split(',').filter((item: string) => !!item),
-					isPassedIRT: _data.mentor_information?.isPassedIRT
-				},
+				mentor_information: _data.mentor_information,
 				user_information: {
 					profile_url: _data?.user_information?.profile_url,
 					bio: _data?.user_information?.bio,

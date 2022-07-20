@@ -1211,19 +1211,11 @@
 				}
 			}
 		},
-		"/hashtag/add": {
-			"post": {
-				"tags": ["hashtag"],
-				"description": "Add new hashtag",
+		"/warrior-information": {
+			"get": {
+				"tags": ["warrior-information"],
+				"description": "Get all warriors",
 				"parameters": [
-					{
-						"name": "user_id",
-						"in": "path",
-						"description": "User ID",
-						"required": true,
-						"type": "integer",
-						"example": 169
-					},
 					{
 						"name": "auth-token",
 						"in": "header",
@@ -1245,49 +1237,33 @@
 								},
 								"example": {
 									"data": {
-										"warriorInformation": {
-											"id": 169,
-											"full_name": "undefined",
-											"user_information": {
-												"profile_url": null,
-												"bio": "Test my bio",
-												"date_of_birth": "2022-05-31",
-												"gender": "other",
-												"job_role": "CEO",
-												"education": "No education"
-											},
-											"warrior_information": {
-												"specialty": ["str"],
-												"certification": ["long string"],
-												"therapy_type": ["short"],
-												"price_range": ["12"]
+										"warriors": [
+											{
+												"id": 1,
+												"user_id": 169,
+												"specialty": "str",
+												"certification": "long string",
+												"therapy_type": "short",
+												"price_range": "12",
+												"user": {
+													"id": 169,
+													"role_id": 4,
+													"full_name": "undefined",
+													"email": "test1@test.com",
+													"default_currency_id": 1,
+													"user_feature_id": null
+												}
 											}
-										}
+										]
 									},
-									"message": "Warrior information retrieved successfully",
+									"message": "Warrior information created successfully",
 									"code": 200
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
 								}
 							}
 						}
 					}
 				}
-			}
-		},
-		"/warrior-information": {
+			},
 			"post": {
 				"tags": ["warrior-information"],
 				"description": "Create Wellness Warrior information",
@@ -3171,10 +3147,9 @@
 				"description": "Get all users",
 				"parameters": [
 					{
-						"name": "id",
-						"in": "path",
-						"description": "User ID",
-						"required": true,
+						"name": "role",
+						"in": "query",
+						"description": "User role id",
 						"style": "simple",
 						"explode": false,
 						"schema": {
@@ -3204,16 +3179,31 @@
 								},
 								"example": {
 									"data": {
-										"professionalInformation": [
+										"users": [
 											{
-												"id": 9,
-												"user_id": 37,
-												"employment_type": "Test employment_type",
-												"company_name": "Test company_name",
-												"profession": "Test profession",
-												"education": "Test education",
-												"net_monthly_salary": 100.73,
-												"work_experience": "Test work_experience"
+												"id": 37,
+												"role_id": 3,
+												"full_name": "ime-prezime",
+												"email": "test",
+												"default_currency_id": 1,
+												"user_feature_id": null,
+												"role": {
+													"id": 3,
+													"name": "Mentor",
+													"authority": "mentor"
+												},
+												"user_information": null,
+												"mentor_information": {
+													"id": 6,
+													"user_id": 37,
+													"isPassedIRT": true,
+													"industry": ["str"],
+													"role": ["string"],
+													"frequency": ["string"],
+													"languages": [],
+													"conversation_mode": ["string"]
+												},
+												"warrior_information": null
 											}
 										]
 									},
@@ -4159,7 +4149,7 @@
 							},
 							"examples": {
 								"0": {
-									"value": "{\n    \"hashtag_name\": \" testni hashtag\",\n    \"user_information_id\": 2\n}"
+									"value": "{\n    \"hashtag_name\": \" testni hashtag\"\n}"
 								}
 							}
 						}
@@ -4178,7 +4168,7 @@
 										"hashtag": {
 											"id": 18,
 											"hashtag_name": "#test2",
-											"user_information_id": 2
+											"user_id": 2
 										}
 									},
 									"code": 200,
@@ -4381,7 +4371,7 @@
 							},
 							"examples": {
 								"0": {
-									"value": "{\n            \"hashtag_name\": \"#hashtagagain\",\n            \"user_information_id\": 1\n        }"
+									"value": "{\n            \"hashtag_name\": \"#hashtagagain\",\n            \"user_id\": 1\n        }"
 								}
 							}
 						}
@@ -4400,7 +4390,7 @@
 										"hashtag": {
 											"id": 5,
 											"hashtag_name": "#BBB",
-											"user_information_id": 1
+											"user_id": 1
 										}
 									},
 									"code": 200,
@@ -4498,22 +4488,22 @@
 											{
 												"id": 1,
 												"hashtag_name": "#test",
-												"user_information_id": 1
+												"user_id": 1
 											},
 											{
 												"id": 5,
 												"hashtag_name": "#hashtagagain",
-												"user_information_id": 1
+												"user_id": 1
 											},
 											{
 												"id": 6,
 												"hashtag_name": "#testagain",
-												"user_information_id": 1
+												"user_id": 1
 											},
 											{
 												"id": 13,
 												"hashtag_name": "#hashtagagain",
-												"user_information_id": 2
+												"user_id": 2
 											}
 										]
 									},
@@ -4526,7 +4516,7 @@
 				}
 			}
 		},
-		"/userInformation/update/{id}": {
+		"/userInformation/update": {
 			"put": {
 				"tags": ["user-information"],
 				"description": "Update user informations",
@@ -4537,18 +4527,6 @@
 						"description": "Auth Token",
 						"required": true,
 						"type": "string"
-					},
-					{
-						"name": "id",
-						"in": "path",
-						"description": "User information ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
 					}
 				],
 				"requestBody": {
@@ -4559,7 +4537,7 @@
 							},
 							"examples": {
 								"0": {
-									"value": "{\n    \"user_id\": 39,\n    \"profile_url\": null,\n    \"bio\": \"Test my bio\",\n    \"date_of_birth\": \"2022-05-31\",\n    \"gender\": \"male\",\n    \"email\": \"email\",\n    \"phone_number\": \"+55555555555\",\n    \"country\": \"test country\",\n    \"city\": \"test city\",\n    \"state\": \"test state\",\n    \"zip_code\": 10000,\n    \"address\": \"Test my address \",\n    \"twitter\": \"frfrfrfrfrf\",\n    \"facebook\": null,\n    \"instagram\": null,\n    \"linkedin\": null,\n    \"tiktok\": null,\n    \"employer_name\": \"Test employer\",\n    \"job_role\": \"CEO\",\n    \"education\": \"No education\",\n    \"other_education\": \"No test education\"\n}"
+									"value": "{\n    \"profile_url\": null,\n    \"bio\": \"Test my bio\",\n    \"date_of_birth\": \"2022-05-31\",\n    \"gender\": \"male\",\n    \"email\": \"email\",\n    \"phone_number\": \"+55555555555\",\n    \"country\": \"test country\",\n    \"city\": \"test city\",\n    \"state\": \"test state\",\n    \"zip_code\": 10000,\n    \"address\": \"Test my address \",\n    \"twitter\": \"frfrfrfrfrf\",\n    \"facebook\": null,\n    \"instagram\": null,\n    \"linkedin\": null,\n    \"tiktok\": null,\n    \"employer_name\": \"Test employer\",\n    \"job_role\": \"CEO\",\n    \"education\": \"No education\",\n    \"other_education\": \"No test education\"\n}"
 								}
 							}
 						}
@@ -4741,17 +4719,17 @@
 											{
 												"id": 5,
 												"hashtag_name": "#hashtagagain",
-												"user_information_id": 1
+												"user_id": 1
 											},
 											{
 												"id": 6,
 												"hashtag_name": "#testagain",
-												"user_information_id": 1
+												"user_id": 1
 											},
 											{
 												"id": 14,
 												"hashtag_name": "#hashtag_andii",
-												"user_information_id": 1
+												"user_id": 1
 											}
 										]
 									},
@@ -6140,104 +6118,7 @@
 				}
 			}
 		},
-		"/user/": {
-			"get": {
-				"tags": ["user"],
-				"description": "Get all users",
-				"parameters": [
-					{
-						"name": "auth-token",
-						"in": "header",
-						"description": "Auth Token",
-						"required": true,
-						"type": "string"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "string"
-								},
-								"example": {
-									"data": {
-										"users": [
-											{
-												"id": 16,
-												"role_id": 1,
-												"full_name": "Ime Prezime",
-												"email": "mail",
-												"password": "$2b$10$jsEt2c/vNFY.ZamVzNXNKewhIoMupnZr.81uckNKdPLvZLBrb5ZRC",
-												"default_currency_id": 1,
-												"user_feature_id": null
-											},
-											{
-												"id": 17,
-												"role_id": 1,
-												"full_name": "Test",
-												"email": "user@email.com",
-												"password": "test password",
-												"default_currency_id": 1,
-												"user_feature_id": 1
-											},
-											{
-												"id": 37,
-												"role_id": 1,
-												"full_name": "ime prezime",
-												"email": "test",
-												"password": "$2b$10$Q9BzTt.cFMsuFlioq/BMYuTd5GQbCpJQU.9oAPag.JhCngu3Z7hgq",
-												"default_currency_id": 1,
-												"user_feature_id": null
-											},
-											{
-												"id": 38,
-												"role_id": 1,
-												"full_name": "imeTEST",
-												"email": "test2",
-												"password": "$2b$10$fz5vyYrjsdQIYz1KzLpmiuDcD1h.E9OASpY5mwx23V1zmNTlK6zKK",
-												"default_currency_id": 1,
-												"user_feature_id": null
-											},
-											{
-												"id": 44,
-												"role_id": 1,
-												"full_name": "ime prezime",
-												"email": "mailxxx",
-												"password": "$2b$10$MfZhYRSAmI4s2x7mbpVaX.HBFvBmcmTIkYLE9M1IN7QNTBdz4Ut72",
-												"default_currency_id": 1,
-												"user_feature_id": null
-											},
-											{
-												"id": 50,
-												"role_id": 1,
-												"full_name": "Ime Prezime",
-												"email": "NewUser2",
-												"password": "$2b$10$jDPeXmeniYQmldqkQaEaUOeeyMSbMUVruTaAxhZx0D16uUucmopp2",
-												"default_currency_id": 1,
-												"user_feature_id": 1
-											},
-											{
-												"id": 53,
-												"role_id": 1,
-												"full_name": "Ime Prezime",
-												"email": "NewUser4",
-												"password": "$2b$10$6/rsQaEGSwdEhk8pcSR7/eINFJwL/5/xy8zOT6Nj8NEkbSqkAgiRW",
-												"default_currency_id": 1,
-												"user_feature_id": null
-											}
-										]
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
+
 		"/transaction/list": {
 			"get": {
 				"tags": ["transaction"],
@@ -6745,7 +6626,7 @@
 											{
 												"id": 40,
 												"hashtag_name": "#test",
-												"user_information_id": 113
+												"user_id": 113
 											}
 										]
 									},
@@ -6800,7 +6681,7 @@
 											{
 												"id": 40,
 												"hashtag_name": "#test",
-												"user_information_id": 113
+												"user_id": 113
 											}
 										],
 										"user_information": {
@@ -7328,7 +7209,30 @@
 				}
 			}
 		},
-		"/mentor-information": {
+		"/mentor-information/": {
+			"get": {
+				"tags": ["mentor-information"],
+				"description": "Get all mentors",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successfully get mentor details",
+						"schema": {
+							"$ref": "#/components/schemas/MentorDetail"
+						}
+					}
+				}
+			}
+		},
+		"/mentor-information/{id}": {
 			"get": {
 				"tags": ["mentor-information"],
 				"description": "Get mentor informations",
@@ -7341,11 +7245,16 @@
 						"type": "string"
 					},
 					{
-						"name": "mentor_id",
-						"in": "query",
-						"description": "Mentor id",
+						"name": "id",
+						"in": "path",
+						"description": "User id",
 						"required": true,
-						"type": "integer"
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
 					}
 				],
 				"responses": {
@@ -8967,7 +8876,7 @@
 			"hashtag_add_body": {
 				"type": "object",
 				"properties": {
-					"user_information_id": {
+					"user_id": {
 						"type": "integer"
 					},
 					"hashtag_name": {
@@ -9077,7 +8986,7 @@
 			"update_id_body_2": {
 				"type": "object",
 				"properties": {
-					"user_information_id": {
+					"user_id": {
 						"type": "integer"
 					},
 					"hashtag_name": {
