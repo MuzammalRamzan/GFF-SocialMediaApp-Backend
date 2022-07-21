@@ -1,9 +1,23 @@
-import { IRoomService, RoomParams } from './interface'
+import { IRoomService, RoomParams, RoomType } from './interface'
 import { Room } from './room.model'
 import { Op } from 'sequelize'
 
 export class RoomService implements IRoomService {
 	constructor() {}
+
+	static async isUserBelongToTheRoom(room_id: number, user_id: number): Promise<boolean> {
+		const room = await Room.findOne({
+			where: { id: room_id }
+		})
+
+		if (!room) {
+			return false
+		}
+
+		const roomObj = room.toJSON() as RoomType
+
+		return roomObj.user_ids.includes(user_id)
+	}
 
 	public async getRooms(): Promise<Room[]> {
 		return await Room.findAll({})
@@ -33,11 +47,7 @@ export class RoomService implements IRoomService {
 			throw new Error('Room not found')
 		}
 
-		const user_ids = (room.get().user_ids = room
-			.get()
-			.user_ids.split(',')
-			.filter((item: number | string) => !!item)
-			.map((item: number | string) => +item))
+		const user_ids = (room.toJSON() as RoomType).user_ids
 
 		if (user_ids.includes(user_id)) {
 			return room
@@ -57,24 +67,6 @@ export class RoomService implements IRoomService {
 		}
 	}
 
-	static async isUserBelongToTheRoom(room_id: number, user_id: number): Promise<boolean> {
-		const room = await Room.findOne({
-			where: { id: room_id }
-		})
-
-		if (!room) {
-			return false
-		}
-
-		const user_ids = (room.get().user_ids = room
-			.get()
-			.user_ids.split(',')
-			.filter((item: number | string) => !!item)
-			.map((item: number | string) => +item))
-
-		return user_ids.includes(user_id)
-	}
-
 	async getAllRooms(user_id: number): Promise<Room[]> {
 		return await Room.findAll({
 			where: {
@@ -92,13 +84,37 @@ export class RoomService implements IRoomService {
 		})
 	}
 
-	async getAllUsersByRoomId(room_id: number): Promise<string[]> {
+	async getAllUsersByRoomId(room_id: number): Promise<number[]> {
 		const room = await Room.findByPk(room_id, { attributes: ['user_ids'] })
 
 		if (!room) throw new Error("Room doesn't exist")
 
-		const users: string = room.getDataValue('user_ids')
+		return (room.toJSON() as RoomType).user_ids
+	}
 
-		return users.split(',')
+	async doesRoomExist(user_ids: number[]): Promise<boolean> {
+		const totalUserIds = user_ids.length
+
+		if (!totalUserIds || totalUserIds === 1) throw new Error('User ids should be greater than or equal 2.')
+
+		const roomsByUserId = await this.getAllRooms(user_ids[0])
+
+		let roomExist = false
+
+		for (let roomIdx = 0; roomIdx < roomsByUserId.length; roomIdx++) {
+			roomExist = true
+			const room = roomsByUserId[roomIdx].toJSON() as RoomType
+			const roomUserIdsLength = room.user_ids.length
+
+			for (let userIdx = 1; userIdx < user_ids.length; userIdx++) {
+				roomExist = roomExist && totalUserIds === roomUserIdsLength && room.user_ids.includes(user_ids[userIdx])
+			}
+
+			if (roomExist) {
+				break
+			}
+		}
+
+		return roomExist
 	}
 }
