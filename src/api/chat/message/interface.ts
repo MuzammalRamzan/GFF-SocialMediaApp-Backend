@@ -24,4 +24,5 @@ export interface IMessageService {
 	subscribeToRoom(req: Request, res: Response, params: { user_id: number; room_id: number }): Promise<void>
 	subscribeToGetNewIncomingMessageNotification(req: Request, res: Response, user_id: number): Promise<void>
 	publishMessage(message: Message | null, user_id: number, room_id: number): Promise<void>
+	markMessagesAsSeen(messageIds: number[]): Promise<void>
 }

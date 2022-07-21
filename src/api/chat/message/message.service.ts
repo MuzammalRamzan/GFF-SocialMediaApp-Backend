@@ -275,4 +275,8 @@ export class MessageService implements IMessageService {
 			})
 		}
 	}
+
+	public async markMessagesAsSeen(messageIds: number[]): Promise<void> {
+		await Message.update({ read: 1 }, { where: { id: { [Op.in]: messageIds } } })
+	}
 }
