@@ -1,5 +1,6 @@
 import { Response, NextFunction } from 'express'
 import { validationResult } from 'express-validator'
+import { RoomService } from '../chat/room/room.service'
 import { IAuthenticatedRequest } from '../helper/authMiddleware'
 import { MentorInformationService } from '../mentor-information/mentorInformationService'
 import { ISarchTermParams, MentorMatcherAuthRequest } from './interface'
@@ -7,9 +8,11 @@ import { MentorMatcherService } from './mentorMatcherService'
 
 export class MentorMatcherController {
 	private readonly mentorMatcherService: MentorMatcherService
+	private readonly roomService: RoomService
 
 	constructor() {
 		this.mentorMatcherService = new MentorMatcherService()
+		this.roomService = new RoomService()
 	}
 
 	public findMentors = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
@@ -131,6 +134,18 @@ export class MentorMatcherController {
 					message: 'Mentor request not found or already approved/rejected!',
 					code: 400
 				})
+			}
+
+			const mentorMatcherReq = await this.mentorMatcherService.getMentorRequestById(request_id)
+			if (mentorMatcherReq) {
+				const users = [mentorMatcherReq.mentee_id, mentorMatcherReq.mentor_id]
+				const doesRoomExist = await this.roomService.doesRoomExist(users)
+				if (!doesRoomExist) {
+					await this.roomService.createRoom({
+						name: `Chat between ${users.join(' and ')}`,
+						user_ids: users.map(id => `${id}`)
+					})
+				}
 			}
 
 			return res.status(200).json({

@@ -19,6 +19,10 @@ export class MentorMatcherService implements IMentorMatcherService {
 
 	private USER_INFORMATION_FIELDS = USER_INFORMATION_FIELDS
 
+	async getMentorRequestById(request_id: number): Promise<IMentorMatcher> {
+		return (await MentorMatcherModel.findByPk(request_id))?.toJSON() as IMentorMatcher
+	}
+
 	async findMentors(userId: number, searchTerms: ISarchTermParams): Promise<ISearchMentors[]> {
 		const _industry = searchTerms.industry?.split(',')
 		const _role = searchTerms.role?.split(',')

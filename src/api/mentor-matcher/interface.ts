@@ -15,6 +15,7 @@ export interface IMentorMatcherService {
 	isFavoriteExist(userId: number, mentor_id: number): Promise<boolean>
 	signContract(userId: number, mentor_id: number): Promise<boolean>
 	findById(request_id: number, userId: number): Promise<IMentorMatcher>
+	getMentorRequestById(request_id: number): Promise<IMentorRequest>
 }
 
 export interface IMentorRequest {
