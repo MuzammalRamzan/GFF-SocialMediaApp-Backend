@@ -1,8 +1,9 @@
 import { DataTypes, Model } from 'sequelize'
+import { HookReturn } from 'sequelize/types/hooks'
 import { sequelize } from '../../../database'
 import { Message } from '../message/message.model'
 
-export class Room extends Model {}
+export class Room extends Model { }
 
 Room.init(
 	{
@@ -17,10 +18,9 @@ Room.init(
 			type: DataTypes.STRING,
 			allowNull: false,
 			get() {
-				let arr: string[] = (this.getDataValue('user_ids') || '').split(',')
-				arr = arr.filter(str => !!str)
-				return arr.map(userId => +userId)
-			}
+				const arr: string[] = (this.getDataValue('user_ids') || '').split(',')
+				return arr.filter(str => !!str).map(userId => +userId)
+			},
 		},
 		name: {
 			type: DataTypes.STRING,
@@ -34,7 +34,14 @@ Room.init(
 	},
 	{
 		sequelize,
-		tableName: 'room'
+		tableName: 'room',
+		hooks: {
+			beforeCreate(attributes: Room, options): HookReturn {
+				const ids = attributes.get('user_ids') as number[];
+				ids.sort((a, b) => a - b)
+				attributes.set('user_ids', ids.join(','))
+			},
+		}
 	}
 )
 

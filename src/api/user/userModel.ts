@@ -8,15 +8,14 @@ import { UserRole } from '../user-role/userRoleModel'
 export interface IUser {
 	id: number
 	email: string
-	firstname: string
-	lastname: string
+	full_name: string
 	phone_number: string
 	default_currency_id: number
 	role_id: number
 	password: string
 }
 
-export class User extends Model {}
+export class User extends Model { }
 User.init(
 	{
 		id: {
