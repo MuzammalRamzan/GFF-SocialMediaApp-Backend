@@ -1983,6 +1983,57 @@
 				}
 			}
 		},
+		"/wellness-warrior/remove": {
+			"delete": {
+				"tags": ["wellness-warrior"],
+				"description": "Remove Warrior/User",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"request_id": { "type": "integer" }
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "User/Warrior removed from your list",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": { "type": "integer" },
+										"message": { "type": "string" },
+										"data": {
+											"type": "object"
+										}
+									}
+								},
+								"exmaple": {
+									"code": 200,
+									"message": "User/Warrior removed from your list",
+									"data": {}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/wellness-warrior/send-request": {
 			"post": {
 				"tags": ["wellness-warrior"],

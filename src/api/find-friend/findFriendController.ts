@@ -2,6 +2,7 @@ import { Response, NextFunction, Request } from 'express'
 import { validationResult } from 'express-validator'
 import { RoomService } from '../chat/room/room.service'
 import { IAuthenticatedRequest } from '../helper/authMiddleware'
+import { GffError } from '../helper/errorHandler'
 import { UserService } from '../user/userService'
 import { FindFriendService } from './findFriendService'
 import { acceptRejectFriendRequest, createFindFriendRequest } from './interface'
@@ -289,7 +290,11 @@ export class FindFriendController {
 			const user_id = req.user?.id as number
 			const destroyedObjects = await this.findFriendService.unfriend(request_id, user_id)
 
-			if (!destroyedObjects) throw new Error("Friend doesn't exist")
+			if (!destroyedObjects) {
+				const error = new GffError("Friend doesn't exist")
+				error.errorCode = '403'
+				throw error
+			}
 
 			return res.status(200).json({ data: {}, message: 'Removed user from your friend list.', code: 200 })
 		} catch (err) {
