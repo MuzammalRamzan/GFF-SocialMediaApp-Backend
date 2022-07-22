@@ -7954,6 +7954,57 @@
 				}
 			}
 		},
+		"/find-friend/unfriend": {
+			"delete": {
+				"tags": ["find-friend"],
+				"description": "Unfriend user",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"request_id": { "type": "integer" }
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Removed user from friend list",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": { "type": "integer" },
+										"message": { "type": "string" },
+										"data": {
+											"type": "object"
+										}
+									}
+								},
+								"exmaple": {
+									"code": 200,
+									"message": "Removed user from your friend list.",
+									"data": {}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/find-friend/friends": {
 			"get": {
 				"tags": ["find-friend"],
