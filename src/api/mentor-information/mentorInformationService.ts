@@ -5,7 +5,7 @@ import { CreateMentorInformation, IMentorInformationService, MentorInformationTy
 import { IMentorInformation, MentorInformation } from './mentorInformationModel'
 import { GffError } from '../helper/errorHandler'
 import { UserRoleService } from '../user-role/userRoleService'
-import { USER_INFORMATION_FIELDS } from '../../helper/db.helper'
+import { MENTOR_FIELDS, USER_INFORMATION_FIELDS } from '../../helper/db.helper'
 
 export class MentorInformationService implements IMentorInformationService {
 	static async isMentorExists(userId: number): Promise<boolean> {
@@ -89,7 +89,7 @@ export class MentorInformationService implements IMentorInformationService {
 			where: {
 				user_id: mentor_id
 			},
-			attributes: ['isPassedIRT', 'industry', 'role', 'frequency', 'conversation_mode', 'languages']
+			attributes: MENTOR_FIELDS
 		})
 
 		if (!mentorInformation) {
@@ -120,7 +120,7 @@ export class MentorInformationService implements IMentorInformationService {
 			where: {
 				user_id: mentor_id
 			},
-			attributes: ['isPassedIRT', 'industry', 'role', 'frequency', 'conversation_mode', 'languages']
+			attributes: MENTOR_FIELDS
 		})
 
 		if (!mentorInformation) return null

@@ -33,14 +33,13 @@ export class UserService implements IUserService {
 		return !!user?.get()
 	}
 
-	async fetchFullUserById(userId: number): Promise<User[]> {
-		const fullUser = await sequelize.query(
-			'SELECT * FROM `user_information` INNER JOIN `user` ON user_information.user_id = user.id WHERE user_id=' +
-				userId,
-			{ type: QueryTypes.SELECT }
-		)
+	async fetchFullUserById(userId: number): Promise<User | null> {
+		const fullUser = await User.findByPk(userId, {
+			attributes: { exclude: ['password'] },
+			include: [{ model: UserInformation, as: 'user_information' }]
+		})
 
-		return fullUser as User[]
+		return fullUser?.get()
 	}
 
 	async list(role: string | undefined, pagination: PaginationType): Promise<PaginatedUserResult> {
@@ -52,11 +51,11 @@ export class UserService implements IUserService {
 					where: {
 						role_id: role
 							? {
-									[Op.eq]: role
-							  }
+								[Op.eq]: role
+							}
 							: {
-									[Op.ne]: adminRole?.get('id')
-							  }
+								[Op.ne]: adminRole?.get('id')
+							}
 					},
 					attributes: { exclude: ['password'] },
 					include: [
@@ -153,44 +152,6 @@ export class UserService implements IUserService {
 		})
 
 		return deletedRow
-	}
-
-	async searchFriend(searchTerm: string, userId: number): Promise<ISearchUser[]> {
-		const user = await User.findAll({
-			where: {
-				[Op.or]: [
-					{
-						firstname: {
-							[Op.like]: `%${searchTerm}%`
-						}
-					},
-					{
-						lastname: {
-							[Op.like]: `%${searchTerm}%`
-						}
-					}
-				],
-				id: {
-					[Op.ne]: userId
-				}
-			}
-		})
-
-		return user.map(user => {
-			const data = user.get()
-			return {
-				id: data.id,
-				firstname: data.firstname,
-				lastname: data.lastname
-			}
-		})
-	}
-
-	deactivateUserAccount = async (userId: number): Promise<User> => {
-		await User.update({ deactivated: 1 }, { where: { id: userId } })
-
-		const user = await User.findByPk(userId, { attributes: ['deactivated', 'id'] })
-		return user as User
 	}
 
 	getMyInfo = async (userId: number): Promise<null | UserInfo> => {
@@ -352,5 +313,19 @@ export class UserService implements IUserService {
 			warrior_request,
 			hashtags
 		}
+	}
+
+	deactivateUserAccount = async (userId: number): Promise<User> => {
+		const user = await User.findByPk(userId)
+
+		if (!user) {
+			const error = new GffError('User not found!')
+			error.errorCode = '404'
+			throw error
+		}
+
+		user.set({ deactivated: true });
+
+		return await user.save()
 	}
 }

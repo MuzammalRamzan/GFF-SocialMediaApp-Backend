@@ -27,7 +27,7 @@ const handleError = (err: any, req: IAuthenticatedRequest, res: Response) => {
 		error.errorCode = '500'
 		error.httpStatusCode = 500
 	}
-	return jsonErrorHandler(error, req, res, () => {})
+	return jsonErrorHandler(error, req, res, () => { })
 }
 export class UserController {
 	private readonly userService: UserService
@@ -70,7 +70,7 @@ export class UserController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -103,7 +103,7 @@ export class UserController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -111,7 +111,7 @@ export class UserController {
 		const userId = +req.user.id
 		try {
 			const fullUser = await this.userService.fetchFullUserById(userId)
-			if (!fullUser.length) {
+			if (!fullUser) {
 				throw new Error('No data found')
 			}
 			return res.status(200).send({
@@ -133,7 +133,7 @@ export class UserController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -164,7 +164,7 @@ export class UserController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -189,7 +189,7 @@ export class UserController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -214,38 +214,7 @@ export class UserController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
-		}
-	}
-
-	searchFriend = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
-		const search = req.query.search as string
-		const userId = req?.user?.id as number
-		try {
-			const users = await this.userService.searchFriend(search, userId)
-			if (!users.length) {
-				throw new Error('No data found')
-			}
-			return res.status(200).send({
-				data: {
-					users
-				},
-				code: 200,
-				message: 'OK'
-			})
-		} catch (err) {
-			const error = err as GffError
-			if (error.message === 'Unauthorized') {
-				error.errorCode = '401'
-				error.httpStatusCode = 401
-			} else if (error.message === 'No data found') {
-				error.errorCode = '404'
-				error.httpStatusCode = 404
-			} else {
-				error.errorCode = '500'
-				error.httpStatusCode = 500
-			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 

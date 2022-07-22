@@ -21,5 +21,7 @@
 		new SubscribePane(document.getElementById('subscribe'), 'subscribe?random=' + Math.random())
 		// fetch all messages on load
 		new GetAllMessages(document.getElementById('subscribe'))
+		// Receive new incoming message notification
+		new SubscribeToGetUnreadMessageNotification()
 	</script>
 </html>

@@ -1211,82 +1211,6 @@
 				}
 			}
 		},
-		"/hashtag/add": {
-			"post": {
-				"tags": ["hashtag"],
-				"description": "Add new hashtag",
-				"parameters": [
-					{
-						"name": "user_id",
-						"in": "path",
-						"description": "User ID",
-						"required": true,
-						"type": "integer",
-						"example": 169
-					},
-					{
-						"name": "auth-token",
-						"in": "header",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "string"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"data": {
-										"warriorInformation": {
-											"id": 169,
-											"full_name": "undefined",
-											"user_information": {
-												"profile_url": null,
-												"bio": "Test my bio",
-												"date_of_birth": "2022-05-31",
-												"gender": "other",
-												"job_role": "CEO",
-												"education": "No education"
-											},
-											"warrior_information": {
-												"specialty": ["str"],
-												"certification": ["long string"],
-												"therapy_type": ["short"],
-												"price_range": ["12"]
-											}
-										}
-									},
-									"message": "Warrior information retrieved successfully",
-									"code": 200
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
-								}
-							}
-						}
-					}
-				}
-			}
-		},
 		"/warrior-information": {
 			"get": {
 				"tags": ["warrior-information"],
@@ -4225,7 +4149,7 @@
 							},
 							"examples": {
 								"0": {
-									"value": "{\n    \"hashtag_name\": \" testni hashtag\",\n    \"user_information_id\": 2\n}"
+									"value": "{\n    \"hashtag_name\": \" testni hashtag\"\n}"
 								}
 							}
 						}
@@ -4244,7 +4168,7 @@
 										"hashtag": {
 											"id": 18,
 											"hashtag_name": "#test2",
-											"user_information_id": 2
+											"user_id": 2
 										}
 									},
 									"code": 200,
@@ -4447,7 +4371,7 @@
 							},
 							"examples": {
 								"0": {
-									"value": "{\n            \"hashtag_name\": \"#hashtagagain\",\n            \"user_information_id\": 1\n        }"
+									"value": "{\n            \"hashtag_name\": \"#hashtagagain\",\n            \"user_id\": 1\n        }"
 								}
 							}
 						}
@@ -4466,7 +4390,7 @@
 										"hashtag": {
 											"id": 5,
 											"hashtag_name": "#BBB",
-											"user_information_id": 1
+											"user_id": 1
 										}
 									},
 									"code": 200,
@@ -4564,22 +4488,22 @@
 											{
 												"id": 1,
 												"hashtag_name": "#test",
-												"user_information_id": 1
+												"user_id": 1
 											},
 											{
 												"id": 5,
 												"hashtag_name": "#hashtagagain",
-												"user_information_id": 1
+												"user_id": 1
 											},
 											{
 												"id": 6,
 												"hashtag_name": "#testagain",
-												"user_information_id": 1
+												"user_id": 1
 											},
 											{
 												"id": 13,
 												"hashtag_name": "#hashtagagain",
-												"user_information_id": 2
+												"user_id": 2
 											}
 										]
 									},
@@ -4795,17 +4719,17 @@
 											{
 												"id": 5,
 												"hashtag_name": "#hashtagagain",
-												"user_information_id": 1
+												"user_id": 1
 											},
 											{
 												"id": 6,
 												"hashtag_name": "#testagain",
-												"user_information_id": 1
+												"user_id": 1
 											},
 											{
 												"id": 14,
 												"hashtag_name": "#hashtag_andii",
-												"user_information_id": 1
+												"user_id": 1
 											}
 										]
 									},
@@ -6702,7 +6626,7 @@
 											{
 												"id": 40,
 												"hashtag_name": "#test",
-												"user_information_id": 113
+												"user_id": 113
 											}
 										]
 									},
@@ -6757,7 +6681,7 @@
 											{
 												"id": 40,
 												"hashtag_name": "#test",
-												"user_information_id": 113
+												"user_id": 113
 											}
 										],
 										"user_information": {
@@ -8952,7 +8876,7 @@
 			"hashtag_add_body": {
 				"type": "object",
 				"properties": {
-					"user_information_id": {
+					"user_id": {
 						"type": "integer"
 					},
 					"hashtag_name": {
@@ -9062,7 +8986,7 @@
 			"update_id_body_2": {
 				"type": "object",
 				"properties": {
-					"user_information_id": {
+					"user_id": {
 						"type": "integer"
 					},
 					"hashtag_name": {
