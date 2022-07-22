@@ -9,7 +9,7 @@ export const adminMiddleware = async (req: IAuthenticatedRequest, res: Response,
 		if (req.user?.role_id !== adminRole?.getDataValue('id')) {
 			throw new Error('Unauthorized')
 		}
-		return next();
+		return next()
 	} catch (error) {
 		console.log(error)
 		res.status(401).send({ message: 'Unauthorized', status: 401 })
