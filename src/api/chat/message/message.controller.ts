@@ -127,4 +127,16 @@ export class MessageController {
 			next(error)
 		}
 	}
+
+	markMessagesAsSeen = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+		try {
+			const messageIds = req.body.messageIds as number[]
+
+			await this.messageService.markMessagesAsSeen(messageIds)
+
+			return res.status(200).json({ data: { messagesRead: messageIds.length }, message: 'OK', code: 200 })
+		} catch (error) {
+			next(error)
+		}
+	}
 }

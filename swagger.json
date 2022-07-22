@@ -8188,7 +8188,6 @@
 				"tags": ["uploads"],
 				"description": "Get uploaded file/image",
 				"parameters": [
-					
 					{
 						"name": "path",
 						"in": "query",
@@ -8262,7 +8261,7 @@
 				}
 			}
 		},
-		"/room/all":{
+		"/room/all": {
 			"get": {
 				"tags": ["chat"],
 				"description": "Get all room details",
@@ -8437,6 +8436,228 @@
 				}
 			}
 		},
+		"/message/all": {
+			"get": {
+				"tags": ["chat"],
+				"description": "Get all messages by user id",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"data": {
+											"type": "object",
+											"properties": {
+												"messages": {
+													"type": "array",
+													"items": { "properties": "object", "$ref": "#/components/schemas/Message" }
+												}
+											}
+										},
+										"message": { "type": "string" },
+										"code": { "type": "integer" }
+									}
+								},
+								"example": {
+									"data": {
+										"messages": [
+											{
+												"id": 11,
+												"user_id": 259,
+												"body": "Hey",
+												"room_id": 1,
+												"created_at": "2022-07-12T15:27:29.000Z",
+												"user": {
+													"id": 259,
+													"full_name": "Ime Prezime",
+													"user_information": null
+												}
+											}
+										]
+									},
+									"message": "OK",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/message/unread": {
+			"get": {
+				"tags": ["chat"],
+				"description": "Get all unread messages of a user",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"data": {
+											"type": "object",
+											"properties": {
+												"unreadMessages": {
+													"type": "array",
+													"items": { "properties": "object", "$ref": "#/components/schemas/Message" }
+												}
+											}
+										},
+										"message": { "type": "string" },
+										"code": { "type": "integer" }
+									}
+								},
+								"example": {
+									"data": {
+										"unreadMessages": [
+											{
+												"id": 11,
+												"user_id": 259,
+												"body": "Hey",
+												"room_id": 1,
+												"created_at": "2022-07-12T15:27:29.000Z",
+												"user": {
+													"id": 259,
+													"full_name": "Ime Prezime",
+													"user_information": null
+												}
+											}
+										]
+									},
+									"message": "OK",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/message/unread/count": {
+			"get": {
+				"tags": ["chat"],
+				"description": "Get a count of unread messages by user id",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"data": {
+											"type": "object",
+											"properties": {
+												"unreadMessageCount": {
+													"type": "integer"
+												}
+											}
+										},
+										"message": { "type": "string" },
+										"code": { "type": "integer" }
+									}
+								},
+								"example": {
+									"data": {
+										"unreadMessageCount": 3
+									},
+									"message": "OK",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/message/subscribe": {
+			"get": {
+				"tags": ["chat"],
+				"description": "Subscribe to receive notification of new incoming messages",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"data": {
+											"type": "object",
+											"properties": {
+												"messages": {
+													"type": "array",
+													"items": { "properties": "object", "$ref": "#/components/schemas/Message" }
+												}
+											}
+										},
+										"message": { "type": "string" },
+										"code": { "type": "integer" }
+									}
+								},
+								"example": {
+									"data": {
+										"messages": [
+											{
+												"id": 11,
+												"user_id": 259,
+												"body": "Hey",
+												"room_id": 1,
+												"created_at": "2022-07-12T15:27:29.000Z",
+												"user": {
+													"id": 259,
+													"full_name": "Ime Prezime",
+													"user_information": null
+												}
+											}
+										]
+									},
+									"message": "OK",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/message/send/room/{id}": {
 			"post": {
 				"tags": ["chat"],
@@ -8476,6 +8697,17 @@
 						"description": "",
 						"content": {
 							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"data": {
+											"type": "object",
+											"properties": { "message": { "type": "object", "$ref": "#/components/schemas/Message" } }
+										},
+										"message": { "type": "string" },
+										"code": { "type": "integer" }
+									}
+								},
 								"example": {
 									"data": {
 										"message": {
@@ -8542,6 +8774,17 @@
 						"description": "",
 						"content": {
 							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"data": {
+											"type": "object",
+											"properties": { "messages": { "type": "array", "$ref": "#/components/schemas/Message" } }
+										},
+										"message": { "type": "string" },
+										"code": { "type": "integer" }
+									}
+								},
 								"example": {
 									"data": {
 										"message": [
@@ -8598,6 +8841,17 @@
 						"description": "",
 						"content": {
 							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"data": {
+											"type": "object",
+											"properties": { "messages": { "type": "object", "$ref": "#/components/schemas/Message" } }
+										},
+										"message": { "type": "string" },
+										"code": { "type": "integer" }
+									}
+								},
 								"example": {
 									"data": {
 										"message": {
@@ -9398,6 +9652,17 @@
 					"name": {
 						"type": "string"
 					}
+				}
+			},
+			"Message": {
+				"type": "object",
+				"properties": {
+					"id": { "type": "integer" },
+					"user_id": { "type": "integer" },
+					"body": { "type": "string" },
+					"read": { "type": "boolean" },
+					"room_id": { "type": "integer" },
+					"created_at": { "type": "string", "format": "date" }
 				}
 			}
 		}

@@ -1,5 +1,6 @@
 import { Response, NextFunction, Request } from 'express'
 import { validationResult } from 'express-validator'
+import { RoomService } from '../chat/room/room.service'
 import { IAuthenticatedRequest } from '../helper/authMiddleware'
 import { UserService } from '../user/userService'
 import { FindFriendService } from './findFriendService'
@@ -7,9 +8,13 @@ import { acceptRejectFriendRequest, createFindFriendRequest } from './interface'
 
 export class FindFriendController {
   private readonly findFriendService: FindFriendService
+  private readonly roomService: RoomService
+  private readonly userService: UserService
 
   constructor() {
+    this.roomService = new RoomService()
     this.findFriendService = new FindFriendService()
+    this.userService = new UserService()
   }
 
   findFriend = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
@@ -108,7 +113,23 @@ export class FindFriendController {
     try {
       const userId = req?.user?.id as number;
       const id = +req.body.request_id;
+
       const acceptFriendRequest = await this.findFriendService.approve(id, userId)
+
+      if (acceptFriendRequest) {
+        const users = [acceptFriendRequest.get('sender_id') as number, acceptFriendRequest.get('receiver_id') as number]
+
+        const user = await this.userService.fetchById(0, acceptFriendRequest.get('sender_id') as number)
+
+        const doesRoomExist = await this.roomService.doesRoomExist(users)
+        if (!doesRoomExist) {
+          await this.roomService.createRoom({
+            name: `${req.user?.full_name} and ${user.getDataValue('full_name')}`,
+            user_ids: users.map(id => `${id}`)
+          })
+        }
+      }
+
       return res.status(200).send({
         data: {
           requests: acceptFriendRequest
