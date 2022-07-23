@@ -1983,7 +1983,7 @@
 				}
 			}
 		},
-		"/wellness-warrior/remove": {
+		"/wellness-warrior/": {
 			"delete": {
 				"tags": ["wellness-warrior"],
 				"description": "Remove Warrior/User",
@@ -7838,6 +7838,57 @@
 						"description": "Success",
 						"schema": {
 							"$ref": "#/components/schemas/Mentor"
+						}
+					}
+				}
+			}
+		},
+		"/mentor-matcher/": {
+			"delete": {
+				"tags": ["mentor-matcher"],
+				"description": "Remove Mentor/User",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"request_id": { "type": "integer" }
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "User/Mentor removed from your list",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": { "type": "integer" },
+										"message": { "type": "string" },
+										"data": {
+											"type": "object"
+										}
+									}
+								},
+								"exmaple": {
+									"code": 200,
+									"message": "User/Mentor removed from your list",
+									"data": {}
+								}
+							}
 						}
 					}
 				}

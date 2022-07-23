@@ -2,8 +2,10 @@ import { Response, NextFunction } from 'express'
 import { validationResult } from 'express-validator'
 import { RoomService } from '../chat/room/room.service'
 import { IAuthenticatedRequest } from '../helper/authMiddleware'
+import { GffError } from '../helper/errorHandler'
 import { MentorInformationService } from '../mentor-information/mentorInformationService'
-import { ISarchTermParams, MentorMatcherAuthRequest } from './interface'
+import { UserRoleService } from '../user-role/userRoleService'
+import { ISarchTermParams, MentorMatcherAuthRequest, removeMentorParams } from './interface'
 import { MentorMatcherService } from './mentorMatcherService'
 
 export class MentorMatcherController {
@@ -331,6 +333,46 @@ export class MentorMatcherController {
 				message: result
 					? 'Contract signed successfully!'
 					: 'The contract has been signed already or the mentor request is not accepted!',
+				code: 200
+			})
+		} catch (error) {
+			next(error)
+		}
+	}
+
+	public removeMentor = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+		try {
+			const user_id = req?.user?.id as number
+			const role_id = req?.user?.role_id as number
+			const request_id = req.body?.request_id as number
+
+			if (!request_id) {
+				const error = new GffError('Please send request_id with the request')
+				error.errorCode = '403'
+				throw error
+			}
+
+			let params: removeMentorParams = { mentee_id: 0, mentor_id: 0 }
+			const mentorRole = await UserRoleService.fetchMentorRole()
+			if (mentorRole?.getDataValue('id') === role_id) {
+				params['mentor_id'] = user_id
+				delete params.mentee_id
+			} else {
+				params['mentee_id'] = user_id
+				delete params.mentor_id
+			}
+
+			const destroyedMentorMatcherObject = await this.mentorMatcherService.removeMentor(request_id, params)
+
+			if (!destroyedMentorMatcherObject) {
+				const error = new GffError(`${params.mentor_id ? 'User' : 'Mentor'} doesn't exist`)
+				error.errorCode = '403'
+				throw error
+			}
+
+			return res.status(200).json({
+				data: {},
+				message: `${params.mentor_id ? 'User' : 'Mentor'} removed from your list`,
 				code: 200
 			})
 		} catch (error) {
