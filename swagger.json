@@ -2460,16 +2460,16 @@
 								},
 								"example": {
 									"data": {
-										"dailyDose": {
-											"id": 2,
-											"title": "Chirag",
-											"subtitle": "abc",
-											"image": "https://image.png",
-											"category": "news"
-										}
+										"id": 4,
+										"title": "abc",
+										"subtitle": "abc",
+										"image": "https://girls-first-finance.s3.amazonaws.com//uploads/dailyArticle/images/1658829054602_SAVAGE.be91855464b02bcda981.png",
+										"contentURL": "chirag agrawal",
+										"keyWord": "chirag",
+										"category": "[\"news\",\"friend-finder\"]"
 									},
 									"code": 200,
-									"message": "OK"
+									"message": "dailyArticle posted successfully"
 								}
 							}
 						}
@@ -2546,16 +2546,17 @@
 								},
 								"example": {
 									"data": {
-										"dailyDose": {
-											"id": 2,
-											"title": "Chirag Agrawal",
-											"subtitle": "abc",
-											"image": "https://image.png",
-											"category": "news"
-										}
+										"id": 4,
+										"title": "Chirag agrawal",
+										"subtitle": "abc",
+										"image": "https://girls-first-finance.s3.amazonaws.com//uploads/dailyArticle/images/1658829475794_splassive.2e66af6fb1bc74651dc8.png",
+										"contentURL": "chirag agrawal",
+										"contentBody": null,
+										"keyWord": "chirag",
+										"category": "[\"news\",\"friend-finder\"]"
 									},
 									"code": 200,
-									"message": "OK"
+									"message": "dailyArticle updated successfully"
 								}
 							}
 						}
@@ -2605,93 +2606,30 @@
 									"type": "string"
 								},
 								"example": {
-									"data": {
-										"dailyDose": [
-											{
-												"id": 16,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 17,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 18,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 19,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 20,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 21,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 22,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 23,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "wise-words"
-											},
-											{
-												"id": 24,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "music"
-											}
-										]
-									},
+									"data": [
+										{
+											"id": 2,
+											"title": "abc",
+											"subtitle": "abc",
+											"image": "https://girls-first-finance.s3.amazonaws.com/uploads/dailyArticle/images/1656924004579_1656412524843_abc_(1).png",
+											"contentURL": "chirag agrawal",
+											"contentBody": null,
+											"keyWord": "chirag",
+											"category": "[\"news\",\"friend-finder\"]"
+										},
+										{
+											"id": 4,
+											"title": "abc",
+											"subtitle": "abc",
+											"image": "https://girls-first-finance.s3.amazonaws.com//uploads/dailyArticle/images/1658829054602_SAVAGE.be91855464b02bcda981.png",
+											"contentURL": "chirag agrawal",
+											"contentBody": null,
+											"keyWord": "chirag",
+											"category": "[\"news\",\"friend-finder\"]"
+										}
+									],
 									"code": 200,
-									"message": "OK"
+									"message": "dailyArticle data!"
 								}
 							}
 						}
@@ -2747,11 +2685,9 @@
 									"type": "string"
 								},
 								"example": {
-									"data": {
-										"dailyDose": 1
-									},
+									"data": 1,
 									"code": 200,
-									"message": "OK"
+									"message": "dailyArticle deleted successfully"
 								}
 							}
 						}
@@ -2795,7 +2731,9 @@
 									"title": { "type": "string", "format": "string" },
 									"subtitle": { "type": "string", "format": "string" },
 									"contentURL": { "type": "string", "format": "string" },
-									"keyWord": { "type": "string", "format": "string" },
+									"keyWord[0]": { "type": "string", "format": "string" },
+									"keyWord[1]": { "type": "string", "format": "string" },
+									"keyWord[2]": { "type": "string", "format": "string" },
 									"category": { "type": "string", "format": "string" },
 									"contentBody": { "type": "string", "format": "string" },
 									"Image": { "type": "string", "format": "binary" }
@@ -2814,16 +2752,17 @@
 								},
 								"example": {
 									"data": {
-										"dailyDose": {
-											"id": 2,
-											"title": "Chirag",
-											"subtitle": "abc",
-											"image": "https://image.png",
-											"category": "news"
-										}
+										"id": 2,
+										"title": "This is title",
+										"subtitle": "This is subtitle",
+										"image": "https://girls-first-finance.s3.amazonaws.com//uploads/dailyDose/images/1658830092394_SAVAGE.be91855464b02bcda981.png",
+										"contentURL": "This is contentURL",
+										"keyWord": "[\"1st\",\"second\"]",
+										"category": "news",
+										"contentBody": "This is contentBody"
 									},
 									"code": 200,
-									"message": "OK"
+									"message": "DailyDose posted sucessfully"
 								}
 							}
 						}
@@ -2898,16 +2837,17 @@
 								},
 								"example": {
 									"data": {
-										"dailyDose": {
-											"id": 2,
-											"title": "Chirag Agrawal",
-											"subtitle": "abc",
-											"image": "https://image.png",
-											"category": "news"
-										}
+										"id": 24,
+										"title": "This is title",
+										"subtitle": "This is subtitle",
+										"image": "/uploads/dailyDose/images/1658827599568_splassive.2e66af6fb1bc74651dc8.png",
+										"contentURL": "This is contentURL",
+										"contentBody": "This is contentBody",
+										"keyWord": "This is Keywords",
+										"category": "news"
 									},
 									"code": 200,
-									"message": "OK"
+									"message": "DailyDose Updated Successfully"
 								}
 							}
 						}
@@ -2957,93 +2897,20 @@
 									"type": "string"
 								},
 								"example": {
-									"data": {
-										"dailyDose": [
-											{
-												"id": 16,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 17,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 18,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 19,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 20,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 21,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 22,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 23,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "wise-words"
-											},
-											{
-												"id": 24,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "music"
-											}
-										]
-									},
+									"data": [
+										{
+											"id": 2,
+											"title": "This is title",
+											"subtitle": "This is subtitle",
+											"image": "https://girls-first-finance.s3.amazonaws.com//uploads/dailyDose/images/1658830092394_SAVAGE.be91855464b02bcda981.png",
+											"contentURL": "This is contentURL",
+											"contentBody": "This is contentBody",
+											"keyWord": "[\"1st\",\"second\"]",
+											"category": "news"
+										}
+									],
 									"code": 200,
-									"message": "OK"
+									"message": "DailyDose Data for all category 'news'"
 								}
 							}
 						}
@@ -3099,11 +2966,9 @@
 									"type": "string"
 								},
 								"example": {
-									"data": {
-										"dailyDose": 1
-									},
+									"data": 1,
 									"code": 200,
-									"message": "OK"
+									"message": "DailyDose deleted successfully"
 								}
 							}
 						}

@@ -30,7 +30,7 @@ export class DailyArticleController {
 			params.image = AWS_S3_BASE_BUCKET_URL + uploadImageInfo.Key
 			params.category = JSON.stringify(params.category)
 			const dailyArticle = await this.ArticleService.add(params)
-			return res.status(200).json({ dailyArticle })
+			return res.status(200).json({ data: dailyArticle, code: 200, message: 'dailyArticle posted successfully' })
 		} catch (err) {
 			next(err)
 		}
@@ -47,7 +47,7 @@ export class DailyArticleController {
 			if (!dailyArticle) {
 				throw new Error('No data found')
 			}
-			return res.status(200).json({ dailyArticle })
+			return res.status(200).json({ data: dailyArticle, code: 200, message: 'dailyArticle data!' })
 		} catch (err) {
 			next(err)
 		}
@@ -62,7 +62,7 @@ export class DailyArticleController {
 				params.image = AWS_S3_BASE_BUCKET_URL + uploadImageInfo.Key
 			}
 			const dailyArticle = await this.ArticleService.update(id, params)
-			return res.status(200).json({ dailyArticle })
+			return res.status(200).json({ data: dailyArticle, code: 200, message: 'dailyArticle updated successfully' })
 		} catch (err) {
 			next(err)
 		}
@@ -71,7 +71,7 @@ export class DailyArticleController {
 		const id = +req.params.id
 		try {
 			const dailyArticle = await this.ArticleService.delete(id)
-			return res.status(200).json({ dailyArticle })
+			return res.status(200).json({ data: dailyArticle, code: 200, message: 'dailyArticle deleted successfully' })
 		} catch (err) {
 			next(err)
 		}
