@@ -30,7 +30,7 @@ export class AuthController {
 			const error = err as GffError
 			error.errorCode = '400'
 			error.httpStatusCode = 400
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -67,7 +67,7 @@ export class AuthController {
 			if (!error?.httpStatusCode) {
 				error.httpStatusCode = 404
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -106,7 +106,7 @@ export class AuthController {
 			if (!error?.httpStatusCode) {
 				error.httpStatusCode = 404
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -116,13 +116,13 @@ export class AuthController {
 			const body = req.body as resetPasswordBodyType
 
 			if (body.newPassword === body.password)
-				throw new GffError('Both old and new password can not be same!', { errorCode: '403' })
+				throw new GffError('Both old and new password can not be same!', { errorCode: '401' })
 
 			if (!user?.email) throw new GffError('User email not found!', { errorCode: '404' })
 
 			const isAuthenticatedUser = await this.authService.checkCreds(user?.email, body.password)
 
-			if (!isAuthenticatedUser) throw new GffError('Wrong username or password!', { errorCode: '403' })
+			if (!isAuthenticatedUser) throw new GffError('Wrong username or password!', { errorCode: '401' })
 
 			await this.authService.updatePassword(user.id, body.newPassword)
 
