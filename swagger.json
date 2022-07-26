@@ -2365,74 +2365,7 @@
 				}
 			}
 		},
-		"/auth/signup": {
-			"post": {
-				"tags": ["auth"],
-				"description": "",
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/auth_signup_body"
-							},
-							"examples": {
-								"0": {
-									"value": "{\n    \"full_name\": \"Ime Prezime\",\n    \"email\": \"test2\",\n    \"password\": \"password\"\n}"
-								}
-							}
-						}
-					}
-				},
-				"responses": {
-					"200": {
-						"description": "",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "string"
-								},
-								"example": {
-									"data": {
-										"user": {
-											"user_feature_id": null,
-											"id": 199,
-											"role_id": "1",
-											"full_name": "Ime Prezime",
-											"email": "lucijan@cinnnnn.com",
-											"password": "$2b$10$zDEMooMlyk9uWGTMlaFrGOagCWBnSEP.Ok/DUO75mj7a1UwZ.IyCm",
-											"default_currency_id": "1"
-										}
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "Bad Request",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"examples": {
-									"0": {
-										"value": "{\n    \"message\": \"'body.password' with value 'vfvf' fails to match the required pattern: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/\",\n    \"field\": \"body.password\"\n} "
-									},
-									"1": {
-										"value": "{\n    \"message\": \"'body.email' with value 'hdhdhdrr.od' fails to match the required pattern: /^([a-zA-Z0-9_.-]+)@([a-zA-Z0-9_.-]+)\\\\.([a-zA-Z]{2,5})$/\",\n    \"field\": \"body.email\"\n}"
-									},
-									"2": {
-										"value": "{\n    \"message\": \"'body.full_name' length must be at least 3 characters long\",\n    \"field\": \"body.full_name\"\n}  "
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		},
+
 		"/dailyArticle/add": {
 			"post": {
 				"tags": ["dailyArticle"],
@@ -5502,6 +5435,52 @@
 								"example": {
 									"error": "404",
 									"message": "Wrong username or password!"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/reset-password": {
+			"put": {
+				"tags": ["auth"],
+				"description": "Reset a password",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"password": { "type": "string", "description": "Old Password" },
+									"newPassword": { "type": "string", "description": "New Password" }
+								}
+							},
+							"examples": { "0": { "newPassword": "654321", "password": "123456" } }
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {},
+									"code": 200,
+									"message": "Password has been updated!"
 								}
 							}
 						}
