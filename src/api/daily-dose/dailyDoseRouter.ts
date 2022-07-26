@@ -2,7 +2,6 @@ import express, { Application } from 'express'
 import { authMiddleware } from '../helper/authMiddleware'
 import { DailyDoseController } from './dailyDoseController'
 import multer from 'multer'
-
 const dailyDoseController = new DailyDoseController()
 export const dailyDoseRouter = express.Router()
 

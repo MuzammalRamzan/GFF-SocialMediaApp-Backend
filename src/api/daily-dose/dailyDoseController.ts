@@ -17,16 +17,18 @@ export class DailyDoseController {
 			if (!req.file) {
 				throw new Error('Please upload a file')
 			}
-			const uploadImageInfo = await this.debtService.upload(req.file)
-			params.image = AWS_S3_BASE_BUCKET_URL + uploadImageInfo.Key
+			// const uploadImageInfo = await this.debtService.upload(req.file)
+			// params.image = AWS_S3_BASE_BUCKET_URL + uploadImageInfo.Key
+			params.image =
+				'https://girls-first-finance.s3.amazonaws.com//uploads/dailyDose/images/1658830092394_SAVAGE.be91855464b02bcda981.png'
 			params.keyWord = JSON.stringify(params.keyWord)
-			if (
-				params.category !== categoryType.MUSIC &&
-				params.category !== categoryType.NEWS &&
-				params.category !== categoryType.WISEWORD
-			) {
-				throw new Error('The category type should be news, music or wise-words')
-			}
+			// if (
+			// 	params.category !== categoryType.MUSIC &&
+			// 	params.category !== categoryType.NEWS &&
+			// 	params.category !== categoryType.WISEWORD
+			// ) {
+			// 	throw new Error('The category type should be news, music or wise-words')
+			// }
 			const dailyDose = await this.debtService.add(params)
 			return res.status(200).json({ data: dailyDose, code: 200, message: `DailyDose posted sucessfully` })
 		} catch (err) {
