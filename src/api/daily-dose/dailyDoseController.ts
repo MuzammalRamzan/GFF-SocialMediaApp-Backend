@@ -22,8 +22,8 @@ export class DailyDoseController {
 			params.keyWord = JSON.stringify(params.keyWord)
 			if (
 				params.category !== categoryType.MUSIC &&
-				params.category != categoryType.NEWS &&
-				params.category != categoryType.WISEWORD
+				params.category !== categoryType.NEWS &&
+				params.category !== categoryType.WISEWORD
 			) {
 				throw new Error('The category type should be news, music or wise-words')
 			}
