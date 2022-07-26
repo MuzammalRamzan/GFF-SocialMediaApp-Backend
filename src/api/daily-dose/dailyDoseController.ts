@@ -18,15 +18,15 @@ export class DailyDoseController {
 			if (!req.file) {
 				throw new Error('Please upload a file')
 			}
-			const uploadImageInfo = await this.debtService.upload(req.file)
-			params.image = AWS_S3_BASE_BUCKET_URL + uploadImageInfo.Key
-			params.keyWord = JSON.stringify(params.keyWord)
 			const errors = validationResult(req).array({ onlyFirstError: true })
 			if (errors.length) {
 				return res
 					.status(400)
 					.json({ errors: errors, message: 'The category type should be news, music or wise-words', code: 400 })
 			}
+			const uploadImageInfo = await this.debtService.upload(req.file)
+			params.image = AWS_S3_BASE_BUCKET_URL + uploadImageInfo.Key
+			params.keyWord = JSON.stringify(params.keyWord)
 			const dailyDose = await this.debtService.add(params)
 			return res.status(200).json({ data: dailyDose, code: 200, message: `DailyDose posted sucessfully` })
 		} catch (err) {
