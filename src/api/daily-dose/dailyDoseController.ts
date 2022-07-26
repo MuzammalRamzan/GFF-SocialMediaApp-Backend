@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { AWS_S3_BASE_BUCKET_URL } from '../../constants'
 import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import { DailyDoseService } from './dailyDoseServices'
+import { validationResult } from 'express-validator'
 import { categoryType } from './interface'
 
 import { createDoseRequest, GetByIdRequest, UpdateDoseRequest, DeleteDoseRequest } from './interface'
@@ -20,12 +21,11 @@ export class DailyDoseController {
 			const uploadImageInfo = await this.debtService.upload(req.file)
 			params.image = AWS_S3_BASE_BUCKET_URL + uploadImageInfo.Key
 			params.keyWord = JSON.stringify(params.keyWord)
-			if (
-				params.category !== categoryType.MUSIC &&
-				params.category !== categoryType.NEWS &&
-				params.category !== categoryType.WISEWORD
-			) {
-				throw new Error('The category type should be news, music or wise-words')
+			const errors = validationResult(req).array({ onlyFirstError: true })
+			if (errors.length) {
+				return res
+					.status(400)
+					.json({ errors: errors, message: 'The category type should be news, music or wise-words', code: 400 })
 			}
 			const dailyDose = await this.debtService.add(params)
 			return res.status(200).json({ data: dailyDose, code: 200, message: `DailyDose posted sucessfully` })
