@@ -25,7 +25,7 @@ export class DailyDoseController {
 				params.category != categoryType.NEWS &&
 				params.category != categoryType.WISEWORD
 			) {
-				throw new Error('Enum can be one of them:news,music,wise-words')
+				throw new Error('The category type should be news, music or wise-words')
 			}
 			const dailyDose = await this.debtService.add(params)
 			return res.status(200).json({ data: dailyDose, code: 200, message: `DailyDose posted sucessfully` })
