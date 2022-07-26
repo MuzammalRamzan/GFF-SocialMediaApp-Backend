@@ -1983,6 +1983,57 @@
 				}
 			}
 		},
+		"/wellness-warrior/": {
+			"delete": {
+				"tags": ["wellness-warrior"],
+				"description": "Remove Warrior/User",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"request_id": { "type": "integer" }
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "User/Warrior removed from your list",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": { "type": "integer" },
+										"message": { "type": "string" },
+										"data": {
+											"type": "object"
+										}
+									}
+								},
+								"exmaple": {
+									"code": 200,
+									"message": "User/Warrior removed from your list",
+									"data": {}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/wellness-warrior/send-request": {
 			"post": {
 				"tags": ["wellness-warrior"],
@@ -7771,6 +7822,57 @@
 				}
 			}
 		},
+		"/mentor-matcher/": {
+			"delete": {
+				"tags": ["mentor-matcher"],
+				"description": "Remove Mentor/User",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"request_id": { "type": "integer" }
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "User/Mentor removed from your list",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": { "type": "integer" },
+										"message": { "type": "string" },
+										"data": {
+											"type": "object"
+										}
+									}
+								},
+								"exmaple": {
+									"code": 200,
+									"message": "User/Mentor removed from your list",
+									"data": {}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/find-friend/search": {
 			"get": {
 				"tags": ["find-friend"],
@@ -7929,6 +8031,57 @@
 				"responses": {
 					"200": {
 						"description": "Friend request rejected"
+					}
+				}
+			}
+		},
+		"/find-friend/unfriend": {
+			"delete": {
+				"tags": ["find-friend"],
+				"description": "Unfriend user",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"request_id": { "type": "integer" }
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Removed user from friend list",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": { "type": "integer" },
+										"message": { "type": "string" },
+										"data": {
+											"type": "object"
+										}
+									}
+								},
+								"exmaple": {
+									"code": 200,
+									"message": "Removed user from your friend list.",
+									"data": {}
+								}
+							}
+						}
 					}
 				}
 			}

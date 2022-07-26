@@ -1,4 +1,10 @@
-import { IMentorMatcherService, IMentorRequest, ISarchTermParams, ISearchMentors } from './interface'
+import {
+	IMentorMatcherService,
+	IMentorRequest,
+	ISarchTermParams,
+	ISearchMentors,
+	removeMentorParams
+} from './interface'
 import { User } from '../user/userModel'
 import { col, fn, Op, where } from 'sequelize'
 import {
@@ -53,46 +59,46 @@ export class MentorMatcherService implements IMentorMatcherService {
 							{
 								industry: _industry?.length
 									? {
-										[Op.or]: _industry?.map((item: string) => ({
-											[Op.like]: `%${item.trim()}%`
-										}))
-									}
+											[Op.or]: _industry?.map((item: string) => ({
+												[Op.like]: `%${item.trim()}%`
+											}))
+									  }
 									: { [Op.ne]: null }
 							},
 							{
 								role: _role?.length
 									? {
-										[Op.or]: _role?.map((item: string) => ({
-											[Op.like]: `%${item.trim()}%`
-										}))
-									}
+											[Op.or]: _role?.map((item: string) => ({
+												[Op.like]: `%${item.trim()}%`
+											}))
+									  }
 									: { [Op.ne]: null }
 							},
 							{
 								frequency: _frequency?.length
 									? {
-										[Op.or]: _frequency?.map((item: string) => ({
-											[Op.like]: `%${item.trim()}%`
-										}))
-									}
+											[Op.or]: _frequency?.map((item: string) => ({
+												[Op.like]: `%${item.trim()}%`
+											}))
+									  }
 									: { [Op.ne]: null }
 							},
 							{
 								conversation_mode: _conversation_mode?.length
 									? {
-										[Op.or]: _conversation_mode?.map((item: string) => ({
-											[Op.like]: `%${item.trim()}%`
-										}))
-									}
+											[Op.or]: _conversation_mode?.map((item: string) => ({
+												[Op.like]: `%${item.trim()}%`
+											}))
+									  }
 									: { [Op.ne]: null }
 							},
 							{
 								languages: _languages?.length
 									? {
-										[Op.or]: _languages?.map((item: string) => ({
-											[Op.like]: `%${item.trim()}%`
-										}))
-									}
+											[Op.or]: _languages?.map((item: string) => ({
+												[Op.like]: `%${item.trim()}%`
+											}))
+									  }
 									: { [Op.ne]: null }
 							}
 						]
@@ -460,5 +466,14 @@ export class MentorMatcherService implements IMentorMatcherService {
 		} catch (error) {
 			return false
 		}
+	}
+
+	async removeMentor(request_id: number, params: removeMentorParams): Promise<number> {
+		return await MentorMatcherModel.destroy({
+			where: {
+				id: request_id,
+				...(params.mentee_id ? { mentee_id: params.mentee_id } : { mentor_id: params.mentor_id })
+			}
+		})
 	}
 }

@@ -10,6 +10,7 @@ import {
 	ISearchWarriorParams,
 	IWellnessWarriorRequest,
 	IWellnessWarriorService,
+	removeWarriorParams,
 	RequestType,
 	StatusType
 } from './interface'
@@ -383,6 +384,12 @@ export class WellnessWarriorService implements IWellnessWarriorService {
 				user: _record.warrior_id === user_id ? user : null,
 				warrior: _record.user_id === user_id ? warrior : null
 			}
+		})
+	}
+
+	async removeWarrior(request_id: number, params: removeWarriorParams): Promise<number> {
+		return await WellnessWarrior.destroy({
+			where: { id: request_id, ...(params.user_id ? { user_id: params.user_id } : { warrior_id: params.warrior_id }) }
 		})
 	}
 }
