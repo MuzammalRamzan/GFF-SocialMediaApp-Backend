@@ -46,7 +46,7 @@ export class FeedbackController {
 				data: { feedback }
 			})
 		} catch (error) {
-			console.log(error);
+			console.log(error)
 			return handleError(error, req, res)
 		}
 	}
