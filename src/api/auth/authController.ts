@@ -1,8 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
 import { Messages } from '../../constants/messages'
+import { IAuthenticatedRequest } from '../helper/authMiddleware'
 import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import { UserRoleService } from '../user-role/userRoleService'
 import { AuthService } from './authService'
+import { resetPasswordBodyType } from './interface'
 
 export class AuthController {
 	private readonly authService: AuthService
@@ -75,10 +77,10 @@ export class AuthController {
 		try {
 			const user = await this.authService.checkCreds(email, password)
 
-			const adminRole = await UserRoleService.fetchAdminRole();
+			const adminRole = await UserRoleService.fetchAdminRole()
 
 			if (user?.role_id !== adminRole?.get('id')) {
-				const err = new GffError("User not found!")
+				const err = new GffError('User not found!')
 				err.errorCode = '404'
 				err.httpStatusCode = 404
 				throw err
@@ -105,6 +107,28 @@ export class AuthController {
 				error.httpStatusCode = 404
 			}
 			return jsonErrorHandler(err, req, res, () => { })
+		}
+	}
+
+	resetPassword = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+		try {
+			const user = req.user
+			const body = req.body as resetPasswordBodyType
+
+			if (body.newPassword === body.password)
+				throw new GffError('Both old and new password can not be same!', { errorCode: '401' })
+
+			if (!user?.email) throw new GffError('User email not found!', { errorCode: '404' })
+
+			const isAuthenticatedUser = await this.authService.checkCreds(user?.email, body.password)
+
+			if (!isAuthenticatedUser) throw new GffError('Wrong username or password!', { errorCode: '401' })
+
+			await this.authService.updatePassword(user.id, body.newPassword)
+
+			return res.status(200).json({ data: {}, message: 'Password has been updated!', code: 200 })
+		} catch (error) {
+			next(error)
 		}
 	}
 }
