@@ -1,7 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../database';
 
-export class UserInformation extends Model {} 
+export class UserInformation extends Model {}
 UserInformation.init({
     id: {
         type: DataTypes.INTEGER,
@@ -29,7 +29,6 @@ UserInformation.init({
     gender: {
         type: DataTypes.ENUM('male', 'female', 'other'),
         allowNull: true
-        
     },
     email: {
         type: DataTypes.STRING,
@@ -94,6 +93,14 @@ UserInformation.init({
     other_education: {
         type: DataTypes.STRING,
         allowNull: true
+    },
+    latitude:{
+      type: DataTypes.DECIMAL(10, 8),
+      allowNull: true
+    },
+    longitude:{
+      type: DataTypes.DECIMAL(11, 8),
+      allowNull: true
     }
 },
 {

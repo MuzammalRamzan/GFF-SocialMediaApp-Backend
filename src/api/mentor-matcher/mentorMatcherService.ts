@@ -5,6 +5,7 @@ import {
 	ISearchMentors,
 	removeMentorParams
 } from './interface'
+import { sequelize } from './../../database/index'
 import { User } from '../user/userModel'
 import { col, fn, Op, where } from 'sequelize'
 import {
@@ -35,8 +36,80 @@ export class MentorMatcherService implements IMentorMatcherService {
 		const _frequency = searchTerms.frequency?.split(',')
 		const _conversation_mode = searchTerms.conversation_mode?.split(',')
 		const _languages = searchTerms.languages?.split(',')
+		const _latitude = searchTerms.latitude
+		const _longitude = searchTerms.longitude
+		const _distance = searchTerms.distance
 
 		const mentorRole = await UserRoleService.fetchMentorRole()
+
+		let mentorINformationWhere = {
+			[Op.or]: [
+				{
+					industry: _industry?.length
+						? {
+								[Op.or]: _industry?.map((item: string) => ({
+									[Op.like]: `%${item.trim()}%`
+								}))
+						  }
+						: { [Op.ne]: null }
+				},
+				{
+					role: _role?.length
+						? {
+								[Op.or]: _role?.map((item: string) => ({
+									[Op.like]: `%${item.trim()}%`
+								}))
+						  }
+						: { [Op.ne]: null }
+				},
+				{
+					frequency: _frequency?.length
+						? {
+								[Op.or]: _frequency?.map((item: string) => ({
+									[Op.like]: `%${item.trim()}%`
+								}))
+						  }
+						: { [Op.ne]: null }
+				},
+				{
+					conversation_mode: _conversation_mode?.length
+						? {
+								[Op.or]: _conversation_mode?.map((item: string) => ({
+									[Op.like]: `%${item.trim()}%`
+								}))
+						  }
+						: { [Op.ne]: null }
+				},
+				{
+					languages: _languages?.length
+						? {
+								[Op.or]: _languages?.map((item: string) => ({
+									[Op.like]: `%${item.trim()}%`
+								}))
+						  }
+						: { [Op.ne]: null }
+				}
+			]
+		}
+
+		let haversine
+
+		let userIds: any[] = []
+
+		if (_latitude && _longitude && _distance) {
+			haversine = `(6371 * acos(cos(radians(${_latitude})) * cos(radians(latitude)) * cos(radians(longitude) - radians(${_longitude})) + sin(radians(${_latitude})) * sin(radians(latitude))))`
+			const userInfos: any = await UserInformation.findAll({
+				attributes: ['user_id', [sequelize.literal(`round(${haversine}, 2)`), 'distance']],
+				order: sequelize.col('distance'),
+				having: sequelize.literal(`distance <= ${_distance}`)
+			})
+
+			if (userInfos.length) {
+				userInfos.map((user: any) => {
+					userIds.push(user.user_id)
+				})
+			}
+		}
 
 		const mentors = await User.findAll({
 			where: {
@@ -44,7 +117,7 @@ export class MentorMatcherService implements IMentorMatcherService {
 					searchTerms.text
 						? where(fn('lower', col('full_name')), 'LIKE', `%${(searchTerms.text || '').trim().toLowerCase()}%`)
 						: { full_name: { [Op.ne]: null } },
-					{ id: { [Op.ne]: userId } },
+					{ id: userIds.filter(id => id !== userId) },
 					{ role_id: mentorRole?.get('id') }
 				]
 			},
@@ -54,55 +127,7 @@ export class MentorMatcherService implements IMentorMatcherService {
 					model: MentorInformation,
 					as: 'mentor_information',
 					attributes: this.MENTOR_INFORMATION_FIELDS,
-					where: {
-						[Op.or]: [
-							{
-								industry: _industry?.length
-									? {
-											[Op.or]: _industry?.map((item: string) => ({
-												[Op.like]: `%${item.trim()}%`
-											}))
-									  }
-									: { [Op.ne]: null }
-							},
-							{
-								role: _role?.length
-									? {
-											[Op.or]: _role?.map((item: string) => ({
-												[Op.like]: `%${item.trim()}%`
-											}))
-									  }
-									: { [Op.ne]: null }
-							},
-							{
-								frequency: _frequency?.length
-									? {
-											[Op.or]: _frequency?.map((item: string) => ({
-												[Op.like]: `%${item.trim()}%`
-											}))
-									  }
-									: { [Op.ne]: null }
-							},
-							{
-								conversation_mode: _conversation_mode?.length
-									? {
-											[Op.or]: _conversation_mode?.map((item: string) => ({
-												[Op.like]: `%${item.trim()}%`
-											}))
-									  }
-									: { [Op.ne]: null }
-							},
-							{
-								languages: _languages?.length
-									? {
-											[Op.or]: _languages?.map((item: string) => ({
-												[Op.like]: `%${item.trim()}%`
-											}))
-									  }
-									: { [Op.ne]: null }
-							}
-						]
-					}
+					where: mentorINformationWhere
 				},
 				{
 					model: UserInformation,

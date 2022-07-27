@@ -20,7 +20,9 @@ export const USER_INFORMATION_FIELDS = [
 	'gender',
 	'country',
 	'job_role',
-	'education'
+	'education',
+	'latitude',
+	'longitude'
 ]
 
 export const USER_FIELDS = ['id', 'full_name']

@@ -78,4 +78,7 @@ export interface ISarchTermParams {
 	conversation_mode?: string
 	languages?: string
 	text?: string
+	latitude?: String
+	longitude?: String
+	distance?: Number
 }
