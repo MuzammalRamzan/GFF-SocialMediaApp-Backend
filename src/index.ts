@@ -34,6 +34,9 @@ import { GffError, jsonErrorHandler } from './api/helper/errorHandler'
 import { feedbackRouter } from './api/feedback/feedbackRouter'
 import { roleRouter } from './api/user-role/userRole.routes'
 
+import { mentorInfoRouter } from './api/Questionnaire/questionnaireRouter'
+import { UserAnswersRouter } from './api/MentorAnswers/userAnsewerRouter'
+
 const storage = multer.memoryStorage()
 
 const options = {
@@ -89,6 +92,9 @@ export const upload = multer({
 	app.use('/', mentorSettingsRouter)
 	app.use('/currency', currencyRouter)
 	app.use('/feedback', feedbackRouter)
+
+	app.use('/mentor-information', mentorInfoRouter)
+	app.use('/mentor-information', UserAnswersRouter)
 
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 		const error = err as GffError
