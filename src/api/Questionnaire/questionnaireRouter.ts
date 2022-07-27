@@ -11,6 +11,10 @@ mentorInfoRouter.get(
 	questionController.getAllQuestions as Application
 )
 mentorInfoRouter.post('/question/add_question', authMiddleware, questionController.createQuestion as Application)
-mentorInfoRouter.get('/question/:id', questionController.getQuestionById as Application)
-mentorInfoRouter.put('/question/update_question/:id', questionController.updateQuestion as Application)
-mentorInfoRouter.delete('/question/delete_question/:id', questionController.deleteQuestion as Application)
+mentorInfoRouter.get('/question/:id', authMiddleware, questionController.getQuestionById as Application)
+mentorInfoRouter.put('/question/update_question/:id', authMiddleware, questionController.updateQuestion as Application)
+mentorInfoRouter.delete(
+	'/question/delete_question/:id',
+	authMiddleware,
+	questionController.deleteQuestion as Application
+)
