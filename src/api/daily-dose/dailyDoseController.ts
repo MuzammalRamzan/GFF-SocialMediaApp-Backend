@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { AWS_S3_BASE_BUCKET_URL } from '../../constants'
 import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import { DailyDoseService } from './dailyDoseServices'
+import { validationResult } from 'express-validator'
 import { categoryType } from './interface'
 
 import { createDoseRequest, GetByIdRequest, UpdateDoseRequest, DeleteDoseRequest } from './interface'
@@ -17,17 +18,17 @@ export class DailyDoseController {
 			if (!req.file) {
 				throw new Error('Please upload a file')
 			}
+			const errors = validationResult(req).array({ onlyFirstError: true })
+			if (errors.length) {
+				return res
+					.status(400)
+					.json({ errors: errors, message: 'The category type should be news, music or wise-words', code: 400 })
+			}
 			const uploadImageInfo = await this.debtService.upload(req.file)
 			params.image = AWS_S3_BASE_BUCKET_URL + uploadImageInfo.Key
-			if (
-				params.category !== categoryType.MUSIC &&
-				params.category != categoryType.NEWS &&
-				params.category != categoryType.WISEWORD
-			) {
-				throw new Error('Enum can be one of them:news,music,wise-words')
-			}
+			params.keyWord = JSON.stringify(params.keyWord)
 			const dailyDose = await this.debtService.add(params)
-			return res.status(200).json({ dailyDose })
+			return res.status(200).json({ data: dailyDose, code: 200, message: `DailyDose posted sucessfully` })
 		} catch (err) {
 			next(err)
 		}
@@ -44,7 +45,9 @@ export class DailyDoseController {
 			if (!dailyDose) {
 				throw new Error('No data found')
 			}
-			return res.status(200).json({ dailyDose })
+			return res
+				.status(200)
+				.json({ data: dailyDose, code: 200, message: `DailyDose Data for all category '${category}'` })
 		} catch (err) {
 			next(err)
 		}
@@ -59,7 +62,7 @@ export class DailyDoseController {
 				params.image = uploadImageInfo.Key
 			}
 			const dailyDose = await this.debtService.update(id, params)
-			return res.status(200).json({ dailyDose })
+			return res.status(200).json({ data: dailyDose, code: 200, message: `DailyDose Updated Successfully` })
 		} catch (err) {
 			next(err)
 		}
@@ -68,7 +71,7 @@ export class DailyDoseController {
 		const id = +req.params.id
 		try {
 			const dailyDose = await this.debtService.delete(id)
-			return res.status(200).json({ dailyDose })
+			return res.status(200).json({ data: dailyDose, code: 200, message: `DailyDose deleted successfully` })
 		} catch (err) {
 			next(err)
 		}

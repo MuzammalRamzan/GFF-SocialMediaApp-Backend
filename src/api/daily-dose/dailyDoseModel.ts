@@ -30,7 +30,7 @@ DailyDose.init(
 			type: DataTypes.STRING
 		},
 		keyWord: {
-			type: DataTypes.STRING
+			type: DataTypes.JSON
 		},
 		category: {
 			type: DataTypes.ENUM(categoryType.MUSIC, categoryType.NEWS, categoryType.WISEWORD),

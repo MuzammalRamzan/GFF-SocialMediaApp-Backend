@@ -2,7 +2,10 @@ import { NextFunction, Response } from 'express'
 import { validationResult } from 'express-validator'
 import { RoomService } from '../chat/room/room.service'
 import { IAuthenticatedRequest } from '../helper/authMiddleware'
+import { GffError } from '../helper/errorHandler'
+import { UserRoleService } from '../user-role/userRoleService'
 import { WarriorInformationService } from '../warrior-information/warriorInformationService'
+import { removeWarriorParams } from './interface'
 import { WellnessWarriorService } from './wellnessWarriorService'
 
 export class WellnessWarriorController {
@@ -335,6 +338,46 @@ export class WellnessWarriorController {
 					wellnessWarriors
 				},
 				message: 'Get wellness warriors successfully!',
+				code: 200
+			})
+		} catch (err) {
+			next(err)
+		}
+	}
+
+	public removeWarrior = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+		try {
+			const user_id = req?.user?.id as number
+			const role_id = req?.user?.role_id as number
+			const request_id = req.body?.request_id as number
+
+			if (!request_id) {
+				const error = new GffError('Please send request_id with the request')
+				error.errorCode = '403'
+				throw error
+			}
+
+			let params: removeWarriorParams = { user_id: 0, warrior_id: 0 }
+			const warriorRole = await UserRoleService.fetchWellnessWarriorRole()
+			if (warriorRole?.getDataValue('id') === role_id) {
+				params['warrior_id'] = user_id
+				delete params.user_id
+			} else {
+				params['user_id'] = user_id
+				delete params.warrior_id
+			}
+
+			const destroyedWellnessWarriorObject = await this.wellnessWarriorService.removeWarrior(request_id, params)
+
+			if (!destroyedWellnessWarriorObject) {
+				const error = new GffError(`${params.warrior_id ? 'User' : 'Warrior'} doesn't exist`)
+				error.errorCode = '403'
+				throw error
+			}
+
+			return res.status(200).json({
+				data: {},
+				message: `${params.warrior_id ? 'User' : 'Warrior'} removed from your list`,
 				code: 200
 			})
 		} catch (err) {
