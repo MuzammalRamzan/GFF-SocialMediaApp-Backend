@@ -39,7 +39,7 @@ export class QuestionnaireController {
 			})
 
 			if (errorMessage) {
-				return res.status(200).send({
+				return res.status(400).send({
 					data: {
 						errorMessage
 					},
