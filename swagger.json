@@ -68,18 +68,12 @@
 		{
 			"name": "uploads",
 			"description": "File upload related routes"
-		},
-    {
-			"name": "question",
-			"description": "Question routes"
 		}
 	],
 	"paths": {
-    "/mentorInformation/add_question": {
+    "/mentor-information/question/add_question": {
       "post": {
-        "tags": [
-          "questions"
-        ],
+        "tags": ["mentor-information"],
         "description": "Create Question",
         "parameters": [
           {
@@ -148,11 +142,9 @@
         }
       }
     },
-    "/mentorInformation/answer_questionnaire": {
+    "/mentor-information/answer_questionnaire": {
       "post": {
-        "tags": [
-          "questions"
-        ],
+        "tags": ["mentor-information"],
         "description": "Give Answer",
         "parameters": [
           {
@@ -228,11 +220,9 @@
         }
       }
     },
-    "/mentorInformation/personality_questionnaire": {
+    "/mentor-information/questions/personality_questionnaire": {
       "get": {
-        "tags": [
-          "questions"
-        ],
+        "tags": ["mentor-information"],
         "description": "Get full questions",
         "parameters": [
           {
@@ -291,11 +281,9 @@
         }
       }
     },
-    "/mentorInformation/{id}": {
+    "/mentor-information/question/{id}": {
       "get": {
-        "tags": [
-          "questions"
-        ],
+        "tags":["mentor-information"],
         "description": "Get full questions",
         "parameters": [
           {
@@ -366,11 +354,9 @@
         }
       }
     },
-    "/mentorInformation/update_question/{id}": {
+    "/mentor-information/question/update_question/{id}": {
       "put": {
-        "tags": [
-          "questions"
-        ],
+        "tags": ["mentor-information"],
         "description": "Update a question",
         "parameters": [
           {
@@ -460,11 +446,9 @@
         }
       }
     },
-    "/mentorInformation/delete_question/{id}": {
+    "/mentor-information/question/delete_question/{id}": {
       "delete": {
-        "tags": [
-          "questions"
-        ],
+        "tags": ["mentor-information"],
         "description": "Delete a loan ledger professional information",
         "parameters": [
           {

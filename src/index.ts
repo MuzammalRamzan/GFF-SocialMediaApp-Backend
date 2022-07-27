@@ -93,8 +93,8 @@ export const upload = multer({
 	app.use('/currency', currencyRouter)
 	app.use('/feedback', feedbackRouter)
 
-	app.use('/mentorInformation', mentorInfoRouter)
-	app.use('/mentorInformation', UserAnswersRouter)
+	app.use('/mentor-information', mentorInfoRouter)
+	app.use('/mentor-information', UserAnswersRouter)
 
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 		const error = err as GffError
