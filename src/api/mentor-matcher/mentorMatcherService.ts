@@ -104,6 +104,7 @@ export class MentorMatcherService implements IMentorMatcherService {
 			if (_latitude && _longitude) {
 				haversine = `(6371 * acos(cos(radians(${_latitude})) * cos(radians(latitude)) * cos(radians(longitude) - radians(${_longitude})) + sin(radians(${_latitude})) * sin(radians(latitude))))`
 				const userInfos = await UserInformation.findAll({
+					where: { user_id: { [Op.ne]: userId } },
 					attributes: ['user_id', [sequelize.literal(`round(${haversine}, 2)`), 'distance']],
 					order: sequelize.col('distance'),
 					having: sequelize.literal(`distance <= ${_distance}`)
@@ -125,7 +126,7 @@ export class MentorMatcherService implements IMentorMatcherService {
 					searchTerms.text
 						? where(fn('lower', col('full_name')), 'LIKE', `%${(searchTerms.text || '').trim().toLowerCase()}%`)
 						: { full_name: { [Op.ne]: null } },
-					{ id: userIds.length ? userIds.filter((id: number) => id !== userId) : { [Op.ne]: userId } },
+					{ id: userIds.length ? userIds : { [Op.ne]: userId } },
 					{ role_id: mentorRole?.get('id') }
 				]
 			},
