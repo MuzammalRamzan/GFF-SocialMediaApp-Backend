@@ -60,6 +60,8 @@ export interface ISearchMentors {
 		country: string
 		job_role: string
 		education: string
+		latitude: string
+		longitude: string
 	}
 	mentor_matcher_request: {
 		id: number
@@ -78,4 +80,7 @@ export interface ISarchTermParams {
 	conversation_mode?: string
 	languages?: string
 	text?: string
+	latitude?: String
+	longitude?: String
+	distance?: Number
 }

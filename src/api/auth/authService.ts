@@ -70,7 +70,7 @@ export class AuthService implements IAuthService {
 		const isValid = await this.checkPass(password, user.password)
 
 		if (!isValid) {
-			throw new Error('Wrong username or password!')
+			throw new Error('Password does not match!')
 		}
 		return user
 	}

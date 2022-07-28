@@ -35,6 +35,9 @@ import { feedbackRouter } from './api/feedback/feedbackRouter'
 import { roleRouter } from './api/user-role/userRole.routes'
 import { identityVerification } from './api/identity-verification/verification.route'
 
+import { mentorInfoRouter } from './api/Questionnaire/questionnaireRouter'
+import { UserAnswersRouter } from './api/MentorAnswers/userAnsewerRouter'
+
 const storage = multer.memoryStorage()
 
 const options = {
@@ -91,6 +94,9 @@ export const upload = multer({
 		app.use('/currency', currencyRouter)
 		app.use('/feedback', feedbackRouter)
 		app.use('/identity', identityVerification)
+
+		app.use('/mentor-information', mentorInfoRouter)
+		app.use('/mentor-information', UserAnswersRouter)
 
 		app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 			const error = err as GffError
