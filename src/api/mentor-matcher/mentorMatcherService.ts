@@ -18,7 +18,7 @@ import {
 import { MentorInformation } from '../mentor-information/mentorInformationModel'
 import { UserInformation } from '../user-information/userInformationModel'
 import { GffError } from '../helper/errorHandler'
-import { MENTOR_FIELDS, USER_INFORMATION_FIELDS } from '../../helper/db.helper'
+import { MENTOR_FIELDS, USER_ADDITIONAL_INFORMATION_FIELDS, USER_INFORMATION_FIELDS } from '../../helper/db.helper'
 import { UserRoleService } from '../user-role/userRoleService'
 import { Associations } from '../association/association.model'
 
@@ -26,6 +26,7 @@ export class MentorMatcherService implements IMentorMatcherService {
 	private MENTOR_INFORMATION_FIELDS = MENTOR_FIELDS
 
 	private USER_INFORMATION_FIELDS = USER_INFORMATION_FIELDS
+	private USER_ADDITIONAL_INFORMATION_FIELDS = USER_ADDITIONAL_INFORMATION_FIELDS
 
 	async getMentorRequestById(request_id: number): Promise<IMentorMatcher> {
 		return (await MentorMatcherModel.findByPk(request_id))?.toJSON() as IMentorMatcher
@@ -141,7 +142,7 @@ export class MentorMatcherService implements IMentorMatcherService {
 				{
 					model: UserInformation,
 					as: 'user_information',
-					attributes: this.USER_INFORMATION_FIELDS
+					attributes: this.USER_ADDITIONAL_INFORMATION_FIELDS
 				},
 				{
 					model: Associations,
