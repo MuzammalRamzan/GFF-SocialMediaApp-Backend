@@ -26,6 +26,7 @@ export type UserInformationType = {
 	education: string
 	other_education: string
 	profile_role: ProfileRoleEnum
+	distance: string
 }
 
 export enum GenderEnum {

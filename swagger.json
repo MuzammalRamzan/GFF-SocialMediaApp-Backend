@@ -7902,6 +7902,13 @@
 						"description": "languages(comma separated value with no spaces, e.g IT,Software)",
 						"required": false,
 						"type": "string"
+					},
+          {
+						"name": "distance",
+						"in": "query",
+						"description": "distance in mile",
+						"required": false,
+						"type": "string"
 					}
 				],
 				"responses": {
