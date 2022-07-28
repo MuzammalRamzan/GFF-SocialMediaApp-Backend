@@ -7466,20 +7466,6 @@
 						"type": "string"
 					},
           {
-						"name": "latitude",
-						"in": "query",
-						"description": "latitude",
-						"required": false,
-						"type": "string"
-					},
-          {
-						"name": "longitude",
-						"in": "query",
-						"description": "longitude",
-						"required": false,
-						"type": "string"
-					},
-          {
 						"name": "distance",
 						"in": "query",
 						"description": "distance in mile",

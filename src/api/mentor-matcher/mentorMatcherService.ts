@@ -1,3 +1,4 @@
+import { UserInformationType } from './../user-information/interface'
 import {
 	IMentorMatcherService,
 	IMentorRequest,
@@ -36,8 +37,11 @@ export class MentorMatcherService implements IMentorMatcherService {
 		const _frequency = searchTerms.frequency?.split(',')
 		const _conversation_mode = searchTerms.conversation_mode?.split(',')
 		const _languages = searchTerms.languages?.split(',')
-		const _latitude = searchTerms.latitude
-		const _longitude = searchTerms.longitude
+
+		const currentUserInfo = await UserInformation.findOne({ where: { user_id: userId } })
+
+		const _latitude = currentUserInfo?.get('latitude')
+		const _longitude = currentUserInfo?.get('longitude')
 		const _distance = searchTerms.distance
 
 		const mentorRole = await UserRoleService.fetchMentorRole()
@@ -94,20 +98,24 @@ export class MentorMatcherService implements IMentorMatcherService {
 
 		let haversine
 
-		let userIds: any[] = []
+		let userIds: number[] = []
 
-		if (_latitude && _longitude && _distance) {
-			haversine = `(6371 * acos(cos(radians(${_latitude})) * cos(radians(latitude)) * cos(radians(longitude) - radians(${_longitude})) + sin(radians(${_latitude})) * sin(radians(latitude))))`
-			const userInfos: any = await UserInformation.findAll({
-				attributes: ['user_id', [sequelize.literal(`round(${haversine}, 2)`), 'distance']],
-				order: sequelize.col('distance'),
-				having: sequelize.literal(`distance <= ${_distance}`)
-			})
-
-			if (userInfos.length) {
-				userInfos.map((user: any) => {
-					userIds.push(user.user_id)
+		if (_distance) {
+			if (_latitude && _longitude) {
+				haversine = `(6371 * acos(cos(radians(${_latitude})) * cos(radians(latitude)) * cos(radians(longitude) - radians(${_longitude})) + sin(radians(${_latitude})) * sin(radians(latitude))))`
+				const userInfos = await UserInformation.findAll({
+					attributes: ['user_id', [sequelize.literal(`round(${haversine}, 2)`), 'distance']],
+					order: sequelize.col('distance'),
+					having: sequelize.literal(`distance <= ${_distance}`)
 				})
+
+				if (userInfos.length) {
+					userInfos.map((user: any) => {
+						userIds.push(user.user_id)
+					})
+				}
+			} else {
+				throw new Error('Can you please set your address')
 			}
 		}
 
@@ -117,7 +125,7 @@ export class MentorMatcherService implements IMentorMatcherService {
 					searchTerms.text
 						? where(fn('lower', col('full_name')), 'LIKE', `%${(searchTerms.text || '').trim().toLowerCase()}%`)
 						: { full_name: { [Op.ne]: null } },
-					{ id: userIds.filter(id => id !== userId) },
+					{ id: userIds.length ? userIds.filter((id: number) => id !== userId) : { [Op.ne]: userId } },
 					{ role_id: mentorRole?.get('id') }
 				]
 			},
@@ -166,7 +174,9 @@ export class MentorMatcherService implements IMentorMatcherService {
 					gender: _data?.user_information?.gender,
 					country: _data?.user_information?.country,
 					job_role: _data?.user_information?.job_role,
-					education: _data?.user_information?.education
+					education: _data?.user_information?.education,
+					latitude: _data?.user_information?.latitude,
+					longitude: _data?.user_information?.longitude
 				},
 				mentor_matcher_request: _data?.user_associations
 			}

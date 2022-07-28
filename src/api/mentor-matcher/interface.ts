@@ -60,6 +60,8 @@ export interface ISearchMentors {
 		country: string
 		job_role: string
 		education: string
+		latitude: string
+		longitude: string
 	}
 	mentor_matcher_request: {
 		id: number
