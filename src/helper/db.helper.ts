@@ -21,8 +21,6 @@ export const USER_INFORMATION_FIELDS = [
 	'country',
 	'job_role',
 	'education',
-	'latitude',
-	'longitude'
 ]
 
 export const USER_ADDITIONAL_INFORMATION_FIELDS = [
