@@ -4,13 +4,12 @@ import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import { DailyDoseService } from './dailyDoseServices'
 import { validationResult } from 'express-validator'
 import { categoryType } from './interface'
-
 import { createDoseRequest, GetByIdRequest, UpdateDoseRequest, DeleteDoseRequest } from './interface'
 export class DailyDoseController {
-	private readonly debtService: DailyDoseService
+	private readonly dailyDoseServices: DailyDoseService
 
 	constructor() {
-		this.debtService = new DailyDoseService()
+		this.dailyDoseServices = new DailyDoseService()
 	}
 	createDose = async (req: createDoseRequest, res: Response, next: NextFunction) => {
 		const params = req.body
@@ -24,12 +23,17 @@ export class DailyDoseController {
 					.status(400)
 					.json({ errors: errors, message: 'The category type should be news, music or wise-words', code: 400 })
 			}
-			const uploadImageInfo = await this.debtService.upload(req.file)
+			const uploadImageInfo = await this.dailyDoseServices.upload(req.file)
+			const file = await this.dailyDoseServices.asyncWriteFile(params.contentBody)
+			const uploadContentInfo = await this.dailyDoseServices.uploadContentBody(file)
 			params.image = AWS_S3_BASE_BUCKET_URL + uploadImageInfo.Key
+			params.contentBody = AWS_S3_BASE_BUCKET_URL + uploadContentInfo.Key
 			params.keyWord = JSON.stringify(params.keyWord)
-			const dailyDose = await this.debtService.add(params)
+			console.log('params', params)
+			const dailyDose = await this.dailyDoseServices.add(params)
 			return res.status(200).json({ data: dailyDose, code: 200, message: `DailyDose posted sucessfully` })
 		} catch (err) {
+			console.log(err)
 			next(err)
 		}
 	}
@@ -38,9 +42,9 @@ export class DailyDoseController {
 		let dailyDose
 		try {
 			if (category) {
-				dailyDose = await this.debtService.findByCategory(category)
+				dailyDose = await this.dailyDoseServices.findByCategory(category)
 			} else {
-				dailyDose = await this.debtService.findAllCategory(category)
+				dailyDose = await this.dailyDoseServices.findAllCategory(category)
 			}
 			if (!dailyDose) {
 				throw new Error('No data found')
@@ -58,10 +62,10 @@ export class DailyDoseController {
 
 		try {
 			if (req.file) {
-				const uploadImageInfo = await this.debtService.upload(req.file)
+				const uploadImageInfo = await this.dailyDoseServices.upload(req.file)
 				params.image = uploadImageInfo.Key
 			}
-			const dailyDose = await this.debtService.update(id, params)
+			const dailyDose = await this.dailyDoseServices.update(id, params)
 			return res.status(200).json({ data: dailyDose, code: 200, message: `DailyDose Updated Successfully` })
 		} catch (err) {
 			next(err)
@@ -70,7 +74,7 @@ export class DailyDoseController {
 	deleteDose = async (req: DeleteDoseRequest, res: Response, next: NextFunction) => {
 		const id = +req.params.id
 		try {
-			const dailyDose = await this.debtService.delete(id)
+			const dailyDose = await this.dailyDoseServices.delete(id)
 			return res.status(200).json({ data: dailyDose, code: 200, message: `DailyDose deleted successfully` })
 		} catch (err) {
 			next(err)
