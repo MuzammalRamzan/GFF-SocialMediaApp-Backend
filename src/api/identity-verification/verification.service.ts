@@ -144,7 +144,6 @@ export class VerificationService {
     }
   }
 
-
   public async createSession(userId: number): Promise<ICreateSession> {
     try {
       const verification = await this.getUserVerification(userId);
@@ -172,18 +171,19 @@ export class VerificationService {
             break;
         }
       }
+
       session = await this.createVerificationSession(userId);
 
-      const payload = {
+      verification.set({
+        yoti_session_id: session.sessionId,
+        yoti_session_secret: session.clientSessionToken,
+      });
+
+      await verification.save();
+      return {
         sessionId: session.sessionId,
         clientSessionToken: session.clientSessionToken,
       };
-
-      verification.set(payload);
-
-      await verification.save();
-
-      return payload;
     } catch (error) {
       console.log(error);
       throw new Error('Yoti error!');
