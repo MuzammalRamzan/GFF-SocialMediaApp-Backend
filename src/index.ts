@@ -17,7 +17,7 @@ import { hashtagRouter } from './api/hashtag/hashtagRouter'
 import { debtRouter } from './api/debt/debtRouter'
 import { dailyDoseRouter } from './api/daily-dose/dailyDoseRouter'
 import { dailyArticleRouter } from './api/dailyArticle/dailyArticleRouter'
-
+import { emailRouter } from './api/email/emailRouter'
 import { loanLedgerProfessionalInformationRouter } from './api/loan-ledger-professional-information/professionalInformationRouter'
 import { loanLedgerPersonalInfoRouter } from './api/loan-ledger-personal-information/loanLedgerPersonalInformationRouter'
 import { mentorMatcherRouter } from './api/mentor-matcher/mentorMatcherRouter'
@@ -92,6 +92,7 @@ export const upload = multer({
 	app.use('/', mentorSettingsRouter)
 	app.use('/currency', currencyRouter)
 	app.use('/feedback', feedbackRouter)
+	app.use('/email', emailRouter)
 
 	app.use('/mentor-information', mentorInfoRouter)
 	app.use('/mentor-information', UserAnswersRouter)
