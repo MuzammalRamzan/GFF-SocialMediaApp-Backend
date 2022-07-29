@@ -72,9 +72,88 @@
 		{
 			"name": "uploads",
 			"description": "File upload related routes"
+		},
+		{
+			"name": "verification",
+			"description": "Yoti verification"
 		}
 	],
 	"paths": {
+		"/identity/verify/session": {
+			"get": {
+				"tags": ["verification"],
+				"description": "Verify Yoti session",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"isVerified": false
+									},
+									"message": "Session verification successfully completed",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/identity/verification/session": {
+			"get": {
+				"tags": ["verification"],
+				"description": "Create Yoti verification session",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"sessionId": "3789c7fa-bdf0-4491-bc46-9576f8406937",
+										"clientSessionToken": "8b911f4e-53c8-46bc-b475-3aa744aa49a2"
+									},
+									"message": "Session created successfully",
+									"status": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/mentor-information/question/add_question": {
 			"post": {
 				"tags": ["mentor-information"],
