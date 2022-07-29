@@ -12,7 +12,6 @@ AWS.config.update({
 })
 
 const s3 = new AWS.S3()
-
 class s3Service {
 	static S3 = new AWS.S3()
 	public uploadFile(file: Express.Multer.File, uploadPath?: string): Promise<AWS.S3.ManagedUpload.SendData> {
@@ -21,6 +20,24 @@ class s3Service {
 				{
 					Body: file.buffer,
 					Key: uploadPath || '/upload/' + new Date() + '_' + file.originalname,
+					ACL: 'public-read',
+					ContentType: file.mimetype,
+					Bucket: process.env.AWS_S3_BUCKET_NAME || ''
+				},
+				(error, data) => {
+					if (error) reject(error)
+					resolve(data)
+				}
+			)
+		})
+	}
+	public uploadHTMLFile(file: Express.Multer.File, uploadPath?: string): Promise<AWS.S3.ManagedUpload.SendData> {
+		return new Promise((resolve, reject) => {
+			s3.upload(
+				{
+					Body: file,
+					ContentType: 'text/html',
+					Key: uploadPath || '/upload/' + new Date() + '_' + 'dailyDoseArticle.html',
 					ACL: 'public-read',
 					Bucket: process.env.AWS_S3_BUCKET_NAME || ''
 				},
