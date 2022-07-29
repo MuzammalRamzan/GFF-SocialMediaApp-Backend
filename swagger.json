@@ -66,6 +66,10 @@
 			"description": "Daily Article apis"
 		},
 		{
+			"name": "email",
+			"description": "Send Email to multiple address"
+		},
+		{
 			"name": "uploads",
 			"description": "File upload related routes"
 		},
@@ -3204,6 +3208,89 @@
 									"data": 1,
 									"code": 200,
 									"message": "dailyArticle deleted successfully"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/email/send": {
+			"post": {
+				"tags": ["email"],
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"description": "",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/auth_signup_body"
+							},
+							"examples": {
+								"0": {
+									"value": {
+										"from": "chiragagrawal0011@gmail.com",
+										"to": ["sufyanmavya400@gmail.com", "m.muzammal208@gmail.com"],
+										"subject": "Application for leave",
+										"text": "This is very first text",
+										"html": "<strong>and easy to do anywhere, even with Node.js</strong>"
+									}
+								},
+								"1": {
+									"value": {
+										"from": "chiragagrawal0011@gmail.com",
+										"to": "sufyanmavya400@gmail.com",
+										"subject": "Application for leave",
+										"text": "This is very first text",
+										"html": "<strong>and easy to do anywhere, even with Node.js</strong>"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"from": "chiragagrawal0011@gmail.com",
+										"to": ["sufyanmavya400@gmail.com", "m.muzammal208@gmail.com"],
+										"subject": "Application for leave",
+										"text": "This is very first text",
+										"html": "<strong>and easy to do anywhere, even with Node.js</strong>",
+										"isMultiple": true,
+										"substitutionWrappers": ["{{", "}}"]
+									},
+									"code": 200,
+									"message": "Email sent sucessfully"
 								}
 							}
 						}
