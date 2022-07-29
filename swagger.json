@@ -100,7 +100,9 @@
 									"type": "object"
 								},
 								"example": {
-									"data": {},
+									"data": {
+										"isVerified": false
+									},
 									"message": "Session verification successfully completed",
 									"code": 200
 								}

@@ -5,9 +5,12 @@ import { User } from '../user/userModel';
 export interface IUserVerification {
   id: number;
   user_id: number;
+  is_verified: boolean;
+  identity_verification_status: string;
   yoti_session_id: string;
   yoti_session_secret: string;
   yoti_session_result: object
+  yoti_checks: object;
 }
 
 export class Verification extends Model { }

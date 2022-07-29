@@ -25,9 +25,11 @@ export class IdentityVerificationController {
   public async verifySession(req: IAuthenticatedRequest, res: Response, next: NextFunction) {
     const userId = req?.user?.id as number;
 
-    await this.verificationService.verifySession(userId);
+    const data = await this.verificationService.verifySession(userId);
     res.status(200).json({
-      data: {},
+      data: {
+        isVerified: data.get('is_verified')
+      },
       message: 'Session verification successfully completed!',
       code: 200
     })
