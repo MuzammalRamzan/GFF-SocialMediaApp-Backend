@@ -105,7 +105,8 @@
 								},
 								"example": {
 									"data": {
-										"isVerified": false
+										"isVerified": false,
+										"status": null
 									},
 									"message": "Session verification successfully completed",
 									"code": 200

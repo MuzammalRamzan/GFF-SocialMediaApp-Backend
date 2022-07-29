@@ -156,12 +156,30 @@ export class VerificationService {
 
         switch (session.state) {
           case YOTI_IDENTITY_VERIFICATION_STATE.COMPLETED:
+            verification.set({
+              identity_verification_status: session.state,
+              yoti_session_id: session.sessionId,
+              yoti_session_secret: session.clientSessionToken,
+              yoti_session_result: session.resources,
+              yoti_checks: session.checks,
+            });
+
+            await verification.save();
             return {
               clientSessionToken: null,
               sessionId: null,
             };
 
           case YOTI_IDENTITY_VERIFICATION_STATE.ONGOING:
+            verification.set({
+              identity_verification_status: session.state,
+              yoti_session_id: session.sessionId,
+              yoti_session_secret: session.clientSessionToken,
+              yoti_session_result: session.resources,
+              yoti_checks: session.checks,
+            });
+
+            await verification.save();
             return {
               clientSessionToken: verification.get('yoti_session_secret') as string,
               sessionId: verification.get('yoti_session_id') as string,
