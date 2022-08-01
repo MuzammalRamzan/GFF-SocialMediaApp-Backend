@@ -181,8 +181,8 @@ export class VerificationService {
 
             await verification.save();
             return {
-              clientSessionToken: verification.get('yoti_session_secret') as string,
-              sessionId: verification.get('yoti_session_id') as string,
+              clientSessionToken: verification.get('yoti_session_secret') as string || null,
+              sessionId: verification.get('yoti_session_id') as string || null,
             };
 
           default:
