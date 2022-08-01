@@ -40,7 +40,7 @@ export class DailyDoseController {
 			console.log('--------------Create Dose Done successfully--------------------')
 			return res.status(200).json({ data: dailyDose, code: 200, message: `DailyDose posted sucessfully` })
 		} catch (err) {
-			console.log(err)
+			console.log('err', err)
 			next(err)
 		}
 	}
