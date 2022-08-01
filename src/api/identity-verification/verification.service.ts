@@ -21,7 +21,7 @@ const CONSTANTS = {
   VERIFICATION_ERROR_ROUTE: "/yoti/error",
 };
 
-const pemFilePath = path.join(__dirname, '../../keys/dev.pem');
+const pemFilePath = path.join(__dirname, '../../keys/yoti.pem');
 const YOTI_PEM = fs.readFileSync(pemFilePath);
 
 const docScanClient = new DocScanClient(CONSTANTS.YOTI_CLIENT_SDK_ID, YOTI_PEM);
