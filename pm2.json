@@ -1,0 +1,9 @@
+{
+  "watch": ["server", "client"],
+  "ignore_watch" : ["node_modules", "build"],
+  "watch_options": {
+    "followSymlinks": false
+  },
+  "name": "gff",
+  "script": "./build/src/index.js"
+}
