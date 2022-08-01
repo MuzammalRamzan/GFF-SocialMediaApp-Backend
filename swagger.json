@@ -66,11 +66,532 @@
 			"description": "Daily Article apis"
 		},
 		{
+			"name": "email",
+			"description": "Send Email to multiple address"
+		},
+		{
 			"name": "uploads",
 			"description": "File upload related routes"
+		},
+		{
+			"name": "verification",
+			"description": "Yoti verification"
 		}
 	],
 	"paths": {
+		"/identity/verify/session": {
+			"get": {
+				"tags": ["verification"],
+				"description": "Verify Yoti session",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"isVerified": false,
+										"status": null
+									},
+									"message": "Session verification successfully completed",
+									"code": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/identity/verification/session": {
+			"get": {
+				"tags": ["verification"],
+				"description": "Create Yoti verification session",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"sessionId": "3789c7fa-bdf0-4491-bc46-9576f8406937",
+										"clientSessionToken": "8b911f4e-53c8-46bc-b475-3aa744aa49a2"
+									},
+									"message": "Session created successfully",
+									"status": 200
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/mentor-information/question/add_question": {
+			"post": {
+				"tags": ["mentor-information"],
+				"description": "Create Question",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						},
+						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/question"
+							},
+							"examples": {
+								"0": {
+									"value": {
+										"question": "how are you?"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"Question": {
+											"id": 1,
+											"question": "This is question?"
+										}
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/mentor-information/answer_questionnaire": {
+			"post": {
+				"tags": ["mentor-information"],
+				"description": "Give Answer",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						},
+						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/mentorAnswers"
+							},
+							"examples": {
+								"0": {
+									"value": [
+										{
+											"question_id": 1,
+											"answer": 2
+										},
+										{
+											"question_id": 2,
+											"answer": 5
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"Question": {
+											"id": 1,
+											"question": "This is question?"
+										}
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/mentor-information/questions/personality_questionnaire": {
+			"get": {
+				"tags": ["mentor-information"],
+				"description": "Get full questions",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						},
+						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"questions": [
+											{
+												"id": 1,
+												"question": "1st Question"
+											},
+											{
+												"id": 2,
+												"question": "how are you?"
+											}
+										]
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/mentor-information/question/{id}": {
+			"get": {
+				"tags": ["mentor-information"],
+				"description": "Get full questions",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Question ID",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					},
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						},
+						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"questions": [
+											{
+												"id": 1,
+												"question": "1st Question"
+											},
+											{
+												"id": 2,
+												"question": "how are you?"
+											}
+										]
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/mentor-information/question/update_question/{id}": {
+			"put": {
+				"tags": ["mentor-information"],
+				"description": "Update a question",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Question Id",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					},
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						},
+						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/update_id_body_7"
+							},
+							"examples": {
+								"data": {
+									"question": {
+										"id": 1,
+										"question": "1st Question"
+									}
+								},
+								"code": 200,
+								"message": "Update Question Successfully!"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"professionalInformation": {
+											"id": 10,
+											"user_id": 37,
+											"employment_type": "Test employment_type2",
+											"company_name": "Test company_name3",
+											"profession": "Test profession2",
+											"education": "Test education2",
+											"net_monthly_salary": 101.83,
+											"work_experience": "Test work_experience2"
+										}
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/mentor-information/question/delete_question/{id}": {
+			"delete": {
+				"tags": ["mentor-information"],
+				"description": "Delete a loan ledger professional information",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Loan ledger professional info ID",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					},
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						},
+						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"code": 200,
+									"message": "Delete Question Successfully!"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+
 		"/user/fullUser": {
 			"get": {
 				"tags": ["user"],
@@ -1983,6 +2504,57 @@
 				}
 			}
 		},
+		"/wellness-warrior/": {
+			"delete": {
+				"tags": ["wellness-warrior"],
+				"description": "Remove Warrior/User",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"request_id": { "type": "integer" }
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "User/Warrior removed from your list",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": { "type": "integer" },
+										"message": { "type": "string" },
+										"data": {
+											"type": "object"
+										}
+									}
+								},
+								"exmaple": {
+									"code": 200,
+									"message": "User/Warrior removed from your list",
+									"data": {}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/wellness-warrior/send-request": {
 			"post": {
 				"tags": ["wellness-warrior"],
@@ -2365,74 +2937,7 @@
 				}
 			}
 		},
-		"/auth/signup": {
-			"post": {
-				"tags": ["auth"],
-				"description": "",
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/auth_signup_body"
-							},
-							"examples": {
-								"0": {
-									"value": "{\n    \"full_name\": \"Ime Prezime\",\n    \"email\": \"test2\",\n    \"password\": \"password\"\n}"
-								}
-							}
-						}
-					}
-				},
-				"responses": {
-					"200": {
-						"description": "",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "string"
-								},
-								"example": {
-									"data": {
-										"user": {
-											"user_feature_id": null,
-											"id": 199,
-											"role_id": "1",
-											"full_name": "Ime Prezime",
-											"email": "lucijan@cinnnnn.com",
-											"password": "$2b$10$zDEMooMlyk9uWGTMlaFrGOagCWBnSEP.Ok/DUO75mj7a1UwZ.IyCm",
-											"default_currency_id": "1"
-										}
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "Bad Request",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"examples": {
-									"0": {
-										"value": "{\n    \"message\": \"'body.password' with value 'vfvf' fails to match the required pattern: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/\",\n    \"field\": \"body.password\"\n} "
-									},
-									"1": {
-										"value": "{\n    \"message\": \"'body.email' with value 'hdhdhdrr.od' fails to match the required pattern: /^([a-zA-Z0-9_.-]+)@([a-zA-Z0-9_.-]+)\\\\.([a-zA-Z]{2,5})$/\",\n    \"field\": \"body.email\"\n}"
-									},
-									"2": {
-										"value": "{\n    \"message\": \"'body.full_name' length must be at least 3 characters long\",\n    \"field\": \"body.full_name\"\n}  "
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		},
+
 		"/dailyArticle/add": {
 			"post": {
 				"tags": ["dailyArticle"],
@@ -2476,16 +2981,16 @@
 								},
 								"example": {
 									"data": {
-										"dailyDose": {
-											"id": 2,
-											"title": "Chirag",
-											"subtitle": "abc",
-											"image": "https://image.png",
-											"category": "news"
-										}
+										"id": 4,
+										"title": "abc",
+										"subtitle": "abc",
+										"image": "https://girls-first-finance.s3.amazonaws.com//uploads/dailyArticle/images/1658829054602_SAVAGE.be91855464b02bcda981.png",
+										"contentURL": "chirag agrawal",
+										"keyWord": "chirag",
+										"category": "[\"news\",\"friend-finder\"]"
 									},
 									"code": 200,
-									"message": "OK"
+									"message": "dailyArticle posted successfully"
 								}
 							}
 						}
@@ -2562,16 +3067,17 @@
 								},
 								"example": {
 									"data": {
-										"dailyDose": {
-											"id": 2,
-											"title": "Chirag Agrawal",
-											"subtitle": "abc",
-											"image": "https://image.png",
-											"category": "news"
-										}
+										"id": 4,
+										"title": "Chirag agrawal",
+										"subtitle": "abc",
+										"image": "https://girls-first-finance.s3.amazonaws.com//uploads/dailyArticle/images/1658829475794_splassive.2e66af6fb1bc74651dc8.png",
+										"contentURL": "chirag agrawal",
+										"contentBody": null,
+										"keyWord": "chirag",
+										"category": "[\"news\",\"friend-finder\"]"
 									},
 									"code": 200,
-									"message": "OK"
+									"message": "dailyArticle updated successfully"
 								}
 							}
 						}
@@ -2621,93 +3127,30 @@
 									"type": "string"
 								},
 								"example": {
-									"data": {
-										"dailyDose": [
-											{
-												"id": 16,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 17,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 18,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 19,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 20,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 21,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 22,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 23,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "wise-words"
-											},
-											{
-												"id": 24,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "music"
-											}
-										]
-									},
+									"data": [
+										{
+											"id": 2,
+											"title": "abc",
+											"subtitle": "abc",
+											"image": "https://girls-first-finance.s3.amazonaws.com/uploads/dailyArticle/images/1656924004579_1656412524843_abc_(1).png",
+											"contentURL": "chirag agrawal",
+											"contentBody": null,
+											"keyWord": "chirag",
+											"category": "[\"news\",\"friend-finder\"]"
+										},
+										{
+											"id": 4,
+											"title": "abc",
+											"subtitle": "abc",
+											"image": "https://girls-first-finance.s3.amazonaws.com//uploads/dailyArticle/images/1658829054602_SAVAGE.be91855464b02bcda981.png",
+											"contentURL": "chirag agrawal",
+											"contentBody": null,
+											"keyWord": "chirag",
+											"category": "[\"news\",\"friend-finder\"]"
+										}
+									],
 									"code": 200,
-									"message": "OK"
+									"message": "dailyArticle data!"
 								}
 							}
 						}
@@ -2763,11 +3206,92 @@
 									"type": "string"
 								},
 								"example": {
+									"data": 1,
+									"code": 200,
+									"message": "dailyArticle deleted successfully"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/email/send": {
+			"post": {
+				"tags": ["email"],
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"description": "",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/auth_signup_body"
+							},
+							"examples": {
+								"0": {
+									"value": {
+										"from": "chiragagrawal0011@gmail.com",
+										"to": ["sufyanmavya400@gmail.com", "m.muzammal208@gmail.com"],
+										"subject": "Application for leave",
+										"text": "This is very first text",
+										"html": "<strong>and easy to do anywhere, even with Node.js</strong>"
+									}
+								},
+								"1": {
+									"value": {
+										"from": "chiragagrawal0011@gmail.com",
+										"to": "sufyanmavya400@gmail.com",
+										"subject": "Application for leave",
+										"text": "This is very first text",
+										"html": "<strong>and easy to do anywhere, even with Node.js</strong>"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
 									"data": {
-										"dailyDose": 1
+										"from": "chiragagrawal0011@gmail.com",
+										"to": ["sufyanmavya400@gmail.com", "m.muzammal208@gmail.com"],
+										"subject": "Application for leave",
+										"text": "This is very first text",
+										"html": "<strong>and easy to do anywhere, even with Node.js</strong>",
+										"isMultiple": true,
+										"substitutionWrappers": ["{{", "}}"]
 									},
 									"code": 200,
-									"message": "OK"
+									"message": "Email sent sucessfully"
 								}
 							}
 						}
@@ -2811,7 +3335,9 @@
 									"title": { "type": "string", "format": "string" },
 									"subtitle": { "type": "string", "format": "string" },
 									"contentURL": { "type": "string", "format": "string" },
-									"keyWord": { "type": "string", "format": "string" },
+									"keyWord[0]": { "type": "string", "format": "string" },
+									"keyWord[1]": { "type": "string", "format": "string" },
+									"keyWord[2]": { "type": "string", "format": "string" },
 									"category": { "type": "string", "format": "string" },
 									"contentBody": { "type": "string", "format": "string" },
 									"Image": { "type": "string", "format": "binary" }
@@ -2830,16 +3356,17 @@
 								},
 								"example": {
 									"data": {
-										"dailyDose": {
-											"id": 2,
-											"title": "Chirag",
-											"subtitle": "abc",
-											"image": "https://image.png",
-											"category": "news"
-										}
+										"id": 2,
+										"title": "This is title",
+										"subtitle": "This is subtitle",
+										"image": "https://girls-first-finance.s3.amazonaws.com//uploads/dailyDose/images/1658830092394_SAVAGE.be91855464b02bcda981.png",
+										"contentURL": "This is contentURL",
+										"keyWord": "[\"1st\",\"second\"]",
+										"category": "news",
+										"contentBody": "This is contentBody"
 									},
 									"code": 200,
-									"message": "OK"
+									"message": "DailyDose posted sucessfully"
 								}
 							}
 						}
@@ -2914,16 +3441,17 @@
 								},
 								"example": {
 									"data": {
-										"dailyDose": {
-											"id": 2,
-											"title": "Chirag Agrawal",
-											"subtitle": "abc",
-											"image": "https://image.png",
-											"category": "news"
-										}
+										"id": 24,
+										"title": "This is title",
+										"subtitle": "This is subtitle",
+										"image": "/uploads/dailyDose/images/1658827599568_splassive.2e66af6fb1bc74651dc8.png",
+										"contentURL": "This is contentURL",
+										"contentBody": "This is contentBody",
+										"keyWord": "This is Keywords",
+										"category": "news"
 									},
 									"code": 200,
-									"message": "OK"
+									"message": "DailyDose Updated Successfully"
 								}
 							}
 						}
@@ -2973,93 +3501,20 @@
 									"type": "string"
 								},
 								"example": {
-									"data": {
-										"dailyDose": [
-											{
-												"id": 16,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 17,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 18,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 19,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 20,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 21,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 22,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "news"
-											},
-											{
-												"id": 23,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "wise-words"
-											},
-											{
-												"id": 24,
-												"title": "Chirag Agrawal",
-												"subtitle": "abc",
-												"image": "https://image.png",
-												"contentURL": null,
-												"keyword": null,
-												"category": "music"
-											}
-										]
-									},
+									"data": [
+										{
+											"id": 2,
+											"title": "This is title",
+											"subtitle": "This is subtitle",
+											"image": "https://girls-first-finance.s3.amazonaws.com//uploads/dailyDose/images/1658830092394_SAVAGE.be91855464b02bcda981.png",
+											"contentURL": "This is contentURL",
+											"contentBody": "This is contentBody",
+											"keyWord": "[\"1st\",\"second\"]",
+											"category": "news"
+										}
+									],
 									"code": 200,
-									"message": "OK"
+									"message": "DailyDose Data for all category 'news'"
 								}
 							}
 						}
@@ -3115,11 +3570,9 @@
 									"type": "string"
 								},
 								"example": {
-									"data": {
-										"dailyDose": 1
-									},
+									"data": 1,
 									"code": 200,
-									"message": "OK"
+									"message": "DailyDose deleted successfully"
 								}
 							}
 						}
@@ -5509,6 +5962,52 @@
 				}
 			}
 		},
+		"/auth/reset-password": {
+			"put": {
+				"tags": ["auth"],
+				"description": "Reset a password",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"password": { "type": "string", "description": "Old Password" },
+									"newPassword": { "type": "string", "description": "New Password" }
+								}
+							},
+							"examples": { "0": { "newPassword": "654321", "password": "123456" } }
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {},
+									"code": 200,
+									"message": "Password has been updated!"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/transactionAccount/delete/{id}": {
 			"delete": {
 				"tags": ["transaction-account"],
@@ -7569,6 +8068,13 @@
 						"description": "languages(comma separated value with no spaces, e.g IT,Software)",
 						"required": false,
 						"type": "string"
+					},
+					{
+						"name": "distance",
+						"in": "query",
+						"description": "distance in mile",
+						"required": false,
+						"type": "string"
 					}
 				],
 				"responses": {
@@ -7792,6 +8298,57 @@
 				}
 			}
 		},
+		"/mentor-matcher/": {
+			"delete": {
+				"tags": ["mentor-matcher"],
+				"description": "Remove Mentor/User",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"request_id": { "type": "integer" }
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "User/Mentor removed from your list",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": { "type": "integer" },
+										"message": { "type": "string" },
+										"data": {
+											"type": "object"
+										}
+									}
+								},
+								"exmaple": {
+									"code": 200,
+									"message": "User/Mentor removed from your list",
+									"data": {}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/find-friend/search": {
 			"get": {
 				"tags": ["find-friend"],
@@ -7950,6 +8507,57 @@
 				"responses": {
 					"200": {
 						"description": "Friend request rejected"
+					}
+				}
+			}
+		},
+		"/find-friend/unfriend": {
+			"delete": {
+				"tags": ["find-friend"],
+				"description": "Unfriend user",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"request_id": { "type": "integer" }
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Removed user from friend list",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": { "type": "integer" },
+										"message": { "type": "string" },
+										"data": {
+											"type": "object"
+										}
+									}
+								},
+								"exmaple": {
+									"code": 200,
+									"message": "Removed user from your friend list.",
+									"data": {}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -9081,6 +9689,34 @@
 					},
 					"status": {
 						"type": "string"
+					}
+				}
+			},
+			"question": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "number"
+					},
+					"question": {
+						"type": "string"
+					}
+				}
+			},
+			"mentorAnswers": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "number"
+					},
+					"answer": {
+						"type": "string"
+					},
+					"question_id": {
+						"type": "number"
+					},
+					"user_id": {
+						"type": "number"
 					}
 				}
 			},

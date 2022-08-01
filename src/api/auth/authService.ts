@@ -50,7 +50,7 @@ export class AuthService implements IAuthService {
 		if (userEmail) {
 			throw new Error('User already exist')
 		}
-		
+
 		const user = await User.create({
 			role_id: userRole?.getDataValue('id'),
 			full_name: fullName,
@@ -62,18 +62,23 @@ export class AuthService implements IAuthService {
 		return user as User
 	}
 
-    async checkCreds (email: string, password: string): Promise<UserType | undefined> {
-        const user = await this.checkEmail(email)
-        if(!user){
-            throw new Error("Wrong username or password!")
-        }
-        const isValid = await this.checkPass(password, user.password)
+	async checkCreds(email: string, password: string): Promise<UserType | undefined> {
+		const user = await this.checkEmail(email)
+		if (!user) {
+			throw new Error('Wrong username or password!')
+		}
+		const isValid = await this.checkPass(password, user.password)
 
-        if (!isValid) {
-            throw new Error("Wrong username or password!")
-        }
-        return user
-    }
+		if (!isValid) {
+			throw new Error('Password does not match!')
+		}
+		return user
+	}
+
+	async updatePassword(user_id: number, password: string): Promise<void> {
+		const hashPassword = await this.hashPassword(password)
+		await User.update({ password: hashPassword }, { where: { id: user_id } })
+	}
 
 	private async checkEmail(email: string): Promise<UserType> {
 		const user = await User.findOne({

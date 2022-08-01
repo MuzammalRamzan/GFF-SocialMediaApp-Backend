@@ -1,6 +1,8 @@
 import { IAuthenticatedRequest } from '../helper/authMiddleware'
 import { IMentorMatcher } from './mentorMatcherModel'
 
+export type removeMentorParams = { mentee_id?: number; mentor_id: number } | { mentee_id: number; mentor_id?: number }
+
 export interface IMentorMatcherService {
 	findMentors(userId: number, searchTerms: ISarchTermParams): Promise<ISearchMentors[]>
 	myMentors(userId: number): Promise<IMentorRequest[]>
@@ -16,6 +18,7 @@ export interface IMentorMatcherService {
 	signContract(userId: number, mentor_id: number): Promise<boolean>
 	findById(request_id: number, userId: number): Promise<IMentorMatcher>
 	getMentorRequestById(request_id: number): Promise<IMentorRequest>
+	removeMentor(request_id: number, params: removeMentorParams): Promise<number>
 }
 
 export interface IMentorRequest {
@@ -57,6 +60,8 @@ export interface ISearchMentors {
 		country: string
 		job_role: string
 		education: string
+		latitude: string
+		longitude: string
 	}
 	mentor_matcher_request: {
 		id: number
@@ -75,4 +80,7 @@ export interface ISarchTermParams {
 	conversation_mode?: string
 	languages?: string
 	text?: string
+	latitude?: String
+	longitude?: String
+	distance?: Number
 }

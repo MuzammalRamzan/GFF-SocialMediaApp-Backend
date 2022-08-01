@@ -510,4 +510,13 @@ export class FindFriendService implements IFindFriendService {
 
 		return !!friendRequest?.get()
 	}
+
+	async unfriend(request_id: number, user_id: number): Promise<number> {
+		return await FindFriendModel.destroy({
+			where: {
+				id: request_id,
+				[Op.or]: [{ sender_id: user_id }, { receiver_id: user_id }]
+			}
+		})
+	}
 }

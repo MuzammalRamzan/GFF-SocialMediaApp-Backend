@@ -1,8 +1,9 @@
 import { IDailyDoseType, DailyDoseType } from './interface'
 import { DailyDose } from './dailyDoseModel'
 import AWS from 'aws-sdk'
+import { readFileSync, readFile, writeFileSync, promises as fsPromises, readdirSync, statSync } from 'fs'
+import { join, basename } from 'path'
 import s3Services from '../../helper/s3Services'
-
 export class DailyDoseService implements IDailyDoseType {
 	private s3: s3Services
 
@@ -34,6 +35,17 @@ export class DailyDoseService implements IDailyDoseType {
 
 		return dailyDose
 	}
+	async asyncWriteFile(content: string) {
+		try {
+			await fsPromises.writeFile(join(__dirname, 'dailyDoseArticle.html'), content, {
+				flag: 'w'
+			})
+			return await fsPromises.readFile(`${__dirname}/dailyDoseArticle.html`)
+		} catch (error) {
+			throw new Error('Write file error found!')
+		}
+	}
+
 	async update(paramsId: number, params: DailyDoseType): Promise<DailyDose> {
 		await DailyDose.update(
 			{
@@ -90,11 +102,36 @@ export class DailyDoseService implements IDailyDoseType {
 		return new Promise((resolve, reject) =>
 			this.s3
 
-				.uploadFile(file, `/uploads/dailyDose/images/${fileNameWithoutSpace}`)
+				.uploadFile(file, `uploads/dailyDose/images/${fileNameWithoutSpace}`)
 
 				.then(data => resolve(data))
 
 				.catch(error => {
+					reject(error)
+				})
+		)
+	}
+	uploadContentBody = async (file: any, uploadPath?: string): Promise<AWS.S3.ManagedUpload.SendData> => {
+		const fileName = new Date().getTime() + '_' + 'dailyDoseArticle.html'
+
+		let fileNameWithoutSpace = fileName.replace(/\s/g, '_')
+
+		if (fileNameWithoutSpace.length > 200) {
+			const ext = fileNameWithoutSpace.split('.').pop()
+
+			fileNameWithoutSpace = fileNameWithoutSpace.substring(0, 40) + ext
+		}
+
+		return new Promise((resolve, reject) =>
+			this.s3
+
+				.uploadHTMLFile(file, `uploads/dailyDose/${fileNameWithoutSpace}`)
+
+				.then(data => resolve(data))
+
+				.catch(error => {
+					console.log('error', error)
+
 					reject(error)
 				})
 		)

@@ -17,7 +17,7 @@ import { hashtagRouter } from './api/hashtag/hashtagRouter'
 import { debtRouter } from './api/debt/debtRouter'
 import { dailyDoseRouter } from './api/daily-dose/dailyDoseRouter'
 import { dailyArticleRouter } from './api/dailyArticle/dailyArticleRouter'
-
+import { emailRouter } from './api/email/emailRouter'
 import { loanLedgerProfessionalInformationRouter } from './api/loan-ledger-professional-information/professionalInformationRouter'
 import { loanLedgerPersonalInfoRouter } from './api/loan-ledger-personal-information/loanLedgerPersonalInformationRouter'
 import { mentorMatcherRouter } from './api/mentor-matcher/mentorMatcherRouter'
@@ -33,6 +33,10 @@ import { uploadRouter } from './api/upload/uploadRouter'
 import { GffError, jsonErrorHandler } from './api/helper/errorHandler'
 import { feedbackRouter } from './api/feedback/feedbackRouter'
 import { roleRouter } from './api/user-role/userRole.routes'
+import { identityVerification } from './api/identity-verification/verification.route'
+
+import { mentorInfoRouter } from './api/Questionnaire/questionnaireRouter'
+import { UserAnswersRouter } from './api/MentorAnswers/userAnsewerRouter'
 
 const storage = multer.memoryStorage()
 
@@ -46,76 +50,80 @@ export const upload = multer({
 	storage,
 	limits: { fileSize: 1000000000 }
 })
-;(async function main(): Promise<void> {
-	const app = Express()
+	; (async function main(): Promise<void> {
+		const app = Express()
 
-	app.use(cors())
-	// CORS error fix
-	app.use((req: Request, res: Response, next: NextFunction) => {
-		res.setHeader('Access-Control-Allow-Origin', '*')
-		res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE')
-		res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-		if (req.method === 'OPTIONS') {
-			return res.sendStatus(200)
+		app.use(cors())
+		// CORS error fix
+		app.use((req: Request, res: Response, next: NextFunction) => {
+			res.setHeader('Access-Control-Allow-Origin', '*')
+			res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE')
+			res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+			if (req.method === 'OPTIONS') {
+				return res.sendStatus(200)
+			}
+			return next()
+		})
+
+		app.use(bodyParser.json())
+		app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options))
+		app.use('/auth', authRouter)
+		app.use('/upload', uploadRouter)
+		app.use('/user', userRouter)
+		app.use('/role', roleRouter)
+		app.use('/transaction', transactionRouter)
+		app.use('/transactionAccount', transactionAccRouter)
+		app.use('/transactionCategory', transactionCategoryRouter)
+		app.use('/record', recordRouter)
+		app.use('/find-friend', findFriendRouter)
+		app.use('/userInformation', userInformationRouter)
+		app.use('/hashtag', hashtagRouter)
+		app.use('/debt', debtRouter)
+		app.use('/dailyDose', dailyDoseRouter)
+		app.use('/dailyArticle', dailyArticleRouter)
+		app.use('/loanLedgerProfessionalInformation', loanLedgerProfessionalInformationRouter)
+		app.use('/loanLedgerPersonalInformation', loanLedgerPersonalInfoRouter)
+		app.use('/mentor-matcher', mentorMatcherRouter)
+		app.use('/mentor-information', mentorInformationRouter)
+		app.use('/mpesa', mpesaRouter)
+		app.use('/room', roomRoute)
+		app.use('/message', messageRoute)
+		app.use('/warrior-information', warriorInformationRouter)
+		app.use('/wellness-warrior', warriorRouter)
+		app.use('/', mentorSettingsRouter)
+		app.use('/currency', currencyRouter)
+		app.use('/feedback', feedbackRouter)
+		app.use('/identity', identityVerification)
+
+		app.use('/mentor-information', mentorInfoRouter)
+		app.use('/mentor-information', UserAnswersRouter)
+
+		app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+			const error = err as GffError
+			if (error.message.toLowerCase() === 'no data found') {
+				error.errorCode = '404'
+				error.httpStatusCode = 404
+			} else if (error?.errorCode) {
+				error.httpStatusCode = +error?.errorCode
+			} else {
+				error.errorCode = '500'
+				error.httpStatusCode = 500
+			}
+
+			return jsonErrorHandler(err, req, res, () => { })
+		})
+
+		app.listen(process.env.PORT, () => {
+			console.log(`Server running at port ${process.env.PORT}`)
+		})
+
+		try {
+			await sequelize.authenticate()
+			console.log('Database connection has been established successfully.')
+		} catch (error) {
+			console.error('Unable to connect to the database:', error)
 		}
-		return next()
+	})().catch(err => {
+		console.log('Error starting application $s', err.message)
+		process.exit(1)
 	})
-
-	app.use(bodyParser.json())
-	app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options))
-	app.use('/auth', authRouter)
-	app.use('/upload', uploadRouter)
-	app.use('/user', userRouter)
-	app.use('/role', roleRouter)
-	app.use('/transaction', transactionRouter)
-	app.use('/transactionAccount', transactionAccRouter)
-	app.use('/transactionCategory', transactionCategoryRouter)
-	app.use('/record', recordRouter)
-	app.use('/find-friend', findFriendRouter)
-	app.use('/userInformation', userInformationRouter)
-	app.use('/hashtag', hashtagRouter)
-	app.use('/debt', debtRouter)
-	app.use('/dailyDose', dailyDoseRouter)
-	app.use('/dailyArticle', dailyArticleRouter)
-	app.use('/loanLedgerProfessionalInformation', loanLedgerProfessionalInformationRouter)
-	app.use('/loanLedgerPersonalInformation', loanLedgerPersonalInfoRouter)
-	app.use('/mentor-matcher', mentorMatcherRouter)
-	app.use('/mentor-information', mentorInformationRouter)
-	app.use('/mpesa', mpesaRouter)
-	app.use('/room', roomRoute)
-	app.use('/message', messageRoute)
-	app.use('/warrior-information', warriorInformationRouter)
-	app.use('/wellness-warrior', warriorRouter)
-	app.use('/', mentorSettingsRouter)
-	app.use('/currency', currencyRouter)
-	app.use('/feedback', feedbackRouter)
-
-	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-		const error = err as GffError
-		if (error.message.toLowerCase() === 'no data found') {
-			error.errorCode = '404'
-			error.httpStatusCode = 404
-		} else if (error?.errorCode) {
-			error.httpStatusCode = +error?.errorCode
-		} else {
-			error.errorCode = '500'
-			error.httpStatusCode = 500
-		}
-
-		return jsonErrorHandler(err, req, res, () => {})
-	})
-
-	app.listen(process.env.PORT, () => {
-		console.log(`Server running at port ${process.env.PORT}`)
-	})
-
-	try {
-		await sequelize.authenticate()
-		console.log('Database connection has been established successfully.')
-	} catch (error) {
-		console.error('Unable to connect to the database:', error)
-	}
-})().catch(err => {
-	console.log('Error starting application $s', err.message)
-	process.exit(1)
-})

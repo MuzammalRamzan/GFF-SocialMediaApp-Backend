@@ -32,9 +32,19 @@ Associations.init(
 	}
 )
 
-User.hasOne(Associations, { foreignKey: 'user_id', as: 'user_associations' })
-Associations.belongsTo(FindFriendModel, { foreignKey: 'find_friend_id', as: 'find_friend_associations' })
-Associations.belongsTo(WellnessWarrior, { foreignKey: 'wellness_warrior_id', as: 'wellness_warrior_associations' })
-Associations.belongsTo(MentorMatcherModel, { foreignKey: 'mentor_matcher_id', as: 'mentor_matcher_associations' })
+const onDelete = { onDelete: 'CASCADE' }
+
+User.hasOne(Associations, { foreignKey: 'user_id', as: 'user_associations', ...onDelete })
+Associations.belongsTo(FindFriendModel, { foreignKey: 'find_friend_id', as: 'find_friend_associations', ...onDelete })
+Associations.belongsTo(WellnessWarrior, {
+	foreignKey: 'wellness_warrior_id',
+	as: 'wellness_warrior_associations',
+	...onDelete
+})
+Associations.belongsTo(MentorMatcherModel, {
+	foreignKey: 'mentor_matcher_id',
+	as: 'mentor_matcher_associations',
+	...onDelete
+})
 
 Associations.sync()

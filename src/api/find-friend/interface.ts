@@ -65,6 +65,7 @@ export interface IFindFriendService {
 	getFriendByUserId(loggedInUserId: number, userId: number): Promise<FriendRequestWithUserInformation>
 	isBlocked(sender_id: number, receiver_id: number): Promise<IFriendRequest>
 	areUsersFriend(sender_id: number, receiver_id: number): Promise<boolean>
+	unfriend(request_id: number, user_id: number): Promise<number>
 }
 
 export interface createFindFriendRequest extends Request, IAuthenticatedRequest {
