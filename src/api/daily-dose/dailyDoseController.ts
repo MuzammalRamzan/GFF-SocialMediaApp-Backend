@@ -23,13 +23,21 @@ export class DailyDoseController {
 					.status(400)
 					.json({ errors: errors, message: 'The category type should be news, music or wise-words', code: 400 })
 			}
+			console.log('--------------Create Dose--------------------')
+			console.log(params);
 			const uploadImageInfo = await this.dailyDoseServices.upload(req.file)
+			console.log('Upload Image Info: ', uploadImageInfo)
 			const file = await this.dailyDoseServices.asyncWriteFile(params.contentBody)
+			console.log('File: ', file)
 			const uploadContentInfo = await this.dailyDoseServices.uploadContentBody(file)
+			console.log('Upload Content Info: ', uploadContentInfo)
 			params.image = AWS_S3_BASE_BUCKET_URL + uploadImageInfo.Key
 			params.contentBody = AWS_S3_BASE_BUCKET_URL + uploadContentInfo.Key
 			params.keyWord = JSON.stringify(params.keyWord)
+			console.log('Params: ', params)
 			const dailyDose = await this.dailyDoseServices.add(params)
+			console.log('Daily Dose: ', dailyDose)
+			console.log('--------------Create Dose Done successfully--------------------')
 			return res.status(200).json({ data: dailyDose, code: 200, message: `DailyDose posted sucessfully` })
 		} catch (err) {
 			console.log(err)
