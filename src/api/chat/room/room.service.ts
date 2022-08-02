@@ -82,6 +82,9 @@ export class RoomService implements IRoomService {
 							[Op.like]: `%${user_id},%`
 						},
 						{
+							[Op.like]: `%,${user_id},%`
+						},
+						{
 							[Op.like]: `%,${user_id}`
 						}
 					]
