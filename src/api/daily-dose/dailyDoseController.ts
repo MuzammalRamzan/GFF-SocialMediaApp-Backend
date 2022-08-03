@@ -23,16 +23,15 @@ export class DailyDoseController {
 					.status(400)
 					.json({ errors: errors, message: 'The category type should be news, music or wise-words', code: 400 })
 			}
-			console.log('--------------Create Dose--------------------')
-			console.log(params);
+			const isValidURL = await this.dailyDoseServices.validURL(params.contentURL)
+			if (params.contentURL && !isValidURL) {
+				const file = await this.dailyDoseServices.asyncWriteFile(params.contentURL)
+				const uploadContentInfo = await this.dailyDoseServices.uploadContentBody(file)
+				params.contentURL = AWS_S3_BASE_BUCKET_URL + uploadContentInfo.Key
+				params.isInternalLink = true
+			}
 			const uploadImageInfo = await this.dailyDoseServices.upload(req.file)
-			console.log('Upload Image Info: ', uploadImageInfo)
-			const file = await this.dailyDoseServices.asyncWriteFile(params.contentBody)
-			console.log('File: ', file)
-			const uploadContentInfo = await this.dailyDoseServices.uploadContentBody(file)
-			console.log('Upload Content Info: ', uploadContentInfo)
 			params.image = AWS_S3_BASE_BUCKET_URL + uploadImageInfo.Key
-			params.contentBody = AWS_S3_BASE_BUCKET_URL + uploadContentInfo.Key
 			params.keyWord = JSON.stringify(params.keyWord)
 			console.log('Params: ', params)
 			const dailyDose = await this.dailyDoseServices.add(params)
@@ -48,11 +47,7 @@ export class DailyDoseController {
 		let category = req.query.category as string
 		let dailyDose
 		try {
-			if (category) {
-				dailyDose = await this.dailyDoseServices.findByCategory(category)
-			} else {
-				dailyDose = await this.dailyDoseServices.findAllCategory(category)
-			}
+			dailyDose = await this.dailyDoseServices.findByCategory(category)
 			if (!dailyDose) {
 				throw new Error('No data found')
 			}
@@ -70,8 +65,16 @@ export class DailyDoseController {
 		try {
 			if (req.file) {
 				const uploadImageInfo = await this.dailyDoseServices.upload(req.file)
-				params.image = uploadImageInfo.Key
+				params.image = AWS_S3_BASE_BUCKET_URL + uploadImageInfo.Key
 			}
+			const isValidURL = await this.dailyDoseServices.validURL(params.contentURL)
+			if (params.contentURL && !isValidURL) {
+				const file = await this.dailyDoseServices.asyncWriteFile(params.contentURL)
+				const uploadContentInfo = await this.dailyDoseServices.uploadContentBody(file)
+				params.contentURL = AWS_S3_BASE_BUCKET_URL + uploadContentInfo.Key
+				params.isInternalLink = true
+			}
+			params.keyWord = JSON.stringify(params.keyWord)
 			const dailyDose = await this.dailyDoseServices.update(id, params)
 			return res.status(200).json({ data: dailyDose, code: 200, message: `DailyDose Updated Successfully` })
 		} catch (err) {

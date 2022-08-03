@@ -8,11 +8,10 @@ export type DailyDoseType = {
 	subtitle: string
 	image: string
 	contentURL: string
-	contentBody: string
 	keyWord: string
 	category: string
+	isInternalLink: Boolean
 }
-
 export interface IDailyDoseType {
 	add(params: DailyDoseType): Promise<DailyDose>
 }

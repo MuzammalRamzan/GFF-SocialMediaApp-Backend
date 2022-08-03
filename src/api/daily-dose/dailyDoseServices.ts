@@ -1,7 +1,7 @@
 import { IDailyDoseType, DailyDoseType } from './interface'
 import { DailyDose } from './dailyDoseModel'
 import AWS from 'aws-sdk'
-import { readFileSync, readFile, writeFileSync, promises as fsPromises, readdirSync, statSync } from 'fs'
+import { readFileSync, readFile, writeFileSync, promises as fsPromises, readdirSync, statSync, unlinkSync } from 'fs'
 import { join, basename } from 'path'
 import s3Services from '../../helper/s3Services'
 export class DailyDoseService implements IDailyDoseType {
@@ -9,6 +9,18 @@ export class DailyDoseService implements IDailyDoseType {
 
 	constructor() {
 		this.s3 = new s3Services()
+	}
+	validURL(link: string) {
+		var pattern = new RegExp(
+			'^(https?:\\/\\/)?' + // protocol
+				'((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+				'((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+				'(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+				'(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+				'(\\#[-a-z\\d_]*)?$',
+			'i'
+		) // fragment locator
+		return !!pattern.test(link)
 	}
 	async add(params: DailyDoseType): Promise<DailyDose> {
 		const dailyDose = await DailyDose.create({
@@ -18,21 +30,27 @@ export class DailyDoseService implements IDailyDoseType {
 			contentURL: params.contentURL,
 			keyWord: params.keyWord,
 			category: params.category,
-			contentBody: params.contentBody
+			isInternalLink: params.isInternalLink
 		})
 		return dailyDose
 	}
 	async findByCategory(category: string): Promise<DailyDose[]> {
-		const dailyDose = await DailyDose.findAll({
-			where: {
-				category: category
-			}
-		})
-
+		let dailyDose: DailyDose[] = []
+		if (category) {
+			dailyDose = await DailyDose.findAll({
+				order: [['created_at', 'ASC']],
+				where: {
+					category: category
+				}
+			})
+		} else {
+			dailyDose = await DailyDose.findAll({
+				order: [['created_at', 'ASC']]
+			})
+		}
 		if (!dailyDose) {
 			throw new Error('Unauthorized')
 		}
-
 		return dailyDose
 	}
 	async asyncWriteFile(content: string) {
@@ -45,6 +63,13 @@ export class DailyDoseService implements IDailyDoseType {
 			throw new Error('Write file error found!')
 		}
 	}
+	asyncDeleteFile() {
+		try {
+			unlinkSync(`${__dirname}/dailyDoseArticle.html`)
+		} catch (error) {
+			throw new Error('Delete File Error')
+		}
+	}
 
 	async update(paramsId: number, params: DailyDoseType): Promise<DailyDose> {
 		await DailyDose.update(
@@ -54,7 +79,8 @@ export class DailyDoseService implements IDailyDoseType {
 				image: params.image,
 				contentURL: params.contentURL,
 				keyWord: params.keyWord,
-				category: params.category
+				category: params.category,
+				isInternalLink: params.isInternalLink
 			},
 			{
 				where: {
@@ -79,16 +105,7 @@ export class DailyDoseService implements IDailyDoseType {
 
 		return deletedRow
 	}
-	async findAllCategory(category: string): Promise<DailyDose[]> {
-		const dailyDose = await DailyDose.findAll()
-
-		if (!dailyDose) {
-			throw new Error('no data found')
-		}
-
-		return dailyDose
-	}
-	upload = async (file: Express.Multer.File, uploadPath?: string): Promise<AWS.S3.ManagedUpload.SendData> => {
+	async upload(file: Express.Multer.File, uploadPath?: string): Promise<AWS.S3.ManagedUpload.SendData> {
 		const fileName = new Date().getTime() + '_' + file.originalname
 
 		let fileNameWithoutSpace = fileName.replace(/\s/g, '_')
@@ -111,7 +128,7 @@ export class DailyDoseService implements IDailyDoseType {
 				})
 		)
 	}
-	uploadContentBody = async (file: any, uploadPath?: string): Promise<AWS.S3.ManagedUpload.SendData> => {
+	async uploadContentBody(file: any, uploadPath?: string): Promise<AWS.S3.ManagedUpload.SendData> {
 		const fileName = new Date().getTime() + '_' + 'dailyDoseArticle.html'
 
 		let fileNameWithoutSpace = fileName.replace(/\s/g, '_')
@@ -127,7 +144,10 @@ export class DailyDoseService implements IDailyDoseType {
 
 				.uploadHTMLFile(file, `uploads/dailyDose/${fileNameWithoutSpace}`)
 
-				.then(data => resolve(data))
+				.then(async data => {
+					await this.asyncDeleteFile()
+					resolve(data)
+				})
 
 				.catch(error => {
 					console.log('error', error)

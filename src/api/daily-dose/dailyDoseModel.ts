@@ -26,15 +26,21 @@ DailyDose.init(
 		contentURL: {
 			type: DataTypes.STRING
 		},
-		contentBody: {
-			type: DataTypes.STRING
-		},
 		keyWord: {
 			type: DataTypes.JSON
 		},
 		category: {
 			type: DataTypes.ENUM(categoryType.MUSIC, categoryType.NEWS, categoryType.WISEWORD),
 			allowNull: false
+		},
+		created_at: {
+			type: DataTypes.DATE,
+			allowNull: false,
+			defaultValue: new Date()
+		},
+		isInternalLink: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false
 		}
 	},
 
