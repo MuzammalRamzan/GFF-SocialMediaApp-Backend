@@ -9055,6 +9055,30 @@
 						"description": "Auth Token",
 						"required": true,
 						"type": "string"
+					},
+					{
+						"name": "to",
+						"in": "query",
+						"description": "To Date",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string",
+							"format": "date"
+						}
+					},
+					{
+						"name": "from",
+						"in": "query",
+						"description": "From Date",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string",
+							"format": "date"
+						}
 					}
 				],
 				"responses": {
@@ -9362,6 +9386,18 @@
 						"schema": {
 							"type": "integer",
 							"format": "int64"
+						}
+					},
+					{
+						"name": "to",
+						"in": "query",
+						"description": "To Date",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string",
+							"format": "date"
 						}
 					},
 					{

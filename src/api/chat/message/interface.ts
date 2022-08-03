@@ -16,10 +16,10 @@ export type MessageType = {
 
 export interface IMessageService {
 	getMessagesByRoom(room_id: number): Promise<Message[]>
-	getAllMessages(user_id: number): Promise<(MessageType | null)[]>
+	getAllMessages(user_id: number, to?: string, from?: string): Promise<(MessageType | null)[]>
 	getAllUnreadMessageCount(user_id: number): Promise<number>
 	sendMessage(message: string, user_id: number, room_id: number): Promise<Message | null>
-	getMessages(room_id: number, from: string): Promise<Message[]>
+	getMessages(room_id: number, to: string, from: string): Promise<Message[]>
 	getAllUnreadMessages(user_id: number): Promise<(MessageType | null)[]>
 	subscribeToRoom(req: Request, res: Response, params: { user_id: number; room_id: number }): Promise<void>
 	subscribeToGetNewIncomingMessageNotification(req: Request, res: Response, user_id: number): Promise<void>

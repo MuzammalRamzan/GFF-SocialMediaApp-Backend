@@ -41,11 +41,25 @@ export class MessageService implements IMessageService {
 		}
 	}
 
-	public async getMessagesByRoom(room_id: number): Promise<Message[]> {
+	public async getMessagesByRoom(room_id: number, to?: string, from?: string): Promise<Message[]> {
+		let filter: any = {
+			room_id,
+		};
+
+		if (to) {
+			filter.created_at = {
+				[Op.lte]: new Date(to)
+			}
+		}
+
+		if (from) {
+			filter.created_at = {
+				[Op.gte]: new Date(from)
+			}
+		}
+
 		return await Message.findAll({
-			where: {
-				room_id
-			},
+			where: filter,
 			order: [['created_at', 'ASC']],
 			include: [
 				{
@@ -64,13 +78,13 @@ export class MessageService implements IMessageService {
 		})
 	}
 
-	public async getAllMessages(user_id: number): Promise<(MessageType | null)[]> {
+	public async getAllMessages(user_id: number, to?: string, from?: string): Promise<(MessageType | null)[]> {
 		const roomService = new RoomService()
 		const getAllRooms = await roomService.getAllRooms(user_id)
 		const messages = []
 
 		for (let room of getAllRooms) {
-			const getMessages = await this.getMessagesByRoom(room.get('id') as number)
+			const getMessages = await this.getMessagesByRoom(room.get('id') as number, to, from)
 			for (let message of getMessages) {
 				messages.push(MessageService.filterMessageObject(message))
 			}
@@ -105,13 +119,15 @@ export class MessageService implements IMessageService {
 		return messageObj
 	}
 
-	public async getMessages(room_id: number, from: string): Promise<Message[]> {
+	public async getMessages(room_id: number, to: string, from: string): Promise<Message[]> {
+		const to_date = new Date(to)
 		const from_date = new Date(from)
 
 		return await Message.findAll({
 			where: {
 				room_id,
 				created_at: {
+					[Op.lte]: to_date,
 					[Op.gte]: from_date
 				}
 			},
@@ -149,6 +165,9 @@ export class MessageService implements IMessageService {
 								},
 								{
 									[Op.like]: `%,${user_id}`
+								},
+								{
+									[Op.like]: `%,${user_id},%`
 								}
 							]
 						}

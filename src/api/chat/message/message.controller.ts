@@ -41,8 +41,25 @@ export class MessageController {
 		try {
 			const room_id = +req.params.id
 			const from = req.query.from as string
+			const to = req.query.to as string
 
-			const messages = await this.messageService.getMessages(room_id, from)
+			const toDate = new Date(to)
+			if (isNaN(toDate.getTime())) {
+				return res.status(400).json({
+					message: 'Invalid to date',
+					code: 400
+				})
+			}
+
+			const fromDate = new Date(from)
+			if (isNaN(fromDate.getTime())) {
+				return res.status(400).json({
+					message: 'Invalid from date',
+					code: 400
+				})
+			}
+
+			const messages = await this.messageService.getMessages(room_id, to, from)
 
 			const data = messages.map(message => MessageService.filterMessageObject(message))
 
@@ -78,7 +95,26 @@ export class MessageController {
 	getAllMessages = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
 		try {
 			const userId = req?.user?.id as number
-			const messages = await this.messageService.getAllMessages(userId)
+			const from = req.query.from as string
+			const to = req.query.to as string
+
+			const toDate = new Date(to)
+			if (isNaN(toDate.getTime())) {
+				return res.status(400).json({
+					message: 'Invalid to date',
+					code: 400
+				})
+			}
+
+			const fromDate = new Date(from)
+			if (isNaN(fromDate.getTime())) {
+				return res.status(400).json({
+					message: 'Invalid from date',
+					code: 400
+				})
+			}
+
+			const messages = await this.messageService.getAllMessages(userId, to, from)
 
 			return res.status(200).json({
 				data: { messages },
