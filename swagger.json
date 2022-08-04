@@ -70,6 +70,10 @@
 			"description": "Send Email to multiple address"
 		},
 		{
+			"name": "promocode",
+			"description": "Promocode APIs"
+		},
+		{
 			"name": "uploads",
 			"description": "File upload related routes"
 		},
@@ -592,303 +596,8 @@
 			}
 		},
 
-		"/user/fullUser": {
-			"get": {
-				"tags": ["user"],
-				"description": "Get full user information",
-				"parameters": [
-					{
-						"name": "auth-token",
-						"in": "header",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "string"
-						},
-						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "string"
-								},
-								"example": {
-									"data": {
-										"fullUser": [
-											{
-												"id": 37,
-												"user_id": 37,
-												"profile_url": null,
-												"bio": "Test my bio",
-												"date_of_birth": "2022-05-31",
-												"gender": "other",
-												"email": "test",
-												"phone_number": "+55555555555",
-												"country": "test country",
-												"city": "test city",
-												"state": "test state",
-												"zip_code": 10000,
-												"address": "Test my address ",
-												"employer_name": "Test employer",
-												"job_role": "CEO",
-												"education": "No education",
-												"other_education": "No test education",
-												"twitter": null,
-												"facebook": null,
-												"instagram": null,
-												"linkedin": null,
-												"tiktok": null,
-												"role_id": 1,
-												"full_name": "ime prezime",
-												"password": "$2b$10$Q9BzTt.cFMsuFlioq/BMYuTd5GQbCpJQU.9oAPag.JhCngu3Z7hgq",
-												"default_currency_id": 1,
-												"user_feature_id": null
-											}
-										]
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/mpesa/auth": {
-			"get": {
-				"tags": ["mpesa"],
-				"description": "Get access token for mpesa",
-				"parameters": [
-					{
-						"name": "auth-token",
-						"in": "header",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "string"
-						},
-						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"data": {
-										"response": {
-											"access_token": "BMaGQC4Ccg0AFwVA111owu3kWnAY",
-											"expires_in": "3599"
-										}
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/loanLedgerProfessionalInformation/update/{id}": {
-			"put": {
-				"tags": ["loan-ledger-professional-info"],
-				"description": "Update a loan ledger professional info",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"description": "Loan ledger professional information ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
-					},
-					{
-						"name": "auth-token",
-						"in": "header",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "string"
-						},
-						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
-					}
-				],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/update_id_body_7"
-							},
-							"examples": {
-								"0": {
-									"value": "{\r\n            \"employment_type\": \"Test employment_type2\",\r\n            \"company_name\": \"Test company_name3\",\r\n            \"profession\": \"Test profession2\",\r\n            \"education\": \"Test education2\",\r\n            \"net_monthly_salary\": 101.83,\r\n            \"work_experience\": \"Test work_experience2\"\r\n        }"
-								}
-							}
-						}
-					}
-				},
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"data": {
-										"professionalInformation": {
-											"id": 10,
-											"user_id": 37,
-											"employment_type": "Test employment_type2",
-											"company_name": "Test company_name3",
-											"profession": "Test profession2",
-											"education": "Test education2",
-											"net_monthly_salary": 101.83,
-											"work_experience": "Test work_experience2"
-										}
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/loanLedgerProfessionalInformation/{id}": {
-			"get": {
-				"tags": ["loan-ledger-professional-info"],
-				"description": "Get loan ledger professional information by ID",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"description": "Loan ledger professional info ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
-					},
-					{
-						"name": "auth-token",
-						"in": "header",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "string"
-						},
-						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"data": {
-										"professionalInformation": {
-											"id": 9,
-											"user_id": 37,
-											"employment_type": "Test employment_type",
-											"company_name": "Test company_name",
-											"profession": "Test profession",
-											"education": "Test education",
-											"net_monthly_salary": 100.73,
-											"work_experience": "Test work_experience"
-										}
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
-								}
-							}
-						}
-					}
-				}
-			}
-		},
+
+
 		"/loanLedgerProfessionalInformation/user/{id}": {
 			"get": {
 				"tags": ["loan-ledger-professional-info"],
@@ -964,774 +673,7 @@
 				}
 			}
 		},
-		"/loanLedgerProfessionalInformation/add": {
-			"post": {
-				"tags": ["loan-ledger-professional-info"],
-				"description": "Add professional information for loan ledger",
-				"parameters": [
-					{
-						"name": "auth-token",
-						"in": "header",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "string"
-						},
-						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
-					}
-				],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/loanLedgerProfessionalInformation_add_body"
-							},
-							"examples": {
-								"0": {
-									"value": "{\r\n            \"user_id\": 37,\r\n            \"employment_type\": \"Test employment_type\",\r\n            \"company_name\": \"Test company_name\",\r\n            \"profession\": \"Test profession\",\r\n            \"education\": \"Test education\",\r\n            \"net_monthly_salary\": 100.73,\r\n            \"work_experience\": \"Test work_experience\"\r\n        }"
-								}
-							}
-						}
-					}
-				},
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object",
-									"example": {
-										"data": {
-											"professionalInformation": {
-												"id": 10,
-												"user_id": 37,
-												"employment_type": "Test employment_type",
-												"company_name": "Test company_name",
-												"profession": "Test profession",
-												"education": "Test education",
-												"net_monthly_salary": 100.73,
-												"work_experience": "Test work_experience"
-											}
-										},
-										"code": 200,
-										"message": "OK"
-									}
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/loanLedgerProfessionalInformation/list": {
-			"get": {
-				"tags": ["loan-ledger-professional-info"],
-				"description": "Get all loan ledger professional informations",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object",
-									"example": {
-										"data": {
-											"professionalInformation": [
-												{
-													"id": 1,
-													"user_id": 38,
-													"employment_type": "Test employment_type3",
-													"company_name": "Test company_name2",
-													"profession": "Test profession2",
-													"education": "Test education2",
-													"net_monthly_salary": 100.83,
-													"work_experience": "Test work_experience2"
-												},
-												{
-													"id": 5,
-													"user_id": 63,
-													"employment_type": "Test employment_type",
-													"company_name": "Test company_name",
-													"profession": "Test profession",
-													"education": "Test education",
-													"net_monthly_salary": 500,
-													"work_experience": "Test"
-												},
-												{
-													"id": 9,
-													"user_id": 37,
-													"employment_type": "Test employment_type",
-													"company_name": "Test company_name",
-													"profession": "Test profession",
-													"education": "Test education",
-													"net_monthly_salary": 100.73,
-													"work_experience": "Test work_experience"
-												}
-											]
-										},
-										"code": 200,
-										"message": "OK"
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/loanLedgerProfessionalInformation/delete/{id}": {
-			"delete": {
-				"tags": ["loan-ledger-professional-info"],
-				"description": "Delete a loan ledger professional information",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"description": "Loan ledger professional info ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
-					},
-					{
-						"name": "auth-token",
-						"in": "header",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "string"
-						},
-						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"data": {
-										"professionalInformation": 1
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/loanLedgerPersonalInformation/add": {
-			"post": {
-				"tags": ["loan-ledger-personal-info"],
-				"description": "Add personal information for loan ledger",
-				"parameters": [
-					{
-						"name": "auth-token",
-						"in": "header",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "string"
-						},
-						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMTEwMTgsImlhdCI6MTY1NTEwMzgxOC4wNywiZW1haWwiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkUTlCelR0LmNGTXN1Rmxpb3EvQk1ZdVRkNUdRYkNwSlFVLjlvQVBhZy5KaENuZ3UzWjdoZ3EifQ.eNeghc_UR9fqKyZagj3V_5DcAeu9vI1QVUIZZb3qP-Q"
-					}
-				],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/loanLedgerPersonalInformation_add_body"
-							},
-							"examples": {
-								"0": {
-									"value": "{\n    \"user_id\": 37,\n    \"full_name\": \"Ime\",\n    \"national_id\": \"12345678\",\n    \"date_of_birth\": \"1990-09-09\",\n    \"registration_number\": \"1234567890\",\n    \"gender\": \"male\",\n    \"email\": \"testemail@email\",\n    \"mobile_phone\": \"123456789\",\n    \"current_residence\": \"Street\",\n    \"house_number\": \"15\",\n    \"country\": \"Croatia\"\n}"
-								}
-							}
-						}
-					}
-				},
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"data": {
-										"loanLedgerPersonalInfo": {
-											"id": 6,
-											"user_id": 37,
-											"full_name": "Name",
-											"national_id": "12345678",
-											"date_of_birth": "1990-07-07T00:00:00.000Z",
-											"registration_number": "1234567890",
-											"gender": "male",
-											"email": "testemail@email",
-											"mobile_phone": "123456789",
-											"current_residence": "Street",
-											"house_number": "15",
-											"country": "Croatia"
-										}
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"examples": {
-									"0": {
-										"value": {
-											"message": "Unauthorized",
-											"status": 401
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/loanLedgerPersonalInformation/list": {
-			"get": {
-				"tags": ["loan-ledger-personal-info"],
-				"description": "Get all loan ledger personal informations",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"data": {
-										"loanPersonalInfos": [
-											{
-												"id": 1,
-												"user_id": 63,
-												"full_name": "Name",
-												"national_id": "12345678",
-												"date_of_birth": "1990-06-06",
-												"registration_number": "1234567890",
-												"gender": "male",
-												"email": "email@email",
-												"mobile_phone": "123456789",
-												"current_residence": "Street",
-												"house_number": "15",
-												"country": "Croatia"
-											},
-											{
-												"id": 2,
-												"user_id": 37,
-												"full_name": "Name",
-												"national_id": "12345678",
-												"date_of_birth": "1990-07-07",
-												"registration_number": "1234567890",
-												"gender": "male",
-												"email": "testemail@email",
-												"mobile_phone": "123456789",
-												"current_residence": "Street",
-												"house_number": "15",
-												"country": "Croatia"
-											}
-										]
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/loanLedgerPersonalInformation/{id}": {
-			"get": {
-				"tags": ["loan-ledger-personal-info"],
-				"description": "Get loan ledger personal information by ID",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"description": "Loan ledger personal info ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
-					},
-					{
-						"name": "auth-token",
-						"in": "header",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "string"
-						},
-						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMTEwMTgsImlhdCI6MTY1NTEwMzgxOC4wNywiZW1haWwiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkUTlCelR0LmNGTXN1Rmxpb3EvQk1ZdVRkNUdRYkNwSlFVLjlvQVBhZy5KaENuZ3UzWjdoZ3EifQ.eNeghc_UR9fqKyZagj3V_5DcAeu9vI1QVUIZZb3qP-Q"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"data": {
-										"loalLedgerPersonalInfo": {
-											"id": 2,
-											"user_id": 37,
-											"full_name": "Name",
-											"national_id": "12345678",
-											"date_of_birth": "1990-07-07",
-											"registration_number": "1234567890",
-											"gender": "male",
-											"email": "testemail@email",
-											"mobile_phone": "123456789",
-											"current_residence": "Street",
-											"house_number": "15",
-											"country": "Croatia"
-										}
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/loanLedgerPersonalInformation/delete/{id}": {
-			"delete": {
-				"tags": ["loan-ledger-personal-info"],
-				"description": "Delete a loan ledger personal information",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"description": "Loan ledger personal info ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
-					},
-					{
-						"name": "auth-token",
-						"in": "header",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "string"
-						},
-						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMTEwMTgsImlhdCI6MTY1NTEwMzgxOC4wNywiZW1haWwiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkUTlCelR0LmNGTXN1Rmxpb3EvQk1ZdVRkNUdRYkNwSlFVLjlvQVBhZy5KaENuZ3UzWjdoZ3EifQ.eNeghc_UR9fqKyZagj3V_5DcAeu9vI1QVUIZZb3qP-Q"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"data": {
-										"loanLedgerPersonalInfo": 1
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/loanLedgerPersonalInformation/update/{id}": {
-			"put": {
-				"tags": ["loan-ledger-personal-info"],
-				"description": "Update a loan ledger personal info",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"description": "Loan ledger personal information ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
-					},
-					{
-						"name": "auth-token",
-						"in": "header",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "string"
-						},
-						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMTEwMTgsImlhdCI6MTY1NTEwMzgxOC4wNywiZW1haWwiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkUTlCelR0LmNGTXN1Rmxpb3EvQk1ZdVRkNUdRYkNwSlFVLjlvQVBhZy5KaENuZ3UzWjdoZ3EifQ.eNeghc_UR9fqKyZagj3V_5DcAeu9vI1QVUIZZb3qP-Q"
-					}
-				],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/update_id_body_6"
-							},
-							"examples": {
-								"0": {
-									"value": "{\n    \"country\": \"Italy\"\n}"
-								}
-							}
-						}
-					}
-				},
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"data": {
-										"loanLedgerPersonalInfo": {
-											"id": 2,
-											"user_id": 37,
-											"full_name": "Name",
-											"national_id": "12345678",
-											"date_of_birth": "1990-07-07",
-											"registration_number": "1234567890",
-											"gender": "male",
-											"email": "testemail@email",
-											"mobile_phone": "123456789",
-											"current_residence": "Street",
-											"house_number": "120",
-											"country": "Italy"
-										}
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/loanLedgerPersonalInformation/user/{user_id}": {
-			"get": {
-				"tags": ["loan-ledger-personal-info"],
-				"description": "Get loan ledger informations for a user",
-				"parameters": [
-					{
-						"name": "user_id",
-						"in": "path",
-						"description": "User ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
-					},
-					{
-						"name": "auth-token",
-						"in": "header",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "string"
-						},
-						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMTEwMTgsImlhdCI6MTY1NTEwMzgxOC4wNywiZW1haWwiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkUTlCelR0LmNGTXN1Rmxpb3EvQk1ZdVRkNUdRYkNwSlFVLjlvQVBhZy5KaENuZ3UzWjdoZ3EifQ.eNeghc_UR9fqKyZagj3V_5DcAeu9vI1QVUIZZb3qP-Q"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"data": {
-										"loanLedgerPersonalInfo": [
-											{
-												"id": 2,
-												"user_id": 37,
-												"full_name": "Name",
-												"national_id": "12345678",
-												"date_of_birth": "1990-07-07",
-												"registration_number": "1234567890",
-												"gender": "male",
-												"email": "testemail@email",
-												"mobile_phone": "123456789",
-												"current_residence": "Street",
-												"house_number": "15",
-												"country": "Croatia"
-											}
-										]
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/debt/delete/{id}": {
-			"delete": {
-				"tags": ["debt"],
-				"description": "Delete a debt",
-				"parameters": [
-					{
-						"name": "auth-token",
-						"in": "header",
-						"description": "Auth Token",
-						"required": true,
-						"type": "string"
-					},
-					{
-						"name": "id",
-						"in": "path",
-						"description": "Debt ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"data": {
-										"debt": 1
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/debt/{id}": {
-			"get": {
-				"tags": ["debt"],
-				"description": "Get debt by id",
-				"parameters": [
-					{
-						"name": "auth-token",
-						"in": "header",
-						"description": "Auth Token",
-						"required": true,
-						"type": "string"
-					},
-					{
-						"name": "id",
-						"in": "path",
-						"description": "Debt ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"data": {
-										"debt": {
-											"id": 1,
-											"amount": 300,
-											"due_date": "2022-07-07",
-											"user_id": 37
-										}
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
-								}
-							}
-						}
-					}
-				}
-			}
-		},
+
 		"/warrior-information": {
 			"get": {
 				"tags": ["warrior-information"],
@@ -3313,6 +2255,371 @@
 				}
 			}
 		},
+		"/promocode/create": {
+			"post": {
+				"tags": ["promocode"],
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"description": "",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/auth_signup_body"
+							},
+							"examples": {
+								"0": {
+									"value": {
+										"number_of_promocodes": 10,
+										"expiry_date": "2022-08-01T14:07:11.579Z"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"promocode": true
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/promocode/update/{id}": {
+			"put": {
+				"tags": ["promocode"],
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "id",
+						"in": "path",
+						"description": "ID",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"description": "",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/auth_signup_body"
+							},
+							"examples": {
+								"0": {
+									"value": {
+										"promo_code": "OWXPWTNKDT0",
+										"expiration_date": "2023-08-03T14:07:11.579Z",
+										"status": "USED"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"promocode": true
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/promocode/utilize/{promocode}": {
+			"get": {
+				"tags": ["promocode"],
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "promocode",
+						"in": "path",
+						"description": "Promocode",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"description": "",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/auth_signup_body"
+							},
+							"examples": {
+								"0": {
+									"value": {
+										"data": {
+											"promocode": ""
+										},
+										"code": 200,
+										"message": "Update Promocode Successfully!"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"promocode": true
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/promocode/list": {
+			"get": {
+				"tags": ["promocode"],
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "page",
+						"in": "path",
+						"description": "Page number",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "pageSize",
+						"in": "path",
+						"description": "Page Size",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"description": "",
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"promocodes": {
+											"count": 10,
+											"rows": [
+												{
+													"id": 5,
+													"promo_code": "UW5EL8U5BT",
+													"issue_date": "2022-08-03T12:42:24.000Z",
+													"expiration_date": "2022-08-01T14:07:11.000Z",
+													"duration": 5,
+													"status": "EXPIRED"
+												},
+												{
+													"id": 6,
+													"promo_code": "EJBLIXEYMY",
+													"issue_date": "2022-08-03T12:42:24.000Z",
+													"expiration_date": "2022-08-01T14:07:11.000Z",
+													"duration": 5,
+													"status": "NOT_USED"
+												}
+											],
+											"page": 2,
+											"pageSize": 2
+										}
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/promocode/delete/{id}": {
+			"delete": {
+				"tags": ["promocode"],
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "id",
+						"in": "path",
+						"description": "ID",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"description": "",
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {},
+									"code": 200,
+									"message": "Promocode Deleted Successfully!"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"error": "500",
+									"message": "Promocode not found!",
+									"code": 500
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/dailyDose/add": {
 			"post": {
 				"tags": ["dailydose"],
@@ -3966,496 +3273,6 @@
 											"status": 401
 										}
 									}
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/loanLedgerPersonalInformation/list": {
-			"get": {
-				"tags": ["loan-ledger-personal-info"],
-				"description": "Get all loan ledger personal informations",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"data": {
-										"loanPersonalInfos": [
-											{
-												"id": 1,
-												"user_id": 63,
-												"full_name": "Name",
-												"national_id": "12345678",
-												"date_of_birth": "1990-06-06",
-												"registration_number": "1234567890",
-												"gender": "male",
-												"email": "email@email",
-												"mobile_phone": "123456789",
-												"current_residence": "Street",
-												"house_number": "15",
-												"country": "Croatia"
-											},
-											{
-												"id": 2,
-												"user_id": 37,
-												"full_name": "Name",
-												"national_id": "12345678",
-												"date_of_birth": "1990-07-07",
-												"registration_number": "1234567890",
-												"gender": "male",
-												"email": "testemail@email",
-												"mobile_phone": "123456789",
-												"current_residence": "Street",
-												"house_number": "15",
-												"country": "Croatia"
-											}
-										]
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/loanLedgerPersonalInformation/{id}": {
-			"get": {
-				"tags": ["loan-ledger-personal-info"],
-				"description": "Get loan ledger personal information by ID",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"description": "Loan ledger personal info ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
-					},
-					{
-						"name": "auth-token",
-						"in": "header",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "string"
-						},
-						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMTEwMTgsImlhdCI6MTY1NTEwMzgxOC4wNywiZW1haWwiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkUTlCelR0LmNGTXN1Rmxpb3EvQk1ZdVRkNUdRYkNwSlFVLjlvQVBhZy5KaENuZ3UzWjdoZ3EifQ.eNeghc_UR9fqKyZagj3V_5DcAeu9vI1QVUIZZb3qP-Q"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"data": {
-										"loalLedgerPersonalInfo": {
-											"id": 2,
-											"user_id": 37,
-											"full_name": "Name",
-											"national_id": "12345678",
-											"date_of_birth": "1990-07-07",
-											"registration_number": "1234567890",
-											"gender": "male",
-											"email": "testemail@email",
-											"mobile_phone": "123456789",
-											"current_residence": "Street",
-											"house_number": "15",
-											"country": "Croatia"
-										}
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/loanLedgerPersonalInformation/delete/{id}": {
-			"delete": {
-				"tags": ["loan-ledger-personal-info"],
-				"description": "Delete a loan ledger personal information",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"description": "Loan ledger personal info ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
-					},
-					{
-						"name": "auth-token",
-						"in": "header",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "string"
-						},
-						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMTEwMTgsImlhdCI6MTY1NTEwMzgxOC4wNywiZW1haWwiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkUTlCelR0LmNGTXN1Rmxpb3EvQk1ZdVRkNUdRYkNwSlFVLjlvQVBhZy5KaENuZ3UzWjdoZ3EifQ.eNeghc_UR9fqKyZagj3V_5DcAeu9vI1QVUIZZb3qP-Q"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"data": {
-										"loanLedgerPersonalInfo": 1
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/loanLedgerPersonalInformation/update/{id}": {
-			"put": {
-				"tags": ["loan-ledger-personal-info"],
-				"description": "Update a loan ledger personal info",
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"description": "Loan ledger personal information ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
-					},
-					{
-						"name": "auth-token",
-						"in": "header",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "string"
-						},
-						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMTEwMTgsImlhdCI6MTY1NTEwMzgxOC4wNywiZW1haWwiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkUTlCelR0LmNGTXN1Rmxpb3EvQk1ZdVRkNUdRYkNwSlFVLjlvQVBhZy5KaENuZ3UzWjdoZ3EifQ.eNeghc_UR9fqKyZagj3V_5DcAeu9vI1QVUIZZb3qP-Q"
-					}
-				],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/update_id_body_6"
-							},
-							"examples": {
-								"0": {
-									"value": "{\n    \"country\": \"Italy\"\n}"
-								}
-							}
-						}
-					}
-				},
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"data": {
-										"loanLedgerPersonalInfo": {
-											"id": 2,
-											"user_id": 37,
-											"full_name": "Name",
-											"national_id": "12345678",
-											"date_of_birth": "1990-07-07",
-											"registration_number": "1234567890",
-											"gender": "male",
-											"email": "testemail@email",
-											"mobile_phone": "123456789",
-											"current_residence": "Street",
-											"house_number": "120",
-											"country": "Italy"
-										}
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/loanLedgerPersonalInformation/user/{user_id}": {
-			"get": {
-				"tags": ["loan-ledger-personal-info"],
-				"description": "Get loan ledger informations for a user",
-				"parameters": [
-					{
-						"name": "user_id",
-						"in": "path",
-						"description": "User ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
-					},
-					{
-						"name": "auth-token",
-						"in": "header",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "string"
-						},
-						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMTEwMTgsImlhdCI6MTY1NTEwMzgxOC4wNywiZW1haWwiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkUTlCelR0LmNGTXN1Rmxpb3EvQk1ZdVRkNUdRYkNwSlFVLjlvQVBhZy5KaENuZ3UzWjdoZ3EifQ.eNeghc_UR9fqKyZagj3V_5DcAeu9vI1QVUIZZb3qP-Q"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"data": {
-										"loanLedgerPersonalInfo": [
-											{
-												"id": 2,
-												"user_id": 37,
-												"full_name": "Name",
-												"national_id": "12345678",
-												"date_of_birth": "1990-07-07",
-												"registration_number": "1234567890",
-												"gender": "male",
-												"email": "testemail@email",
-												"mobile_phone": "123456789",
-												"current_residence": "Street",
-												"house_number": "15",
-												"country": "Croatia"
-											}
-										]
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/debt/delete/{id}": {
-			"delete": {
-				"tags": ["debt"],
-				"description": "Delete a debt",
-				"parameters": [
-					{
-						"name": "auth-token",
-						"in": "header",
-						"description": "Auth Token",
-						"required": true,
-						"type": "string"
-					},
-					{
-						"name": "id",
-						"in": "path",
-						"description": "Debt ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"data": {
-										"debt": 1
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/debt/{id}": {
-			"get": {
-				"tags": ["debt"],
-				"description": "Get debt by id",
-				"parameters": [
-					{
-						"name": "auth-token",
-						"in": "header",
-						"description": "Auth Token",
-						"required": true,
-						"type": "string"
-					},
-					{
-						"name": "id",
-						"in": "path",
-						"description": "Debt ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"data": {
-										"debt": {
-											"id": 1,
-											"amount": 300,
-											"due_date": "2022-07-07",
-											"user_id": 37
-										}
-									},
-									"code": 200,
-									"message": "OK"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"message": "Unauthorized",
-									"status": 401
 								}
 							}
 						}

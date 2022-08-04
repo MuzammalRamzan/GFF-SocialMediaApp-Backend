@@ -50,7 +50,8 @@ User.init(
 			allowNull: true,
 			defaultValue: null
 		},
-		deactivated: { type: DataTypes.BOOLEAN, defaultValue: 0 }
+		deactivated: { type: DataTypes.BOOLEAN, defaultValue: 0 },
+		is_pro: { type: DataTypes.BOOLEAN, defaultValue: 0 }
 	},
 	{
 		sequelize,

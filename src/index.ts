@@ -37,6 +37,7 @@ import { identityVerification } from './api/identity-verification/verification.r
 
 import { mentorInfoRouter } from './api/Questionnaire/questionnaireRouter'
 import { UserAnswersRouter } from './api/MentorAnswers/userAnsewerRouter'
+import { promocodeRouter } from './api/promocode/promocodeRouter'
 
 const storage = multer.memoryStorage()
 
@@ -66,6 +67,7 @@ export const upload = multer({
 		})
 
 		app.use(bodyParser.json())
+		// app.get("/api-docs/swagger.json", (req, res) => res.json(swaggerDocument));
 		app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options))
 		app.use('/auth', authRouter)
 		app.use('/upload', uploadRouter)
@@ -97,6 +99,7 @@ export const upload = multer({
 
 		app.use('/mentor-information', mentorInfoRouter)
 		app.use('/mentor-information', UserAnswersRouter)
+		app.use('/promocode', promocodeRouter)
 
 		app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 			const error = err as GffError

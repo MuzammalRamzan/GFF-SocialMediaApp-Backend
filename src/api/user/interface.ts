@@ -18,6 +18,7 @@ export type UserType = {
 	role_id: number
 	user_feature_id: number
 	deactivated?: boolean
+	is_pro?: boolean
 }
 
 export interface ISearchUser {
