@@ -1,16 +1,13 @@
-import moment from 'moment'
-import sequelize, { Op } from 'sequelize'
-import { GffError } from '../helper/errorHandler'
-import { Frequency, ITransactionService, ListTransactionsReqParams, Status, TransactionType } from './interface'
+import { ITransactionService, TransactionType } from './interface'
 import { Transaction } from './transactionModel'
 
 export class TransactionService implements ITransactionService {
-	async list(queryParams: ListTransactionsReqParams): Promise<Transaction[]> {
-		const transactions = await Transaction.findAll({ where: { ...queryParams } })
+	async list(): Promise<Transaction[]> {
+		const transactions = await Transaction.findAll()
 		return transactions
 	}
 
-	async fetchForUser(userId: number): Promise<Transaction[]> {
+	async fetchForUser (userId: number): Promise<Transaction[]> {
 		const transactions = await Transaction.findAll({
 			where: {
 				user_id: userId
@@ -31,8 +28,7 @@ export class TransactionService implements ITransactionService {
 			status: params.status,
 			created_at: created_at,
 			due_date: params.due_date,
-			paid_at: params.paid_at,
-			recurring_status: params.frequency !== Frequency.Never ? Status.Active : Status.Inactive,
+			payed_at: params.payed_at
 		})
 		return transaction
 	}
@@ -46,8 +42,8 @@ export class TransactionService implements ITransactionService {
 				category_id: params.category_id,
 				status: params.status,
 				due_date: params.due_date,
-				paid_at: params.paid_at,
-				amount: params.amount
+				payed_at: params.payed_at,
+				amount: params.amount,
 			},
 			{
 				where: {
@@ -65,67 +61,12 @@ export class TransactionService implements ITransactionService {
 	}
 
 	async delete(id: number, user_id: number): Promise<number> {
-		const transaction = await Transaction.update({
-			status: Status.Deleted
-		}, {
+		const transaction = await Transaction.destroy({
 			where: {
 				id: id,
 				user_id: user_id
 			}
 		})
-		return transaction[0]
-	}
-
-	async markAsPaid(id: number, user_id: number): Promise<Transaction> {
-		const transaction = await Transaction.findOne({ where: { id } })
-
-		if (transaction?.getDataValue('user_id') !== user_id) {
-			throw new GffError('Unauthorized', { errorCode: '403' })
-		}
-
-		if (transaction.getDataValue('status') === Status.Paid) {
-			throw new GffError('Transaction has already been marked as paid!', { errorCode: '400' })
-		}
-
-		transaction.setDataValue('status', Status.Paid)
-		transaction.setDataValue('paid_at', new Date())
-
-		await transaction.save()
-
-		return transaction.toJSON()
-	}
-
-	async getOverDueTransactions(user_id: number): Promise<Transaction[]> {
-		const transactions = await Transaction.findAll({
-			where: {
-				[Op.and]: [
-					{ user_id, status: { [Op.ne]: Status.Paid } },
-					{ due_date: { [Op.lte]: moment().utc().endOf('month') } }
-				]
-			}
-		})
-		return transactions
-	}
-
-	async getPaidTransactions(user_id: number): Promise<Transaction[]> {
-		const transactions = await Transaction.findAll({
-			where: {
-				user_id, status: Status.Paid
-			}
-		})
-		return transactions
-	}
-
-	async cancelRecurringTransaction(user_id: number, id: number): Promise<Transaction> {
-		const transaction = await Transaction.findOne({ where: { id } })
-
-		if (!transaction) {
-			throw new GffError('Transaction not found', { errorCode: '404' })
-		}
-
-		transaction.setDataValue('recurring_status', Status.Inactive)
-		await transaction.save()
-
-		return transaction.toJSON()
+		return transaction
 	}
 }
