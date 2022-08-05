@@ -2,9 +2,10 @@ import { DataTypes, Model } from 'sequelize'
 import { sequelize } from '../../database/index'
 import { TransactionAccount } from '../transaction-account/transactionAccModel'
 import { TransactionCategory } from '../transaction-category/transactionCategoryModel'
-import { transactionType } from './interface'
+import { RecurringStatus, transactionType } from './interface'
+import { Frequency } from './interface'
 
-export class Transaction extends Model {}
+export class Transaction extends Model { }
 
 Transaction.init(
 	{
@@ -14,7 +15,7 @@ Transaction.init(
 			autoIncrement: true
 		},
 		frequency: {
-			type: DataTypes.ENUM('Daily', 'Weekly', 'Monthly', 'Never'),
+			type: DataTypes.ENUM(Frequency.Daily, Frequency.Weekly, Frequency.Monthly, Frequency.Never),
 			allowNull: false
 		},
 		user_id: {
@@ -35,19 +36,23 @@ Transaction.init(
 			allowNull: false
 		},
 		status: {
-			type: DataTypes.ENUM('Active', 'Inactive', 'Deleted'),
-			allowNull: false
+			type: DataTypes.ENUM('Active', 'Inactive', 'Deleted', 'Paid'),
+			allowNull: true
+		},
+		recurring_status: {
+			type: DataTypes.ENUM(RecurringStatus.Active, RecurringStatus.Inactive),
+			allowNull: true
 		},
 		created_at: {
 			type: DataTypes.DATE,
-			defaultValue: DataTypes.NOW,
+			defaultValue: sequelize.fn('now'),
 			allowNull: false
 		},
 		due_date: {
 			type: DataTypes.DATE,
 			allowNull: false
 		},
-		payed_at: {
+		paid_at: {
 			type: DataTypes.DATE,
 			allowNull: false
 		},

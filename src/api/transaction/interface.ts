@@ -12,7 +12,12 @@ export type TransactionType = {
 	status: Status
 	created_at: Date
 	due_date: Date
-	payed_at: Date
+	paid_at: Date
+}
+
+export enum RecurringStatus {
+	Active = 'Active',
+	Inactive = 'Inactive',
 }
 
 export enum transactionType {
@@ -22,9 +27,9 @@ export enum transactionType {
 
 export enum Status {
 	Active = 'Active',
-	Pending = 'Pending',
 	Inactive = 'Inactive',
-	Deleted = 'Deleted'
+	Deleted = 'Deleted',
+	Paid = 'Paid',
 }
 
 export enum Frequency {
@@ -32,6 +37,11 @@ export enum Frequency {
 	Weekly = 'Weekly',
 	Monthly = 'Monthly',
 	Never = 'Never'
+}
+
+export type ListTransactionsReqParams = {
+	status?: Status
+	frequency?: Frequency
 }
 
 export interface CreateTransactionRequest extends Request {
@@ -51,9 +61,11 @@ export interface DeleteTransactionRequest extends Request {
 }
 
 export interface ITransactionService {
-	list(): Promise<Transaction[]>
+	list(queryParams: ListTransactionsReqParams, userId: number): Promise<Transaction[]>
 	fetchForUser(userId: number): Promise<Transaction[]>
 	add(params: TransactionType): Promise<Transaction>
 	update(id: number, params: TransactionType): Promise<Transaction>
 	delete(id: number, user_id: number): Promise<number>
+	markAsPaid(id: number, user_id: number): Promise<Transaction>
+	getOverDueTransactions(user_id: number): Promise<Transaction[]>
 }
