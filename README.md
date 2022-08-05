@@ -58,6 +58,6 @@ yarn start
   8. Install dependencies `yarn install`
   9. Build application `yarn build`
   10. TEMP HACK - copy YOTI .pem file 
-  - mkdir build/keys
+  - mkdir build/src/keys
   - cp ~/keys/yoti/yoti.pem build/src/keys
   11. Start pm2 process `pm2 start ecosystem.config.js`
