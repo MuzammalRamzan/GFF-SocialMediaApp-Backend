@@ -1,7 +1,8 @@
 import { DataTypes, Model } from 'sequelize'
 import { sequelize } from '../../database/index'
+import { Frequency } from './interface'
 
-export class Transaction extends Model {}
+export class Transaction extends Model { }
 
 Transaction.init(
 	{
@@ -11,7 +12,7 @@ Transaction.init(
 			autoIncrement: true
 		},
 		frequency: {
-			type: DataTypes.ENUM('Daily', 'Weekly', 'Monthly', 'Never'),
+			type: DataTypes.ENUM(Frequency.Daily, Frequency.Weekly, Frequency.Monthly, Frequency.Never),
 			allowNull: false
 		},
 		user_id: {
@@ -31,8 +32,12 @@ Transaction.init(
 			allowNull: false
 		},
 		status: {
-			type: DataTypes.ENUM('Active', 'Inactive', 'Deleted'),
-			allowNull: false
+			type: DataTypes.ENUM('Active', 'Inactive', 'Deleted', 'Paid'),
+			allowNull: true
+		},
+		recurring_status: {
+			type: DataTypes.ENUM('Active', 'Inactive'),
+			allowNull: true
 		},
 		created_at: {
 			type: DataTypes.DATE,
@@ -43,9 +48,14 @@ Transaction.init(
 			type: DataTypes.DATE,
 			allowNull: false
 		},
-		payed_at: {
+		paid_at: {
 			type: DataTypes.DATE,
-			allowNull: false
+			allowNull: true
+		},
+		parent_transaction_id: {
+			type: DataTypes.INTEGER,
+			allowNull: true,
+			defaultValue: null,
 		}
 	},
 	{
@@ -53,3 +63,7 @@ Transaction.init(
 		tableName: 'transaction'
 	}
 )
+
+Transaction.hasMany(Transaction, { as: 'child_transactions', foreignKey: 'parent_transaction_id' })
+
+Transaction.sync()

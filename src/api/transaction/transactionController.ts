@@ -1,6 +1,12 @@
 import { Request, Response, NextFunction } from 'express'
+import { IAuthenticatedRequest } from '../helper/authMiddleware'
 import { GffError, jsonErrorHandler } from '../helper/errorHandler'
-import { CreateTransactionRequest, UpdateTransactionRequest, DeleteTransactionRequest } from './interface'
+import {
+	CreateTransactionRequest,
+	UpdateTransactionRequest,
+	DeleteTransactionRequest,
+	ListTransactionsReqParams
+} from './interface'
 import { TransactionService } from './transactionService'
 
 export class TransactionController {
@@ -12,8 +18,10 @@ export class TransactionController {
 
 	getAllTransactions = async (req: Request, res: Response, next: NextFunction) => {
 		try {
-			const transaction = await this.transactionService.list()
-			if(!transaction.length) {
+			const queryParams = req.query as ListTransactionsReqParams
+
+			const transaction = await this.transactionService.list(queryParams)
+			if (!transaction.length) {
 				throw new Error('No data found')
 			}
 			return res.status(200).send({
@@ -28,16 +36,14 @@ export class TransactionController {
 			if (error.message === 'Unauthorized') {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
-			}
-			else if  (error.message === 'No data found') {
+			} else if (error.message === 'No data found') {
 				error.errorCode = '404'
 				error.httpStatusCode = 404
-			}
-			else {
+			} else {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -76,12 +82,11 @@ export class TransactionController {
 			if (error.message === 'Unauthorized') {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
-			}
-			else {
+			} else {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -104,12 +109,11 @@ export class TransactionController {
 			if (error.message === 'Unauthorized') {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
-			}
-			else {
+			} else {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -131,12 +135,55 @@ export class TransactionController {
 			if (error.message === 'Unauthorized') {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
-			}
-			else {
+			} else {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
+		}
+	}
+
+	markTransactionAsPaid = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+		try {
+			const transactionId = +req.params.id
+			const userId = req.user?.id as number
+
+			const transaction = await this.transactionService.markAsPaid(transactionId, userId)
+			return res.status(200).json({ data: { transaction }, message: 'OK', code: 200 })
+		} catch (error) {
+			next(error)
+		}
+	}
+
+	getOverDueTransactions = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+		try {
+			const user_id = req.user?.id as number
+			const transactions = await this.transactionService.getOverDueTransactions(user_id)
+			return res.status(200).json({ data: { transactions }, code: 200, message: 'OK' })
+		} catch (error) {
+			next(error)
+		}
+	}
+
+	getPaidTransactions = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+		try {
+			const user_id = req.user?.id as number
+			const transactions = await this.transactionService.getPaidTransactions(user_id)
+			return res.status(200).json({ data: { transactions }, code: 200, message: 'OK' })
+		} catch (error) {
+			next(error)
+		}
+	}
+
+	cancelRecurringTransaction = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+		try {
+			const transactionId = +req.params.id
+			const userId = req.user?.id as number
+
+			const transaction = await this.transactionService.cancelRecurringTransaction(transactionId, userId)
+			return res.status(200).json({ data: { transaction }, message: 'OK', code: 200 })
+		} catch (error) {
+			next(error)
 		}
 	}
 }

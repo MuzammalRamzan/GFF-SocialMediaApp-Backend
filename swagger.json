@@ -6240,6 +6240,87 @@
 				}
 			}
 		},
+		"/transaction/cancel/{id}": {
+			"put": {
+				"tags": ["transaction"],
+				"description": "Cancel recurring transactions",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Transaction ID",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/update_id_body"
+							},
+							"examples": {
+								"0": {
+									"value": "{\n        \"frequency\": \"weekly\",\n        \"user_id\": 16,\n        \"account_id\": 3,\n        \"category_id\": 1,\n        \"status\": \"active\"\n    }"
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"transaction": {
+											"id": 19,
+											"frequency": "weekly",
+											"user_id": 16,
+											"account_id": 3,
+											"category_id": 1,
+											"status": "active"
+										}
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/transactionAccount/update/{id}": {
 			"put": {
 				"tags": ["transaction-account"],
@@ -6459,6 +6540,86 @@
 									},
 									"code": 200,
 									"message": "OK"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/transaction/paid/{id}": {
+			"put": {
+				"tags": ["transaction"],
+				"description": "Mark transaction as paid",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Transaction ID",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"transaction": {
+											"id": 1,
+											"frequency": "never",
+											"user_id": 16,
+											"amount": 160,
+											"account_id": 3,
+											"category_id": 1,
+											"status": "active"
+										}
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/transaction/due": {
+			"get": {
+				"tags": ["transaction"],
+				"description": "Get all overdue transaction till end of the month",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"$ref": "#/components/schemas/Transaction"
 								}
 							}
 						}
@@ -9164,6 +9325,29 @@
 					"read": { "type": "boolean" },
 					"room_id": { "type": "integer" },
 					"created_at": { "type": "string", "format": "date" }
+				}
+			},
+			"Transaction": {
+				"type": "object",
+				"properties": {
+					"id": { "type": "integer" },
+					"frequency": { "type": "string" },
+					"user_id": { "type": "integer" },
+					"amount": { "type": "integer" },
+					"account_id": { "type": "integer" },
+					"category_id": { "type": "integer" },
+					"status": { "type": "string" },
+					"created_at": { "type": "string", "format": "date" },
+					"due_date": { "type": "string", "format": "date" }
+				},
+				"example": {
+					"id": 1,
+					"frequency": "never",
+					"user_id": 16,
+					"amount": 160,
+					"account_id": 3,
+					"category_id": 1,
+					"status": "active"
 				}
 			}
 		}
