@@ -15,6 +15,11 @@ export type TransactionType = {
 	payed_at: Date
 }
 
+export enum transactionType {
+	INCOME = 'income',
+	EXPENSE = 'expense'
+}
+
 export enum Status {
 	Active = 'Active',
 	Pending = 'Pending',

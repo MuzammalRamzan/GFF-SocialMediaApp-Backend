@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
+import { validationResult } from 'express-validator'
 import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import { CreateTransactionRequest, UpdateTransactionRequest, DeleteTransactionRequest } from './interface'
 import { TransactionService } from './transactionService'
@@ -13,7 +14,7 @@ export class TransactionController {
 	getAllTransactions = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const transaction = await this.transactionService.list()
-			if(!transaction.length) {
+			if (!transaction.length) {
 				throw new Error('No data found')
 			}
 			return res.status(200).send({
@@ -28,12 +29,10 @@ export class TransactionController {
 			if (error.message === 'Unauthorized') {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
-			}
-			else if  (error.message === 'No data found') {
+			} else if (error.message === 'No data found') {
 				error.errorCode = '404'
 				error.httpStatusCode = 404
-			}
-			else {
+			} else {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
@@ -62,7 +61,13 @@ export class TransactionController {
 	createTransaction = async (req: CreateTransactionRequest, res: Response, next: NextFunction) => {
 		const user_id = +req.user.id
 		const params = { ...req.body, user_id }
+
 		try {
+			const errors = validationResult(req)
+			if (!errors.isEmpty()) {
+				throw new Error(errors.array()[0].msg)
+			}
+
 			const transaction = await this.transactionService.add(params)
 			return res.status(200).send({
 				data: {
@@ -76,8 +81,7 @@ export class TransactionController {
 			if (error.message === 'Unauthorized') {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
-			}
-			else {
+			} else {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
@@ -91,6 +95,11 @@ export class TransactionController {
 		const params = { ...req.body, user_id }
 
 		try {
+			const errors = validationResult(req)
+			if (!errors.isEmpty()) {
+				throw new Error(errors.array()[0].msg)
+			}
+
 			const transaction = await this.transactionService.update(id, params)
 			return res.status(200).send({
 				data: {
@@ -104,8 +113,7 @@ export class TransactionController {
 			if (error.message === 'Unauthorized') {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
-			}
-			else {
+			} else {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
@@ -131,8 +139,7 @@ export class TransactionController {
 			if (error.message === 'Unauthorized') {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
-			}
-			else {
+			} else {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
