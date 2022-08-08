@@ -8,7 +8,7 @@ export type PaginatedPromocodeResult = { rows: Promocode[]; count: number; page?
 export const Messages = {
 	CREATE_PROMOCODE: 'Create Promocode Successfully!',
 	UPDATE_PROMOCODE: 'Update Promocode Successfully!',
-	DELETE_PROMOCODE: 'Delete Promocode Successfully!',
+	DELETE_PROMOCODE: 'Promocode Deleted Successfully!',
 	GET_ALL_PROMOCODE: 'Fetch Promocodes Successfully!',
 	INVALID_PROMOCODE: 'Invalid Promocode!',
 	GET_PROMOCODE: 'Fetch Promocode Successfully!',
@@ -17,7 +17,8 @@ export const Messages = {
 	PROMOCODE_EXPIRED: 'Promocode is expired!',
 	NOT_FOUND: 'No data found',
 	PROMOCODE_APPLIED: 'Promocode applied Successfully!',
-	UNAUTHORIZED: 'Unauthorized'
+	UNAUTHORIZED: 'Unauthorized',
+	EXPIRY_IN_PAST: "Expiry date should be in future."
 }
 
 
@@ -30,7 +31,8 @@ export interface IPromocodeService {
 
 export interface CreatePromoCodesRequest extends Request {
 	number_of_promocodes: number
-	expiry_date: Date
+	expiry_date: Date,
+	duration: number,
 }
 
 export interface UpdatePromocodeRequest extends Request {

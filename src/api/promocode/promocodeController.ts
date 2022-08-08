@@ -12,6 +12,7 @@ import { PromocodeService } from './promocodeService'
 import { PaginationType } from '../../helper/db.helper'
 import { PAGE_SIZE } from '../../constants'
 import { UserService } from '../user/userService'
+import moment from 'moment'
 
 const handleError = (err: any, req: IAuthenticatedRequest, res: Response) => {
 	const error = err as GffError
@@ -42,6 +43,10 @@ export class PromocodeController {
 
 	createBulkPromocodes = async (req: CreatePromoCodesRequest, res: Response, next: NextFunction) => {
 		try {
+			if(new Date(req.body.expiry_date) <= new Date()) {
+				throw new Error(Messages.EXPIRY_IN_PAST)
+			}
+
 			const promocode = await this.promocodeService.createBulkPromocodes(req.body)
 			return res.status(200).send({
 				data: {
@@ -55,7 +60,11 @@ export class PromocodeController {
 			if (error.message === 'Unauthorized') {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
-			} else {
+			} else if (error.message === Messages.EXPIRY_IN_PAST){
+				error.errorCode = '412'
+				error.httpStatusCode = 412
+			}
+			else {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
@@ -160,7 +169,7 @@ export class PromocodeController {
 
 			const user_id = +req.user.id
 			const user = await this.userService.fetchById(user_id, user_id)
-			await user.update({ is_pro: true })
+			await user.update({ is_pro: true, promoted_till: moment().add(plain.duration,'days').toDate() })
 
 			// add entry in users table also.
 			return res.status(200).send({
@@ -191,12 +200,15 @@ export class PromocodeController {
 		const id = +req.params.id
 		try {
 			const promocode = await this.promocodeService.delete(id)
+
+			if(promocode === 0){
+				throw new Error(Messages.PROMOCODE_NOT_FOUND)
+			}
+
 			return res.status(200).send({
-				data: {
-					promocode
-				},
+				data: {},
 				code: 200,
-				message: 'OK'
+				message: Messages.DELETE_PROMOCODE
 			})
 		} catch (err) {
 			const error = err as GffError

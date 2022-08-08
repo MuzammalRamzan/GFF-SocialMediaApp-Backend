@@ -47,6 +47,10 @@ export class AuthController {
 				throw err
 			}
 
+			if(user?.is_pro === null){
+				user.is_pro = false;
+			}
+
 			const token = this.authService.generateJwtToken(user!.email, user!.password)
 
 			res.set('auth-token', token)

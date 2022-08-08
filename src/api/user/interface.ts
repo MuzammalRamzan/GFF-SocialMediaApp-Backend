@@ -19,6 +19,7 @@ export type UserType = {
 	user_feature_id: number
 	deactivated?: boolean
 	is_pro?: boolean
+	promoted_till?: Date
 }
 
 export interface ISearchUser {

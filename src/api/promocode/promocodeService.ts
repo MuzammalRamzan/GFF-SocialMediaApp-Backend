@@ -17,7 +17,7 @@ export class PromocodeService implements IPromocodeService {
 				expiration_date: new Date(request.expiry_date),
 				status: 'NOT_USED',
 				issue_date: new Date(),
-				duration: 5
+				duration: request.duration
 			} as Partial<IPromocode>)
 		)
 
@@ -62,7 +62,6 @@ export class PromocodeService implements IPromocodeService {
 		})
 
 		if (promocode) {
-			delete params.duration;
 			delete params.id;
 			delete params.issue_date;
 			await promocode.update(params as Partial<IPromocode>)

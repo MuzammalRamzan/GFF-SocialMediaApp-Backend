@@ -125,7 +125,8 @@ export class UserService implements IUserService {
 				email: params.email,
 				default_currency_id: params.default_currency_id,
 				user_feature_id: params.user_feature_id,
-				is_pro: params.is_pro || 0
+				is_pro: params.is_pro || 0,
+				promoted_till: params.promoted_till
 			},
 			{
 				where: {
