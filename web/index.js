@@ -62,7 +62,8 @@ function SubscribePane(elem, url) {
 
 // Receiving new incoming message notification with long polling
 function SubscribeToGetUnreadMessageNotification() {
-	const url = 'http://localhost:3000/message/subscribe'
+	const timestamp = (Date.now() / 1000) | 0
+	const url = 'http://localhost:3000/message/subscribe?timestamp=' + timestamp
 
 	async function subscribe() {
 		let response = await fetch(url, { headers: { 'auth-token': authToken } })
@@ -96,7 +97,9 @@ function SubscribeToGetUnreadMessageNotification() {
 function GetAllMessages(elem) {
 	async function getAll() {
 		let response = await fetch(
-			'http://localhost:3000/message/room/' + params.get('room_id') + '?from=2022-07-06T04:22:54.000Z',
+			'http://localhost:3000/message/room/' +
+				params.get('room_id') +
+				'?from=2022-07-06T04:22:54.000Z&to=2022-08-08T04:22:54.000Z',
 			{
 				headers: { 'auth-token': authToken }
 			}

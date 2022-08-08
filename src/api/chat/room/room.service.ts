@@ -7,16 +7,29 @@ export class RoomService implements IRoomService {
 
 	static async isUserBelongToTheRoom(room_id: number, user_id: number): Promise<boolean> {
 		const room = await Room.findOne({
-			where: { id: room_id }
+			where: {
+				id: room_id,
+				user_ids: {
+					[Op.or]: [
+						{
+							[Op.like]: `%${user_id},%`
+						},
+						{
+							[Op.like]: `%,${user_id},%`
+						},
+						{
+							[Op.like]: `%,${user_id}`
+						}
+					]
+				}
+			}
 		})
 
 		if (!room) {
 			return false
 		}
 
-		const roomObj = room.toJSON() as RoomType
-
-		return roomObj.user_ids.includes(user_id)
+		return room.get()
 	}
 
 	public async getRooms(): Promise<Room[]> {
@@ -139,5 +152,25 @@ export class RoomService implements IRoomService {
 		}
 
 		return roomExist
+	}
+
+	static async getRoomsByUserId(user_id: number): Promise<Room[]> {
+		return await Room.findAll({
+			where: {
+				user_ids: {
+					[Op.or]: [
+						{
+							[Op.like]: `%${user_id},%`
+						},
+						{
+							[Op.like]: `%,${user_id},%`
+						},
+						{
+							[Op.like]: `%,${user_id}`
+						}
+					]
+				}
+			}
+		})
 	}
 }

@@ -6,7 +6,7 @@ export type MessageType = {
 	user_id: number
 	body: string
 	room_id: number
-	created_at: Date
+	created_at: Date | number
 	user?: {
 		id: number
 		full_name: string
@@ -20,7 +20,7 @@ export interface IMessageService {
 	getAllUnreadMessageCount(user_id: number): Promise<number>
 	sendMessage(message: string, user_id: number, room_id: number): Promise<Message | null>
 	getMessages(room_id: number, to: string, from: string): Promise<Message[]>
-	getAllUnreadMessages(user_id: number): Promise<(MessageType | null)[]>
+	getAllUnreadMessages(user_id: number, timestamp?: number): Promise<(MessageType | null)[]>
 	subscribeToRoom(req: Request, res: Response, params: { user_id: number; room_id: number }): Promise<void>
 	subscribeToGetNewIncomingMessageNotification(req: Request, res: Response, user_id: number): Promise<void>
 	publishMessage(message: Message | null, user_id: number, room_id: number): Promise<void>

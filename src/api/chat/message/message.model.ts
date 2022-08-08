@@ -3,7 +3,7 @@ import { sequelize } from '../../../database'
 import { User } from '../../user/userModel'
 import { Room } from '../room/room.model'
 
-export class Message extends Model {}
+export class Message extends Model { }
 
 Message.init(
 	{
@@ -29,7 +29,7 @@ Message.init(
 		created_at: {
 			type: DataTypes.DATE,
 			allowNull: false,
-			defaultValue: new Date()
+			defaultValue: sequelize.fn('NOW')
 		}
 	},
 	{

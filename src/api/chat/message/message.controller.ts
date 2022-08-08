@@ -98,22 +98,6 @@ export class MessageController {
 			const from = req.query.from as string
 			const to = req.query.to as string
 
-			const toDate = new Date(to)
-			if (isNaN(toDate.getTime())) {
-				return res.status(400).json({
-					message: 'Invalid to date',
-					code: 400
-				})
-			}
-
-			const fromDate = new Date(from)
-			if (isNaN(fromDate.getTime())) {
-				return res.status(400).json({
-					message: 'Invalid from date',
-					code: 400
-				})
-			}
-
 			const messages = await this.messageService.getAllMessages(userId, to, from)
 
 			return res.status(200).json({
@@ -158,6 +142,9 @@ export class MessageController {
 	) => {
 		try {
 			const user_id = req?.user?.id as number
+
+			if (!req.query?.timestamp) throw new Error('Please send a timestamp!')
+
 			return this.messageService.subscribeToGetNewIncomingMessageNotification(req, res, user_id)
 		} catch (error) {
 			next(error)

@@ -1,5 +1,5 @@
-import { MessageTagList } from 'aws-sdk/clients/sesv2'
 import { Request, Response } from 'express'
+import moment from 'moment'
 import { Op } from 'sequelize'
 import { IAuthenticatedRequest } from '../../helper/authMiddleware'
 import { UserInformation } from '../../user-information/userInformationModel'
@@ -16,6 +16,23 @@ type SubscribersType = {
 export class MessageService implements IMessageService {
 	private subscribers: SubscribersType = Object.create(null)
 	private incomingMessageNotificationSubscribers: { [user_id: string]: Response | null } = Object.create(null)
+	private incomingMessageNotificationTimestamp: { [user_id: string]: number } = Object.create(null)
+
+	private getRoomsByUserQuery(user_id: number) {
+		return {
+			[Op.or]: [
+				{
+					[Op.like]: `%${user_id},%`
+				},
+				{
+					[Op.like]: `%,${user_id}`
+				},
+				{
+					[Op.like]: `%,${user_id},%`
+				}
+			]
+		}
+	}
 
 	private readonly roomService: RoomService
 
@@ -32,7 +49,7 @@ export class MessageService implements IMessageService {
 			user_id: data.user_id,
 			body: data.body,
 			room_id: data.room_id,
-			created_at: data.created_at,
+			created_at: moment(data.created_at).unix(),
 			user: {
 				id: data.user.id,
 				full_name: data.user.full_name,
@@ -43,8 +60,8 @@ export class MessageService implements IMessageService {
 
 	public async getMessagesByRoom(room_id: number, to?: string, from?: string): Promise<Message[]> {
 		let filter: any = {
-			room_id,
-		};
+			room_id
+		}
 
 		if (to) {
 			filter.created_at = {
@@ -59,7 +76,9 @@ export class MessageService implements IMessageService {
 		}
 
 		return await Message.findAll({
-			where: filter,
+			where: {
+				room_id
+			},
 			order: [['created_at', 'ASC']],
 			include: [
 				{
@@ -114,7 +133,7 @@ export class MessageService implements IMessageService {
 		})
 
 		this.publishMessage(messageObj, user_id, room_id)
-		this.sendMessageNotification(messageObj)
+		this.sendMessageNotification(user_id, room_id)
 
 		return messageObj
 	}
@@ -123,14 +142,24 @@ export class MessageService implements IMessageService {
 		const to_date = new Date(to)
 		const from_date = new Date(from)
 
+		let filter: any = {
+			room_id
+		}
+
+		if (to) {
+			filter.created_at = {
+				[Op.lte]: new Date(to)
+			}
+		}
+
+		if (from) {
+			filter.created_at = {
+				[Op.gte]: new Date(from)
+			}
+		}
+
 		return await Message.findAll({
-			where: {
-				room_id,
-				created_at: {
-					[Op.lte]: to_date,
-					[Op.gte]: from_date
-				}
-			},
+			where: filter,
 			order: [['created_at', 'ASC']],
 			include: [
 				{
@@ -158,19 +187,7 @@ export class MessageService implements IMessageService {
 					as: 'room',
 					required: true,
 					where: {
-						user_ids: {
-							[Op.or]: [
-								{
-									[Op.like]: `%${user_id},%`
-								},
-								{
-									[Op.like]: `%,${user_id}`
-								},
-								{
-									[Op.like]: `%,${user_id},%`
-								}
-							]
-						}
+						user_ids: this.getRoomsByUserQuery(user_id)
 					}
 				}
 			]
@@ -178,25 +195,24 @@ export class MessageService implements IMessageService {
 		return unreadMessageCount
 	}
 
-	public async getAllUnreadMessages(user_id: number): Promise<(MessageType | null)[]> {
+	public async getAllUnreadMessages(user_id: number, timestamp: number | null = null): Promise<(MessageType | null)[]> {
+		const rooms = await RoomService.getRoomsByUserId(user_id)
 		const unreadMessages = await Message.findAll({
-			where: { user_id: { [Op.ne]: user_id }, read: 0 },
+			where: {
+				// user_id: { [Op.ne]: user_id },
+				read: 0,
+				...(timestamp ? { created_at: { [Op.gte]: moment.unix(timestamp).utc() } } : {})
+			},
 			include: [
 				{
 					model: Room,
 					as: 'room',
 					required: true,
 					where: {
-						user_ids: {
-							[Op.or]: [
-								{
-									[Op.like]: `%${user_id},%`
-								},
-								{
-									[Op.like]: `%,${user_id}`
-								}
-							]
+						id: {
+							[Op.in]: rooms.map(room => room.get('id'))
 						}
+						// user_ids: this.getRoomsByUserQuery(user_id)
 					}
 				},
 				{
@@ -245,14 +261,26 @@ export class MessageService implements IMessageService {
 		res.setHeader('Cache-Control', 'no-cache, must-revalidate')
 
 		this.incomingMessageNotificationSubscribers[user_id] = res
+		if (req.query.timestamp) this.incomingMessageNotificationTimestamp[user_id] = +req.query.timestamp
 
-		setTimeout(() => {
+		setTimeout(async () => {
+			const messages = await this.getAllUnreadMessages(user_id, this.incomingMessageNotificationTimestamp[user_id])
+			console.log(this.incomingMessageNotificationTimestamp[user_id])
 			req.pause()
-			res.status(201).end()
+			res.status(201).end(
+				JSON.stringify({
+					code: 200,
+					data: {
+						messages
+					},
+					message: 'OK'
+				})
+			)
 		}, 30000)
 
 		req.on('close', () => {
 			delete this.incomingMessageNotificationSubscribers[user_id]
+			delete this.incomingMessageNotificationTimestamp[user_id]
 		})
 	}
 
@@ -275,24 +303,28 @@ export class MessageService implements IMessageService {
 		}
 	}
 
-	public async sendMessageNotification(message: Message | null): Promise<void> {
-		if (message) {
-			let roomParticipants = await this.roomService.getAllUsersByRoomId(message.getDataValue('room_id'))
+	public async sendMessageNotification(user_id: number, room_id: number): Promise<void> {
+		let roomParticipants = await this.roomService.getAllUsersByRoomId(room_id)
 
-			roomParticipants = roomParticipants.filter(userId => +userId !== message.getDataValue('user_id'))
+		// roomParticipants = roomParticipants.filter(userId => +userId !== user_id)
 
-			roomParticipants.map(userId => {
+		Promise.all(
+			roomParticipants.map(async userId => {
+				const messages = await this.getAllUnreadMessages(userId, this.incomingMessageNotificationTimestamp[userId])
+
 				if (this.incomingMessageNotificationSubscribers[userId]) {
 					this.incomingMessageNotificationSubscribers[userId]?.end(
 						JSON.stringify({
 							code: 200,
-							data: { messages: [MessageService.filterMessageObject(message)] },
-							message: 'Received a message!'
+							data: {
+								messages
+							},
+							message: 'OK'
 						})
 					)
 				}
 			})
-		}
+		)
 	}
 
 	public async markMessagesAsSeen(messageIds: number[]): Promise<void> {
