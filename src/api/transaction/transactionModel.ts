@@ -57,7 +57,10 @@ Transaction.init(
 			allowNull: false
 		},
 		transaction_type: {
-			type: DataTypes.ENUM(transactionType.INCOME, transactionType.EXPENSE)
+			type: DataTypes.VIRTUAL,
+			get() {
+				return this.getDataValue('amount') > 0 ? transactionType.INCOME : transactionType.EXPENSE
+			}
 		}
 	},
 	{
@@ -65,16 +68,6 @@ Transaction.init(
 		tableName: 'transaction'
 	}
 )
-
-const beforeCreateHook = (transaction: Transaction) => {
-	transaction.setDataValue(
-		'transaction_type',
-		transaction.getDataValue('amount') > 0 ? transactionType.EXPENSE : transactionType.INCOME
-	)
-}
-
-Transaction.beforeCreate(beforeCreateHook)
-Transaction.beforeUpdate(beforeCreateHook)
 
 Transaction.belongsTo(TransactionCategory, { as: 'transaction_category', foreignKey: 'category_id' })
 Transaction.belongsTo(TransactionAccount, { as: 'transaction_account', foreignKey: 'account_id' })

@@ -1,6 +1,5 @@
 import { DataTypes, Model } from 'sequelize'
 import { sequelize } from '../../database/index'
-import { Currency } from '../currency/currencyModel'
 
 export class TransactionAccount extends Model {}
 
@@ -65,7 +64,3 @@ TransactionAccount.init(
 		tableName: 'transaction_account'
 	}
 )
-
-TransactionAccount.belongsTo(Currency, { as: 'currency', foreignKey: 'currency_id' })
-
-TransactionAccount.sync()
