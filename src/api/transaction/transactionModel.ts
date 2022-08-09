@@ -1,4 +1,5 @@
 import { DataTypes, Model } from 'sequelize'
+import { DATABASE_TABLES } from '../../constants/db_tables'
 import { sequelize } from '../../database/index'
 import { TransactionAccount } from '../transaction-account/transactionAccModel'
 import { TransactionCategory } from '../transaction-category/transactionCategoryModel'
@@ -65,7 +66,7 @@ Transaction.init(
 	},
 	{
 		sequelize,
-		tableName: 'transaction'
+		tableName: DATABASE_TABLES.TRANSACTION
 	}
 )
 

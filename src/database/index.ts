@@ -24,3 +24,5 @@ export const pool = mysql.createPool({
 	multipleStatements: true,
 	dateStrings: true
 })
+
+export const queryInterface = sequelize.getQueryInterface()
