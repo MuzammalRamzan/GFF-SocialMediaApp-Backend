@@ -83,9 +83,194 @@
     {
       "name": "verification",
       "description": "Yoti verification"
+    },
+    {
+      "name": "payment-api",
+      "description": "brain tree payment"
     }
   ],
   "paths": {
+    "/payment/transaction": {
+      "get": {
+        "tags": [
+          "payment-api"
+        ],
+        "description": "get all payment transaction",
+        "parameters": [
+          {
+            "name": "auth-token",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "code": 200,
+                  "message": "Fetch transactions successfully",
+                  "data": {
+                    "transaction": [
+                      {
+                        "id": 5,
+                        "status": "Success",
+                        "amount": 30,
+                        "transaction_id": "8cg9pnpf",
+                        "created_at": "2022-08-03T10:38:52.000Z",
+                        "service_provider": {
+                          "id": 688,
+                          "role_id": 1,
+                          "full_name": "John Test",
+                          "email": "johntest@gmail.com",
+                          "default_currency_id": 1,
+                          "user_feature_id": null,
+                          "deactivated": false
+                        }
+                      },
+                      {
+                        "id": 4,
+                        "status": "Success",
+                        "amount": 30,
+                        "transaction_id": "5e919wyx",
+                        "created_at": "2022-08-03T10:36:34.000Z",
+                        "service_provider": {
+                          "id": 688,
+                          "role_id": 1,
+                          "full_name": "John Test",
+                          "email": "johntest@gmail.com",
+                          "default_currency_id": 1,
+                          "user_feature_id": null,
+                          "deactivated": false
+                        }
+                      },
+                      {
+                        "id": 3,
+                        "status": "Success",
+                        "amount": 30,
+                        "transaction_id": "kvfym6wb",
+                        "created_at": "2022-08-03T10:33:51.000Z",
+                        "service_provider": {
+                          "id": 688,
+                          "role_id": 1,
+                          "full_name": "John Test",
+                          "email": "johntest@gmail.com",
+                          "default_currency_id": 1,
+                          "user_feature_id": null,
+                          "deactivated": false
+                        }
+                      },
+                      {
+                        "id": 1,
+                        "status": "Success",
+                        "amount": 30,
+                        "transaction_id": "fj7aj4rx",
+                        "created_at": "2022-08-02T13:06:30.000Z",
+                        "service_provider": {
+                          "id": 688,
+                          "role_id": 1,
+                          "full_name": "John Test",
+                          "email": "johntest@gmail.com",
+                          "default_currency_id": 1,
+                          "user_feature_id": null,
+                          "deactivated": false
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payment/create-transaction": {
+      "post": {
+        "tags": [
+          "payment-api"
+        ],
+        "description": "Create transaction",
+        "parameters": [
+          {
+            "name": "auth-token",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/question"
+              },
+              "examples": {
+                "0": {
+                  "value": {
+                    "amount": "100",
+                    "token": "tokencc_bh_mxhkh4_qvdstx_nw4qqh_ccsgby_yn6",
+                    "deviceData": "628d75c3b3372106c2cc3ce6aa839dfb",
+                    "serviceProviderId": 688,
+                    "date": "12/11/2021",
+                    "startTime": "2:00",
+                    "endTime": "6:00"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": {
+                  "data": {
+                    "transactionStatus": {
+                      "message": "Transaction Successfully!"
+                    }
+                  },
+                  "code": 200
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "message": "Unauthorized",
+                  "status": 401
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/identity/verify/session": {
       "get": {
         "tags": [
@@ -10023,6 +10208,56 @@
           "account_id": 3,
           "category_id": 1,
           "status": "active"
+        }
+      },
+      "PaymentTransaction": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          },
+          "buyer_id": {
+            "type": "integer"
+          },
+          "service_provider_id": {
+            "type": "integer"
+          },
+          "session_id": {
+            "type": "integer"
+          },
+          "amount": {
+            "type": "integer"
+          },
+          "transaction_id": {
+            "type": "string"
+          },
+          "transaction_data": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "example": {
+          "id": 12,
+          "status": "Success",
+          "buyer_id": 12,
+          "amount": 100,
+          "transaction_id": "2r5c12e3",
+          "service_provider": {
+            "id": 688,
+            "role_id": 1,
+            "full_name": "John Test",
+            "email": "johntest@gmail.com",
+            "default_currency_id": 1,
+            "user_feature_id": null,
+            "deactivated": false
+          },
+          "created_at": "2022-08-09T13:43:07.000Z"
         }
       }
     }
