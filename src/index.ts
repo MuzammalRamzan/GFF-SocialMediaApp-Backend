@@ -38,6 +38,7 @@ import { identityVerification } from './api/identity-verification/verification.r
 import { mentorInfoRouter } from './api/Questionnaire/questionnaireRouter'
 import { UserAnswersRouter } from './api/MentorAnswers/userAnsewerRouter'
 import { promocodeRouter } from './api/promocode/promocodeRouter'
+import { paymentRouter } from './api/payment-api/paymentRouter'
 import { AlterationsManager } from './alteration'
 
 const storage = multer.memoryStorage()
@@ -51,9 +52,8 @@ const options = {
 export const upload = multer({
 	storage,
 	limits: { fileSize: 1000000000 }
-});
-
-(async function main(): Promise<void> {
+})
+;(async function main(): Promise<void> {
 	const app = Express()
 
 	app.use(cors())
@@ -103,6 +103,8 @@ export const upload = multer({
 	app.use('/mentor-information', UserAnswersRouter)
 	app.use('/promocode', promocodeRouter)
 
+	app.use('/payment', paymentRouter)
+
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 		const error = err as GffError
 		if (error.message.toLowerCase() === 'no data found') {
@@ -115,7 +117,7 @@ export const upload = multer({
 			error.httpStatusCode = 500
 		}
 
-		return jsonErrorHandler(err, req, res, () => { })
+		return jsonErrorHandler(err, req, res, () => {})
 	})
 
 	app.listen(process.env.PORT, () => {
@@ -126,7 +128,7 @@ export const upload = multer({
 		await sequelize.authenticate()
 		console.log('Database connection has been established successfully.')
 		setTimeout(() => {
-			AlterationsManager.run();
+			AlterationsManager.run()
 		}, 1000)
 	} catch (error) {
 		console.error('Unable to connect to the database:', error)

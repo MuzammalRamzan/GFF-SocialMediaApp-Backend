@@ -101,7 +101,12 @@ UserInformation.init({
     longitude:{
       type: DataTypes.DECIMAL(11, 8),
       allowNull: true
-    }
+    },
+    braintree_customer_id: {
+			type: DataTypes.STRING,
+			allowNull: true
+		}
+
 },
 {
     sequelize,

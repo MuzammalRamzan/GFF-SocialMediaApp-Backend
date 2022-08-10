@@ -20,7 +20,7 @@ export const USER_INFORMATION_FIELDS = [
 	'gender',
 	'country',
 	'job_role',
-	'education',
+	'education'
 ]
 
 export const USER_ADDITIONAL_INFORMATION_FIELDS = [
@@ -40,3 +40,15 @@ export const USER_FIELDS = ['id', 'full_name']
 export const WELLNESS_WARRIOR_FIELDS = ['specialty', 'certification', 'therapy_type', 'price_range']
 
 export const MENTOR_FIELDS = ['industry', 'role', 'frequency', 'conversation_mode', 'isPassedIRT', 'languages']
+
+export const PAYMENT_TRANSACTION_FIELDS = ['id', 'status', 'amount', 'transaction_id', 'created_at']
+
+export const USER_DETAILS_FIELDS = [
+	'id',
+	'role_id',
+	'full_name',
+	'email',
+	'default_currency_id',
+	'user_feature_id',
+	'deactivated'
+]
