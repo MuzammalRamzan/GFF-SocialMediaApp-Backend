@@ -40,7 +40,9 @@ import { UserAnswersRouter } from './api/MentorAnswers/userAnsewerRouter'
 import { promocodeRouter } from './api/promocode/promocodeRouter'
 import { paymentRouter } from './api/payment-api/paymentRouter'
 import { AlterationsManager } from './alteration'
+import { userFCMTokenRouter } from './api/user-fcm-token/userFCMTokenRouter'
 import { dashboardRouter } from './api/dashboard/dashboard.routes'
+
 
 const storage = multer.memoryStorage()
 
@@ -100,6 +102,7 @@ export const upload = multer({
   app.use('/currency', currencyRouter)
   app.use('/feedback', feedbackRouter)
   app.use('/identity', identityVerification)
+  app.use('/fcm-token', userFCMTokenRouter)
 
   app.use('/mentor-information', mentorInfoRouter)
   app.use('/mentor-information', UserAnswersRouter)

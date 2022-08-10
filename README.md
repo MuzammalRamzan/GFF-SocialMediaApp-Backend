@@ -61,3 +61,10 @@ yarn start
   - mkdir build/src/keys
   - cp ~/keys/yoti/yoti.pem build/src/keys
   11. Start pm2 process `pm2 start ecosystem.config.js`
+
+
+## Set firebase file in environment
+Run following command to set an firebase file as an environment variable and then run `yarn run dev`. Or For deployment set this variable and value in environment.
+```
+export GOOGLE_APPLICATION_CREDENTIALS="/path/to/firebase.json"
+```
