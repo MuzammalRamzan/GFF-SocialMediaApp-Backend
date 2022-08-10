@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from 'express'
+
+import { Response, NextFunction } from 'express'
 import { validationResult } from 'express-validator'
 import { IAuthenticatedRequest } from '../helper/authMiddleware'
-import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import { CreateTransactionRequest, UpdateTransactionRequest, DeleteTransactionRequest, ListTransactionsReqParams } from './interface'
 import { TransactionService } from './transactionService'
 
@@ -18,9 +18,7 @@ export class TransactionController {
 			const userId = req?.user?.id as number;
 
 			const transaction = await this.transactionService.list(queryParams, userId)
-			if (!transaction.length) {
-				throw new Error('No data found')
-			}
+
 			return res.status(200).send({
 				data: {
 					transaction
