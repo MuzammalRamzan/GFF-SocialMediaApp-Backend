@@ -13,7 +13,7 @@ export class QuestionnaireController {
 		this.questionsService = new QuestionService()
 	}
 
-	getAllQuestions = async (req: Request, res: Response) => {
+	getAllQuestions = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const questions = await this.questionsService.list()
 			return res.status(200).send({
@@ -24,23 +24,11 @@ export class QuestionnaireController {
 				message: Messages.GET_ALL_QUESTION
 			})
 		} catch (err) {
-			console.log(err)
-			const error = err as GffError
-			if (error.message === Messages.UNAUTHORIZED) {
-				error.errorCode = '401'
-				error.httpStatusCode = 401
-			} else if (error.message === Messages.NOT_FOUND) {
-				error.errorCode = '404'
-				error.httpStatusCode = 404
-			} else {
-				error.errorCode = '500'
-				error.httpStatusCode = 500
-			}
-			return jsonErrorHandler(err, req, res, () => {})
+			next(err)
 		}
 	}
 
-	createQuestion = async (req: Request, res: Response) => {
+	createQuestion = async (req: Request, res: Response, next: NextFunction) => {
 		const Question_name = req.body.question
 		try {
 			const Question = await this.questionsService.add(Question_name)
@@ -52,19 +40,11 @@ export class QuestionnaireController {
 				message: Messages.CREATE_QUESTION
 			})
 		} catch (err) {
-			const error = err as GffError
-			if (error.message === Messages.UNAUTHORIZED) {
-				error.errorCode = '401'
-				error.httpStatusCode = 401
-			} else {
-				error.errorCode = '500'
-				error.httpStatusCode = 500
-			}
-			return jsonErrorHandler(err, req, res, () => {})
+			next(err)
 		}
 	}
 
-	getQuestionById = async (req: GetQuestionsByUniqueId, res: Response) => {
+	getQuestionById = async (req: GetQuestionsByUniqueId, res: Response, next: NextFunction) => {
 		const id = +req.params.id
 
 		try {
@@ -82,22 +62,11 @@ export class QuestionnaireController {
 				message: Messages.GET_QUESTION
 			})
 		} catch (err) {
-			const error = err as GffError
-			if (error.message === Messages.UNAUTHORIZED) {
-				error.errorCode = '401'
-				error.httpStatusCode = 401
-			} else if (error.message === Messages.NOT_FOUND) {
-				error.errorCode = '404'
-				error.httpStatusCode = 404
-			} else {
-				error.errorCode = '500'
-				error.httpStatusCode = 500
-			}
-			return jsonErrorHandler(err, req, res, () => {})
+			next(err)
 		}
 	}
 
-	updateQuestion = async (req: UpdateQuestionRequest, res: Response) => {
+	updateQuestion = async (req: UpdateQuestionRequest, res: Response, next: NextFunction) => {
 		const id = +req.params.id
 		const params = req.body
 
@@ -116,19 +85,11 @@ export class QuestionnaireController {
 				message: Messages.UPDATE_QUESTION
 			})
 		} catch (err) {
-			const error = err as GffError
-			if (error.message === Messages.UNAUTHORIZED) {
-				error.errorCode = '401'
-				error.httpStatusCode = 401
-			} else {
-				error.errorCode = '500'
-				error.httpStatusCode = 500
-			}
-			return jsonErrorHandler(err, req, res, () => {})
+			next(err)
 		}
 	}
 
-	deleteQuestion = async (req: DeleteQuestionRequest, res: Response) => {
+	deleteQuestion = async (req: DeleteQuestionRequest, res: Response, next: NextFunction) => {
 		const id = +req.params.id
 
 		try {
@@ -137,21 +98,13 @@ export class QuestionnaireController {
 				throw new Error(Messages.QUESTION_NOT_FOUND)
 			}
 
-			const question = await this.questionsService.delete(id)
+			await this.questionsService.delete(id)
 			return res.status(200).send({
 				code: 200,
 				message: Messages.DELETE_QUESTION
 			})
 		} catch (err) {
-			const error = err as GffError
-			if (error.message === Messages.UNAUTHORIZED) {
-				error.errorCode = '401'
-				error.httpStatusCode = 401
-			} else {
-				error.errorCode = '500'
-				error.httpStatusCode = 500
-			}
-			return jsonErrorHandler(err, req, res, () => {})
+			next(err)
 		}
 	}
 }

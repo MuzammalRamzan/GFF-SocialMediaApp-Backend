@@ -266,16 +266,18 @@
               },
               "examples": {
                 "0": {
-                  "value": [
-                    {
-                      "question_id": 1,
-                      "answer": 2
-                    },
-                    {
-                      "question_id": 2,
-                      "answer": 5
-                    }
-                  ]
+                  "value": {
+                    "list": [
+                      {
+                        "question_id": 1,
+                        "answer": 2
+                      },
+                      {
+                        "question_id": 2,
+                        "answer": 5
+                      }
+                    ]
+                  }
                 }
               }
             }

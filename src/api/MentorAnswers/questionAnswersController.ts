@@ -12,11 +12,11 @@ export class QuestionnaireController {
 		this.questionsService = new QuestionService()
 	}
 
-	giveAnswers = async (req: IAuthenticatedRequest, res: Response) => {
+	giveAnswers = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
 		try {
 			const userId = req?.user?.id || (0 as number)
 
-			const userAnswersArray = req.body
+			const userAnswersArray = req.body.list
 			const questions = await this.questionsService.list()
 
 			let answersArray: IAnswers[] = []
@@ -40,9 +40,7 @@ export class QuestionnaireController {
 
 			if (errorMessage) {
 				return res.status(400).send({
-					data: {
-						errorMessage
-					},
+					message: errorMessage,
 					code: 400
 				})
 			}
@@ -58,19 +56,7 @@ export class QuestionnaireController {
 				message: Messages.SUBMIT_ANSWER
 			})
 		} catch (err) {
-			console.log(err)
-			const error = err as GffError
-			if (error.message === Messages.UNAUTHORIZED) {
-				error.errorCode = '401'
-				error.httpStatusCode = 401
-			} else if (error.message === Messages.NOT_FOUND) {
-				error.errorCode = '404'
-				error.httpStatusCode = 404
-			} else {
-				error.errorCode = '500'
-				error.httpStatusCode = 500
-			}
-			return jsonErrorHandler(err, req, res, () => {})
+			next(err)
 		}
 	}
 }
