@@ -2,12 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { validationResult } from 'express-validator'
 import { IAuthenticatedRequest } from '../helper/authMiddleware'
 import { GffError, jsonErrorHandler } from '../helper/errorHandler'
-import {
-	CreateTransactionRequest,
-	UpdateTransactionRequest,
-	DeleteTransactionRequest,
-	ListTransactionsReqParams
-} from './interface'
+import { CreateTransactionRequest, UpdateTransactionRequest, DeleteTransactionRequest, ListTransactionsReqParams } from './interface'
 import { TransactionService } from './transactionService'
 
 export class TransactionController {
@@ -59,7 +54,6 @@ export class TransactionController {
 	createTransaction = async (req: CreateTransactionRequest, res: Response, next: NextFunction) => {
 		const user_id = +req.user.id
 		const params = { ...req.body, user_id }
-
 		try {
 			const errors = validationResult(req)
 			if (!errors.isEmpty()) {
@@ -75,7 +69,7 @@ export class TransactionController {
 				message: 'OK'
 			})
 		} catch (err) {
-			next(err);
+			next(err)
 		}
 	}
 

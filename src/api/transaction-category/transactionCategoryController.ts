@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { GffError, jsonErrorHandler } from '../helper/errorHandler'
+import { GffError, jsonErrorHandler, UNAUTHORIZED } from '../helper/errorHandler'
 import {
 	CreateTransactionCategoryRequest,
 	DeleteTransactionCategoryRequest,
@@ -28,23 +28,14 @@ export class TransactionCategotryController {
 				message: 'OK'
 			})
 		} catch (err) {
-			const error = err as GffError
-			if (error.message === 'Unauthorized') {
-				error.errorCode = '401'
-				error.httpStatusCode = 401
-			}
-			else {
-				error.errorCode = '500'
-				error.httpStatusCode = 500
-			}
-			return jsonErrorHandler(err, req, res, () => {})
+			next(err);
 		}
 	}
 
 	getAllTransactionCategories = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const transactionCategories = await this.transactionCategoryService.list()
-			if(!transactionCategories.length) {
+			if (!transactionCategories.length) {
 				throw new Error('No data found')
 			}
 			return res.status(200).send({
@@ -55,20 +46,7 @@ export class TransactionCategotryController {
 				message: 'OK'
 			})
 		} catch (err) {
-			const error = err as GffError
-			if (error.message === 'Unauthorized') {
-				error.errorCode = '401'
-				error.httpStatusCode = 401
-			}
-			else if  (error.message === 'No data found') {
-				error.errorCode = '404'
-				error.httpStatusCode = 404
-			}
-			else {
-				error.errorCode = '500'
-				error.httpStatusCode = 500
-			}
-			return jsonErrorHandler(err, req, res, () => {})
+			next(err);
 		}
 	}
 
@@ -81,7 +59,7 @@ export class TransactionCategotryController {
 
 		try {
 			const transactionCategories = await this.transactionCategoryService.fetchByUserId(id)
-			if(!transactionCategories.length) {
+			if (!transactionCategories.length) {
 				throw new Error('No data found')
 			}
 			return res.status(200).send({
@@ -92,20 +70,7 @@ export class TransactionCategotryController {
 				message: 'OK'
 			})
 		} catch (err) {
-			const error = err as GffError
-			if (error.message === 'Unauthorized') {
-				error.errorCode = '401'
-				error.httpStatusCode = 401
-			}
-			else if  (error.message === 'No data found') {
-				error.errorCode = '404'
-				error.httpStatusCode = 404
-			}
-			else {
-				error.errorCode = '500'
-				error.httpStatusCode = 500
-			}
-			return jsonErrorHandler(err, req, res, () => {})
+			next(err);
 		}
 	}
 
@@ -118,6 +83,10 @@ export class TransactionCategotryController {
 		const id = +req.params.id
 		const params = { ...req.body, user_id }
 		try {
+			if (await TransactionCategoryService.isDefaultCategory(id)) {
+				throw new GffError("You're not allowed to update default category!", { errorCode: '403' })
+			}
+
 			const transactionCategory = await this.transactionCategoryService.update(id, params)
 			return res.status(200).send({
 				data: {
@@ -127,16 +96,7 @@ export class TransactionCategotryController {
 				message: 'OK'
 			})
 		} catch (err) {
-			const error = err as GffError
-			if (error.message === 'Unauthorized') {
-				error.errorCode = '401'
-				error.httpStatusCode = 401
-			}
-			else {
-				error.errorCode = '500'
-				error.httpStatusCode = 500
-			}
-			return jsonErrorHandler(err, req, res, () => {})
+			next(err)
 		}
 	}
 
@@ -144,6 +104,10 @@ export class TransactionCategotryController {
 		const userId = +req.user.id
 		const id = +req.params.id
 		try {
+			if (await TransactionCategoryService.isDefaultCategory(id)) {
+				throw new GffError("You're not allowed to delete default category!", { errorCode: '403' })
+			}
+
 			const transactionCategory = await this.transactionCategoryService.delete(id, userId)
 			return res.status(200).send({
 				data: {
@@ -153,16 +117,7 @@ export class TransactionCategotryController {
 				message: 'OK'
 			})
 		} catch (err) {
-			const error = err as GffError
-			if (error.message === 'Unauthorized') {
-				error.errorCode = '401'
-				error.httpStatusCode = 401
-			}
-			else {
-				error.errorCode = '500'
-				error.httpStatusCode = 500
-			}
-			return jsonErrorHandler(err, req, res, () => {})
+			next(err)
 		}
 	}
 }

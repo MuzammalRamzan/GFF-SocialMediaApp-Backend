@@ -1,7 +1,12 @@
+import { UNAUTHORIZED } from '../helper/errorHandler'
 import { ITransactionCategoryService, TransactionCategoryType } from './interface'
 import { TransactionCategory } from './transactionCategoryModel'
 
 export class TransactionCategoryService implements ITransactionCategoryService {
+	public static async isDefaultCategory(id: number): Promise<boolean> {
+		return Boolean(await TransactionCategory.findOne({ where: { id, is_default: true } }))
+	}
+
 	async add(params: TransactionCategoryType): Promise<TransactionCategory> {
 		const transactionCategory = await TransactionCategory.create({
 			name: params.name,
@@ -56,7 +61,7 @@ export class TransactionCategoryService implements ITransactionCategoryService {
 			return transactionAccount as TransactionCategory
 		}
 
-		throw new Error('Unauthorized')
+		throw new Error(UNAUTHORIZED)
 	}
 
 	async delete(id: number, userId: number): Promise<number> {
