@@ -61,7 +61,9 @@ export class TransactionService implements ITransactionService {
 			paid_at: params.paid_at,
 			recurring_status: params.frequency !== Frequency.Never ? Status.Active : Status.Inactive,
 		})
-		return transaction
+		return (await Transaction.findByPk(transaction.getDataValue('id'), {
+			include: this.include
+		})) as Transaction
 	}
 
 	async update(id: number, params: TransactionType): Promise<Transaction> {
@@ -84,7 +86,9 @@ export class TransactionService implements ITransactionService {
 			}
 		)
 		if (updatedTransaction[0] === 1) {
-			const transaction = await Transaction.findByPk(id)
+			const transaction = await Transaction.findByPk(id, {
+				include: this.include
+			})
 			return transaction as Transaction
 		}
 

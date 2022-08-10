@@ -3,8 +3,7 @@ import { DATABASE_TABLES } from '../../constants/db_tables'
 import { sequelize } from '../../database/index'
 import { TransactionAccount } from '../transaction-account/transactionAccModel'
 import { TransactionCategory } from '../transaction-category/transactionCategoryModel'
-import { RecurringStatus, transactionType } from './interface'
-import { Frequency } from './interface'
+import { RecurringStatus, transactionType, Frequency } from './interface'
 
 export class Transaction extends Model { }
 

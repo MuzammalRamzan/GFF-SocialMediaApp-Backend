@@ -5,7 +5,7 @@ import { Alteration } from './controller'
 
 export const addLatitudeColumn = async () => {
 	const migration = new Alteration(
-		1,
+		6,
 		`Added new latitude column to ${DATABASE_TABLES.USER_INFORMATION}`,
 		new Date().toISOString(),
 		async () => {
@@ -34,7 +34,7 @@ export const addLatitudeColumn = async () => {
 
 export const addLongitudeColumn = async () => {
 	const migration = new Alteration(
-		1,
+		7,
 		`Added new longitude column to ${DATABASE_TABLES.USER_INFORMATION}`,
 		new Date().toISOString(),
 		async () => {
@@ -63,7 +63,7 @@ export const addLongitudeColumn = async () => {
 
 export const addBraintreeCustomerIdColumn = async () => {
 	const migration = new Alteration(
-		1,
+		8,
 		`Added new braintree_customer_id column to ${DATABASE_TABLES.USER_INFORMATION}`,
 		new Date().toISOString(),
 		async () => {

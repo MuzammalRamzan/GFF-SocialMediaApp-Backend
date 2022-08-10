@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express'
-import { GffError, jsonErrorHandler } from '../helper/errorHandler'
 import {
 	TransactionAccountType,
 	GetTransactionAccountByIdRequest,
@@ -42,44 +41,48 @@ export class TransactionAccController {
 		}
 	}
 
-	getAllTransactionAccountsForUser = async (req: GetTransactionAccountByIdRequest, res: Response, next: NextFunction) => {
+	getAllTransactionAccountsForUser = async (
+		req: GetTransactionAccountByIdRequest,
+		res: Response,
+		next: NextFunction
+	) => {
 		const userId = +req.user.id
-		const result: AccountArray = {
-			bank: [],
-			card: [],
-			manual: [],
-			mPesa: [],
-			wallet: [],
-		}
+		// const result: AccountArray = {
+		// 	bank: [],
+		// 	card: [],
+		// 	manual: [],
+		// 	mPesa: [],
+		// 	wallet: [],
+		// }
 
 		try {
-			const accountResult = await this.transactionAccService.fetchForUser(userId)
+			const accountDetails = await this.transactionAccService.fetchForUser(userId)
 
 			// TODO: match results by id
 
-			accountResult.forEach((element, index) => {
-				switch (element.getDataValue('account_type_id')) {
-					case 1:
-						result.bank.push(element)
-						break
-					case 2:
-						result.card.push(element)
-						break
-					case 3:
-						result.manual.push(element)
-						break
-					case 4:
-						result.mPesa.push(element)
-						break
-					case 5:
-						result.wallet.push(element)
-						break
-				}
-			})
+			// accountResult.forEach((element, index) => {
+			// 	switch (element.getDataValue('account_type_id')) {
+			// 		case 1:
+			// 			result.bank.push(element)
+			// 			break
+			// 		case 2:
+			// 			result.card.push(element)
+			// 			break
+			// 		case 3:
+			// 			result.manual.push(element)
+			// 			break
+			// 		case 4:
+			// 			result.mPesa.push(element)
+			// 			break
+			// 		case 5:
+			// 			result.wallet.push(element)
+			// 			break
+			// 	}
+			// })
 
 			return res.status(200).send({
 				data: {
-					result
+					accountDetails
 				},
 				code: 200,
 				message: 'OK'

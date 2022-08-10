@@ -1,5 +1,6 @@
 import { DataTypes, Model } from 'sequelize'
 import { sequelize } from '../../database'
+import { transactionType } from '../transaction/interface'
 
 export class TransactionCategory extends Model {}
 
@@ -28,7 +29,7 @@ TransactionCategory.init(
 			allowNull: false
 		},
 		type: {
-			type: DataTypes.ENUM('income', 'expense'),
+			type: DataTypes.ENUM(transactionType.INCOME, transactionType.EXPENSE),
 			allowNull: false
 		},
 		is_default: {
