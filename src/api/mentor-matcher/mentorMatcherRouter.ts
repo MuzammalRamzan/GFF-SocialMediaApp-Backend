@@ -10,22 +10,22 @@ mentorMatcherRouter.get('/mentors', authMiddleware, controller.findMentors as Ap
 mentorMatcherRouter.get('/my-mentor', authMiddleware, controller.myMentors as Application)
 mentorMatcherRouter.get('/my-mentee', authMiddleware, controller.myMentees as Application)
 mentorMatcherRouter.post(
-  '/request/send',
-  authMiddleware,
-  sendMentorRequestValidation,
-  controller.sendMentorRequest as Application
+	'/request/send',
+	authMiddleware,
+	sendMentorRequestValidation,
+	controller.sendMentorRequest as Application
 )
 mentorMatcherRouter.put(
-  '/request/accept',
-  authMiddleware,
-  requiredRequestId,
-  controller.acceptMentorRequest as Application
+	'/request/accept',
+	authMiddleware,
+	requiredRequestId,
+	controller.acceptMentorRequest as Application
 )
 mentorMatcherRouter.put(
-  '/request/reject',
-  authMiddleware,
-  requiredRequestId,
-  controller.rejectMentorRequest as Application
+	'/request/reject',
+	authMiddleware,
+	requiredRequestId,
+	controller.rejectMentorRequest as Application
 )
 mentorMatcherRouter.delete('/', authMiddleware, controller.removeMentor as Application)
 // get list of received requests
@@ -33,16 +33,16 @@ mentorMatcherRouter.get('/request/mentor', authMiddleware, controller.getMentorR
 // get list of sent requests
 mentorMatcherRouter.get('/request/mentee', authMiddleware, controller.getMentorRequestsByMenteeId as Application)
 mentorMatcherRouter.post(
-  '/mentor/favorite/add',
-  authMiddleware,
-  requiredMentorId,
-  controller.addMentorToFavorite as Application
+	'/mentor/favorite/add',
+	authMiddleware,
+	requiredMentorId,
+	controller.addMentorToFavorite as Application
 )
 mentorMatcherRouter.post(
-  '/mentor/favorite/remove',
-  authMiddleware,
-  requiredMentorId,
-  controller.removeMentorFromFavorite as Application
+	'/mentor/favorite/remove',
+	authMiddleware,
+	requiredMentorId,
+	controller.removeMentorFromFavorite as Application
 )
 
 mentorMatcherRouter.put('/sign-contract', authMiddleware, requiredRequestId, controller.signContract as Application)
