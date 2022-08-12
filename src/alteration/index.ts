@@ -5,6 +5,7 @@ import {
 	changeStatusColumnDataType,
 	renameIconColumnInCategory
 } from './transaction'
+import { addPromotedTillColumn } from './user'
 import { addBraintreeCustomerIdColumn, addLatitudeColumn, addLongitudeColumn } from './userInfo'
 
 export class AlterationsManager {
@@ -20,5 +21,8 @@ export class AlterationsManager {
 		await addLatitudeColumn()
 		await addLongitudeColumn()
 		await addBraintreeCustomerIdColumn()
+
+		// user table 
+		await addPromotedTillColumn()
 	}
 }

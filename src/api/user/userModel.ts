@@ -4,6 +4,7 @@ import { WarriorInformation } from '../warrior-information/warriorInformationMod
 import { MentorInformation } from '../mentor-information/mentorInformationModel'
 import { UserInformation } from '../user-information/userInformationModel'
 import { UserRole } from '../user-role/userRoleModel'
+import { DATABASE_TABLES } from '../../constants/db_tables'
 
 export interface IUser {
 	id: number
@@ -56,7 +57,7 @@ User.init(
 	},
 	{
 		sequelize,
-		tableName: 'user',
+		tableName: DATABASE_TABLES.USER,
 		timestamps: true
 	}
 )
