@@ -13,6 +13,7 @@ export class AlterationsManager {
 		await addRecurringStatusColumn()
 		await changeStatusColumnDataType()
 		await allowNullInDueAndPaidAtColumns()
+		await addTransactionTypeColumn()
 
 		await renameIconColumnInCategory()
 

@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import { RecurringStatus } from "../api/transaction/interface";
+import { RecurringStatus, transactionType } from "../api/transaction/interface";
 import { DATABASE_TABLES } from "../constants/db_tables"
 import { queryInterface } from "../database";
 import { Alteration } from "./controller"
@@ -98,7 +98,6 @@ export const allowNullInDueAndPaidAtColumns = async () => {
   migration.run();
 }
 
-// No need to add virtual columns for transaction_type
 export const addTransactionTypeColumn = async () => {
   const migration = new Alteration(
     4,
@@ -116,10 +115,7 @@ export const addTransactionTypeColumn = async () => {
           DATABASE_TABLES.TRANSACTION,
           'transaction_type',
           {
-            type: DataTypes.VIRTUAL,
-            get() {
-              return this.getDataValue('amount') > 0 ? 'Income' : 'Expense'
-            }
+            type: DataTypes.ENUM(transactionType.INCOME, transactionType.EXPENSE)
           }
         );
 

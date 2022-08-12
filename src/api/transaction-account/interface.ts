@@ -43,6 +43,6 @@ export interface UpdateTransactionAccountRequest extends Request {
 export interface ITransactionAccountService {
 	list(): Promise<TransactionAccount[]>
 	fetch(id: number, userId: number): Promise<TransactionAccount[]>
-	add(params: TransactionAccountType): Promise<TransactionAccount>
-	update(id: number, params: TransactionAccountType): Promise<TransactionAccount>
+	add(params: TransactionAccountType): Promise<TransactionAccount | null>
+	update(id: number, params: TransactionAccountType): Promise<TransactionAccount | null>
 }

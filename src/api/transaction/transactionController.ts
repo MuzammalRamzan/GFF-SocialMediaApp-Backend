@@ -2,6 +2,7 @@
 import { Response, NextFunction } from 'express'
 import { validationResult } from 'express-validator'
 import { IAuthenticatedRequest } from '../helper/authMiddleware'
+import { TransactionAccService } from '../transaction-account/transactionAccService'
 import { CreateTransactionRequest, UpdateTransactionRequest, DeleteTransactionRequest, ListTransactionsReqParams } from './interface'
 import { TransactionService } from './transactionService'
 
@@ -56,6 +57,11 @@ export class TransactionController {
 			const errors = validationResult(req)
 			if (!errors.isEmpty()) {
 				throw new Error(errors.array()[0].msg)
+			}
+
+			const isActiveAccount = await TransactionAccService.isActiveAccount(params.account_id, user_id);
+			if (!isActiveAccount) {
+				throw new Error('Account is been deleted!')
 			}
 
 			const transaction = await this.transactionService.add(params)

@@ -6,7 +6,7 @@ import { transactionBodyValidation } from './validation'
 const transactionController = new TransactionController()
 export const transactionRouter = express.Router()
 
-transactionRouter.get('/list', transactionController.getAllTransactions)
+transactionRouter.get('/list', authMiddleware, transactionController.getAllTransactions)
 transactionRouter.post(
 	'/add',
 	authMiddleware,

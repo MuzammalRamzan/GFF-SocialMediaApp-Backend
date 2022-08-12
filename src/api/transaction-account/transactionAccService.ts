@@ -1,10 +1,27 @@
 import { Currency } from '../currency/currencyModel'
-import { ITransactionAccountService, TransactionAccountType } from './interface'
+import { ITransactionAccountService, Status, TransactionAccountType } from './interface'
 import { TransactionAccount } from './transactionAccModel'
 
 // TODO: pull data from db with user id and join it with account types table
 
 export class TransactionAccService implements ITransactionAccountService {
+	private readonly TransactionAccountAttributes = {
+		attributes: ['id', 'account_type_id', 'balance', 'currency_id', 'name', 'status', 'user_id'],
+		include: [{ model: Currency, as: 'currency' }]
+	}
+
+	static async filterTransactionAccount(id: number) {
+		const account = await TransactionAccount.findOne({
+			where: {
+				id,
+			},
+			attributes: ['id', 'account_type_id', 'balance', 'currency_id', 'name', 'status', 'user_id'],
+			include: [{ model: Currency, as: 'currency' }]
+		})
+
+		return account
+	}
+
 	async list(): Promise<TransactionAccount[]> {
 		const transactionAcc = await TransactionAccount.findAll()
 		return transactionAcc as TransactionAccount[]
@@ -14,8 +31,10 @@ export class TransactionAccService implements ITransactionAccountService {
 		const transactionAccount = await TransactionAccount.findAll({
 			where: {
 				id: id,
-				user_id: userId
-			}
+				user_id: userId,
+				status: Status.Active
+			},
+			...this.TransactionAccountAttributes
 		})
 
 		return transactionAccount
@@ -24,16 +43,16 @@ export class TransactionAccService implements ITransactionAccountService {
 	async fetchForUser(userId: number): Promise<TransactionAccount[]> {
 		const accounts = await TransactionAccount.findAll({
 			where: {
-				user_id: userId
+				user_id: userId,
+				status: Status.Active
 			},
-			attributes: ['id', 'account_type_id', 'balance', 'currency_id', 'name', 'status', 'user_id'],
-			include: [{ model: Currency, as: 'currency' }]
+			...this.TransactionAccountAttributes
 		})
 
 		return accounts
 	}
 
-	async add(params: TransactionAccountType): Promise<TransactionAccount> {
+	async add(params: TransactionAccountType): Promise<TransactionAccount | null> {
 		const transactionAccount = await TransactionAccount.create({
 			balance: params.balance,
 			account_type_id: params.account_type_id,
@@ -46,12 +65,12 @@ export class TransactionAccService implements ITransactionAccountService {
 			card_cvc: params.card_cvc,
 			currency_id: params.currency_id,
 			user_id: params.user_id,
-			status: params.status
+			status: Status.Active,
 		})
-		return transactionAccount
+		return await TransactionAccService.filterTransactionAccount(transactionAccount.get('id') as number)
 	}
 
-	async update(id: number, params: TransactionAccountType): Promise<TransactionAccount> {
+	async update(id: number, params: TransactionAccountType): Promise<TransactionAccount | null> {
 		const updatedTransactionAccount = await TransactionAccount.update(
 			{
 				balance: params.balance,
@@ -70,26 +89,40 @@ export class TransactionAccService implements ITransactionAccountService {
 			{
 				where: {
 					id: id,
-					user_id: params.user_id
+					user_id: params.user_id,
+					status: Status.Active
 				}
 			}
 		)
 		if (updatedTransactionAccount[0] === 1) {
-			const transactionAccount = await TransactionAccount.findByPk(id)
-			return transactionAccount as TransactionAccount
+			return await TransactionAccService.filterTransactionAccount(id)
 		}
 
 		throw new Error('Unauthorized')
 	}
 
 	async delete(id: number, userId: number): Promise<number> {
-		const deletedRow = await TransactionAccount.destroy({
+		const account = await TransactionAccount.update({
+			status: Status.Deleted,
+		}, {
 			where: {
-				id: id,
+				id,
 				user_id: userId
 			}
 		})
 
-		return deletedRow
+		return account[0]
+	}
+
+	static async isActiveAccount(id: number, userId: number): Promise<boolean> {
+		const account = await TransactionAccount.findOne({
+			where: {
+				id,
+				user_id: userId,
+				status: Status.Active
+			}
+		})
+
+		return !!account
 	}
 }

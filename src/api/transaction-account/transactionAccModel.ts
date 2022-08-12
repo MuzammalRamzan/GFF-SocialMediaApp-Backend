@@ -1,8 +1,9 @@
 import { DataTypes, Model } from 'sequelize'
 import { sequelize } from '../../database/index'
 import { Currency } from '../currency/currencyModel'
+import { Status } from './interface'
 
-export class TransactionAccount extends Model {}
+export class TransactionAccount extends Model { }
 
 TransactionAccount.init(
 	{
@@ -56,7 +57,7 @@ TransactionAccount.init(
 			allowNull: false
 		},
 		status: {
-			type: DataTypes.ENUM('Active', 'Inactive', 'Deleted'),
+			type: DataTypes.ENUM(Status.Active, Status.Inactive, Status.Deleted),
 			allowNull: false
 		}
 	},

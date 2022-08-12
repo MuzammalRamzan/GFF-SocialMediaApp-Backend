@@ -50,11 +50,11 @@ Transaction.init(
 		},
 		due_date: {
 			type: DataTypes.DATE,
-			allowNull: false
+			allowNull: true
 		},
 		paid_at: {
 			type: DataTypes.DATE,
-			allowNull: false
+			allowNull: true
 		},
 		transaction_type: {
 			type: DataTypes.ENUM(transactionType.INCOME, transactionType.EXPENSE)
