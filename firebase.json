@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "girls-first-finance-f5f10",
+  "private_key_id": "dee12b34999834e2861ebb3c32ded96064e0335d",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDHVWwYsLVcU4wl\nJqUCgnlGtIc3IAXjZHQCVBHyUBf6+bG90E35lYrqM0pa26D3IHeVsqJ9OekQA8Do\nF67U+dHKlu2RDVE9hDiIsGrfQeawDQ2wgbBDvOGf6Y9XQuoYkskgOKC7ONPpcjmY\nKTzaMhfsfGcD6GiXvcIFlvBEsDWGdi3dBq2FDFIpcgzwxNzcXU3QCdZgsarWUlIZ\n8/7gdJDDpOtsntXhclUk0x2ruMIFmTpOSbXPQNPp+QD135h25y5QEUGCaSkvEPsH\n+RkLAwrwlf2T+fPn0Bq3lXac4Ec1the4Rla/s13BvUH5ev1uHe3Zt2vE9JledL+Y\nXuAwWuDxAgMBAAECggEABFs6bUVtGme8dckb2qudmTGzsaq5NjhyX3c5wJyG7jYZ\npukv9DcB4n0BniRvOQCPyjabOVsdN2k9luc5Bzlme39DyCyfMQyy/nUxJVCFZLeW\nmdwSlmPTO6hP76kjAJlW7soym1u7cVCoVG60kpzGOaW9OXl/Gx1LaakA0h97K/w6\nK4OxOUGjUwkMCk9JLA+soaqxezxJdppYJiu34M30V/wy/A4PEHY8gOJn+gu0DPN5\nvzCRl+oQnO45F6X/EYaWRTnUJnWURsA4DSGShgTI3qevvfHH0p4h6PmlJu1aMBlP\n5ykZ7n+GQeJCgBbirqHCuZppro7pYoOe34kilaVfuQKBgQDyYlyGVzUzY5zl8Dkj\nhOlKG2Ql8hn9mjwr/XjF1aPxiqDHmy/LUuqrDC+eF78qPuGK2kvjEQIHFz4v13MC\nw6VVcp0ZrXI1dYLXq06R+9quljNRZYQe3LgC/6aOJ0Hfk4+qu7aOyM0GgGcmp8Fz\nldBmd0v5TmtSqc/GSI9/k5tRgwKBgQDSh/d9d2BWD3TM7rDKDh9f2LgfnjqB328T\nYTDCEHZViyMrLWxw55AfTKqyt7pnzy1fafobyPq8QK5nR4r+rX9EMNQr3aS0V6xH\nEm46U8Mw5JN5E/2cSZvAc23wyINLCB5bVb/yUdh3/jFSGmAikjXlxKyITKg7rPU1\nNhIZy6+9ewKBgEHNclEGW+sXoADMtrZt3ue/h/DFSUkQFkXbCm6rEVcBy6Rk/RS1\n7f+Bz2ucBsnxSEnp+bArbeF+7eMPGqolcz0/YGcYL2lT/bGPUEVRmozLOiNe6/90\n7H/j59Ov1LJd3SL80xLwcLjTIy3bXSmEAo/O01FbeMd4UnACQvLfn8sBAoGAcTvi\nOGBpt0AO8V58ReD8rP+SYKcpDstPIdxHbkmObAou+z0uMzfJA5ynvwIkx0reO5Bz\njlg1y+T6KOCI+Nv2NIYSyBkpSjpRldRq5wJAXN7EFv5SjKnmlMdA3Z3rSALw2O0x\nFTNCO5/DhUZcaJu9U3zJ03FvltE6/ci8SZWNS1sCgYAjwSwTHrixdoXrzk8G0SF1\nvy214Hua0lM2uqekW9es3L8sza27y5otoiBzrmZb3QF/ptgsiQzF0OaCD62E6cqd\nP/WqPc2jSV6pVRD80eH0ccYWoJiIB77NUiSgCYTgKQCEIw45EIg9cTxv5cNlCyDo\nZidgjQcky4ESk0LmkF2QYQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-g528d@girls-first-finance-f5f10.iam.gserviceaccount.com",
+  "client_id": "110204532541526198845",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-g528d%40girls-first-finance-f5f10.iam.gserviceaccount.com"
+}
