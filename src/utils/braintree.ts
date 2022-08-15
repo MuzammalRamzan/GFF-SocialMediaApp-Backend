@@ -1,13 +1,18 @@
+import { Console } from 'console'
+
 const Express = require('express')
 const app = Express()
 
 const braintree = require('braintree')
 
+const client = require('braintree-web/client')
+const dataCollector = require('braintree-web/data-collector')
+
 const gateway = new braintree.BraintreeGateway({
 	environment: braintree.Environment.Sandbox,
-	merchantId: process.env.BRAINTREE_MERCHANT_ID,
-	publicKey: process.env.BRAINTREE_PUBLIC_KEY,
-	privateKey: process.env.BRAINTREE_PRIVATE_KEY
+	merchantId: '9kpq3sdks86t2jbb',
+	publicKey: '3bh79vgjt4js8fkk',
+	privateKey: '9374fe6d8bafd49d60d4c7f1d57635ab'
 })
 
 // gateway.customer.create(

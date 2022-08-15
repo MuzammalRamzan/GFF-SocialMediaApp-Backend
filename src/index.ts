@@ -38,76 +38,85 @@ import { identityVerification } from './api/identity-verification/verification.r
 import { mentorInfoRouter } from './api/Questionnaire/questionnaireRouter'
 import { UserAnswersRouter } from './api/MentorAnswers/userAnsewerRouter'
 import { promocodeRouter } from './api/promocode/promocodeRouter'
-import { paymentRouter } from './api/payment-api/paymentRouter'
 import { AlterationsManager } from './alteration'
+
+import { paymentRouter } from './api/payment-api/paymentRouter'
+import { crewRouter } from './api/crew/crewRouter'
+import { crewMemberRouter } from './api/crewMember/crewMemberRouter'
 import { userFCMTokenRouter } from './api/user-fcm-token/userFCMTokenRouter'
 import { dashboardRouter } from './api/dashboard/dashboard.routes'
 
 const storage = multer.memoryStorage()
 
 const options = {
-  swaggerOptions: {
-    filter: true
-  }
+	swaggerOptions: {
+		filter: true
+	}
 }
 
 export const upload = multer({
-  storage,
-  limits: { fileSize: 1000000000 }
-});
+	storage,
+	limits: { fileSize: 1000000000 }
+})
 
-(async function main(): Promise<void> {
-  const app = Express()
+;(async function main(): Promise<void> {
+	const app = Express()
 
-  app.use(cors())
-  // CORS error fix
-  app.use((req: Request, res: Response, next: NextFunction) => {
-    res.setHeader('Access-Control-Allow-Origin', '*')
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE')
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-    if (req.method === 'OPTIONS') {
-      return res.sendStatus(200)
-    }
-    return next()
-  })
+	app.use(cors())
+	// CORS error fix
+	app.use((req: Request, res: Response, next: NextFunction) => {
+		res.setHeader('Access-Control-Allow-Origin', '*')
+		res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE')
+		res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+		if (req.method === 'OPTIONS') {
+			return res.sendStatus(200)
+		}
+		return next()
+	})
 
-  app.use(bodyParser.json())
-  // app.get("/api-docs/swagger.json", (req, res) => res.json(swaggerDocument));
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options))
-  app.use('/auth', authRouter)
-  app.use('/upload', uploadRouter)
-  app.use('/user', userRouter)
-  app.use('/role', roleRouter)
-  app.use('/transaction', transactionRouter)
-  app.use('/transactionAccount', transactionAccRouter)
-  app.use('/transactionCategory', transactionCategoryRouter)
-  app.use('/record', recordRouter)
-  app.use('/find-friend', findFriendRouter)
-  app.use('/userInformation', userInformationRouter)
-  app.use('/hashtag', hashtagRouter)
-  app.use('/debt', debtRouter)
-  app.use('/dailyDose', dailyDoseRouter)
-  app.use('/dailyArticle', dailyArticleRouter)
-  app.use('/loanLedgerProfessionalInformation', loanLedgerProfessionalInformationRouter)
-  app.use('/loanLedgerPersonalInformation', loanLedgerPersonalInfoRouter)
-  app.use('/mentor-matcher', mentorMatcherRouter)
-  app.use('/mentor-information', mentorInformationRouter)
-  app.use('/mpesa', mpesaRouter)
-  app.use('/room', roomRoute)
-  app.use('/message', messageRoute)
-  app.use('/warrior-information', warriorInformationRouter)
-  app.use('/wellness-warrior', warriorRouter)
-  app.use('/', mentorSettingsRouter)
-  app.use('/currency', currencyRouter)
-  app.use('/feedback', feedbackRouter)
-  app.use('/identity', identityVerification)
+	app.use(bodyParser.json())
+	// app.get("/api-docs/swagger.json", (req, res) => res.json(swaggerDocument));
+	app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options))
+	app.use('/auth', authRouter)
+	app.use('/upload', uploadRouter)
+	app.use('/user', userRouter)
+	app.use('/role', roleRouter)
+	app.use('/transaction', transactionRouter)
+	app.use('/transactionAccount', transactionAccRouter)
+	app.use('/transactionCategory', transactionCategoryRouter)
+	app.use('/record', recordRouter)
+	app.use('/find-friend', findFriendRouter)
+	app.use('/userInformation', userInformationRouter)
+	app.use('/hashtag', hashtagRouter)
+	app.use('/debt', debtRouter)
+	app.use('/dailyDose', dailyDoseRouter)
+	app.use('/dailyArticle', dailyArticleRouter)
+	app.use('/loanLedgerProfessionalInformation', loanLedgerProfessionalInformationRouter)
+	app.use('/loanLedgerPersonalInformation', loanLedgerPersonalInfoRouter)
+	app.use('/mentor-matcher', mentorMatcherRouter)
+	app.use('/mentor-information', mentorInformationRouter)
+	app.use('/mpesa', mpesaRouter)
+	app.use('/room', roomRoute)
+	app.use('/message', messageRoute)
+	app.use('/warrior-information', warriorInformationRouter)
+	app.use('/wellness-warrior', warriorRouter)
+	app.use('/', mentorSettingsRouter)
+	app.use('/currency', currencyRouter)
+	app.use('/feedback', feedbackRouter)
+	app.use('/identity', identityVerification)
 	app.use('/fcm-token', userFCMTokenRouter)
 
-  app.use('/mentor-information', mentorInfoRouter)
-  app.use('/mentor-information', UserAnswersRouter)
-  app.use('/promocode', promocodeRouter)
-  app.use('/dashboard', dashboardRouter)
+	app.use('/mentor-information', mentorInfoRouter)
+	app.use('/mentor-information', UserAnswersRouter)
+	app.use('/promocode', promocodeRouter)
+	app.use('/dashboard', dashboardRouter)
 	app.use('/payment', paymentRouter)
+
+	app.use('/crew', crewRouter)
+	app.use('/crew-member', crewMemberRouter)
+
+	app.use('/crew', crewRouter)
+	app.use('/crew-member', crewMemberRouter)
 
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 		const error = err as GffError
@@ -124,20 +133,20 @@ export const upload = multer({
 		return jsonErrorHandler(err, req, res, () => {})
 	})
 
-  app.listen(process.env.PORT, () => {
-    console.log(`Server running at port ${process.env.PORT}`)
-  })
+	app.listen(process.env.PORT, () => {
+		console.log(`Server running at port ${process.env.PORT}`)
+	})
 
-  try {
-    await sequelize.authenticate()
-    console.log('Database connection has been established successfully.')
-    setTimeout(() => {
-      AlterationsManager.run();
-    }, 1000)
-  } catch (error) {
-    console.error('Unable to connect to the database:', error)
-  }
+	try {
+		await sequelize.authenticate()
+		console.log('Database connection has been established successfully.')
+		setTimeout(() => {
+			AlterationsManager.run()
+		}, 1000)
+	} catch (error) {
+		console.error('Unable to connect to the database:', error)
+	}
 })().catch(err => {
-  console.log('Error starting application $s', err.message)
-  process.exit(1)
+	console.log('Error starting application $s', err.message)
+	process.exit(1)
 })

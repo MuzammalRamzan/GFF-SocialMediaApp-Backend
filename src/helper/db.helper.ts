@@ -13,6 +13,10 @@ export const paginate = (query: FindAndCountOptions, pagination: PaginationType)
 	}
 }
 
+export const CREW_MEMBERS_FIELDS = ['status', 'role']
+
+export const CREW_MEMBER_USER_FIELD = ['full_name', 'role_id']
+
 export const USER_INFORMATION_FIELDS = [
 	'profile_url',
 	'bio',

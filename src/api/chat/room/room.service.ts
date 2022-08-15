@@ -3,7 +3,7 @@ import { Room } from './room.model'
 import { Op } from 'sequelize'
 
 export class RoomService implements IRoomService {
-	constructor() { }
+	constructor() {}
 
 	static async isUserBelongToTheRoom(room_id: number, user_id: number): Promise<boolean> {
 		const room = await Room.findOne({
@@ -45,7 +45,7 @@ export class RoomService implements IRoomService {
 	}
 
 	public async createRoom(params: RoomParams): Promise<Room> {
-		const doesRoomExists = await this.doesRoomExist((params.user_ids || []).map(user_id => +user_id));
+		const doesRoomExists = await this.doesRoomExist((params.user_ids || []).map(user_id => +user_id))
 
 		if (doesRoomExists) {
 			throw new Error('Room already exists')
@@ -127,11 +127,11 @@ export class RoomService implements IRoomService {
 					[Op.or]: [
 						{ [Op.like]: `%,${user_ids.join(',')}` },
 						{ [Op.like]: `${user_ids.join(',')},%` },
-						{ [Op.like]: `${user_ids.join(',')}` },
-					],
+						{ [Op.like]: `${user_ids.join(',')}` }
+					]
 				}
 			}
-		});
+		})
 
 		const roomsByUserId = await this.getAllRooms(user_ids[0])
 

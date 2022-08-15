@@ -85,6 +85,14 @@
       "description": "Yoti verification"
     },
     {
+      "name": "crew",
+      "description": "crew APIs"
+    },
+    {
+      "name": "crew-members",
+      "description": "crew members APIs"
+    },
+    {
       "name": "payment-api",
       "description": "brain tree payment"
     }
@@ -250,6 +258,1018 @@
                     }
                   },
                   "code": 200
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "message": "Unauthorized",
+                  "status": 401
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crew/create": {
+      "post": {
+        "tags": [
+          "crew"
+        ],
+        "description": "Create Crew",
+        "parameters": [
+          {
+            "name": "auth-token",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/crew"
+              },
+              "examples": {
+                "0": {
+                  "value": {
+                    "name": "JK crew",
+                    "invite_members": [
+                      775,
+                      688,
+                      777
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": {
+                  "data": {
+                    "crew": {
+                      "id": 5,
+                      "created_by_id": 699,
+                      "name": "JK crew 2",
+                      "is_archived": false,
+                      "room_id": 20,
+                      "crew_members": [
+                        {
+                          "status": "accepted",
+                          "role": "owner",
+                          "user": {
+                            "full_name": "Bob Jhon",
+                            "role_id": 1,
+                            "role": {
+                              "id": 1,
+                              "name": "User",
+                              "authority": "user"
+                            }
+                          }
+                        },
+                        {
+                          "status": "invited",
+                          "role": "member",
+                          "user": {
+                            "full_name": "Normal User",
+                            "role_id": 1,
+                            "role": {
+                              "id": 1,
+                              "name": "User",
+                              "authority": "user"
+                            }
+                          }
+                        },
+                        {
+                          "status": "invited",
+                          "role": "member",
+                          "user": {
+                            "full_name": "John Test",
+                            "role_id": 1,
+                            "role": {
+                              "id": 1,
+                              "name": "User",
+                              "authority": "user"
+                            }
+                          }
+                        },
+                        {
+                          "status": "invited",
+                          "role": "member",
+                          "user": {
+                            "full_name": "Mentor",
+                            "role_id": 3,
+                            "role": {
+                              "id": 3,
+                              "name": "Mentor",
+                              "authority": "mentor"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "code": 200,
+                  "message": "CREATE_CREW"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "message": "Unauthorized",
+                  "status": 401
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crew/crews": {
+      "get": {
+        "tags": [
+          "crew"
+        ],
+        "description": "get all crew",
+        "parameters": [
+          {
+            "name": "auth-token",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "data": {
+                    "crew": [
+                      {
+                        "id": 1,
+                        "created_by_id": 699,
+                        "name": "My menots crew",
+                        "is_archived": false,
+                        "room_id": 17,
+                        "crew_members": [
+                          {
+                            "status": "accepted",
+                            "role": "owner",
+                            "user": {
+                              "full_name": "Bob Jhon",
+                              "role_id": 1,
+                              "role": {
+                                "id": 1,
+                                "name": "User",
+                                "authority": "user"
+                              }
+                            }
+                          },
+                          {
+                            "status": "invited",
+                            "role": "member",
+                            "user": {
+                              "full_name": "Normal User",
+                              "role_id": 1,
+                              "role": {
+                                "id": 1,
+                                "name": "User",
+                                "authority": "user"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "id": 2,
+                        "created_by_id": 699,
+                        "name": "JK crew",
+                        "is_archived": false,
+                        "room_id": 18,
+                        "crew_members": [
+                          {
+                            "status": "accepted",
+                            "role": "owner",
+                            "user": {
+                              "full_name": "Bob Jhon",
+                              "role_id": 1,
+                              "role": {
+                                "id": 1,
+                                "name": "User",
+                                "authority": "user"
+                              }
+                            }
+                          },
+                          {
+                            "status": "invited",
+                            "role": "member",
+                            "user": {
+                              "full_name": "Normal User",
+                              "role_id": 1,
+                              "role": {
+                                "id": 1,
+                                "name": "User",
+                                "authority": "user"
+                              }
+                            }
+                          },
+                          {
+                            "status": "invited",
+                            "role": "member",
+                            "user": {
+                              "full_name": "John Test",
+                              "role_id": 1,
+                              "role": {
+                                "id": 1,
+                                "name": "User",
+                                "authority": "user"
+                              }
+                            }
+                          },
+                          {
+                            "status": "accepted",
+                            "role": "member",
+                            "user": {
+                              "full_name": "Mentor",
+                              "role_id": 3,
+                              "role": {
+                                "id": 3,
+                                "name": "Mentor",
+                                "authority": "mentor"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "code": 200,
+                  "message": "GET_ALL_CREW"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crew/{id}": {
+      "get": {
+        "tags": [
+          "crew"
+        ],
+        "description": "Get Crew By ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Crew ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "auth-token",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": {
+                  "data": {
+                    "crew": {
+                      "id": 2,
+                      "created_by_id": 699,
+                      "name": "JK crew",
+                      "is_archived": true,
+                      "room_id": 18,
+                      "crew_members": [
+                        {
+                          "status": "accepted",
+                          "role": "owner",
+                          "user": {
+                            "full_name": "Bob Jhon",
+                            "role_id": 1,
+                            "role": {
+                              "id": 1,
+                              "name": "User",
+                              "authority": "user"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "code": 200,
+                  "message": "GET_CREW"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "message": "Unauthorized",
+                  "status": 401
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crew/update/{id}": {
+      "put": {
+        "tags": [
+          "crew"
+        ],
+        "description": "Update a crew",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Crew Id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "auth-token",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/crew"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "data": {
+                    "crew": {
+                      "id": 3,
+                      "created_by_id": 699,
+                      "name": "1st crew",
+                      "is_archived": false,
+                      "room_id": 19
+                    }
+                  },
+                  "code": 200,
+                  "message": "UPDATE_CREW"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "message": "Unauthorized",
+                  "status": 401
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crew/delete/{id}": {
+      "delete": {
+        "tags": [
+          "crew"
+        ],
+        "description": "Delete a crew",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "crew info ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "auth-token",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "code": 200,
+                  "message": "DELETE_CREW"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "message": "Unauthorized",
+                  "status": 401
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crew-member/invite": {
+      "post": {
+        "tags": [
+          "crew-members"
+        ],
+        "description": "invite Crew member",
+        "parameters": [
+          {
+            "name": "auth-token",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/crewMember"
+              },
+              "examples": {
+                "0": {
+                  "value": {
+                    "crew_id": 2,
+                    "user_id": 777
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": {
+                  "data": {
+                    "CrewMember": {
+                      "status": "invited",
+                      "role": "member",
+                      "id": 17,
+                      "crew_id": 2,
+                      "user_id": 779
+                    }
+                  },
+                  "code": 200,
+                  "message": "CREATE_CREW"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "message": "Unauthorized",
+                  "status": 401
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crew-member/all-crew-member": {
+      "get": {
+        "tags": [
+          "crew-members"
+        ],
+        "description": "Get Crew Member By ID",
+        "parameters": [
+          {
+            "name": "auth-token",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+          },
+          {
+            "name": "crew_id",
+            "in": "query",
+            "description": "crew id",
+            "required": true,
+            "type": "string",
+            "example": "1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": {
+                  "data": {
+                    "crew": {
+                      "id": 1,
+                      "created_by_id": 699,
+                      "name": "JK crew",
+                      "is_archived": false,
+                      "room_id": 16,
+                      "crew_members": [
+                        {
+                          "status": "accepted",
+                          "role": "owner",
+                          "user": {
+                            "full_name": "Bob Jhon",
+                            "role_id": 1,
+                            "role": {
+                              "id": 1,
+                              "name": "User",
+                              "authority": "user"
+                            }
+                          }
+                        },
+                        {
+                          "status": "invited",
+                          "role": "member",
+                          "user": {
+                            "full_name": "Normal User",
+                            "role_id": 1,
+                            "role": {
+                              "id": 1,
+                              "name": "User",
+                              "authority": "user"
+                            }
+                          }
+                        },
+                        {
+                          "status": "invited",
+                          "role": "member",
+                          "user": {
+                            "full_name": "John Test",
+                            "role_id": 1,
+                            "role": {
+                              "id": 1,
+                              "name": "User",
+                              "authority": "user"
+                            }
+                          }
+                        },
+                        {
+                          "status": "invited",
+                          "role": "member",
+                          "user": {
+                            "full_name": "Mentor",
+                            "role_id": 3,
+                            "role": {
+                              "id": 3,
+                              "name": "Mentor",
+                              "authority": "mentor"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "code": 200,
+                  "message": "GET_ALL_CREW_MEMBERS"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "message": "Unauthorized",
+                  "status": 401
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crew-member/crew-request": {
+      "get": {
+        "tags": [
+          "crew-members"
+        ],
+        "description": "Crew Member request",
+        "parameters": [
+          {
+            "name": "auth-token",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": {
+                  "code": 200,
+                  "data": [
+                    {
+                      "id": 1,
+                      "created_by_id": 699,
+                      "name": "JK crew",
+                      "is_archived": false,
+                      "room_id": 16,
+                      "crew_members": [
+                        {
+                          "status": "invited",
+                          "role": "member",
+                          "user": {
+                            "full_name": "Mentor",
+                            "role_id": 3,
+                            "role": {
+                              "id": 3,
+                              "name": "Mentor",
+                              "authority": "mentor"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "id": 2,
+                      "created_by_id": 699,
+                      "name": "JK crew 2",
+                      "is_archived": false,
+                      "room_id": 17,
+                      "crew_members": [
+                        {
+                          "status": "invited",
+                          "role": "member",
+                          "user": {
+                            "full_name": "Mentor",
+                            "role_id": 3,
+                            "role": {
+                              "id": 3,
+                              "name": "Mentor",
+                              "authority": "mentor"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  "message": "FETCH CREW REQUESTS SUCCESSFULLY"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "message": "Unauthorized",
+                  "status": 401
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crew-member/update/{id}": {
+      "put": {
+        "tags": [
+          "crew-members"
+        ],
+        "description": "Update a crew member",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Crew member Id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "auth-token",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/crew"
+              },
+              "example": {
+                "user_id": 688,
+                "crew_id": 2,
+                "status": "accepted",
+                "role": "member"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "data": {
+                    "crew": {
+                      "id": 4,
+                      "user_id": 688,
+                      "crew_id": 2,
+                      "status": "accepted",
+                      "role": "member"
+                    }
+                  },
+                  "code": 200,
+                  "message": "UPDATE_CREW"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "message": "Unauthorized",
+                  "status": 401
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crew-member/accept-reject-request": {
+      "put": {
+        "tags": [
+          "crew-members"
+        ],
+        "description": "accept or reject crew request",
+        "parameters": [
+          {
+            "name": "auth-token",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/crewMember"
+              },
+              "example": {
+                "crew_id": 2,
+                "status": "accepted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "code": 200,
+                  "message": "Crew request accepted"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "message": "Unauthorized",
+                  "status": 401
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crew-member/remove/{id}": {
+      "delete": {
+        "tags": [
+          "crew-members"
+        ],
+        "description": "Delete a crew",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "crew info ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "auth-token",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "code": 200,
+                  "message": "DELETE_CREW_MEMBER"
                 }
               }
             }
@@ -10208,56 +11228,6 @@
           "account_id": 3,
           "category_id": 1,
           "status": "active"
-        }
-      },
-      "PaymentTransaction": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "string"
-          },
-          "buyer_id": {
-            "type": "integer"
-          },
-          "service_provider_id": {
-            "type": "integer"
-          },
-          "session_id": {
-            "type": "integer"
-          },
-          "amount": {
-            "type": "integer"
-          },
-          "transaction_id": {
-            "type": "string"
-          },
-          "transaction_data": {
-            "type": "string"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date"
-          }
-        },
-        "example": {
-          "id": 12,
-          "status": "Success",
-          "buyer_id": 12,
-          "amount": 100,
-          "transaction_id": "2r5c12e3",
-          "service_provider": {
-            "id": 688,
-            "role_id": 1,
-            "full_name": "John Test",
-            "email": "johntest@gmail.com",
-            "default_currency_id": 1,
-            "user_feature_id": null,
-            "deactivated": false
-          },
-          "created_at": "2022-08-09T13:43:07.000Z"
         }
       }
     }
