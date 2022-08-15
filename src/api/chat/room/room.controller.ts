@@ -1,5 +1,7 @@
 import { NextFunction, Response } from "express";
 import { IAuthenticatedRequest } from "../../helper/authMiddleware";
+import { User } from "../../user/userModel";
+import { UserService } from "../../user/userService";
 import { RoomService } from "./room.service";
 
 export class RoomController {
@@ -12,8 +14,35 @@ export class RoomController {
     try {
       const userId = req?.user?.id as number;
       const rooms = await this.roomService.getAllRooms(userId);
+
+      for (const room of rooms) {
+        const user_ids = room.get('user_ids') as number[]
+        const users = await UserService.getUsersByIds(user_ids);
+
+        console.log(users.map((user: any) => ({
+          id: user.get('id'),
+          full_name: user.get('full_name') || null,
+          profile_url: user?.get('user_information')?.get('profile_url') || null
+        })));
+      }
+
+      const data = await Promise.all(rooms.map(async (room: any) => {
+        const user_ids = room.get('user_ids') as number[]
+        const users = await UserService.getUsersByIds(user_ids);
+
+        return {
+          ...room.get(),
+          user_ids: user_ids,
+          users: users.map((user: any) => ({
+            id: user.get('id'),
+            full_name: user.get('full_name') || null,
+            profile_url: user?.get('user_information')?.get('profile_url') || null
+          }))
+        }
+      }));
+
       res.status(200).json({
-        data: { rooms },
+        data: { rooms: data },
         message: "Successfully fetched all rooms",
         code: 200
       });

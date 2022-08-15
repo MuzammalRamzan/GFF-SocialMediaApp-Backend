@@ -102,7 +102,8 @@ export class RoomService implements IRoomService {
 						}
 					]
 				}
-			}
+			},
+			order: [['created_at', 'DESC']],
 		})
 	}
 

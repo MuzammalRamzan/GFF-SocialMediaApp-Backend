@@ -330,4 +330,22 @@ export class UserService implements IUserService {
 
 		return await user.save()
 	}
+
+	static async getUsersByIds(userIds: number[]): Promise<User[]> {
+		return await User.findAll({
+			where: {
+				id: {
+					[Op.in]: userIds
+				}
+			},
+			attributes: USER_FIELDS,
+			include: [
+				{
+					model: UserInformation,
+					as: 'user_information',
+					attributes: USER_INFORMATION_FIELDS
+				}
+			]
+		});
+	}
 }
