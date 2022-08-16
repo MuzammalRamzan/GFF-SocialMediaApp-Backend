@@ -8,6 +8,9 @@ import { Room } from '../room/room.model'
 import { RoomService } from '../room/room.service'
 import { IMessageService, MessageType } from './interface'
 import { Message } from './message.model'
+import { FirebaseService } from '../../../helper/firebaseService'
+import { UserFCMTokenService } from '../../user-fcm-token/userFCMTokenService'
+import { MulticastMessage } from 'firebase-admin/lib/messaging/messaging-api'
 
 type SubscribersType = {
 	[room_id: string]: { [user_id: string]: Response | null }
@@ -17,6 +20,8 @@ export class MessageService implements IMessageService {
 	private subscribers: SubscribersType = Object.create(null)
 	private incomingMessageNotificationSubscribers: { [user_id: string]: Response | null } = Object.create(null)
 	private incomingMessageNotificationTimestamp: { [user_id: string]: number } = Object.create(null)
+	private readonly firebaseService: FirebaseService
+	private readonly fcmService: UserFCMTokenService
 
 	private getRoomsByUserQuery(user_id: number) {
 		return {
@@ -38,6 +43,8 @@ export class MessageService implements IMessageService {
 
 	constructor() {
 		this.roomService = new RoomService()
+		this.firebaseService = new FirebaseService()
+		this.fcmService = new UserFCMTokenService()
 	}
 
 	static filterMessageObject(message: Message | null): MessageType | null {
@@ -134,6 +141,33 @@ export class MessageService implements IMessageService {
 
 		this.publishMessage(messageObj, user_id, room_id)
 		this.sendMessageNotification(user_id, room_id)
+
+		let roomParticipants = await this.roomService.getAllUsersByRoomId(room_id)
+		let userIds = roomParticipants.filter(id => id !== user_id);
+		console.log('roomparticipants', {
+			roomParticipants,
+			user_id,
+			userIds
+		});
+
+		const fcmTokens = await this.fcmService.getUserTokens(userIds)
+		const tokens = fcmTokens.map(x => x.get().token)
+		console.log({ fcmTokens, tokens })
+
+		if (tokens.length > 0){
+			await this.firebaseService.getInstance().sendMultiple({
+				data: {
+					sender_id: user_id.toString(),
+					room_id: room_id.toString(),
+					message,
+				},
+				notification: {
+					title: 'You have a new message.',
+					body: message
+				},
+				tokens
+			} as MulticastMessage)
+		}
 
 		return messageObj
 	}

@@ -1,6 +1,7 @@
 import { UserFCMTokens } from './userFCMTokensModel'
 import { IUserFCMTokenService, Messages  } from './interface'
 import { GffError } from '../helper/errorHandler'
+import { Op } from 'sequelize'
 
 export class UserFCMTokenService implements IUserFCMTokenService {
 
@@ -24,10 +25,15 @@ export class UserFCMTokenService implements IUserFCMTokenService {
     })
   }
 
-  getUserTokens = async (userId: number): Promise<UserFCMTokens[]> => {
+  getUserTokens = async (userId: number | number[]): Promise<UserFCMTokens[]> => {
 
     const fcmToken = await UserFCMTokens.findAll({
-      where: { user_id: userId },
+      where: {
+        user_id: {
+          [Op.in]: Array.isArray(userId) ? userId : [userId]
+        }
+      },
+
     })
 
     if(!fcmToken) {
