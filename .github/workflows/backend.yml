@@ -5,6 +5,7 @@ on:
     # Publish `dev` as Docker `latest` image.
     branches:
       - develop
+      - prod
     # Publish `v1.2.3` tags as releases.
     tags:
       - v*
@@ -27,11 +28,15 @@ jobs:
         shell: bash
     steps:
       - uses: actions/checkout@v2
+
       - name: Build image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
       - name: Log into registry
         run: echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       - name: Push image
+
+      - name: 'Run on develop branch'
+        if: ${{ github.ref == 'develop' }}
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository }}/$IMAGE_NAME
           # Change all uppercase to lowercase
@@ -46,6 +51,24 @@ jobs:
           echo VERSION=$VERSION
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
+
+      - name: 'Run on prod branch'
+        if: ${{ github.ref == 'prod' }}
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository }}/$IMAGE_NAME
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "dev" ] && VERSION=latest
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -53,7 +76,14 @@ jobs:
       - name: executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@master
         with:
+          if: ${{ github.ref == 'develop' }}
           host: ${{ secrets.DEV_SERVER_URL }}
           username: ubuntu
           key: ${{ secrets.DEV_SSH_KEY }}
+
+          if: ${{ github.ref == 'prod' }}
+          host: ${{ secrets.PROD_SERVER_URL }}
+          username: ubuntu
+          key: ${{ secrets.PROD_SSH_KEY }}
+
           script: sh deploy-backend.sh
