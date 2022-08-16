@@ -178,3 +178,51 @@ export const renameIconColumnInCategory = async () => {
 
   migration.run();
 }
+
+export const allowNullInTransactionAccount = async () => {
+  const migration = new Alteration(
+    10,
+    `Allow null to bank columns for ${DATABASE_TABLES.TRANSACTION_ACCOUNT}`,
+    new Date().toISOString(),
+    async () => {
+      try {
+        const strFields = [
+          'country',
+          'bank_name',
+          'card_owner',
+          'card_number',
+          'card_cvc',
+        ];
+
+        await Promise.all(strFields.map((field) => {
+          return queryInterface.changeColumn(
+            DATABASE_TABLES.TRANSACTION_ACCOUNT,
+            field,
+            {
+              type: DataTypes.STRING,
+              allowNull: true
+            }
+          );
+        }))
+
+        await queryInterface.changeColumn(
+          DATABASE_TABLES.TRANSACTION_ACCOUNT,
+          'card_expiration_date',
+          {
+            type: DataTypes.STRING,
+            allowNull: true
+          }
+        );
+
+
+
+        return true;
+      } catch (error) {
+        console.log(error);
+        return false;
+      }
+    }
+  )
+
+  migration.run();
+}

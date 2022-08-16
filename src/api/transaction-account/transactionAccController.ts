@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
+import { validationResult } from 'express-validator'
 import {
 	TransactionAccountType,
 	GetTransactionAccountByIdRequest,
@@ -116,6 +117,26 @@ export class TransactionAccController {
 	createTransactionAccount = async (req: CreateTransactionAccountRequest, res: Response, next: NextFunction) => {
 		const user_id = +req.user.id
 		const params = { ...req.body, user_id }
+
+		const errors = validationResult(req).array({ onlyFirstError: true })
+		if (errors.length) {
+			return res.status(400).json({
+				errors: errors,
+				message: 'Validation error',
+				code: 400
+			})
+		}
+
+		if (!req.user.default_currency_id && !params.currency_id) {
+			return res.status(400).send({
+				message: 'Please select a currency',
+				status: 400
+			})
+		}
+
+		if (!params.currency_id) {
+			params.currency_id = req.user.default_currency_id
+		}
 
 		try {
 			const transactionAccount = await this.transactionAccService.add(params as TransactionAccountType)

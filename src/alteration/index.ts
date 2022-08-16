@@ -2,6 +2,7 @@ import {
 	addRecurringStatusColumn,
 	addTransactionTypeColumn,
 	allowNullInDueAndPaidAtColumns,
+	allowNullInTransactionAccount,
 	changeStatusColumnDataType,
 	renameIconColumnInCategory
 } from './transaction'
@@ -15,6 +16,7 @@ export class AlterationsManager {
 		await changeStatusColumnDataType()
 		await allowNullInDueAndPaidAtColumns()
 		await addTransactionTypeColumn()
+		await allowNullInTransactionAccount()
 
 		await renameIconColumnInCategory()
 

@@ -26,27 +26,27 @@ TransactionAccount.init(
 		},
 		country: {
 			type: DataTypes.STRING,
-			allowNull: false
+			allowNull: true
 		},
 		bank_name: {
 			type: DataTypes.STRING,
-			allowNull: false
+			allowNull: true
 		},
 		card_owner: {
 			type: DataTypes.STRING,
-			allowNull: false
+			allowNull: true
 		},
 		card_number: {
 			type: DataTypes.STRING,
-			allowNull: false
+			allowNull: true
 		},
 		card_expiration_date: {
 			type: DataTypes.DATE,
-			allowNull: false
+			allowNull: true
 		},
 		card_cvc: {
 			type: DataTypes.STRING,
-			allowNull: false
+			allowNull: true
 		},
 		currency_id: {
 			type: DataTypes.INTEGER,

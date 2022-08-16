@@ -4,4 +4,5 @@ export const DATABASE_TABLES = {
 	TRANSACTION_CATEGORY: 'transaction_category',
 	USER_INFORMATION: 'user_information',
 	USER: 'user',
+	TRANSACTION_ACCOUNT: 'transaction_account',
 }
