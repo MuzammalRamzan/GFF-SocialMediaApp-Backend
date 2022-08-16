@@ -28,14 +28,11 @@ jobs:
         shell: bash
     steps:
       - uses: actions/checkout@v2
-
       - name: Build image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
       - name: Log into registry
         run: echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-      - name: Push image
-
-      - name: 'Run on develop branch'
+      - name: 'Push image run on develop branch'
         if: ${{ github.ref == 'develop' }}
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository }}/$IMAGE_NAME
@@ -51,8 +48,7 @@ jobs:
           echo VERSION=$VERSION
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
-
-      - name: 'Run on prod branch'
+      - name: 'Push image run on prod branch'
         if: ${{ github.ref == 'prod' }}
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository }}/$IMAGE_NAME
@@ -73,17 +69,21 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: executing remote ssh commands using ssh key
+      - name: executing remote ssh commands using ssh key for develop
         uses: appleboy/ssh-action@master
+        if: ${{ github.ref == 'develop' }}
         with:
-          if: ${{ github.ref == 'develop' }}
           host: ${{ secrets.DEV_SERVER_URL }}
           username: ubuntu
           key: ${{ secrets.DEV_SSH_KEY }}
-
-          if: ${{ github.ref == 'prod' }}
+          script: sh deploy-backend.sh
+      - name: executing remote ssh commands using ssh key for prod
+        uses: appleboy/ssh-action@master
+        if: ${{ github.ref == 'prod' }}
+        with:
           host: ${{ secrets.PROD_SERVER_URL }}
           username: ubuntu
           key: ${{ secrets.PROD_SSH_KEY }}
-
           script: sh deploy-backend.sh
+
+
