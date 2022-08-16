@@ -10314,6 +10314,146 @@
           }
         }
       }
+    },
+    "/fcm-token/add": {
+      "post": {
+        "tags": [
+          "FCM token"
+        ],
+        "description": "Add FCM Token",
+        "parameters": [
+          {
+            "name": "auth-token",
+            "in": "header",
+            "description": "Auth Token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/send_message_body"
+              },
+              "examples": {
+                "0": {
+                  "value": {
+                    "token":"xxxxxxxxxxxxxxxxxxxxxxxxxx"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "object",
+                          "$ref": "#/components/schemas/Message"
+                        }
+                      }
+                    },
+                    "message": {
+                      "token": "string"
+                    },
+                    "code": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "example": {
+                  "data": {
+                    "id": 12,
+                    "user_id": 726,
+                    "token": "xxxxxxxxxxxxxxxxxxxxxxxxxx",
+                    "updatedAt": "2022-08-16T07:18:09.840Z",
+                    "createdAt": "2022-08-16T07:18:09.840Z"
+                  },
+                  "code": 200,
+                  "message": "OK"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fcm-token/delete": {
+      "put": {
+        "tags": [
+          "FCM token"
+        ],
+        "description": "Delete FCM Token",
+        "parameters": [
+          {
+            "name": "auth-token",
+            "in": "header",
+            "description": "Auth Token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/send_message_body"
+              },
+              "examples": {
+                "0": {
+                  "value": {
+                    "token":"xxxxxxxxxxxxxxxxxxxxxxxxxx"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "object",
+                          "$ref": "#/components/schemas/Message"
+                        }
+                      }
+                    },
+                    "message": {
+                      "token": "string"
+                    },
+                    "code": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "example": {
+                  "data": {},
+                  "code": 200,
+                  "message": "Token deleted successfully!"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
