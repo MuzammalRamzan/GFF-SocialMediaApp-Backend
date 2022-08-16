@@ -6,21 +6,31 @@ import sequelize, { Op } from 'sequelize'
 import { GffError } from '../helper/errorHandler'
 import { Frequency, ITransactionService, ListTransactionsReqParams, Status, TransactionType } from './interface'
 import { Transaction } from './transactionModel'
+import { Currency } from '../currency/currencyModel'
+import { ObjectParser } from '../../helper/ObjectParser'
 
 export class TransactionService implements ITransactionService {
-	private readonly include: Includeable | Includeable[] = [
+	static readonly transactionAccountIncludeables: Includeable | Includeable[] = [{ model: Currency, as: 'currency' }]
+
+	static readonly transactionIncludeables: Includeable | Includeable[] = [
 		{ model: TransactionCategory, as: 'transaction_category' },
 		{
 			model: TransactionAccount,
 			as: 'transaction_account',
-			attributes: ['id', 'balance', 'account_type_id', 'name', 'country', 'currency_id', 'user_id', 'status']
+			attributes: ['id', 'balance', 'account_type_id', 'name', 'country', 'currency_id', 'user_id', 'status'],
+			include: [{ model: Currency, as: 'currency' }]
 		}
 	]
 
-	async list(params: ListTransactionsReqParams, userId: number): Promise<Transaction[]> {
+	static TransactionParser(transaction: Transaction) {
+		const newData = {}
+		ObjectParser(transaction.toJSON(), newData)
+		return newData as Transaction
+	}
 
+	async list(params: ListTransactionsReqParams, userId: number): Promise<Transaction[]> {
 		const filter: any = {
-			user_id: userId,
+			user_id: userId
 		}
 
 		if (params.status) {
@@ -31,10 +41,10 @@ export class TransactionService implements ITransactionService {
 		}
 
 		const transactions = await Transaction.findAll({
-			include: this.include,
+			include: TransactionService.transactionIncludeables,
 			where: filter
 		})
-		return transactions
+		return transactions.map(transaction => TransactionService.TransactionParser(transaction))
 	}
 
 	async fetchForUser(userId: number): Promise<Transaction[]> {
@@ -44,12 +54,12 @@ export class TransactionService implements ITransactionService {
 			}
 		})
 
-		return transactions
+		return transactions.map(transaction => TransactionService.TransactionParser(transaction))
 	}
 
 	async add(params: TransactionType): Promise<Transaction> {
 		const created_at = new Date().getTime()
-		const transaction = await Transaction.create({
+		let transaction = await Transaction.create({
 			frequency: params.frequency,
 			user_id: params.user_id,
 			account_id: params.account_id,
@@ -59,11 +69,15 @@ export class TransactionService implements ITransactionService {
 			created_at: created_at,
 			due_date: params.due_date,
 			paid_at: params.paid_at,
-			recurring_status: params.frequency !== Frequency.Never ? Status.Active : Status.Inactive,
+			recurring_status: params.frequency !== Frequency.Never ? Status.Active : Status.Inactive
 		})
-		return (await Transaction.findByPk(transaction.getDataValue('id'), {
-			include: this.include
+		transaction = (await Transaction.findByPk(transaction.getDataValue('id'), {
+			include: TransactionService.transactionIncludeables
 		})) as Transaction
+
+		if (!transaction) throw new GffError('Transaction not found!', { errorCode: '404' })
+
+		return TransactionService.TransactionParser(transaction)
 	}
 
 	async update(id: number, params: TransactionType): Promise<Transaction> {
@@ -87,23 +101,29 @@ export class TransactionService implements ITransactionService {
 		)
 		if (updatedTransaction[0] === 1) {
 			const transaction = await Transaction.findByPk(id, {
-				include: this.include
+				include: TransactionService.transactionIncludeables
 			})
-			return transaction as Transaction
+
+			if (!transaction) throw new GffError('Transaction not found!', { errorCode: '404' })
+
+			return TransactionService.TransactionParser(transaction)
 		}
 
 		throw new Error('Unauthorized')
 	}
 
 	async delete(id: number, user_id: number): Promise<number> {
-		const transaction = await Transaction.update({
-			status: Status.Deleted
-		}, {
-			where: {
-				id: id,
-				user_id: user_id
+		const transaction = await Transaction.update(
+			{
+				status: Status.Deleted
+			},
+			{
+				where: {
+					id: id,
+					user_id: user_id
+				}
 			}
-		})
+		)
 		return transaction[0]
 	}
 
@@ -132,13 +152,14 @@ export class TransactionService implements ITransactionService {
 				[Op.and]: [
 					{
 						user_id,
-						paid_at: { [Op.eq]: null },
+						paid_at: { [Op.eq]: null }
 					},
 					{ due_date: { [Op.lte]: moment().utc().endOf('month') } }
 				]
-			}
+			},
+			include: TransactionService.transactionIncludeables
 		})
-		return transactions
+		return transactions.map(transaction => TransactionService.TransactionParser(transaction))
 	}
 
 	async getPaidTransactions(user_id: number): Promise<Transaction[]> {
@@ -147,9 +168,10 @@ export class TransactionService implements ITransactionService {
 				user_id,
 				status: Status.Paid,
 				paid_at: { [Op.ne]: null }
-			}
+			},
+			include: TransactionService.transactionIncludeables
 		})
-		return transactions
+		return transactions.map(transaction => TransactionService.TransactionParser(transaction))
 	}
 
 	async cancelRecurringTransaction(user_id: number, id: number): Promise<Transaction> {

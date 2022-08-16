@@ -10,16 +10,31 @@ export class TransactionAccService implements ITransactionAccountService {
 		include: [{ model: Currency, as: 'currency' }]
 	}
 
+	static parseTransactionAccount(transactionAccount: TransactionAccount[]) {
+		return transactionAccount.map(account => {
+			const transactionAcc = account.toJSON()
+			if (transactionAcc?.currency) {
+				transactionAcc['currency_symbol'] = transactionAcc.currency.symbol
+				transactionAcc['currency_name'] = transactionAcc.currency.name
+
+				delete transactionAcc['currency']
+			}
+			return transactionAcc
+		})
+	}
+
 	static async filterTransactionAccount(id: number) {
 		const account = await TransactionAccount.findOne({
 			where: {
-				id,
+				id
 			},
 			attributes: ['id', 'account_type_id', 'balance', 'currency_id', 'name', 'status', 'user_id'],
 			include: [{ model: Currency, as: 'currency' }]
 		})
 
-		return account
+		if (!account) throw new Error("Account doesn't exist")
+
+		return TransactionAccService.parseTransactionAccount([account])[0]
 	}
 
 	async list(): Promise<TransactionAccount[]> {
@@ -37,7 +52,7 @@ export class TransactionAccService implements ITransactionAccountService {
 			...this.TransactionAccountAttributes
 		})
 
-		return transactionAccount
+		return TransactionAccService.parseTransactionAccount(transactionAccount) as TransactionAccount[]
 	}
 
 	async fetchForUser(userId: number): Promise<TransactionAccount[]> {
@@ -49,7 +64,7 @@ export class TransactionAccService implements ITransactionAccountService {
 			...this.TransactionAccountAttributes
 		})
 
-		return accounts
+		return TransactionAccService.parseTransactionAccount(accounts)
 	}
 
 	async add(params: TransactionAccountType): Promise<TransactionAccount | null> {
@@ -102,14 +117,17 @@ export class TransactionAccService implements ITransactionAccountService {
 	}
 
 	async delete(id: number, userId: number): Promise<number> {
-		const account = await TransactionAccount.update({
-			status: Status.Deleted,
-		}, {
-			where: {
-				id,
-				user_id: userId
+		const account = await TransactionAccount.update(
+			{
+				status: Status.Deleted
+			},
+			{
+				where: {
+					id,
+					user_id: userId
+				}
 			}
-		})
+		)
 
 		return account[0]
 	}

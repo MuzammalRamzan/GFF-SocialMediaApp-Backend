@@ -10,7 +10,7 @@ export type GroupedTransactionType = {
 }
 
 export type TransactionStatistics = {
-	[key in transactionType]: { total_amount: number; categories: TransactionCategoryType[] }
+	[key in transactionType]: { total_amount: number; categories: (TransactionCategoryType & { amount: number })[] }
 } & { currency_symbol: string }
 
 export type DashboardTransactionInformation = {

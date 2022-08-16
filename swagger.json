@@ -95,9 +95,206 @@
     {
       "name": "payment-api",
       "description": "brain tree payment"
-    }
+    },
+    {
+			"name": "dashboard",
+			"description": "Dashboard Statistics Routes"
+		}
   ],
   "paths": {
+    "/dashboard/chart": {
+			"get": {
+				"tags": ["dashboard"],
+				"description": "Dashboard chart statistics api",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json; charset=utf-8": {
+								"example": {
+									"data": {
+										"chart": {
+											"currency_symbol": "$",
+											"expense": {
+												"total_amount": 111,
+												"categories": [
+													{
+														"id": 1,
+														"name": "New updated name",
+														"user_id": 16,
+														"icon_id": 0,
+														"colour": "",
+														"type": "income",
+														"is_default": true,
+														"status": "active",
+														"amount": 10
+													},
+													{
+														"id": 36,
+														"name": "Paycheck",
+														"user_id": 169,
+														"icon_id": 0,
+														"colour": "#86BB73",
+														"type": "income",
+														"is_default": false,
+														"status": "active",
+														"amount": 101
+													}
+												]
+											},
+											"income": {
+												"total_amount": -404,
+												"categories": [
+													{
+														"id": 1,
+														"name": "New updated name",
+														"user_id": 16,
+														"icon_id": 0,
+														"colour": "",
+														"type": "income",
+														"is_default": true,
+														"status": "active",
+														"amount": -303
+													},
+													{
+														"id": 39,
+														"name": "Gift",
+														"user_id": 169,
+														"icon_id": 0,
+														"colour": "#EC8F25",
+														"type": "income",
+														"is_default": true,
+														"status": "active",
+														"amount": -101
+													}
+												]
+											}
+										}
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/dashboard/info": {
+			"get": {
+				"tags": ["dashboard"],
+				"description": "Dashboard information api",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json; charset=utf-8": {
+								"example": {
+									"data": {
+										"accounts": [
+											{
+												"id": 1,
+												"balance": 10.5,
+												"account_type_id": 1,
+												"name": "Lucijan",
+												"country": "Croatia",
+												"currency_id": 1,
+												"user_id": 169,
+												"status": "active",
+												"currency_symbol": "$",
+												"currency_name": "US Dollar"
+											}
+										],
+										"payment_due": [
+											{
+												"id": 151,
+												"frequency": "Daily",
+												"user_id": 169,
+												"account_id": 1,
+												"amount": -101,
+												"category_id": 39,
+												"status": "active",
+												"recurring_status": "Inactive",
+												"created_at": "2022-08-05",
+												"paid_at": null,
+												"transaction_type": "income",
+												"category_name": "Gift",
+												"category_user_id": 169,
+												"category_icon_id": 0,
+												"category_colour": "#EC8F25",
+												"category_type": "income",
+												"category_is_default": true,
+												"category_status": "active",
+												"account_balance": 10.5,
+												"account_account_type_id": 1,
+												"account_name": "Lucijan",
+												"account_country": "Croatia",
+												"account_currency_id": 1,
+												"account_user_id": 169,
+												"account_status": "active",
+												"currency_id": 1,
+												"currency_symbol": "$",
+												"currency_name": "US Dollar"
+											}
+										],
+										"paid": [
+											{
+												"id": 151,
+												"frequency": "Daily",
+												"user_id": 169,
+												"account_id": 1,
+												"amount": -101,
+												"category_id": 39,
+												"status": "active",
+												"recurring_status": "Inactive",
+												"created_at": "2022-08-05",
+												"paid_at": null,
+												"transaction_type": "income",
+												"category_name": "Gift",
+												"category_user_id": 169,
+												"category_icon_id": 0,
+												"category_colour": "#EC8F25",
+												"category_type": "income",
+												"category_is_default": true,
+												"category_status": "active",
+												"account_balance": 10.5,
+												"account_account_type_id": 1,
+												"account_name": "Lucijan",
+												"account_country": "Croatia",
+												"account_currency_id": 1,
+												"account_user_id": 169,
+												"account_status": "active",
+												"currency_id": 1,
+												"currency_symbol": "$",
+												"currency_name": "US Dollar"
+											}
+										]
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
     "/payment/transaction": {
       "get": {
         "tags": [

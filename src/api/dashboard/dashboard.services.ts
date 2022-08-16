@@ -2,9 +2,10 @@ import { Op } from 'sequelize'
 import { sequelize } from '../../database'
 import { Currency } from '../currency/currencyModel'
 import { TransactionAccount } from '../transaction-account/transactionAccModel'
-import { TransactionCategory } from '../transaction-category/transactionCategoryModel'
+import { TransactionAccService } from '../transaction-account/transactionAccService'
 import { transactionType } from '../transaction/interface'
 import { Transaction } from '../transaction/transactionModel'
+import { TransactionService } from '../transaction/transactionService'
 import {
 	DashboardTransactionInformation,
 	GroupedTransactionType,
@@ -17,21 +18,8 @@ export class DashboardServices implements IDashboardServices {
 		const currency = await Currency.findByPk(currency_id)
 
 		const transactions = await Transaction.findAll({
-			include: [
-				{
-					model: TransactionCategory,
-					as: 'transaction_category',
-					where: { [Op.or]: [{ user_id }, { is_default: true }] },
-					required: true
-				},
-				{
-					model: TransactionAccount,
-					as: 'transaction_account',
-					where: { currency_id },
-					attributes: ['currency_id'],
-					required: true
-				}
-			],
+			where: { user_id },
+			include: TransactionService.transactionIncludeables,
 			attributes: [[sequelize.fn('sum', sequelize.col('amount')), 'total_amount'], 'transaction_type'],
 			group: ['transaction_type', 'category_id']
 		})
@@ -47,7 +35,10 @@ export class DashboardServices implements IDashboardServices {
 
 			if (transaction.transaction_type) {
 				details[transaction.transaction_type].total_amount += +transaction.total_amount
-				details[transaction.transaction_type].categories.push(transaction.transaction_category)
+				details[transaction.transaction_type].categories.push({
+					...transaction.transaction_category,
+					amount: +transaction.total_amount
+				})
 			}
 		})
 
@@ -55,23 +46,27 @@ export class DashboardServices implements IDashboardServices {
 	}
 
 	async getTransactionInformation(user_id: number): Promise<DashboardTransactionInformation> {
-		const accounts = await TransactionAccount.findAll({ where: { user_id } })
+		const accounts = await TransactionAccount.findAll({
+			where: { user_id },
+			attributes: ['id', 'balance', 'account_type_id', 'name', 'country', 'currency_id', 'user_id', 'status'],
+			include: TransactionService.transactionAccountIncludeables
+		})
 
 		const payment_due = await Transaction.findAll({
-			where: { user_id, due_date: { [Op.lte]: sequelize.fn('NOW') }, payed_at: null },
-			include: [{ model: TransactionCategory, as: 'transaction_category' }]
+			where: { user_id, due_date: { [Op.lte]: sequelize.fn('NOW') }, paid_at: null },
+			include: TransactionService.transactionIncludeables
 		})
 
 		const paid = await Transaction.findAll({
-			where: { user_id, payed_at: { [Op.ne]: null } },
-			include: [{ model: TransactionCategory, as: 'transaction_category' }],
+			where: { user_id, paid_at: { [Op.ne]: null } },
+			include: TransactionService.transactionIncludeables,
 			limit: 15
 		})
 
 		return {
-			accounts: accounts.map(res => res.toJSON()),
-			payment_due: payment_due.map(res => res.toJSON()),
-			paid: paid.map(res => res.toJSON())
+			accounts: TransactionAccService.parseTransactionAccount(accounts),
+			payment_due: payment_due.map(transaction => TransactionService.TransactionParser(transaction)),
+			paid: paid.map(transaction => TransactionService.TransactionParser(transaction))
 		}
 	}
 }
