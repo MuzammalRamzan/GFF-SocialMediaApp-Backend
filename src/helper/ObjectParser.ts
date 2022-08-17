@@ -15,7 +15,7 @@ export const ObjectParser = (currentObj: any, newObj: any, current?: string) => 
 
 		let newKey = current ? current + '_' + key : key // joined key with dot
 
-		if (value && typeof value === 'object' && value.length === undefined) {
+		if (value && typeof value === 'object' && value.length === undefined && value instanceof Date !== true) {
 			ObjectParser(value, res, key) // it's a nested object, so do it again
 		} else {
 			res[newKey] = value // it's not an object, so set the property
