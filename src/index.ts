@@ -45,6 +45,7 @@ import { crewRouter } from './api/crew/crewRouter'
 import { crewMemberRouter } from './api/crewMember/crewMemberRouter'
 import { userFCMTokenRouter } from './api/user-fcm-token/userFCMTokenRouter'
 import { dashboardRouter } from './api/dashboard/dashboard.routes'
+import { meetingRouter } from './api/meetings/meeting.routes'
 
 const storage = multer.memoryStorage()
 
@@ -57,9 +58,9 @@ const options = {
 export const upload = multer({
 	storage,
 	limits: { fileSize: 1000000000 }
-})
+});
 
-;(async function main(): Promise<void> {
+(async function main(): Promise<void> {
 	const app = Express()
 
 	app.use(cors())
@@ -105,16 +106,12 @@ export const upload = multer({
 	app.use('/feedback', feedbackRouter)
 	app.use('/identity', identityVerification)
 	app.use('/fcm-token', userFCMTokenRouter)
-
 	app.use('/mentor-information', mentorInfoRouter)
 	app.use('/mentor-information', UserAnswersRouter)
 	app.use('/promocode', promocodeRouter)
 	app.use('/dashboard', dashboardRouter)
 	app.use('/payment', paymentRouter)
-
-	app.use('/crew', crewRouter)
-	app.use('/crew-member', crewMemberRouter)
-
+	app.use('/meeting', meetingRouter)
 	app.use('/crew', crewRouter)
 	app.use('/crew-member', crewMemberRouter)
 
@@ -130,7 +127,7 @@ export const upload = multer({
 			error.httpStatusCode = 500
 		}
 
-		return jsonErrorHandler(err, req, res, () => {})
+		return jsonErrorHandler(err, req, res, () => { })
 	})
 
 	app.listen(process.env.PORT, () => {
