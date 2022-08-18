@@ -6,4 +6,5 @@ export const DATABASE_TABLES = {
 	DAILY_ARTICLE: 'dailyArticle',
 	USER: 'user',
 	TRANSACTION_ACCOUNT: 'transaction_account',
+	WARRIOR_INFORMATION: 'warrior_information'
 }

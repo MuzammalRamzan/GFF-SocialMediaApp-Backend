@@ -1,10 +1,10 @@
-import { USER_FIELDS, USER_INFORMATION_FIELDS } from '../../helper/db.helper'
+import { USER_FIELDS, USER_INFORMATION_FIELDS, WELLNESS_WARRIOR_FIELDS } from '../../helper/db.helper'
 import { GffError } from '../helper/errorHandler'
 import { UserInformation } from '../user-information/userInformationModel'
 import { UserRoleService } from '../user-role/userRoleService'
 import { User } from '../user/userModel'
 import { WellnessWarriorService } from '../wellness-warrior/wellnessWarriorService'
-import { IWarriorInformationService, IWarriorUser, WarriorInformationParams } from './interface'
+import { IWarriorInformationService, IWarriorUser, Status, WarriorInformationParams } from './interface'
 import { WarriorInformation } from './warriorInformationModel'
 
 export class WarriorInformationService implements IWarriorInformationService {
@@ -21,7 +21,10 @@ export class WarriorInformationService implements IWarriorInformationService {
 			specialty: params.specialty.join(','),
 			certification: params.certification.join(','),
 			therapy_type: params.therapy_type.join(','),
-			price_range: params.price_range.join(',')
+			conversation_mode: params.conversation_mode.join(','),
+			hourly_rate: params.hourly_rate,
+			language: params.language.join(','),
+			status: Status.PENDING,
 		}
 
 		if (warriorInformation) {
@@ -41,7 +44,7 @@ export class WarriorInformationService implements IWarriorInformationService {
 				{
 					model: WarriorInformation,
 					as: 'warrior_information',
-					attributes: ['specialty', 'certification', 'therapy_type', 'price_range']
+					attributes: WELLNESS_WARRIOR_FIELDS
 				},
 				{
 					model: UserInformation,

@@ -3,12 +3,22 @@ import { IWellnessWarriorRequest } from '../wellness-warrior/interface'
 import { WellnessWarrior } from '../wellness-warrior/wellnessWarriorModel'
 import { WarriorInformation } from './warriorInformationModel'
 
+export enum Status {
+	APPROVED = 'approved',
+	PENDING = 'pending',
+	REJECTED = 'deactivated',
+}
+
 export type WarriorInformationParams = {
 	user_id: number
 	specialty: string[]
 	certification: string[]
 	therapy_type: string[]
-	price_range: string[]
+	price_range: number
+	conversation_mode: string[]
+	hourly_rate: number
+	language: string[]
+	status: Status
 }
 
 export interface IWarriorUser {

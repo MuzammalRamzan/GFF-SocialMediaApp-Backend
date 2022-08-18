@@ -19,7 +19,10 @@ export interface ISearchWarriorParams {
 	specialty?: string
 	certification?: string
 	therapy_type?: string
-	price_range?: string
+	conversation_mode?: string
+	min_hourly_rate?: number
+	max_hourly_rate?: number
+	language?: string
 }
 
 export interface IWellnessWarriorRequest {

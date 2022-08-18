@@ -1,6 +1,8 @@
 import { DataTypes, Model } from 'sequelize'
+import { DATABASE_TABLES } from '../../constants/db_tables'
 import { sequelize } from '../../database'
 import { UserInformationType } from '../user-information/interface'
+import { Status } from './interface'
 
 export interface IWarriorInformation {
 	id: number
@@ -12,7 +14,7 @@ export interface IWarriorInformation {
 	user?: UserInformationType
 }
 
-export class WarriorInformation extends Model {}
+export class WarriorInformation extends Model { }
 
 WarriorInformation.init(
 	{
@@ -28,7 +30,6 @@ WarriorInformation.init(
 		},
 		specialty: {
 			type: DataTypes.STRING,
-			allowNull: true,
 			get() {
 				let arr: string[] = (this.getDataValue('specialty') || '').split(',')
 				return arr.filter(str => !!str)
@@ -36,7 +37,6 @@ WarriorInformation.init(
 		},
 		certification: {
 			type: DataTypes.STRING,
-			allowNull: true,
 			get() {
 				let arr: string[] = (this.getDataValue('certification') || '').split(',')
 				return arr.filter(str => !!str)
@@ -44,24 +44,34 @@ WarriorInformation.init(
 		},
 		therapy_type: {
 			type: DataTypes.STRING,
-			allowNull: true,
 			get() {
 				let arr: string[] = (this.getDataValue('therapy_type') || '').split(',')
 				return arr.filter(str => !!str)
 			}
 		},
-		price_range: {
+		conversation_mode: {
 			type: DataTypes.STRING,
-			allowNull: true,
 			get() {
-				let arr: string[] = (this.getDataValue('price_range') || '').split(',')
+				let arr: string[] = (this.getDataValue('conversation_mode') || '').split(',')
 				return arr.filter(str => !!str)
 			}
+		},
+		hourly_rate: { type: DataTypes.INTEGER, defaultValue: 0 },
+		language: {
+			type: DataTypes.STRING,
+			get() {
+				let arr: string[] = (this.getDataValue('language') || '').split(',')
+				return arr.filter(str => !!str)
+			}
+		},
+		status: {
+			type: DataTypes.ENUM(...Object.values(Status)),
+			defaultValue: Status.PENDING
 		}
 	},
 	{
 		sequelize: sequelize,
-		tableName: 'warrior_information'
+		tableName: DATABASE_TABLES.WARRIOR_INFORMATION
 	}
 )
 

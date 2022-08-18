@@ -10,6 +10,7 @@ import {
 } from './transaction'
 import { addPromotedTillColumn } from './user'
 import { addBraintreeCustomerIdColumn, addLatitudeColumn, addLongitudeColumn } from './userInfo'
+import { addNewColumns, addStatusColumn, removePriceRangeColumn } from './warrior_information'
 
 export class AlterationsManager {
 	public static async run() {
@@ -30,7 +31,13 @@ export class AlterationsManager {
 
 		await removeContentBodyColumn()
 		await addCreatedAtColumn()
-		// user table 
+
+    // user table 
 		await addPromotedTillColumn()
+
+		// warrior_information
+		await addStatusColumn()
+		await removePriceRangeColumn()
+		await addNewColumns()
 	}
 }

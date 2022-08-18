@@ -17,7 +17,7 @@ import {
 import { WellnessWarrior } from './wellnessWarriorModel'
 
 export class WellnessWarriorService implements IWellnessWarriorService {
-	constructor() {}
+	constructor() { }
 
 	private readonly wellness_warrior_relationships = [
 		{
@@ -86,7 +86,9 @@ export class WellnessWarriorService implements IWellnessWarriorService {
 		const _specialty = searchParams.specialty?.split(',')
 		const _certification = searchParams.certification?.split(',')
 		const _therapy_type = searchParams.therapy_type?.split(',')
-		const _price_range = searchParams.price_range?.split(',')
+		const _conversation_mode = searchParams.conversation_mode?.split(',')
+		const _language = searchParams.language?.split(',')
+
 
 		const records = await User.findAll({
 			where: {
@@ -125,10 +127,22 @@ export class WellnessWarriorService implements IWellnessWarriorService {
 								}
 							},
 							{
-								price_range: {
-									[Op.or]: _price_range?.map((price_range: string) => ({
-										[Op.like]: `%${price_range.trim()}%`
+								conversation_mode: {
+									[Op.or]: _conversation_mode?.map((conversation_mode: string) => ({
+										[Op.like]: `%${conversation_mode.trim()}%`
 									}))
+								}
+							},
+							{
+								language: {
+									[Op.or]: _language?.map((language: string) => ({
+										[Op.like]: `%${language.trim()}%`
+									}))
+								}
+							},
+							{
+								hourly_rate: {
+									[Op.between]: [searchParams.min_hourly_rate, searchParams.max_hourly_rate]
 								}
 							}
 						]
