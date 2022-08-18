@@ -33,9 +33,7 @@ export class DailyDoseController {
 			const uploadImageInfo = await this.dailyDoseServices.upload(req.file)
 			params.image = AWS_S3_BASE_BUCKET_URL + uploadImageInfo.Key
 			params.keyWord = JSON.stringify(params.keyWord)
-			console.log('Params: ', params)
 			const dailyDose = await this.dailyDoseServices.add(params)
-			console.log('Daily Dose: ', dailyDose)
 			console.log('--------------Create Dose Done successfully--------------------')
 			return res.status(200).json({ data: dailyDose, code: 200, message: `DailyDose posted sucessfully` })
 		} catch (err) {

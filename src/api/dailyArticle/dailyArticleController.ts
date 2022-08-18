@@ -26,8 +26,16 @@ export class DailyArticleController {
 			if (!params.category) {
 				throw new Error('Category is not passed')
 			}
+			const isValidURL = await this.ArticleService.validURL(params.contentURL)
+			if (params.contentURL && !isValidURL) {
+				const file = await this.ArticleService.asyncWriteFile(params.contentURL)
+				const uploadContentInfo = await this.ArticleService.uploadContentBody(file)
+				params.contentURL = AWS_S3_BASE_BUCKET_URL + uploadContentInfo.Key
+				params.isInternalLink = true
+			}
 			const uploadImageInfo = await this.ArticleService.upload(req.file)
 			params.image = AWS_S3_BASE_BUCKET_URL + uploadImageInfo.Key
+			params.keyWord = JSON.stringify(params?.keyWord || [])
 			params.category = JSON.stringify(params.category)
 			const dailyArticle = await this.ArticleService.add(params)
 			return res.status(200).json({ data: dailyArticle, code: 200, message: 'dailyArticle posted successfully' })
@@ -61,6 +69,14 @@ export class DailyArticleController {
 				const uploadImageInfo = await this.ArticleService.upload(req.file)
 				params.image = AWS_S3_BASE_BUCKET_URL + uploadImageInfo.Key
 			}
+			const isValidURL = await this.ArticleService.validURL(params.contentURL)
+			if (params.contentURL && !isValidURL) {
+				const file = await this.ArticleService.asyncWriteFile(params.contentURL)
+				const uploadContentInfo = await this.ArticleService.uploadContentBody(file)
+				params.contentURL = AWS_S3_BASE_BUCKET_URL + uploadContentInfo.Key
+				params.isInternalLink = true
+			}
+			params.keyWord = JSON.stringify(params.keyWord)
 			const dailyArticle = await this.ArticleService.update(id, params)
 			return res.status(200).json({ data: dailyArticle, code: 200, message: 'dailyArticle updated successfully' })
 		} catch (err) {

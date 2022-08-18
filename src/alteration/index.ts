@@ -1,3 +1,4 @@
+import { addCreatedAtColumn, removeContentBodyColumn } from './dailyDose'
 import { changeIdDatatype } from './migration'
 import {
 	addRecurringStatusColumn,
@@ -27,6 +28,8 @@ export class AlterationsManager {
 		await addLongitudeColumn()
 		await addBraintreeCustomerIdColumn()
 
+		await removeContentBodyColumn()
+		await addCreatedAtColumn()
 		// user table 
 		await addPromotedTillColumn()
 	}

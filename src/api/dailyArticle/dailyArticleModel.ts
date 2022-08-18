@@ -1,8 +1,9 @@
 import { DataTypes, Model } from 'sequelize'
+import { DATABASE_TABLES } from '../../constants/db_tables'
 import { sequelize } from '../../database/index'
 import { categoryType } from './interface'
 
-export class DailyArticle extends Model {}
+export class DailyArticle extends Model { }
 
 DailyArticle.init(
 	{
@@ -27,11 +28,13 @@ DailyArticle.init(
 		contentURL: {
 			type: DataTypes.STRING
 		},
-		contentBody: {
-			type: DataTypes.STRING
-		},
 		keyWord: {
 			type: DataTypes.STRING
+		},
+		created_at: {
+			type: DataTypes.DATE,
+			allowNull: false,
+			defaultValue: new Date()
 		},
 		category: {
 			type: DataTypes.JSON,
@@ -41,7 +44,7 @@ DailyArticle.init(
 
 	{
 		sequelize,
-		tableName: 'dailyArticle'
+		tableName: DATABASE_TABLES.DAILY_ARTICLE
 	}
 )
 DailyArticle.sync()

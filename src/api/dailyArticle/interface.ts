@@ -11,6 +11,7 @@ export type DailyArticleType = {
 	contentBody: string
 	keyWord: string
 	category: string
+	isInternalLink: Boolean
 }
 
 export interface IDailyArticleType {
