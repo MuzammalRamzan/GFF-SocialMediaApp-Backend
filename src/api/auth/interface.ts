@@ -6,6 +6,15 @@ export type resetPasswordBodyType = {
 	newPassword: string
 }
 
+export type changePasswordBodyType = {
+	password: string
+	token: string
+}
+
+export type resetPasswordRequestBodyType = {
+	email: string
+}
+
 export interface IAuthService {
 	createUser(email: string, fullName: string, password: string): Promise<User>
 	checkCreds(email: string, password: string): Promise<UserType | undefined>

@@ -1,8 +1,6 @@
-import { QueryTypes } from 'sequelize'
-import { sequelize } from '../../database'
-import { ISearchUser, IUserService, OtherUserInfo, PaginatedUserResult, UserInfo, UserType } from './interface'
-import { User } from './userModel'
 import { Op } from 'sequelize'
+import { IUserService, OtherUserInfo, PaginatedUserResult, UserInfo, UserType } from './interface'
+import { User } from './userModel'
 import { WarriorInformation } from '../warrior-information/warriorInformationModel'
 import { UserInformation } from '../user-information/userInformationModel'
 import { MentorInformation } from '../mentor-information/mentorInformationModel'
@@ -118,6 +116,16 @@ export class UserService implements IUserService {
 		return user as User
 	}
 
+	async findUserByToken(token: string): Promise<User> {
+		const user = await User.findOne({
+			where: {
+				forgot_password_token: token
+			}
+		})
+
+		return user as User
+	}
+
 	async update(userId: number, params: UserType): Promise<User> {
 		await User.update(
 			{
@@ -126,7 +134,8 @@ export class UserService implements IUserService {
 				default_currency_id: params.default_currency_id,
 				user_feature_id: params.user_feature_id,
 				is_pro: params.is_pro || 0,
-				promoted_till: params.promoted_till
+				promoted_till: params.promoted_till,
+				forgot_password_token: params.forgot_password_token || null
 			},
 			{
 				where: {

@@ -1,4 +1,5 @@
 import { Request } from 'express'
+import { MailDataRequired } from '@sendgrid/helpers/classes/mail'
 export type EmailType = {
 	to: string[]
 	from: string
@@ -6,8 +7,8 @@ export type EmailType = {
 	text: string
 }
 export interface SendEmailRequest extends Request {
-	emailType: EmailType
+	emailType: MailDataRequired
 }
 export interface IEmailType {
-	send(params: EmailType): Promise<EmailType>
+	send(params: MailDataRequired): Promise<MailDataRequired>
 }

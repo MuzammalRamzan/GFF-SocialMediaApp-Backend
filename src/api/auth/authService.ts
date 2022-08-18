@@ -5,6 +5,8 @@ import { User } from '../user/userModel'
 import { UserType } from '../user/interface'
 import { UserRoleService } from '../user-role/userRoleService'
 import { CurrencyService } from '../currency/currencyService'
+import crypto from 'crypto'
+import { GffError } from '../helper/errorHandler'
 
 export class AuthService implements IAuthService {
 	private readonly userRoleService: UserRoleService
@@ -75,9 +77,33 @@ export class AuthService implements IAuthService {
 		return user
 	}
 
-	async updatePassword(user_id: number, password: string): Promise<void> {
+	async updatePassword(user_id: number, password: string, reset_forgot_password_token ?: boolean): Promise<void> {
 		const hashPassword = await this.hashPassword(password)
-		await User.update({ password: hashPassword }, { where: { id: user_id } })
+		if(reset_forgot_password_token){
+			await User.update({ password: hashPassword, forgot_password_token: null }, { where: { id: user_id } })
+		}else{
+			await User.update({ password: hashPassword }, { where: { id: user_id } })
+		}
+	}
+
+	async resetPasswordRequest(email: string): Promise<User> {
+		const userObj = await User.findOne({
+			where: {
+				email: email
+			}
+		})
+
+		if (!userObj) {
+			throw new GffError('User not found!', { errorCode: '404' })
+		}
+
+		const token = crypto.randomBytes(64).toString('hex')
+		userObj.set({
+			forgot_password_token: token
+		})
+
+		await userObj.save()
+		return userObj
 	}
 
 	private async checkEmail(email: string): Promise<UserType> {

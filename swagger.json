@@ -6362,6 +6362,119 @@
 				}
 			}
 		},
+    "/auth/forgot-password-request": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "description": "Send forgot password request",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/auth_login_body"
+              },
+              "examples": {
+                "0": {
+                  "value": {
+                    "email": "user@gmail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "data": {},
+                  "message": "Forgot password mail has been sent!",
+                  "code": 200
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "error": "404",
+                  "message": "User not found!",
+                  "code": 404
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/change-password": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "description": "Change password",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/auth_login_body"
+              },
+              "examples": {
+                "0": {
+                  "value": {
+                    "password": "Hardik123#",
+                    "token": "3667f4a927781db45c342c24ebfb2ae33b65da05ec36a150247133165ebd0ab73791bf552814ce4636f9e70f28ade684b9795139c0f714c129e77dee5878551d"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "data": {},
+                  "message": "Password has been updated!",
+                  "code": 200
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "error": "404",
+                  "message": "Invalid token!",
+                  "code": 404
+                }
+              }
+            }
+          }
+        }
+      }
+    },
 		"/auth/reset-password": {
 			"put": {
 				"tags": ["auth"],

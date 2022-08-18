@@ -53,7 +53,8 @@ User.init(
 		},
 		deactivated: { type: DataTypes.BOOLEAN, defaultValue: 0 },
 		is_pro: { type: DataTypes.BOOLEAN, defaultValue: 0 },
-		promoted_till: { type: DataTypes.DATE, defaultValue: null }
+		promoted_till: { type: DataTypes.DATE, defaultValue: null },
+		forgot_password_token: { type: DataTypes.STRING, defaultValue: null },
 	},
 	{
 		sequelize,

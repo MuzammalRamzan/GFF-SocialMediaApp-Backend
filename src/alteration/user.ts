@@ -31,3 +31,31 @@ export const addPromotedTillColumn = async () => {
 
   migration.run()
 }
+export const forgotPasswordToken = async () => {
+  const migration = new Alteration(
+    "add_forgot_password_token_to_user_table",
+    `Added new forgot_password_token column to ${DATABASE_TABLES.USER}`,
+    new Date().toISOString(),
+    async () => {
+      try {
+        const table = await queryInterface.describeTable(DATABASE_TABLES.USER)
+
+        if (table.forgot_password_token) {
+          return true
+        }
+
+        await queryInterface.addColumn(DATABASE_TABLES.USER, 'forgot_password_token', {
+          type: DataTypes.STRING,
+          defaultValue: null
+        })
+
+        return true
+      } catch (error) {
+        console.log(error)
+        return false
+      }
+    }
+  )
+
+  migration.run()
+}
