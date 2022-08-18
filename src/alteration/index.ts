@@ -1,3 +1,4 @@
+import { changeIdDatatype } from './migration'
 import {
 	addRecurringStatusColumn,
 	addTransactionTypeColumn,
@@ -11,6 +12,8 @@ import { addBraintreeCustomerIdColumn, addLatitudeColumn, addLongitudeColumn } f
 
 export class AlterationsManager {
 	public static async run() {
+		await changeIdDatatype()
+
 		// Transaction table alterations
 		await addRecurringStatusColumn()
 		await changeStatusColumnDataType()

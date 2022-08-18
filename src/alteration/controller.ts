@@ -1,19 +1,20 @@
 import { AlterationModel } from "./model";
 
 export interface IMigration {
-  alterationsId: number;
+  alterationsId: string | number;
   description: string;
   timestamps: string;
   execute: () => Promise<boolean>;
 }
 
 export class Alteration implements IMigration {
-  alterationsId: number;
+  alterationsId: string | number;
   description: string;
   timestamps: string;
   execute: () => Promise<boolean>;
 
-  public constructor(alterationsId: number, description: string, timestamps: string, execute: () => Promise<boolean>) {
+  // Use the ID as UUID
+  public constructor(alterationsId: string | number, description: string, timestamps: string, execute: () => Promise<boolean>) {
     this.alterationsId = alterationsId;
     this.description = description;
     this.timestamps = timestamps;

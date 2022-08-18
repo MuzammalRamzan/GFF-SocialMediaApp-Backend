@@ -6,9 +6,7 @@ export class AlterationModel extends Model { }
 
 AlterationModel.init({
   id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    autoIncrement: true,
+    type: DataTypes.STRING,
     primaryKey: true
   },
   description: {
