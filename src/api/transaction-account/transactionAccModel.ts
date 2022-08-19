@@ -18,7 +18,7 @@ TransactionAccount.init(
 		},
 		account_type_id: {
 			type: DataTypes.INTEGER,
-			allowNull: false
+			allowNull: true
 		},
 		name: {
 			type: DataTypes.STRING,
@@ -26,27 +26,32 @@ TransactionAccount.init(
 		},
 		country: {
 			type: DataTypes.STRING,
-			allowNull: true
+			allowNull: true,
+			defaultValue: 'US'
 		},
 		bank_name: {
 			type: DataTypes.STRING,
-			allowNull: true
+			allowNull: true,
+			defaultValue: ''
 		},
 		card_owner: {
 			type: DataTypes.STRING,
-			allowNull: true
+			allowNull: true,
+			defaultValue: ''
 		},
 		card_number: {
 			type: DataTypes.STRING,
-			allowNull: true
+			allowNull: true,
 		},
 		card_expiration_date: {
 			type: DataTypes.DATE,
-			allowNull: true
+			allowNull: true,
+			defaultValue: sequelize.fn('NOW')
 		},
 		card_cvc: {
 			type: DataTypes.STRING,
-			allowNull: true
+			allowNull: true,
+			defaultValue: ''
 		},
 		currency_id: {
 			type: DataTypes.INTEGER,

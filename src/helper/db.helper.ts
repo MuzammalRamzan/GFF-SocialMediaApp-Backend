@@ -62,3 +62,18 @@ export const USER_DETAILS_FIELDS = [
 	'user_feature_id',
 	'deactivated'
 ]
+
+export const TRANSACTION_FIELDS = [
+	'id',
+	'user_id',
+	'account_id',
+	'category_id',
+	'transaction_type',
+	'amount',
+	'due_date',
+	'paid_at',
+	'created_at',
+	'recurring_status',
+	'status',
+	'frequency',
+]

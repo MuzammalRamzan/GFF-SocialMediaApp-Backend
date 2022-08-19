@@ -41,7 +41,6 @@ import { identityVerification } from './api/identity-verification/verification.r
 import { mentorInfoRouter } from './api/Questionnaire/questionnaireRouter'
 import { UserAnswersRouter } from './api/MentorAnswers/userAnsewerRouter'
 import { promocodeRouter } from './api/promocode/promocodeRouter'
-import { AlterationsManager } from './alteration'
 
 import { paymentRouter } from './api/payment-api/paymentRouter'
 import { crewRouter } from './api/crew/crewRouter'
@@ -142,9 +141,6 @@ export const upload = multer({
 	try {
 		await sequelize.authenticate()
 		console.log('Database connection has been established successfully.')
-		setTimeout(() => {
-			AlterationsManager.run()
-		}, 1000)
 	} catch (error) {
 		console.error('Unable to connect to the database:', error)
 	}

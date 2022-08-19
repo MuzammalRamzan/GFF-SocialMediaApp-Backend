@@ -50,11 +50,13 @@ Transaction.init(
 		},
 		due_date: {
 			type: DataTypes.DATE,
-			allowNull: true
+			allowNull: true,
+			defaultValue: sequelize.fn('now')
 		},
 		paid_at: {
 			type: DataTypes.DATE,
-			allowNull: true
+			allowNull: true,
+			defaultValue: sequelize.fn('now')
 		},
 		transaction_type: {
 			type: DataTypes.ENUM(transactionType.INCOME, transactionType.EXPENSE),
