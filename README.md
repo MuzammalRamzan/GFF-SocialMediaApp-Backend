@@ -68,3 +68,6 @@ Run following command to set an firebase file as an environment variable and the
 ```
 export GOOGLE_APPLICATION_CREDENTIALS="/path/to/firebase.json"
 ```
+
+## Import world Data
+Import `src/api/world/world.sql` file in database to see Countries, States and Cities Data.

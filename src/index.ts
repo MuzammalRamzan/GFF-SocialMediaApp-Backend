@@ -1,4 +1,4 @@
-import Express, { Request, Response, NextFunction } from 'express'
+import Express, { NextFunction, Request, Response } from 'express'
 import multer from 'multer'
 import cors from 'cors'
 import bodyParser from 'body-parser'
@@ -17,9 +17,12 @@ import { hashtagRouter } from './api/hashtag/hashtagRouter'
 import { debtRouter } from './api/debt/debtRouter'
 import { dailyDoseRouter } from './api/daily-dose/dailyDoseRouter'
 import { dailyArticleRouter } from './api/dailyArticle/dailyArticleRouter'
-import { emailRouter } from './api/email/emailRouter'
-import { loanLedgerProfessionalInformationRouter } from './api/loan-ledger-professional-information/professionalInformationRouter'
-import { loanLedgerPersonalInfoRouter } from './api/loan-ledger-personal-information/loanLedgerPersonalInformationRouter'
+import {
+	loanLedgerProfessionalInformationRouter
+} from './api/loan-ledger-professional-information/professionalInformationRouter'
+import {
+	loanLedgerPersonalInfoRouter
+} from './api/loan-ledger-personal-information/loanLedgerPersonalInformationRouter'
 import { mentorMatcherRouter } from './api/mentor-matcher/mentorMatcherRouter'
 import { mentorInformationRouter } from './api/mentor-information/mentorInformationRouter'
 import { mpesaRouter } from './api/mpesa-auth/mpesaRouter'
@@ -46,6 +49,7 @@ import { crewMemberRouter } from './api/crewMember/crewMemberRouter'
 import { userFCMTokenRouter } from './api/user-fcm-token/userFCMTokenRouter'
 import { dashboardRouter } from './api/dashboard/dashboard.routes'
 import { meetingRouter } from './api/meetings/meeting.routes'
+import { worldRouter } from './api/world/worldRouter'
 
 const storage = multer.memoryStorage()
 
@@ -114,6 +118,7 @@ export const upload = multer({
 	app.use('/meeting', meetingRouter)
 	app.use('/crew', crewRouter)
 	app.use('/crew-member', crewMemberRouter)
+	app.use('/world', worldRouter)
 
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 		const error = err as GffError
