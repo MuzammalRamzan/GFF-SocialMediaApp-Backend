@@ -6654,6 +6654,142 @@
 				}
 			}
 		},
+    "/transaction/user/{id}": {
+      "get": {
+        "tags": [
+          "transaction"
+        ],
+        "description": "List all transactions for any user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": " user ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "auth-token",
+            "in": "header",
+            "description": "Auth Token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": {
+                  "data": {
+                    "transaction": [
+                      {
+                        "id": 165,
+                        "frequency": "Never",
+                        "user_id": 202,
+                        "account_id": 241,
+                        "amount": 5500,
+                        "category_id": 44,
+                        "status": "Active",
+                        "recurring_status": "Active",
+                        "paid_at": "2022-08-17",
+                        "transaction_type": "expense",
+                        "category_name": "daw",
+                        "category_user_id": 202,
+                        "category_icon_id": 5,
+                        "category_colour": "#dfe5ac",
+                        "category_type": "expense",
+                        "category_is_default": false,
+                        "category_status": "active",
+                        "account_account_type_id": 3,
+                        "account_name": "Cash",
+                        "account_country": "sdasd",
+                        "account_currency_id": 6,
+                        "account_user_id": 202,
+                        "account_status": "active",
+                        "currency_id": 6,
+                        "currency_symbol": "ZAR",
+                        "currency_name": "South African Rand",
+                        "amountInDefaultCurrency": "26191.67"
+                      },
+                      {
+                        "id": 162,
+                        "frequency": "Never",
+                        "user_id": 202,
+                        "account_id": 241,
+                        "amount": 88500,
+                        "category_id": 44,
+                        "status": "Active",
+                        "recurring_status": "Active",
+                        "paid_at": "2022-08-16",
+                        "transaction_type": "expense",
+                        "category_name": "daw",
+                        "category_user_id": 202,
+                        "category_icon_id": 5,
+                        "category_colour": "#dfe5ac",
+                        "category_type": "expense",
+                        "category_is_default": false,
+                        "category_status": "active",
+                        "account_account_type_id": 3,
+                        "account_name": "Cash",
+                        "account_country": "sdasd",
+                        "account_currency_id": 6,
+                        "account_user_id": 202,
+                        "account_status": "active",
+                        "currency_id": 6,
+                        "currency_symbol": "ZAR",
+                        "currency_name": "South African Rand",
+                        "amountInDefaultCurrency": "427510.95"
+                      },
+                      {
+                        "id": 168,
+                        "frequency": "Never",
+                        "user_id": 202,
+                        "account_id": 241,
+                        "amount": 222200,
+                        "category_id": 44,
+                        "status": "Active",
+                        "recurring_status": "Active",
+                        "paid_at": "2022-08-17",
+                        "transaction_type": "expense",
+                        "category_name": "daw",
+                        "category_user_id": 202,
+                        "category_icon_id": 5,
+                        "category_colour": "#dfe5ac",
+                        "category_type": "expense",
+                        "category_is_default": false,
+                        "category_status": "active",
+                        "account_account_type_id": 3,
+                        "account_name": "Cash",
+                        "account_country": "sdasd",
+                        "account_currency_id": 6,
+                        "account_user_id": 202,
+                        "account_status": "active",
+                        "currency_id": 6,
+                        "currency_symbol": "ZAR",
+                        "currency_name": "South African Rand",
+                        "amountInDefaultCurrency": "1058143.35"
+                      }
+                    ]
+                  },
+                  "code": 200,
+                  "message": "OK"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
 		"/transactionAccount/user": {
 			"get": {
 				"tags": ["transaction-account"],

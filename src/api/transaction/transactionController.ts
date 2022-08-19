@@ -1,9 +1,13 @@
-
 import { Response, NextFunction } from 'express'
 import { validationResult } from 'express-validator'
 import { IAuthenticatedRequest } from '../helper/authMiddleware'
 import { TransactionAccService } from '../transaction-account/transactionAccService'
-import { CreateTransactionRequest, UpdateTransactionRequest, DeleteTransactionRequest, ListTransactionsReqParams } from './interface'
+import {
+	CreateTransactionRequest,
+	UpdateTransactionRequest,
+	DeleteTransactionRequest,
+	ListTransactionsReqParams
+} from './interface'
 import { TransactionService } from './transactionService'
 
 export class TransactionController {
@@ -16,7 +20,7 @@ export class TransactionController {
 	getAllTransactions = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
 		try {
 			const queryParams = req.query as ListTransactionsReqParams
-			const userId = req?.user?.id as number;
+			const userId = req?.user?.id as number
 
 			const transaction = await this.transactionService.list(queryParams, userId)
 
@@ -28,7 +32,7 @@ export class TransactionController {
 				message: 'OK'
 			})
 		} catch (err) {
-			next(err);
+			next(err)
 		}
 	}
 
@@ -50,6 +54,25 @@ export class TransactionController {
 		}
 	}
 
+	getTransactions = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+		try {
+			const userId = req?.params?.id as string
+			const loginUser = req?.user as object
+
+			const transaction = await this.transactionService.get(userId, loginUser)
+
+			return res.status(200).send({
+				data: {
+					transaction
+				},
+				code: 200,
+				message: 'OK'
+			})
+		} catch (err) {
+			next(err)
+		}
+	}
+
 	createTransaction = async (req: CreateTransactionRequest, res: Response, next: NextFunction) => {
 		const user_id = +req.user.id
 		const params = { ...req.body, user_id }
@@ -59,7 +82,7 @@ export class TransactionController {
 				throw new Error(errors.array()[0].msg)
 			}
 
-			const isActiveAccount = await TransactionAccService.isActiveAccount(params.account_id, user_id);
+			const isActiveAccount = await TransactionAccService.isActiveAccount(params.account_id, user_id)
 			if (!isActiveAccount) {
 				throw new Error('Account is been deleted!')
 			}
@@ -97,7 +120,7 @@ export class TransactionController {
 				message: 'OK'
 			})
 		} catch (err) {
-			next(err);
+			next(err)
 		}
 	}
 
@@ -115,7 +138,7 @@ export class TransactionController {
 				message: 'OK'
 			})
 		} catch (err) {
-			next(err);
+			next(err)
 		}
 	}
 

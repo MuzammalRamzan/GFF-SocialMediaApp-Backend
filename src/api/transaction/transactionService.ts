@@ -8,6 +8,7 @@ import { Frequency, ITransactionService, ListTransactionsReqParams, Status, Tran
 import { Transaction } from './transactionModel'
 import { Currency } from '../currency/currencyModel'
 import { ObjectParser } from '../../helper/ObjectParser'
+import axios from 'axios'
 
 export class TransactionService implements ITransactionService {
 	static readonly transactionAccountIncludeables: Includeable | Includeable[] = [{ model: Currency, as: 'currency' }]
@@ -18,6 +19,16 @@ export class TransactionService implements ITransactionService {
 			model: TransactionAccount,
 			as: 'transaction_account',
 			attributes: ['id', 'balance', 'account_type_id', 'name', 'country', 'currency_id', 'user_id', 'status'],
+			include: [{ model: Currency, as: 'currency' }]
+		}
+	]
+
+	static readonly transactionIncludeablesForConvertCurrency: Includeable | Includeable[] = [
+		{ model: TransactionCategory, as: 'transaction_category' },
+		{
+			model: TransactionAccount,
+			as: 'transaction_account',
+			attributes: ['id', 'account_type_id', 'name', 'country', 'currency_id', 'user_id', 'status'],
 			include: [{ model: Currency, as: 'currency' }]
 		}
 	]
@@ -55,6 +66,49 @@ export class TransactionService implements ITransactionService {
 		})
 
 		return transactions.map(transaction => TransactionService.TransactionParser(transaction))
+	}
+
+	async get(userId: string, loginUser: any): Promise<Transaction[]> {
+		console.log(loginUser)
+		const transactions = await Transaction.findAll({
+			include: TransactionService.transactionIncludeablesForConvertCurrency,
+			where: {
+				user_id: +userId
+			}
+		})
+
+		let newData = transactions.map(transaction => TransactionService.TransactionParser(transaction))
+
+		let response: any = []
+
+		const currency = await Currency.findByPk(loginUser?.default_currency_id)
+		const defaultCurrency = currency?.getDataValue('symbol')
+
+		await Promise.all(
+			newData.map(async (data: any): Promise<any> => {
+				let obj: any = {}
+				const config = {
+					method: 'get',
+					url: `https://api.exchangerate.host/convert?from=${data?.currency_symbol}&to=${defaultCurrency}&date=${moment(
+						data?.paid_at
+					)
+						.subtract(1, 'day')
+						.format('YYYY-MM-DD')}&amount=${data?.amount}`,
+					headers: {}
+				}
+				const res = await axios(config)
+
+				obj = {
+					...data,
+					conversionCurrency: defaultCurrency,
+					convertedAmount: res.data.result.toFixed(2)
+				}
+
+				response.push(obj)
+			})
+		)
+
+		return response?.sort((a: any, b: any) => b.id - a.id)
 	}
 
 	async add(params: TransactionType): Promise<Transaction> {
@@ -135,7 +189,9 @@ export class TransactionService implements ITransactionService {
 		}
 
 		if (transaction.getDataValue('status') === Status.Paid) {
-			throw new GffError('Transaction has already been marked as paid!', { errorCode: '400' })
+			throw new GffError('Transaction has already been marked as paid!', {
+				errorCode: '400'
+			})
 		}
 
 		transaction.setDataValue('status', Status.Paid)

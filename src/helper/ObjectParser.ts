@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 type defaultReplacementType = { [key: string]: string }
 
 const defaultReplacement: defaultReplacementType = {

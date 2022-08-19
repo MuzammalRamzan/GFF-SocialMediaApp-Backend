@@ -7,6 +7,8 @@ const transactionController = new TransactionController()
 export const transactionRouter = express.Router()
 
 transactionRouter.get('/list', authMiddleware, transactionController.getAllTransactions)
+transactionRouter.get('/user/:id', authMiddleware, transactionController.getTransactions)
+
 transactionRouter.post(
 	'/add',
 	authMiddleware,
