@@ -57,7 +57,10 @@ Transaction.init(
 			allowNull: true
 		},
 		transaction_type: {
-			type: DataTypes.ENUM(transactionType.INCOME, transactionType.EXPENSE)
+			type: DataTypes.ENUM(transactionType.INCOME, transactionType.EXPENSE),
+			get() {
+				return this.getDataValue('amount') > 0 ? transactionType.INCOME : transactionType.EXPENSE
+			}
 		}
 	},
 	{
