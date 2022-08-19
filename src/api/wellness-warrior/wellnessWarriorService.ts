@@ -1,7 +1,13 @@
 import { col, fn, Op, where } from 'sequelize'
-import { USER_FIELDS, USER_INFORMATION_FIELDS, WELLNESS_WARRIOR_FIELDS } from '../../helper/db.helper'
+import {
+	getALikeStringFromArray,
+	USER_FIELDS,
+	USER_INFORMATION_FIELDS,
+	WELLNESS_WARRIOR_FIELDS
+} from '../../helper/db.helper'
 import { Associations } from '../association/association.model'
 import { UserInformation } from '../user-information/userInformationModel'
+import { UserInformationService } from '../user-information/userInformationService'
 import { UserRoleService } from '../user-role/userRoleService'
 import { User } from '../user/userModel'
 import { IWarriorUser } from '../warrior-information/interface'
@@ -84,17 +90,84 @@ export class WellnessWarriorService implements IWellnessWarriorService {
 		const warriorRole = await UserRoleService.fetchWellnessWarriorRole()
 
 		const _specialty = searchParams.specialty?.split(',')
-		const _certification = searchParams.certification?.split(',')
 		const _therapy_type = searchParams.therapy_type?.split(',')
 		const _conversation_mode = searchParams.conversation_mode?.split(',')
 		const _language = searchParams.language?.split(',')
+		const _distance = searchParams.distance;
+		const _max_hourly_rate = searchParams.max_hourly_rate;
+		const _min_hourly_rate = searchParams.min_hourly_rate;
 
+
+		let userIds: number[] = []
+
+		if (_distance) {
+			userIds = await UserInformationService.getNearByUsers(user_id, _distance)
+		}
+
+		const wellnessWarriorWhere = {
+			[Op.and]: [
+				...(
+					_specialty?.length
+						?
+						[{
+							specialty: {
+								[Op.or]: getALikeStringFromArray(_specialty)
+							}
+						}]
+						:
+						[]
+				),
+				...(
+					_therapy_type?.length
+						?
+						[{
+							therapy_type: {
+								[Op.or]: getALikeStringFromArray(_therapy_type)
+							}
+						}]
+						:
+						[]
+				),
+				...(
+					_language?.length
+						?
+						[{
+							language: { [Op.or]: getALikeStringFromArray(_language) }
+						}]
+						:
+						[]
+				),
+				...(
+					_max_hourly_rate || _min_hourly_rate
+						?
+						[{
+							hourly_rate: {
+								[Op.and]: [
+									...(_max_hourly_rate ? [{ [Op.lte]: _max_hourly_rate }] : []),
+									...(_min_hourly_rate ? [{ [Op.gte]: _min_hourly_rate }] : [])
+								]
+							}
+						}]
+						:
+						[]
+				),
+				...(
+					_conversation_mode?.length
+						?
+						[{
+							conversation_mode: { [Op.or]: getALikeStringFromArray(_conversation_mode) }
+						}]
+						:
+						[]
+				),
+			]
+		}
 
 		const records = await User.findAll({
 			where: {
 				[Op.and]: [
 					{ role_id: warriorRole?.get('id') },
-					{ id: { [Op.not]: user_id } },
+					{ id: userIds.length ? { [Op.in]: userIds } : { [Op.ne]: user_id } },
 					where(fn('lower', col('full_name')), 'LIKE', `%${(searchParams.searchTerm || '').trim().toLowerCase()}%`)
 				]
 			},
@@ -103,50 +176,7 @@ export class WellnessWarriorService implements IWellnessWarriorService {
 					model: WarriorInformation,
 					as: 'warrior_information',
 					attributes: WELLNESS_WARRIOR_FIELDS,
-					where: {
-						[Op.or]: [
-							{
-								specialty: {
-									[Op.or]: _specialty?.map((specialty: string) => ({
-										[Op.like]: `%${specialty.trim()}%`
-									}))
-								}
-							},
-							{
-								certification: {
-									[Op.or]: _certification?.map((certification: string) => ({
-										[Op.like]: `%${certification.trim()}%`
-									}))
-								}
-							},
-							{
-								therapy_type: {
-									[Op.or]: _therapy_type?.map((therapy_type: string) => ({
-										[Op.like]: `%${therapy_type.trim()}%`
-									}))
-								}
-							},
-							{
-								conversation_mode: {
-									[Op.or]: _conversation_mode?.map((conversation_mode: string) => ({
-										[Op.like]: `%${conversation_mode.trim()}%`
-									}))
-								}
-							},
-							{
-								language: {
-									[Op.or]: _language?.map((language: string) => ({
-										[Op.like]: `%${language.trim()}%`
-									}))
-								}
-							},
-							{
-								hourly_rate: {
-									[Op.between]: [searchParams.min_hourly_rate, searchParams.max_hourly_rate]
-								}
-							}
-						]
-					}
+					where: wellnessWarriorWhere
 				},
 				{
 					model: UserInformation,

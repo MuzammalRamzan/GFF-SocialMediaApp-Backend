@@ -21,6 +21,7 @@ import { GffError } from '../helper/errorHandler'
 import { MENTOR_FIELDS, USER_ADDITIONAL_INFORMATION_FIELDS, USER_INFORMATION_FIELDS } from '../../helper/db.helper'
 import { UserRoleService } from '../user-role/userRoleService'
 import { Associations } from '../association/association.model'
+import { UserInformationService } from '../user-information/userInformationService'
 
 export class MentorMatcherService implements IMentorMatcherService {
 	private MENTOR_INFORMATION_FIELDS = MENTOR_FIELDS
@@ -39,86 +40,64 @@ export class MentorMatcherService implements IMentorMatcherService {
 		const _conversation_mode = searchTerms.conversation_mode?.split(',')
 		const _languages = searchTerms.languages?.split(',')
 
-		const currentUserInfo = await UserInformation.findOne({ where: { user_id: userId } })
-
-		const _latitude = currentUserInfo?.get('latitude')
-		const _longitude = currentUserInfo?.get('longitude')
-		const _distance = searchTerms.distance
+		const _distance = searchTerms.distance as number
 
 		const mentorRole = await UserRoleService.fetchMentorRole()
 
 		let mentorINformationWhere = {
-			[Op.or]: [
+			[Op.and]: [
 				{
 					industry: _industry?.length
 						? {
-								[Op.or]: _industry?.map((item: string) => ({
-									[Op.like]: `%${item.trim()}%`
-								}))
-						  }
+							[Op.or]: _industry?.map((item: string) => ({
+								[Op.like]: `%${item.trim()}%`
+							}))
+						}
 						: { [Op.ne]: null }
 				},
 				{
 					role: _role?.length
 						? {
-								[Op.or]: _role?.map((item: string) => ({
-									[Op.like]: `%${item.trim()}%`
-								}))
-						  }
+							[Op.or]: _role?.map((item: string) => ({
+								[Op.like]: `%${item.trim()}%`
+							}))
+						}
 						: { [Op.ne]: null }
 				},
 				{
 					frequency: _frequency?.length
 						? {
-								[Op.or]: _frequency?.map((item: string) => ({
-									[Op.like]: `%${item.trim()}%`
-								}))
-						  }
+							[Op.or]: _frequency?.map((item: string) => ({
+								[Op.like]: `%${item.trim()}%`
+							}))
+						}
 						: { [Op.ne]: null }
 				},
 				{
 					conversation_mode: _conversation_mode?.length
 						? {
-								[Op.or]: _conversation_mode?.map((item: string) => ({
-									[Op.like]: `%${item.trim()}%`
-								}))
-						  }
+							[Op.or]: _conversation_mode?.map((item: string) => ({
+								[Op.like]: `%${item.trim()}%`
+							}))
+						}
 						: { [Op.ne]: null }
 				},
 				{
 					languages: _languages?.length
 						? {
-								[Op.or]: _languages?.map((item: string) => ({
-									[Op.like]: `%${item.trim()}%`
-								}))
-						  }
+							[Op.or]: _languages?.map((item: string) => ({
+								[Op.like]: `%${item.trim()}%`
+							}))
+						}
 						: { [Op.ne]: null }
 				}
 			]
 		}
 
-		let haversine
-
 		let userIds: number[] = []
 
 		if (_distance) {
-			if (_latitude && _longitude) {
-				haversine = `(6371 * acos(cos(radians(${_latitude})) * cos(radians(latitude)) * cos(radians(longitude) - radians(${_longitude})) + sin(radians(${_latitude})) * sin(radians(latitude))))`
-				const userInfos = await UserInformation.findAll({
-					where: { user_id: { [Op.ne]: userId } },
-					attributes: ['user_id', [sequelize.literal(`round(${haversine}, 2)`), 'distance']],
-					order: sequelize.col('distance'),
-					having: sequelize.literal(`distance <= ${_distance}`)
-				})
-
-				if (userInfos.length) {
-					userInfos.map((user: any) => {
-						userIds.push(user.user_id)
-					})
-				}
-			} else {
-				throw new Error('Can you please set your address')
-			}
+			userIds = await UserInformationService.getNearByUsers(userId, _distance)
 		}
 
 		const mentors = await User.findAll({

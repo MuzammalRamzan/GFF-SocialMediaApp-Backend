@@ -17,12 +17,12 @@ export const RequestType = {
 export interface ISearchWarriorParams {
 	searchTerm: string
 	specialty?: string
-	certification?: string
 	therapy_type?: string
 	conversation_mode?: string
 	min_hourly_rate?: number
 	max_hourly_rate?: number
 	language?: string
+	distance?: number
 }
 
 export interface IWellnessWarriorRequest {

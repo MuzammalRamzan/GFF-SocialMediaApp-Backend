@@ -1,5 +1,6 @@
 import express from 'express'
 import { check } from 'express-validator'
+import { adminMiddleware } from '../helper/AdminMiddleware'
 import { authMiddleware } from '../helper/authMiddleware'
 import { WarriorInformationController } from './warriorInformationController'
 
@@ -14,7 +15,7 @@ const validation = [
 	check('price_range').isArray().notEmpty().withMessage('Price range is required')
 ]
 
-warriorInformationRouter.get('/', authMiddleware, controller.getAllWarriors)
+warriorInformationRouter.get('/', authMiddleware, adminMiddleware, controller.getAllWarriors)
 warriorInformationRouter.get('/:user_id', authMiddleware, controller.getByUserId)
 warriorInformationRouter.post('/', authMiddleware, validation, controller.create)
 warriorInformationRouter.put('/', authMiddleware, validation, controller.update)

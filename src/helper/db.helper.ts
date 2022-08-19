@@ -1,4 +1,5 @@
 import { FindAndCountOptions } from 'sequelize/types'
+import { Op } from 'sequelize'
 
 export type PaginationType = { page: number; pageSize: number }
 
@@ -12,6 +13,11 @@ export const paginate = (query: FindAndCountOptions, pagination: PaginationType)
 		limit
 	}
 }
+
+export const getALikeStringFromArray = (arr: string[]) =>
+	arr.map((item: string) => ({
+		[Op.like]: `%${item.trim()}%`
+	}))
 
 export const CREW_MEMBERS_FIELDS = ['status', 'role']
 

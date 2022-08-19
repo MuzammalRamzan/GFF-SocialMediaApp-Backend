@@ -10,7 +10,7 @@ const requiredRequestId = body('request_id', 'Request id is required').isNumeric
 
 const controller = new WellnessWarriorController()
 
-warriorRouter.get('/search', authMiddleware, controller.searchWellnessWarriors)
+warriorRouter.post('/search', authMiddleware, controller.searchWellnessWarriors)
 warriorRouter.post('/send-request', authMiddleware, requiredWarriorId, controller.sendRequest)
 warriorRouter.post('/approve-request', authMiddleware, requiredRequestId, controller.approveRequest)
 warriorRouter.post('/reject-request', authMiddleware, requiredRequestId, controller.rejectRequest)

@@ -1,6 +1,8 @@
 import { IUserInformationService, UserInformationType } from './interface'
 import { UserInformation } from './userInformationModel'
-import { AuthService } from '../auth/authService'
+import { getHaversine } from '../../helper/helper'
+import { sequelize } from '../../database'
+import { Op } from 'sequelize'
 
 export class UserInformationService implements IUserInformationService {
 	async add(params: UserInformationType): Promise<UserInformation> {
@@ -40,13 +42,13 @@ export class UserInformationService implements IUserInformationService {
 			where: {
 				user_id: userId
 			}
-		});
+		})
 
 		if (userInformation) {
-			userInformation.set(params);
-			return await userInformation.save();
+			userInformation.set(params)
+			return await userInformation.save()
 		} else {
-			return await UserInformation.create(params);
+			return await UserInformation.create(params)
 		}
 	}
 
@@ -68,16 +70,42 @@ export class UserInformationService implements IUserInformationService {
 			where: {
 				user_id: userId
 			}
-		});
+		})
 
 		if (userInformation) {
-			userInformation.set('profile_url', profile_url);
-			return await userInformation.save();
+			userInformation.set('profile_url', profile_url)
+			return await userInformation.save()
 		} else {
 			return await UserInformation.create({
 				user_id: userId,
 				profile_url: profile_url
-			});
+			})
 		}
+	}
+
+	static getNearByUsers = async (user_id: number, _distance: number): Promise<number[]> => {
+		const currentUserInfo = await UserInformation.findOne({ where: { user_id } })
+
+		const _latitude = currentUserInfo?.get('latitude') as number
+		const _longitude = currentUserInfo?.get('longitude') as number
+
+		let userIds: number[] = []
+		if (_latitude && _longitude) {
+			let haversine = getHaversine(_latitude, _longitude)
+			const userInfos = await UserInformation.findAll({
+				where: { user_id: { [Op.ne]: user_id } },
+				attributes: ['user_id', [sequelize.literal(`round(${haversine}, 2)`), 'distance']],
+				order: sequelize.col('distance'),
+				having: sequelize.literal(`distance <= ${_distance}`)
+			})
+
+			if (userInfos.length) {
+				userInfos.map((user: any) => {
+					userIds.push(user.user_id)
+				})
+			}
+		}
+
+		return userIds
 	}
 }

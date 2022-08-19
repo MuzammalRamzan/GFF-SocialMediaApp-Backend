@@ -5,7 +5,7 @@ import { IAuthenticatedRequest } from '../helper/authMiddleware'
 import { GffError } from '../helper/errorHandler'
 import { UserRoleService } from '../user-role/userRoleService'
 import { WarriorInformationService } from '../warrior-information/warriorInformationService'
-import { removeWarriorParams } from './interface'
+import { ISearchWarriorParams, removeWarriorParams } from './interface'
 import { WellnessWarriorService } from './wellnessWarriorService'
 
 export class WellnessWarriorController {
@@ -20,7 +20,10 @@ export class WellnessWarriorController {
 	public searchWellnessWarriors = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
 		try {
 			const user_id = req?.user?.id as number
-			const wellnessWarriors = await this.wellnessWarriorService.searchWellnessWarriors(user_id, req.query as any)
+			const wellnessWarriors = await this.wellnessWarriorService.searchWellnessWarriors(
+				user_id,
+				req.body as ISearchWarriorParams
+			)
 
 			return res.status(200).json({
 				data: {

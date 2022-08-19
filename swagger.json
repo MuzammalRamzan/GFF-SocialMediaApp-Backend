@@ -2212,108 +2212,8 @@
 				}
 			}
 		},
-		"/warrior-information/{id}": {
-			"get": {
-				"tags": ["warrior-information"],
-				"description": "Get wellness warrior by id",
-				"parameters": [
-					{
-						"name": "auth-token",
-						"in": "header",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "string"
-						}
-					},
-					{
-						"name": "id",
-						"in": "path",
-						"description": "Warrior User ID",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "integer",
-							"format": "int64"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json; charset=utf-8": {
-								"schema": {
-									"type": "object"
-								},
-								"example": {
-									"data": {
-										"warriorInformation": {
-											"id": 169,
-											"full_name": "Jon Snow",
-											"user_information": {
-												"profile_url": "params.profile_url",
-												"bio": "Update it bro!!",
-												"date_of_birth": "2022-05-31T00:00:00.000Z",
-												"gender": "",
-												"country": "params.country",
-												"job_role": "params.job_role",
-												"education": "params.education"
-											},
-											"warrior_information": {
-												"specialty": ["str"],
-												"certification": ["long string"],
-												"therapy_type": ["short"],
-												"price_range": ["12"]
-											},
-											"wellness_warrior_request": {
-												"id": 7,
-												"user_id": 165,
-												"warrior_id": 169,
-												"status": "approve",
-												"request_type": "warrior",
-												"user": {
-													"id": 165,
-													"full_name": "Lannister",
-													"user_information": {
-														"profile_url": "params.profile_url",
-														"bio": "params.bio",
-														"date_of_birth": null,
-														"gender": "",
-														"country": "params.country",
-														"job_role": "params.job_role",
-														"education": "params.education"
-													}
-												},
-												"warrior": {
-													"id": 169,
-													"full_name": "Jon Snow",
-													"user_information": {
-														"profile_url": "params.profile_url",
-														"bio": "Update it bro!!",
-														"date_of_birth": "2022-05-31T00:00:00.000Z",
-														"gender": "",
-														"country": "params.country",
-														"job_role": "params.job_role",
-														"education": "params.education"
-													}
-												}
-											}
-										}
-									},
-									"message": "Warrior information retrieved successfully",
-									"code": 200
-								}
-							}
-						}
-					}
-				}
-			}
-		},
 		"/wellness-warrior/search": {
-			"get": {
+			"post": {
 				"tags": ["wellness-warrior"],
 				"description": "Search Wellness Warrior",
 				"parameters": [
@@ -2326,48 +2226,37 @@
 						"schema": {
 							"type": "string"
 						}
-					},
-					{
-						"name": "searchTerm",
-						"in": "query",
-						"description": "Search",
-						"required": true,
-						"type": "string",
-						"example": "un"
-					},
-					{
-						"name": "specialty",
-						"in": "query",
-						"description": "Specialty",
-						"required": true,
-						"type": "string",
-						"example": "str,un,in"
-					},
-					{
-						"name": "certification",
-						"in": "query",
-						"description": "Certification",
-						"required": true,
-						"type": "string",
-						"example": "string,params"
-					},
-					{
-						"name": "therapy_type",
-						"in": "query",
-						"description": "Therapy Type",
-						"required": true,
-						"type": "string",
-						"example": "type,the"
-					},
-					{
-						"name": "price_range",
-						"in": "query",
-						"description": "Price Range",
-						"required": true,
-						"type": "string",
-						"example": "20,50,12"
 					}
 				],
+				"requestBody": {
+					"content": {
+						"application/json; charset=utf-8": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"searchTerm": { "type": "string" },
+									"specialty": { "type": "string" },
+									"therapy_type": { "type": "string" },
+									"conversation_mode": { "type": "string" },
+									"language": { "type": "string" },
+									"min_hourly_rate": { "type": "integer" },
+									"max_hourly_rate": { "type": "integer" },
+									"distance": { "type": "integer" }
+								}
+							},
+							"example": {
+								"searchTerm": "Jon",
+								"specialty": "nodejs,react-js",
+								"therapy_type": "online,offline",
+								"conversation_mode": "voice,video",
+								"language": "english,french",
+								"min_hourly_rate": 50,
+								"max_hourly_rate": 52,
+								"distance": 135
+							}
+						}
+					}
+				},
 				"responses": {
 					"200": {
 						"description": "OK",
@@ -2380,8 +2269,26 @@
 									"data": {
 										"wellnessWarriors": [
 											{
-												"id": 169,
-												"full_name": "undefined",
+												"id": 259,
+												"role_id": 4,
+												"full_name": "Ime Prezime",
+												"email": "ImePrezime@mailinator.com",
+												"password": "$2b$10$hX34Tjnei8IczbP1mODFBe8AsFdn8YLl5KB1.uHjSzcfUbMvSylyi",
+												"default_currency_id": 1,
+												"user_feature_id": null,
+												"deactivated": false,
+												"is_pro": false,
+												"promoted_till": null,
+												"forgot_password_token": null,
+												"warrior_information": {
+													"specialty": ["nodejs", "mongo", "express"],
+													"certification": ["udemy"],
+													"therapy_type": ["offline", "online"],
+													"conversation_mode": ["voice"],
+													"language": ["guj", "hin", "eng"],
+													"hourly_rate": 51,
+													"status": "pending"
+												},
 												"user_information": {
 													"profile_url": null,
 													"bio": "Test my bio",
@@ -2391,11 +2298,15 @@
 													"job_role": "CEO",
 													"education": "No education"
 												},
-												"warrior_information": {
-													"specialty": ["str"],
-													"certification": ["long string"],
-													"therapy_type": ["short"],
-													"price_range": ["12"]
+												"user_associations": {
+													"id": 48,
+													"wellness_warrior_associations": {
+														"id": 7,
+														"user_id": 165,
+														"warrior_id": 169,
+														"status": "approve",
+														"request_type": "warrior"
+													}
 												}
 											}
 										]
@@ -6362,119 +6273,6 @@
 				}
 			}
 		},
-    "/auth/forgot-password-request": {
-      "post": {
-        "tags": [
-          "auth"
-        ],
-        "description": "Send forgot password request",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/auth_login_body"
-              },
-              "examples": {
-                "0": {
-                  "value": {
-                    "email": "user@gmail.com"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json; charset=utf-8": {
-                "schema": {
-                  "type": "object"
-                },
-                "example": {
-                  "data": {},
-                  "message": "Forgot password mail has been sent!",
-                  "code": 200
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json; charset=utf-8": {
-                "schema": {
-                  "type": "object"
-                },
-                "example": {
-                  "error": "404",
-                  "message": "User not found!",
-                  "code": 404
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/auth/change-password": {
-      "post": {
-        "tags": [
-          "auth"
-        ],
-        "description": "Change password",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/auth_login_body"
-              },
-              "examples": {
-                "0": {
-                  "value": {
-                    "password": "Hardik123#",
-                    "token": "3667f4a927781db45c342c24ebfb2ae33b65da05ec36a150247133165ebd0ab73791bf552814ce4636f9e70f28ade684b9795139c0f714c129e77dee5878551d"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json; charset=utf-8": {
-                "schema": {
-                  "type": "object"
-                },
-                "example": {
-                  "data": {},
-                  "message": "Password has been updated!",
-                  "code": 200
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json; charset=utf-8": {
-                "schema": {
-                  "type": "object"
-                },
-                "example": {
-                  "error": "404",
-                  "message": "Invalid token!",
-                  "code": 404
-                }
-              }
-            }
-          }
-        }
-      }
-    },
 		"/auth/reset-password": {
 			"put": {
 				"tags": ["auth"],

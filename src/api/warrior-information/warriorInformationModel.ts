@@ -10,8 +10,11 @@ export interface IWarriorInformation {
 	specialty: string[]
 	certification: string[]
 	therapy_type: string[]
-	price_range: string[]
+	hourly_rate: number
 	user?: UserInformationType
+	conversation_mode: string[]
+	status: Status
+	language: string[]
 }
 
 export class WarriorInformation extends Model { }

@@ -29,9 +29,6 @@ export class AlterationsManager {
 		await addLongitudeColumn()
 		await addBraintreeCustomerIdColumn()
 
-		await removeContentBodyColumn()
-		await addCreatedAtColumn()
-
 		// user table
 		await addPromotedTillColumn()
 		await forgotPasswordToken()

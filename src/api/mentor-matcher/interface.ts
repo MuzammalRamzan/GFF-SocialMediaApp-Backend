@@ -82,5 +82,5 @@ export interface ISarchTermParams {
 	text?: string
 	latitude?: String
 	longitude?: String
-	distance?: Number
+	distance?: number
 }
