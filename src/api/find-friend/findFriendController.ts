@@ -1,4 +1,4 @@
-import { Response, NextFunction, Request } from 'express'
+import { NextFunction, Response } from 'express'
 import { validationResult } from 'express-validator'
 import { RoomService } from '../chat/room/room.service'
 import { IAuthenticatedRequest } from '../helper/authMiddleware'
@@ -87,6 +87,7 @@ export class FindFriendController {
       }
 
       const loggedInUserId = req?.user?.id as number
+      const loggedInUserName = req?.user?.full_name as string
       const user_id = req.body.user_id as number
 
       const isUserExists = await UserService.isExists(user_id)
@@ -125,15 +126,12 @@ export class FindFriendController {
       const tokens = fcmTokens.map(x => x.get().token)
 
       if (tokens.length > 0){
-        // @todo title and body needs to be changed.
         await this.firebaseService.getInstance().sendMultiple({
           data: {
-            loggedInUserId: loggedInUserId + '',
-            user_id: user_id + ''
-          },
-          notification: {
+            user_id: loggedInUserId + '',
+            type: "friend-finder",
             title: 'You have a Friendship request.',
-            body: 'You have a Friendship request.'
+            body: `${loggedInUserName} wants you to become their friend.`
           },
           tokens
         } as MulticastMessage)
@@ -154,6 +152,8 @@ export class FindFriendController {
   acceptFriendRequest = async (req: acceptRejectFriendRequest, res: Response, next: NextFunction) => {
     try {
       const userId = req?.user?.id as number
+      const loggedInUserName = req?.user?.full_name as string
+
       const id = +req.body.request_id
 
       const acceptFriendRequest = await this.findFriendService.approve(id, userId)
@@ -174,14 +174,13 @@ export class FindFriendController {
         const fcmTokens = await this.fcmService.getUserTokens(acceptFriendRequest.get('sender_id') as number)
         const tokens = fcmTokens.map(x => x.get().token)
 
-        if (tokens.length > 0) { // @todo title and body needs to be changed.
+        if (tokens.length > 0) {
           await this.firebaseService.getInstance().sendMultiple({
             data: {
-              sender_id: acceptFriendRequest.get('sender_id') + ''
-            },
-            notification: {
+              user_id: acceptFriendRequest.get('sender_id') + '',
+              type: "friend-finder",
               title: 'Friendship request accepted.',
-              body: 'Friendship request accepted.'
+              body: `${loggedInUserName} just approved your friend request.`
             },
             tokens
           } as MulticastMessage)
@@ -204,20 +203,21 @@ export class FindFriendController {
   rejectFriendRequest = async (req: acceptRejectFriendRequest, res: Response, next: NextFunction) => {
     try {
       const userId = req?.user?.id as number
+      const loggedInUserName = req?.user?.full_name as string
+
       const id = +req.body.request_id
       const rejectFriendRequest = await this.findFriendService.reject(id, userId)
 
       const fcmTokens = await this.fcmService.getUserTokens(rejectFriendRequest.get('sender_id') as number)
       const tokens = fcmTokens.map(x => x.get().token)
 
-      if (tokens.length > 0) { // @todo title and body needs to be changed.
+      if (tokens.length > 0) {
         await this.firebaseService.getInstance().sendMultiple({
           data: {
-            sender_id: rejectFriendRequest.get('sender_id') + ''
-          },
-          notification: {
+            user_id: rejectFriendRequest.get('sender_id') + '',
+            type: "friend-finder",
             title: 'Friendship request rejected.',
-            body: 'Friendship request rejected.'
+            body: `${loggedInUserName} just rejected your friend request.`
           },
           tokens: tokens
         } as MulticastMessage)

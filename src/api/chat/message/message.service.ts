@@ -119,7 +119,7 @@ export class MessageService implements IMessageService {
 		return messages
 	}
 
-	public async sendMessage(message: string, user_id: number, room_id: number): Promise<Message | null> {
+	public async sendMessage(message: string, user_id: number, room_id: number, loggedInUserName: string): Promise<Message | null> {
 		let messageObj: Message | null = await Message.create({ user_id, room_id, body: message })
 
 		messageObj = await Message.findByPk(messageObj.getDataValue('id'), {
@@ -160,10 +160,9 @@ export class MessageService implements IMessageService {
 					sender_id: user_id.toString(),
 					room_id: room_id.toString(),
 					message,
-				},
-				notification: {
+					type: 'chat',
 					title: 'You have a new message.',
-					body: message
+					body: `${loggedInUserName} just sent you a message.`,
 				},
 				tokens
 			} as MulticastMessage)

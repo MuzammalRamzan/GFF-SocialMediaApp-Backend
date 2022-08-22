@@ -87,6 +87,8 @@ export class MentorMatcherController {
       }
 
       const userId = req?.user?.id || (0 as number)
+      const loggedInUserName = req?.user?.full_name as string
+
       const mentor_id = Number(req.body.mentor_id || 0)
       const message = req.body.message
 
@@ -119,15 +121,13 @@ export class MentorMatcherController {
       const fcmTokens = await this.fcmService.getUserTokens(mentor_id)
       const tokens = fcmTokens.map(x => x.get().token)
 
-      if (tokens.length > 0) { // @todo title and body needs to be changed.
+      if (tokens.length > 0) {
         await this.firebaseService.getInstance().sendMultiple({
           data: {
-            userId: userId + '',
-            mentor_id: mentor_id + ''
-          },
-          notification: {
+            user_id: userId + '',
+            type: "mentor-matcher",
             title: 'You have a mentorship request.',
-            body: 'You have a mentorship request.'
+            body: `${loggedInUserName} wants you to become their mentor.`
           },
           tokens
         } as MulticastMessage)
@@ -156,6 +156,8 @@ export class MentorMatcherController {
       // check is the request from mentor ot not
 
       const userId = req?.user?.id || (0 as number)
+      const loggedInUserName = req?.user?.full_name as string
+
       const request_id = Number(req.body.request_id || 0)
 
       if (!request_id) {
@@ -188,15 +190,15 @@ export class MentorMatcherController {
       const fcmTokens = await this.fcmService.getUserTokens(mentorMatcherReq.mentee_id)
       const tokens = fcmTokens.map(x => x.get().token)
 
-      if (tokens.length > 0) { // @todo title and body needs to be changed.
+      if (tokens.length > 0) {
         await this.firebaseService.getInstance().sendMultiple({
           data: {
-            userId: userId + '',
-            mentor_id: mentorMatcherReq.mentee_id + ''
-          },
-          notification: {
+            // userId: userId + '',
+            // mentor_id: mentorMatcherReq.mentee_id + '',
+            user_id: userId + '',
+            type: "mentor-matcher",
             title: 'Mentor accepted your mentorship request.',
-            body: 'Mentor accepted your mentorship request.'
+            body: `${loggedInUserName} has accepted your mentorship request.`
           },
           tokens
         } as MulticastMessage)
@@ -224,6 +226,8 @@ export class MentorMatcherController {
       // check is the request from mentor ot not
 
       const userId = req?.user?.id || (0 as number)
+      const loggedInUserName = req?.user?.full_name as string
+
       const request_id = Number(req.body.request_id || 0)
 
       if (!request_id) {
@@ -245,15 +249,15 @@ export class MentorMatcherController {
       const fcmTokens = await this.fcmService.getUserTokens(mentorMatcherReq.mentee_id)
       const tokens = fcmTokens.map(x => x.get().token)
 
-      if (tokens.length > 0) {// @todo title and body needs to be changed.
+      if (tokens.length > 0) {
         await this.firebaseService.getInstance().sendMultiple({
           data: {
-            userId: userId + '',
-            mentor_id: mentorMatcherReq.mentee_id + ''
-          },
-          notification: {
-            title: 'Mentor accepted your mentorship request.',
-            body: 'Mentor accepted your mentorship request.'
+            // userId: userId + '',
+            // mentor_id: mentorMatcherReq.mentee_id + ''
+            user_id: userId + '',
+            type: "mentor-matcher",
+            title: 'Mentor rejected your mentorship request.',
+            body: `${loggedInUserName} has rejected your mentorship request.`
           },
           tokens
         } as MulticastMessage)

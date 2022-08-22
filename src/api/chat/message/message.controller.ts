@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express'
+import { NextFunction, Response } from 'express'
 import { IAuthenticatedRequest } from '../../helper/authMiddleware'
 import { RoomService } from '../room/room.service'
 import { MessageService } from './message.service'
@@ -14,6 +14,8 @@ export class MessageController {
 		try {
 			const message = req.body.message
 			const user_id = req?.user?.id as number
+			const loggedInUserName = req?.user?.full_name as string
+
 			const room_id = +req.params.roomId
 
 			const isUserBelongToTheRoom = await RoomService.isUserBelongToTheRoom(room_id, user_id)
@@ -25,7 +27,7 @@ export class MessageController {
 				})
 			}
 
-			const messageObj = await this.messageService.sendMessage(message, user_id, room_id)
+			const messageObj = await this.messageService.sendMessage(message, user_id, room_id, loggedInUserName)
 
 			return res.status(200).json({
 				data: { message: MessageService.filterMessageObject(messageObj) },
