@@ -16,7 +16,7 @@ export type resetPasswordRequestBodyType = {
 }
 
 export interface IAuthService {
-	createUser(email: string, fullName: string, password: string): Promise<User>
+	createUser(email: string, fullName: string, password: string, first_name: string, last_name: string): Promise<User>
 	checkCreds(email: string, password: string): Promise<UserType | undefined>
 	hashPassword(password: string): Promise<string>
 	generateJwtToken(email: string, password: string): string

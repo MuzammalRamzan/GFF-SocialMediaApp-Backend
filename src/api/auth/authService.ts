@@ -43,7 +43,13 @@ export class AuthService implements IAuthService {
 		return jwt.verify(token, process.env.JWT_SECRET!)
 	}
 
-	async createUser(email: string, fullName: string, password: string): Promise<User> {
+	async createUser(
+		email: string,
+		fullName: string,
+		password: string,
+		first_name: string,
+		last_name: string
+	): Promise<User> {
 		const passwordHash = await this.hashPassword(password)
 		const userEmail = await this.checkEmail(email)
 		const userRole = await this.userRoleService.fetchUserRole()
@@ -58,7 +64,9 @@ export class AuthService implements IAuthService {
 			full_name: fullName,
 			email: email,
 			password: passwordHash,
-			default_currency_id: defaultCurrency?.getDataValue('id')
+			default_currency_id: defaultCurrency?.getDataValue('id'),
+			first_name,
+			last_name
 		})
 
 		return user as User
@@ -77,11 +85,11 @@ export class AuthService implements IAuthService {
 		return user
 	}
 
-	async updatePassword(user_id: number, password: string, reset_forgot_password_token ?: boolean): Promise<void> {
+	async updatePassword(user_id: number, password: string, reset_forgot_password_token?: boolean): Promise<void> {
 		const hashPassword = await this.hashPassword(password)
-		if(reset_forgot_password_token){
+		if (reset_forgot_password_token) {
 			await User.update({ password: hashPassword, forgot_password_token: null }, { where: { id: user_id } })
-		}else{
+		} else {
 			await User.update({ password: hashPassword }, { where: { id: user_id } })
 		}
 	}

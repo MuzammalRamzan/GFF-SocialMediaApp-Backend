@@ -14,6 +14,8 @@ export interface IUser {
 	default_currency_id: number
 	role_id: number
 	password: string
+	first_name: string
+	last_name: string
 }
 
 export class User extends Model { }
@@ -30,6 +32,14 @@ User.init(
 			allowNull: false
 		},
 		full_name: {
+			type: DataTypes.STRING,
+			allowNull: false
+		},
+		first_name: {
+			type: DataTypes.STRING,
+			allowNull: false
+		},
+		last_name: {
 			type: DataTypes.STRING,
 			allowNull: false
 		},

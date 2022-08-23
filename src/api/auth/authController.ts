@@ -25,8 +25,10 @@ export class AuthController {
 		const email = req.body.email
 		const pass = req.body.password
 		const fullName = req.body.full_name
+		const first_name = req.body.first_name
+		const last_name = req.body.last_name
 		try {
-			const user = await this.authService.createUser(email, fullName, pass)
+			const user = await this.authService.createUser(email, fullName, pass, first_name, last_name)
 			return res.status(200).send({
 				data: {
 					user
@@ -55,7 +57,7 @@ export class AuthController {
 				throw err
 			}
 
-			if(user?.is_pro === null){
+			if (user?.is_pro === null) {
 				user.is_pro = false;
 			}
 
@@ -153,7 +155,7 @@ export class AuthController {
 
 			const user = await this.userService.findUserByToken(body.token);
 
-			if(!user){
+			if (!user) {
 				throw new GffError('Invalid token!', { errorCode: '404' })
 			}
 			console.log('user.id', user.get('id'))
