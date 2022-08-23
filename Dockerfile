@@ -7,7 +7,7 @@ COPY . ./server
 WORKDIR /opt/app/server
 
 RUN yarn install
-RUN yarn install -g sequelize-cli
+RUN yarn global add sequelize-cli
 RUN yarn run build
 
 # --- Release with Alpine ----
@@ -18,7 +18,7 @@ WORKDIR /home/app
 COPY --from=base /opt/app/server .
 
 RUN yarn install
-RUN yarn install -g sequelize-cli
+RUN yarn global add sequelize-cli
 
 EXPOSE 4000
 
