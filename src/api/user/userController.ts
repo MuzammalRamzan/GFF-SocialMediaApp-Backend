@@ -27,7 +27,7 @@ const handleError = (err: any, req: IAuthenticatedRequest, res: Response) => {
 		error.errorCode = '500'
 		error.httpStatusCode = 500
 	}
-	return jsonErrorHandler(error, req, res, () => {})
+	return jsonErrorHandler(error, req, res, () => { })
 }
 export class UserController {
 	private readonly userService: UserService
@@ -70,48 +70,7 @@ export class UserController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
-		}
-	}
-
-	getAllSubscribedUser = async (req: Request, res: Response, next: NextFunction) => {
-		try {
-			console.log('test')
-
-			const users = await this.userService.fetchBySubscribedUser()
-			console.log('user', users)
-
-			return res.status(200).send({
-				data: {
-					users
-				},
-				code: 200,
-				message: 'OK'
-			})
-		} catch (err) {
-			console.log('error', err)
-			const error = err as GffError
-			if (error.message === 'Unauthorized') {
-				error.errorCode = '401'
-				error.httpStatusCode = 401
-			} else if (error.message === 'No data found') {
-				error.errorCode = '404'
-				error.httpStatusCode = 404
-			} else {
-				error.errorCode = '500'
-				error.httpStatusCode = 500
-			}
-			return jsonErrorHandler(err, req, res, () => {})
-		}
-	}
-
-	unsubscribeByUser = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
-		try {
-			const userId = +req.params?.id as number
-			const user = await this.userService.unsubscribe(userId)
-			return res.status(200).json({ data: { user }, code: 200, message: 'OK' })
-		} catch (err) {
-			next(err)
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -144,7 +103,7 @@ export class UserController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -174,7 +133,7 @@ export class UserController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -205,7 +164,7 @@ export class UserController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -230,7 +189,7 @@ export class UserController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 
@@ -255,7 +214,7 @@ export class UserController {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
-			return jsonErrorHandler(err, req, res, () => {})
+			return jsonErrorHandler(err, req, res, () => { })
 		}
 	}
 

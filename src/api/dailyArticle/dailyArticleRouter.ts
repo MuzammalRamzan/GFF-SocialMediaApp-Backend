@@ -6,12 +6,7 @@ import multer from 'multer'
 const dailyArticleController = new DailyArticleController()
 export const dailyArticleRouter = express.Router()
 
-dailyArticleRouter.post(
-	'/add',
-	authMiddleware,
-	multer().single('Image'),
-	dailyArticleController.createArticle as Application
-)
+dailyArticleRouter.post('/add', authMiddleware, multer().single('Image'), dailyArticleController.createArticle as Application)
 dailyArticleRouter.get('/getByCategory', authMiddleware, dailyArticleController.getByCategory as Application)
 dailyArticleRouter.put(
 	'/update/:id',
