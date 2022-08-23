@@ -1,5 +1,5 @@
 import { IAnswers, IQuestionService, QuestionType } from './interface'
-import { Questions } from '../Questionnaire/questionnaireModel'
+import { Questions } from '../mentor-questionnaire/questionnaireModel'
 import { MentorAnswers } from './userAnswerModel'
 import { Optional } from 'sequelize/types'
 

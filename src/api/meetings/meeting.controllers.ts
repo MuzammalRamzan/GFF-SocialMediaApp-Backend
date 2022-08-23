@@ -2,12 +2,12 @@ import { NextFunction, Response } from 'express'
 import { IAuthenticatedRequest } from '../helper/authMiddleware'
 import { GffError } from '../helper/errorHandler'
 import { MentorInformationService } from '../mentor-information/mentorInformationService'
+import { IQuestionnaireAnswer } from '../questionnaire/interface'
 import { WarriorInformationService } from '../warrior-information/warriorInformationService'
-import { IMeetingServices } from './interface'
 import { MeetingServices } from './meeting.services'
 
 export class MeetingController {
-	private readonly meetingServices: IMeetingServices
+	private readonly meetingServices: MeetingServices
 
 	constructor() {
 		this.meetingServices = new MeetingServices()
@@ -26,11 +26,19 @@ export class MeetingController {
 		try {
 			const user_id = req.user?.id as number
 			const startTime = req.body.startTime as string
+			const endTime = req.body.endTime as string
 			const participant_id = req.body.participant_id as number
+			const isContractSigned = req.body.isContractSigned as boolean
+			const answers = req.body.answers as IQuestionnaireAnswer[]
 
-			// await this.validateIsParticipantMentorOrWarrior(participant_id)
-
-			const meeting = await this.meetingServices.createMeeting({ user_id, participant_id, startTime })
+			const meeting = await this.meetingServices.createMeeting({
+				user_id,
+				participant_id,
+				startTime,
+				endTime,
+				isContractSigned,
+				answers
+			})
 
 			return res.status(200).json({ data: { meeting }, code: 200, message: 'OK' })
 		} catch (error) {

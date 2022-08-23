@@ -2,6 +2,9 @@ import moment from 'moment'
 import { sequelize } from '../../database'
 import { USER_FIELDS, USER_INFORMATION_FIELDS } from '../../helper/db.helper'
 import { GffError } from '../helper/errorHandler'
+import { IQuestionnaireAnswer } from '../questionnaire/interface'
+import { Questionnaire, QuestionnaireAnswers } from '../questionnaire/questionnaire.model'
+import { QuestionnaireService } from '../questionnaire/questionnaire.services'
 import { UserInformation } from '../user-information/userInformationModel'
 import { User } from '../user/userModel'
 import { IMeetingServices, MeetingRequestStatus, createMeetingParams } from './interface'
@@ -9,6 +12,12 @@ import { Meeting } from './meeting.model'
 import { MeetingParticipants } from './meetingParticipants.model'
 
 export class MeetingServices implements IMeetingServices {
+	private readonly questionnaireService: QuestionnaireService
+
+	constructor() {
+		this.questionnaireService = new QuestionnaireService()
+	}
+
 	async createMeeting(params: createMeetingParams): Promise<Meeting> {
 		const meeting = await sequelize.transaction(async t => {
 			const meeting = await Meeting.create(
@@ -16,7 +25,9 @@ export class MeetingServices implements IMeetingServices {
 					createdBy: params.user_id,
 					status: MeetingRequestStatus.SEND,
 					startTime: moment(params.startTime).utc(),
-					name: `Meeting - ${params.user_id} - ${params.participant_id}`
+					name: `Meeting - ${params.user_id} - ${params.participant_id}`,
+					endTime: moment(params.endTime).utc(),
+					isContractSigned: params.isContractSigned
 				},
 				{ transaction: t }
 			)
@@ -33,6 +44,12 @@ export class MeetingServices implements IMeetingServices {
 				],
 				{ transaction: t }
 			)
+
+			let answers: IQuestionnaireAnswer[]
+			if (params?.answers && params?.answers.length) {
+				answers = params.answers.map(answer => ({ ...answer, user_id: params.user_id, meeting_id }))
+				await this.questionnaireService.saveAnswers(answers, t)
+			}
 
 			return meeting
 		})
@@ -64,6 +81,11 @@ export class MeetingServices implements IMeetingServices {
 					as: 'participants',
 					required: true,
 					where: { user_id }
+				},
+				{
+					model: QuestionnaireAnswers,
+					as: 'answers',
+					required: false
 				}
 			]
 		})

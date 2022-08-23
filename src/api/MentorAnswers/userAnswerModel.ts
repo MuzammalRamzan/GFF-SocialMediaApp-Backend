@@ -1,6 +1,6 @@
 import { DataTypes, Model } from 'sequelize'
 import { sequelize } from '../../database'
-import { Questions } from '../Questionnaire/questionnaireModel'
+import { Questions } from '../mentor-questionnaire/questionnaireModel'
 import { User } from '../user/userModel'
 
 export class MentorAnswers extends Model {}

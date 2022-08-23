@@ -97,13 +97,17 @@
 			"name": "dashboard",
 			"description": "Dashboard Statistics Routes"
 		},
-    {
+		{
 			"name": "wellness-warrior-certificate",
 			"description": "Store certificate of wellness warrior as pdf file"
+		},
+		{
+			"name": "meeting",
+			"description": "Meeting Routes"
 		}
 	],
 	"paths": {
-    "/wellness-warrior-certificate/create": {
+		"/wellness-warrior-certificate/create": {
 			"post": {
 				"tags": ["wellness-warrior-certificate"],
 				"description": "Create certificate",
@@ -122,55 +126,55 @@
 				],
 				"requestBody": {
 					"content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "pdfFile": {
-                    "type": "string",
-                    "format": "binary"
-                  },
-                  "authority": {"type":"string"},
-                  "title": {"type":"string"},
-                  "year": {"type":"number"},
-                  "wellness_warrior_id": {"type":"number"}
-                }
-              }
-            }
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"pdfFile": {
+										"type": "string",
+										"format": "binary"
+									},
+									"authority": { "type": "string" },
+									"title": { "type": "string" },
+									"year": { "type": "number" },
+									"wellness_warrior_id": { "type": "number" }
+								}
+							}
+						}
 					}
 				},
 				"responses": {
 					"200": {
-            "description": "OK",
+						"description": "OK",
 						"content": {
 							"application/json; charset=utf-8": {
 								"schema": {
 									"type": "object"
 								},
 								"example": {
-                    "data": {
-                        "warriorCertificate": {
-                            "id": 5,
-                            "wellness_warrior_id": 1,
-                            "authority": "authority",
-                            "title": "title",
-                            "year": 2000,
-                            "pdfUrl": "https://girls-first-finance.s3.amazonaws.com//uploads/wellness_warrior/certificates/1/pdf_files/1661168832658_AgreementData-275000.pdf",
-                            "wellness_warrior": {
-                                "id": 1,
-                                "user_id": 37,
-                                "warrior_id": 169,
-                                "status": "approve",
-                                "request_type": "warrior"
-                            }
-                        }
-                    },
-                    "message": "Warrior certificate created successfully",
-                    "code": 200
-                  }
-                }
-              }
-          },
+									"data": {
+										"warriorCertificate": {
+											"id": 5,
+											"wellness_warrior_id": 1,
+											"authority": "authority",
+											"title": "title",
+											"year": 2000,
+											"pdfUrl": "https://girls-first-finance.s3.amazonaws.com//uploads/wellness_warrior/certificates/1/pdf_files/1661168832658_AgreementData-275000.pdf",
+											"wellness_warrior": {
+												"id": 1,
+												"user_id": 37,
+												"warrior_id": 169,
+												"status": "approve",
+												"request_type": "warrior"
+											}
+										}
+									},
+									"message": "Warrior certificate created successfully",
+									"code": 200
+								}
+							}
+						}
+					},
 					"401": {
 						"description": "Unauthorized",
 						"content": {
@@ -188,12 +192,12 @@
 				}
 			}
 		},
-    "/wellness-warrior-certificate/wellness-warrior/{id}": {
+		"/wellness-warrior-certificate/wellness-warrior/{id}": {
 			"get": {
 				"tags": ["wellness-warrior-certificate"],
 				"description": "get all wellness warrior certificate",
 				"parameters": [
-          {
+					{
 						"name": "id",
 						"in": "path",
 						"description": "wellness warrior ID",
@@ -225,80 +229,80 @@
 									"type": "object"
 								},
 								"example": {
-                  "data": {
-                      "wellness_warriors_certificates": [
-                          {
-                              "id": 1,
-                              "wellness_warrior_id": 1,
-                              "authority": "authorityy",
-                              "title": "titl",
-                              "year": 2022,
-                              "pdfUrl": "https://girls-first-finance.s3.amazonaws.com//uploads/wellness_warrior/certificates/1/pdf_files/1661161728308_0ef72e12-28c6-4932-b29b-20ec1c103498.png",
-                              "wellness_warrior": {
-                                  "id": 1,
-                                  "user_id": 37,
-                                  "warrior_id": 169,
-                                  "status": "approve",
-                                  "request_type": "warrior"
-                              }
-                          },
-                          {
-                              "id": 3,
-                              "wellness_warrior_id": 1,
-                              "authority": "authority",
-                              "title": "title",
-                              "year": 123,
-                              "pdfUrl": "https://girls-first-finance.s3.amazonaws.com//uploads/wellness_warrior/certificates/1/pdf_files/1661165269049_0ef72e12-28c6-4932-b29b-20ec1c103498.png",
-                              "wellness_warrior": {
-                                  "id": 1,
-                                  "user_id": 37,
-                                  "warrior_id": 169,
-                                  "status": "approve",
-                                  "request_type": "warrior"
-                              }
-                          },
-                          {
-                              "id": 4,
-                              "wellness_warrior_id": 1,
-                              "authority": "authority",
-                              "title": "title",
-                              "year": 123,
-                              "pdfUrl": "https://girls-first-finance.s3.amazonaws.com//uploads/wellness_warrior/certificates/1/pdf_files/1661165288283_0ef72e12-28c6-4932-b29b-20ec1c103498.png",
-                              "wellness_warrior": {
-                                  "id": 1,
-                                  "user_id": 37,
-                                  "warrior_id": 169,
-                                  "status": "approve",
-                                  "request_type": "warrior"
-                              }
-                          },
-                          {
-                              "id": 5,
-                              "wellness_warrior_id": 1,
-                              "authority": "authority",
-                              "title": "title",
-                              "year": 2000,
-                              "pdfUrl": "https://girls-first-finance.s3.amazonaws.com//uploads/wellness_warrior/certificates/1/pdf_files/1661168832658_AgreementData-275000.pdf",
-                              "wellness_warrior": {
-                                  "id": 1,
-                                  "user_id": 37,
-                                  "warrior_id": 169,
-                                  "status": "approve",
-                                  "request_type": "warrior"
-                              }
-                          }
-                      ]
-                  },
-                  "code": 200,
-                  "message": "OK"
-                }
+									"data": {
+										"wellness_warriors_certificates": [
+											{
+												"id": 1,
+												"wellness_warrior_id": 1,
+												"authority": "authorityy",
+												"title": "titl",
+												"year": 2022,
+												"pdfUrl": "https://girls-first-finance.s3.amazonaws.com//uploads/wellness_warrior/certificates/1/pdf_files/1661161728308_0ef72e12-28c6-4932-b29b-20ec1c103498.png",
+												"wellness_warrior": {
+													"id": 1,
+													"user_id": 37,
+													"warrior_id": 169,
+													"status": "approve",
+													"request_type": "warrior"
+												}
+											},
+											{
+												"id": 3,
+												"wellness_warrior_id": 1,
+												"authority": "authority",
+												"title": "title",
+												"year": 123,
+												"pdfUrl": "https://girls-first-finance.s3.amazonaws.com//uploads/wellness_warrior/certificates/1/pdf_files/1661165269049_0ef72e12-28c6-4932-b29b-20ec1c103498.png",
+												"wellness_warrior": {
+													"id": 1,
+													"user_id": 37,
+													"warrior_id": 169,
+													"status": "approve",
+													"request_type": "warrior"
+												}
+											},
+											{
+												"id": 4,
+												"wellness_warrior_id": 1,
+												"authority": "authority",
+												"title": "title",
+												"year": 123,
+												"pdfUrl": "https://girls-first-finance.s3.amazonaws.com//uploads/wellness_warrior/certificates/1/pdf_files/1661165288283_0ef72e12-28c6-4932-b29b-20ec1c103498.png",
+												"wellness_warrior": {
+													"id": 1,
+													"user_id": 37,
+													"warrior_id": 169,
+													"status": "approve",
+													"request_type": "warrior"
+												}
+											},
+											{
+												"id": 5,
+												"wellness_warrior_id": 1,
+												"authority": "authority",
+												"title": "title",
+												"year": 2000,
+												"pdfUrl": "https://girls-first-finance.s3.amazonaws.com//uploads/wellness_warrior/certificates/1/pdf_files/1661168832658_AgreementData-275000.pdf",
+												"wellness_warrior": {
+													"id": 1,
+													"user_id": 37,
+													"warrior_id": 169,
+													"status": "approve",
+													"request_type": "warrior"
+												}
+											}
+										]
+									},
+									"code": 200,
+									"message": "OK"
+								}
 							}
 						}
 					}
 				}
 			}
 		},
-    "/wellness-warrior-certificate/{id}": {
+		"/wellness-warrior-certificate/{id}": {
 			"get": {
 				"tags": ["wellness-warrior-certificate"],
 				"description": "Get wellness warrior certificate By ID",
@@ -329,36 +333,36 @@
 				],
 				"responses": {
 					"200": {
-              "description": "OK",
-              "content": {
-                "application/json; charset=utf-8": {
-                  "schema": {
-                    "type": "object"
-                  },
-                  "example": {
-                    "data": {
-                        "warriorCertificate": {
-                            "id": 5,
-                            "wellness_warrior_id": 1,
-                            "authority": "authority",
-                            "title": "title",
-                            "year": 2000,
-                            "pdfUrl": "https://girls-first-finance.s3.amazonaws.com//uploads/wellness_warrior/certificates/1/pdf_files/1661168832658_AgreementData-275000.pdf",
-                            "wellness_warrior": {
-                                "id": 1,
-                                "user_id": 37,
-                                "warrior_id": 169,
-                                "status": "approve",
-                                "request_type": "warrior"
-                            }
-                        }
-                    },
-                    "message": "fetch warrior certificate successfully",
-                    "code": 200
-                  }
-                }
-              }
-            },
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"warriorCertificate": {
+											"id": 5,
+											"wellness_warrior_id": 1,
+											"authority": "authority",
+											"title": "title",
+											"year": 2000,
+											"pdfUrl": "https://girls-first-finance.s3.amazonaws.com//uploads/wellness_warrior/certificates/1/pdf_files/1661168832658_AgreementData-275000.pdf",
+											"wellness_warrior": {
+												"id": 1,
+												"user_id": 37,
+												"warrior_id": 169,
+												"status": "approve",
+												"request_type": "warrior"
+											}
+										}
+									},
+									"message": "fetch warrior certificate successfully",
+									"code": 200
+								}
+							}
+						}
+					},
 					"401": {
 						"description": "Unauthorized",
 						"content": {
@@ -376,7 +380,7 @@
 				}
 			}
 		},
-    "/wellness-warrior-certificate/update/{id}": {
+		"/wellness-warrior-certificate/update/{id}": {
 			"put": {
 				"tags": ["wellness-warrior-certificate"],
 				"description": "Update a wellness warrior certificate",
@@ -407,21 +411,21 @@
 				],
 				"requestBody": {
 					"content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "pdfFile": {
-                    "type": "string",
-                    "format": "binary"
-                  },
-                  "authority": {"type":"string"},
-                  "title": {"type":"string"},
-                  "year": {"type":"number"},
-                  "wellness_warrior_id": {"type":"number"}
-                }
-              }
-            }
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"pdfFile": {
+										"type": "string",
+										"format": "binary"
+									},
+									"authority": { "type": "string" },
+									"title": { "type": "string" },
+									"year": { "type": "number" },
+									"wellness_warrior_id": { "type": "number" }
+								}
+							}
+						}
 					}
 				},
 				"responses": {
@@ -433,29 +437,29 @@
 									"type": "object"
 								},
 								"example": {
-                    "data": {
-                        "warriorCertificate": {
-                            "id": 1,
-                            "wellness_warrior_id": 1,
-                            "authority": "authority",
-                            "title": "title",
-                            "year": 2022,
-                            "pdfUrl": "https://girls-first-finance.s3.amazonaws.com//uploads/wellness_warrior/certificates/1/pdf_files/1661168832658_AgreementData-275000.pdf",
-                            "wellness_warrior": {
-                                "id": 1,
-                                "user_id": 37,
-                                "warrior_id": 169,
-                                "status": "approve",
-                                "request_type": "warrior"
-                            }
-                        }
-                    },
-                    "message": "Warrior certificate updated successfully",
-                    "code": 200
-                  }
-                }
-              }
-            },
+									"data": {
+										"warriorCertificate": {
+											"id": 1,
+											"wellness_warrior_id": 1,
+											"authority": "authority",
+											"title": "title",
+											"year": 2022,
+											"pdfUrl": "https://girls-first-finance.s3.amazonaws.com//uploads/wellness_warrior/certificates/1/pdf_files/1661168832658_AgreementData-275000.pdf",
+											"wellness_warrior": {
+												"id": 1,
+												"user_id": 37,
+												"warrior_id": 169,
+												"status": "approve",
+												"request_type": "warrior"
+											}
+										}
+									},
+									"message": "Warrior certificate updated successfully",
+									"code": 200
+								}
+							}
+						}
+					},
 					"401": {
 						"description": "Unauthorized",
 						"content": {
@@ -473,7 +477,7 @@
 				}
 			}
 		},
-    "/wellness-warrior-certificate/delete/{id}": {
+		"/wellness-warrior-certificate/delete/{id}": {
 			"delete": {
 				"tags": ["wellness-warrior-certificate"],
 				"description": "Delete a wellness warrior certificate",
@@ -511,9 +515,9 @@
 									"type": "object"
 								},
 								"example": {
-                  "message": "delete warrior certificate successfully",
-                  "code": 200
-                }
+									"message": "delete warrior certificate successfully",
+									"code": 200
+								}
 							}
 						}
 					},
@@ -6887,142 +6891,140 @@
 				}
 			}
 		},
-    "/transaction/user/{id}": {
-      "get": {
-        "tags": [
-          "transaction"
-        ],
-        "description": "List all transactions for any user",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": " user ID",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "auth-token",
-            "in": "header",
-            "description": "Auth Token",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json; charset=utf-8": {
-                "schema": {
-                  "type": "string"
-                },
-                "example": {
-                  "data": {
-                    "transaction": [
-                      {
-                        "id": 165,
-                        "frequency": "Never",
-                        "user_id": 202,
-                        "account_id": 241,
-                        "amount": 5500,
-                        "category_id": 44,
-                        "status": "Active",
-                        "recurring_status": "Active",
-                        "paid_at": "2022-08-17",
-                        "transaction_type": "expense",
-                        "category_name": "daw",
-                        "category_user_id": 202,
-                        "category_icon_id": 5,
-                        "category_colour": "#dfe5ac",
-                        "category_type": "expense",
-                        "category_is_default": false,
-                        "category_status": "active",
-                        "account_account_type_id": 3,
-                        "account_name": "Cash",
-                        "account_country": "sdasd",
-                        "account_currency_id": 6,
-                        "account_user_id": 202,
-                        "account_status": "active",
-                        "currency_id": 6,
-                        "currency_symbol": "ZAR",
-                        "currency_name": "South African Rand",
-                        "amountInDefaultCurrency": "26191.67"
-                      },
-                      {
-                        "id": 162,
-                        "frequency": "Never",
-                        "user_id": 202,
-                        "account_id": 241,
-                        "amount": 88500,
-                        "category_id": 44,
-                        "status": "Active",
-                        "recurring_status": "Active",
-                        "paid_at": "2022-08-16",
-                        "transaction_type": "expense",
-                        "category_name": "daw",
-                        "category_user_id": 202,
-                        "category_icon_id": 5,
-                        "category_colour": "#dfe5ac",
-                        "category_type": "expense",
-                        "category_is_default": false,
-                        "category_status": "active",
-                        "account_account_type_id": 3,
-                        "account_name": "Cash",
-                        "account_country": "sdasd",
-                        "account_currency_id": 6,
-                        "account_user_id": 202,
-                        "account_status": "active",
-                        "currency_id": 6,
-                        "currency_symbol": "ZAR",
-                        "currency_name": "South African Rand",
-                        "amountInDefaultCurrency": "427510.95"
-                      },
-                      {
-                        "id": 168,
-                        "frequency": "Never",
-                        "user_id": 202,
-                        "account_id": 241,
-                        "amount": 222200,
-                        "category_id": 44,
-                        "status": "Active",
-                        "recurring_status": "Active",
-                        "paid_at": "2022-08-17",
-                        "transaction_type": "expense",
-                        "category_name": "daw",
-                        "category_user_id": 202,
-                        "category_icon_id": 5,
-                        "category_colour": "#dfe5ac",
-                        "category_type": "expense",
-                        "category_is_default": false,
-                        "category_status": "active",
-                        "account_account_type_id": 3,
-                        "account_name": "Cash",
-                        "account_country": "sdasd",
-                        "account_currency_id": 6,
-                        "account_user_id": 202,
-                        "account_status": "active",
-                        "currency_id": 6,
-                        "currency_symbol": "ZAR",
-                        "currency_name": "South African Rand",
-                        "amountInDefaultCurrency": "1058143.35"
-                      }
-                    ]
-                  },
-                  "code": 200,
-                  "message": "OK"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
+		"/transaction/user/{id}": {
+			"get": {
+				"tags": ["transaction"],
+				"description": "List all transactions for any user",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": " user ID",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					},
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "string"
+								},
+								"example": {
+									"data": {
+										"transaction": [
+											{
+												"id": 165,
+												"frequency": "Never",
+												"user_id": 202,
+												"account_id": 241,
+												"amount": 5500,
+												"category_id": 44,
+												"status": "Active",
+												"recurring_status": "Active",
+												"paid_at": "2022-08-17",
+												"transaction_type": "expense",
+												"category_name": "daw",
+												"category_user_id": 202,
+												"category_icon_id": 5,
+												"category_colour": "#dfe5ac",
+												"category_type": "expense",
+												"category_is_default": false,
+												"category_status": "active",
+												"account_account_type_id": 3,
+												"account_name": "Cash",
+												"account_country": "sdasd",
+												"account_currency_id": 6,
+												"account_user_id": 202,
+												"account_status": "active",
+												"currency_id": 6,
+												"currency_symbol": "ZAR",
+												"currency_name": "South African Rand",
+												"amountInDefaultCurrency": "26191.67"
+											},
+											{
+												"id": 162,
+												"frequency": "Never",
+												"user_id": 202,
+												"account_id": 241,
+												"amount": 88500,
+												"category_id": 44,
+												"status": "Active",
+												"recurring_status": "Active",
+												"paid_at": "2022-08-16",
+												"transaction_type": "expense",
+												"category_name": "daw",
+												"category_user_id": 202,
+												"category_icon_id": 5,
+												"category_colour": "#dfe5ac",
+												"category_type": "expense",
+												"category_is_default": false,
+												"category_status": "active",
+												"account_account_type_id": 3,
+												"account_name": "Cash",
+												"account_country": "sdasd",
+												"account_currency_id": 6,
+												"account_user_id": 202,
+												"account_status": "active",
+												"currency_id": 6,
+												"currency_symbol": "ZAR",
+												"currency_name": "South African Rand",
+												"amountInDefaultCurrency": "427510.95"
+											},
+											{
+												"id": 168,
+												"frequency": "Never",
+												"user_id": 202,
+												"account_id": 241,
+												"amount": 222200,
+												"category_id": 44,
+												"status": "Active",
+												"recurring_status": "Active",
+												"paid_at": "2022-08-17",
+												"transaction_type": "expense",
+												"category_name": "daw",
+												"category_user_id": 202,
+												"category_icon_id": 5,
+												"category_colour": "#dfe5ac",
+												"category_type": "expense",
+												"category_is_default": false,
+												"category_status": "active",
+												"account_account_type_id": 3,
+												"account_name": "Cash",
+												"account_country": "sdasd",
+												"account_currency_id": 6,
+												"account_user_id": 202,
+												"account_status": "active",
+												"currency_id": 6,
+												"currency_symbol": "ZAR",
+												"currency_name": "South African Rand",
+												"amountInDefaultCurrency": "1058143.35"
+											}
+										]
+									},
+									"code": 200,
+									"message": "OK"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/transactionAccount/user": {
 			"get": {
 				"tags": ["transaction-account"],
@@ -10908,7 +10910,9 @@
 											"updated_at": "2022-05-21T21:06:00.000Z",
 											"flag": 1,
 											"wikiDataId": null
-										}]}
+										}
+									]
+								}
 							}
 						}
 					}
@@ -10919,13 +10923,15 @@
 			"get": {
 				"tags": ["World"],
 				"description": "Get Regions",
-				"parameters": [{
+				"parameters": [
+					{
 						"name": "countryId",
 						"in": "query",
 						"description": "Country Id",
 						"required": true,
 						"type": "string"
-				}],
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "",
@@ -10995,13 +11001,15 @@
 			"get": {
 				"tags": ["World"],
 				"description": "Get Cities",
-				"parameters": [{
+				"parameters": [
+					{
 						"name": "regionId",
 						"in": "query",
 						"description": "Region Id",
 						"required": true,
 						"type": "string"
-				}],
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "",
@@ -11057,7 +11065,203 @@
 											"flag": 1,
 											"wikiDataId": "Q2350169"
 										}
-	]
+									]
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/meeting/": {
+			"get": {
+				"tags": ["meeting"],
+				"description": "Get all meetings user is part of.",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"data": {
+											"type": "object",
+											"properties": {
+												"meetings": {
+													"type": "array",
+													"items": {
+														"$ref": "#/components/schemas/MeetingResponse"
+													}
+												}
+											}
+										},
+										"message": { "type": "string" },
+										"code": { "type": "integer" }
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["meeting"],
+				"description": "Create a meeting",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json; charset=utf-8": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"startTime": { "type": "string", "format": "date" },
+									"endTime": { "type": "string", "format": "date" },
+									"isContractSigned": { "type": "boolean" },
+									"participant_id": { "type": "integer" },
+									"questioner": { "type": "object" }
+								}
+							},
+							"example": {
+								"startTime": "2022-08-14 21:20:07",
+								"endTime": "2022-08-14 22:20:07",
+								"participant_id": 165,
+								"isContractSigned": false,
+								"questioner": [
+									{
+										"question": "How are you?",
+										"answer": "I'm doing great!"
+									}
+								]
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"data": {
+											"type": "object",
+											"properties": {
+												"meeting": {
+													"type": "object",
+													"$ref": "#/components/schemas/Meeting"
+												}
+											}
+										},
+										"message": { "type": "string" },
+										"code": { "type": "integer" }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/meeting/accept": {
+			"put": {
+				"tags": ["meeting"],
+				"description": "Accept meeting invite",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json; charset=utf-8": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"meeting_id": { "type": "integer" }
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"data": {},
+										"message": { "type": "string", "example": "Meeting request has been accepted!" },
+										"code": { "type": "integer" }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/meeting/reject": {
+			"put": {
+				"tags": ["meeting"],
+				"description": "Reject meeting invite",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json; charset=utf-8": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"meeting_id": { "type": "integer" }
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"data": {},
+										"message": { "type": "string", "example": "Meeting request has been rejected!" },
+										"code": { "type": "integer" }
+									}
 								}
 							}
 						}
@@ -11068,7 +11272,7 @@
 	},
 	"components": {
 		"schemas": {
-      "wellness_warriors_certificate": {
+			"wellness_warriors_certificate": {
 				"type": "object",
 				"properties": {
 					"id": {
@@ -11077,16 +11281,16 @@
 					"authority": {
 						"type": "string"
 					},
-          "title": {
+					"title": {
 						"type": "string"
 					},
-          "year": {
+					"year": {
 						"type": "number"
 					},
-          "pdfUrl": {
+					"pdfUrl": {
 						"type": "string"
 					},
-          "wellness_warrior_id": {
+					"wellness_warrior_id": {
 						"type": "integer"
 					}
 				}
@@ -11986,6 +12190,51 @@
 					"account_id": 3,
 					"category_id": 1,
 					"status": "active"
+				}
+			},
+			"MeetingResponse": {
+				"type": "object",
+				"$ref": "#/components/schemas/Meeting",
+				"properties": {
+					"participants": {
+						"type": "object",
+						"$ref": "#/components/schemas/MeetingParticipants"
+					}
+				}
+			},
+			"Meeting": {
+				"type": "object",
+				"properties": {
+					"id": { "type": "integer" },
+					"name": { "type": "string" },
+					"roomId": { "type": "integer" },
+					"startTime": { "type": "string", "format": "date" },
+					"endTime": { "type": "string", "format": "date" },
+					"reservationTime": { "type": "string", "format": "date" },
+					"canceledTime": { "type": "string", "format": "date" },
+					"description": { "type": "string" },
+					"canceledReason": { "type": "string" },
+					"status": { "type": "string" },
+					"createdBy": { "type": "integer" }
+				}
+			},
+			"MeetingParticipants": {
+				"type": "object",
+				"properties": {
+					"id": { "type": "integer" },
+					"meeting_id": { "type": "integer" },
+					"user_id": { "type": "integer" },
+					"user": {
+						"type": "object",
+						"properties": {
+							"id": { "type": "integer" },
+							"full_name": { "type": "string" },
+							"userInformation": {
+								"type": "object",
+								"$ref": "#/components/schemas/UserInformation"
+							}
+						}
+					}
 				}
 			}
 		}

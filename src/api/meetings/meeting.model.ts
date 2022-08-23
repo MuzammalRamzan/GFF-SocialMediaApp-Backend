@@ -1,4 +1,5 @@
 import { DataTypes, Model } from 'sequelize'
+import { DATABASE_TABLES } from '../../constants/db_tables'
 import { sequelize } from '../../database'
 import { MeetingRequestStatus } from './interface'
 import { MeetingParticipants } from './meetingParticipants.model'
@@ -21,12 +22,13 @@ Meeting.init(
 		description: { type: DataTypes.STRING },
 		canceledReason: { type: DataTypes.STRING },
 		status: { type: DataTypes.ENUM(...Object.values(MeetingRequestStatus)) },
-		createdBy: { type: DataTypes.INTEGER, allowNull: false }
+		createdBy: { type: DataTypes.INTEGER, allowNull: false },
+		isContractSigned: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false }
 	},
-	{ sequelize, tableName: 'meeting' }
+	{ sequelize, tableName: DATABASE_TABLES.MEETING }
 )
 
 Meeting.hasMany(MeetingParticipants, { as: 'participants', foreignKey: 'meeting_id' })
-MeetingParticipants.belongsTo(Meeting, { as: 'meeting', foreignKey: 'meeting_id' })
+MeetingParticipants.belongsTo(Meeting, { as: DATABASE_TABLES.MEETING, foreignKey: 'meeting_id' })
 
 Meeting.sync()

@@ -17,12 +17,8 @@ import { hashtagRouter } from './api/hashtag/hashtagRouter'
 import { debtRouter } from './api/debt/debtRouter'
 import { dailyDoseRouter } from './api/daily-dose/dailyDoseRouter'
 import { dailyArticleRouter } from './api/dailyArticle/dailyArticleRouter'
-import {
-	loanLedgerProfessionalInformationRouter
-} from './api/loan-ledger-professional-information/professionalInformationRouter'
-import {
-	loanLedgerPersonalInfoRouter
-} from './api/loan-ledger-personal-information/loanLedgerPersonalInformationRouter'
+import { loanLedgerProfessionalInformationRouter } from './api/loan-ledger-professional-information/professionalInformationRouter'
+import { loanLedgerPersonalInfoRouter } from './api/loan-ledger-personal-information/loanLedgerPersonalInformationRouter'
 import { mentorMatcherRouter } from './api/mentor-matcher/mentorMatcherRouter'
 import { mentorInformationRouter } from './api/mentor-information/mentorInformationRouter'
 import { mpesaRouter } from './api/mpesa-auth/mpesaRouter'
@@ -38,7 +34,7 @@ import { feedbackRouter } from './api/feedback/feedbackRouter'
 import { roleRouter } from './api/user-role/userRole.routes'
 import { identityVerification } from './api/identity-verification/verification.route'
 
-import { mentorInfoRouter } from './api/Questionnaire/questionnaireRouter'
+import { mentorInfoRouter } from './api/mentor-questionnaire/questionnaireRouter'
 import { UserAnswersRouter } from './api/MentorAnswers/userAnsewerRouter'
 import { promocodeRouter } from './api/promocode/promocodeRouter'
 
@@ -49,6 +45,7 @@ import { userFCMTokenRouter } from './api/user-fcm-token/userFCMTokenRouter'
 import { dashboardRouter } from './api/dashboard/dashboard.routes'
 import { meetingRouter } from './api/meetings/meeting.routes'
 import { worldRouter } from './api/world/worldRouter'
+import { questionnaireRouter } from './api/questionnaire/questionnaire.routes'
 
 import { warriorCertificateRouter } from './api/wellness-warrior-certificate/warriorInformationRouter'
 
@@ -63,9 +60,8 @@ const options = {
 export const upload = multer({
 	storage,
 	limits: { fileSize: 1000000000 }
-});
-
-(async function main(): Promise<void> {
+})
+;(async function main(): Promise<void> {
 	const app = Express()
 
 	app.use(cors())
@@ -121,6 +117,7 @@ export const upload = multer({
 	app.use('/crew', crewRouter)
 	app.use('/crew-member', crewMemberRouter)
 	app.use('/world', worldRouter)
+	app.use('/questionnaire', questionnaireRouter)
 
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 		const error = err as GffError
@@ -134,7 +131,7 @@ export const upload = multer({
 			error.httpStatusCode = 500
 		}
 
-		return jsonErrorHandler(err, req, res, () => { })
+		return jsonErrorHandler(err, req, res, () => {})
 	})
 
 	app.listen(process.env.PORT, () => {

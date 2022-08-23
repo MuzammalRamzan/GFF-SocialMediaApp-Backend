@@ -1,3 +1,4 @@
+import { IQuestionnaireAnswer } from '../questionnaire/interface'
 import { Meeting } from './meeting.model'
 
 export enum MeetingRequestStatus {
@@ -8,8 +9,11 @@ export enum MeetingRequestStatus {
 
 export type createMeetingParams = {
 	startTime: string
+	endTime: string
 	user_id: number
 	participant_id: number
+	isContractSigned: boolean
+	answers?: IQuestionnaireAnswer[]
 }
 
 export interface IMeetingServices {

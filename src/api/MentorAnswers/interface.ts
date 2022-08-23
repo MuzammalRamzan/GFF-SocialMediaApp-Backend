@@ -1,4 +1,4 @@
-import { Questions } from '../Questionnaire/questionnaireModel'
+import { Questions } from '../mentor-questionnaire/questionnaireModel'
 import { Request } from 'express'
 
 type MessagesConst = {

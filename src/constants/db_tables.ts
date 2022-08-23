@@ -9,5 +9,6 @@ export const DATABASE_TABLES = {
 	STATES: 'states',
 	CITIES: 'cities',
 	TRANSACTION_ACCOUNT: 'transaction_account',
-	WARRIOR_INFORMATION: 'warrior_information'
+	WARRIOR_INFORMATION: 'warrior_information',
+	MEETING: 'meeting'
 }
