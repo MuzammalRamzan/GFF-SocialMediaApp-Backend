@@ -1,6 +1,8 @@
-import { Op } from 'sequelize'
-import { IUserService, OtherUserInfo, PaginatedUserResult, UserInfo, UserType } from './interface'
+import { QueryTypes } from 'sequelize'
+import { sequelize } from '../../database'
+import { ISearchUser, IUserService, OtherUserInfo, PaginatedUserResult, UserInfo, UserType } from './interface'
 import { User } from './userModel'
+import { Op } from 'sequelize'
 import { WarriorInformation } from '../warrior-information/warriorInformationModel'
 import { UserInformation } from '../user-information/userInformationModel'
 import { MentorInformation } from '../mentor-information/mentorInformationModel'
@@ -49,11 +51,11 @@ export class UserService implements IUserService {
 					where: {
 						role_id: role
 							? {
-								[Op.eq]: role
-							}
+									[Op.eq]: role
+							  }
 							: {
-								[Op.ne]: adminRole?.get('id')
-							}
+									[Op.ne]: adminRole?.get('id')
+							  }
 					},
 					attributes: { exclude: ['password'] },
 					include: [
@@ -91,6 +93,32 @@ export class UserService implements IUserService {
 		return user as any
 	}
 
+	async fetchBySubscribedUser(): Promise<User[]> {
+		console.log('fetchBySubscribedUser')
+
+		const user = await User.findAll({
+			where: {
+				is_subscribed_newsletter: true
+			}
+		})
+
+		return user as any
+	}
+
+	async unsubscribe(userId: number): Promise<User> {
+		const user = await User.findByPk(userId)
+
+		if (!user) {
+			const error = new GffError('User not found!')
+			error.errorCode = '404'
+			throw error
+		}
+
+		user.set({ is_subscribed_newsletter: false })
+
+		return await user.save()
+	}
+
 	async fetchByEmail(email: string, userId: number): Promise<User> {
 		const user = await User.findOne({
 			where: {
@@ -116,16 +144,6 @@ export class UserService implements IUserService {
 		return user as User
 	}
 
-	async findUserByToken(token: string): Promise<User> {
-		const user = await User.findOne({
-			where: {
-				forgot_password_token: token
-			}
-		})
-
-		return user as User
-	}
-
 	async update(userId: number, params: UserType): Promise<User> {
 		await User.update(
 			{
@@ -134,8 +152,7 @@ export class UserService implements IUserService {
 				default_currency_id: params.default_currency_id,
 				user_feature_id: params.user_feature_id,
 				is_pro: params.is_pro || 0,
-				promoted_till: params.promoted_till,
-				forgot_password_token: params.forgot_password_token || null
+				promoted_till: params.promoted_till
 			},
 			{
 				where: {
@@ -335,7 +352,7 @@ export class UserService implements IUserService {
 			throw error
 		}
 
-		user.set({ deactivated: true });
+		user.set({ deactivated: true })
 
 		return await user.save()
 	}
@@ -355,6 +372,6 @@ export class UserService implements IUserService {
 					attributes: USER_INFORMATION_FIELDS
 				}
 			]
-		});
+		})
 	}
 }

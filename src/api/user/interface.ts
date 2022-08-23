@@ -20,7 +20,7 @@ export type UserType = {
 	deactivated?: boolean
 	is_pro?: boolean
 	promoted_till?: Date
-	forgot_password_token?: string | null
+	is_subscribed_newsletter: boolean
 }
 
 export interface ISearchUser {
@@ -52,7 +52,6 @@ export interface IUserService {
 	list(role: string | undefined, pagination: PaginationType): Promise<PaginatedUserResult>
 	fetchById(userId: number, id: number): Promise<User>
 	fetchByEmail(email: string, userId: number): Promise<User>
-	findUserByToken(token: string): Promise<User>
 	update(id: number, params: UserType): Promise<User>
 	delete(id: number, userId: number): Promise<number>
 	fetchFullUserById(userId: number): Promise<User | null>

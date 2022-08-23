@@ -14,9 +14,10 @@ export interface IUser {
 	default_currency_id: number
 	role_id: number
 	password: string
+	is_subscribed_newsletter: boolean
 }
 
-export class User extends Model { }
+export class User extends Model {}
 User.init(
 	{
 		id: {
@@ -54,7 +55,7 @@ User.init(
 		deactivated: { type: DataTypes.BOOLEAN, defaultValue: 0 },
 		is_pro: { type: DataTypes.BOOLEAN, defaultValue: 0 },
 		promoted_till: { type: DataTypes.DATE, defaultValue: null },
-		forgot_password_token: { type: DataTypes.STRING, defaultValue: null },
+		is_subscribed_newsletter: { type: DataTypes.BOOLEAN, defaultValue: true }
 	},
 	{
 		sequelize,
