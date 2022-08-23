@@ -15,7 +15,7 @@
     "lint": "eslint 'src/**/*.ts'",
     "dev": "ts-node-dev --respawn -r dotenv/config -r source-map-support/register src/index.ts",
     "debug": "ts-node-dev --respawn --inspect -r dotenv/config -r source-map-support/register src/index.ts",
-    "start": "node -r dotenv/config build/src/index.js"
+    "start": "npx sequelize-cli db:migrate && node -r dotenv/config build/src/index.js"
   },
   "license": "ISC",
   "devDependencies": {
