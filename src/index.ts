@@ -50,6 +50,8 @@ import { dashboardRouter } from './api/dashboard/dashboard.routes'
 import { meetingRouter } from './api/meetings/meeting.routes'
 import { worldRouter } from './api/world/worldRouter'
 
+import { warriorCertificateRouter } from './api/wellness-warrior-certificate/warriorInformationRouter'
+
 const storage = multer.memoryStorage()
 
 const options = {
@@ -104,6 +106,7 @@ export const upload = multer({
 	app.use('/message', messageRoute)
 	app.use('/warrior-information', warriorInformationRouter)
 	app.use('/wellness-warrior', warriorRouter)
+	app.use('/wellness-warrior-certificate', warriorCertificateRouter)
 	app.use('/', mentorSettingsRouter)
 	app.use('/currency', currencyRouter)
 	app.use('/feedback', feedbackRouter)

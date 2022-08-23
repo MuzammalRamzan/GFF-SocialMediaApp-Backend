@@ -1,6 +1,7 @@
 import { DataTypes, Model } from 'sequelize'
 import { sequelize } from '../../database'
 import { User } from '../user/userModel'
+import { WellnessWarriorsCertificate } from '../wellness-warrior-certificate/wellnessWarriorCertificateModel'
 import { RequestType, StatusType } from './interface'
 
 export class WellnessWarrior extends Model {}
@@ -44,6 +45,13 @@ WellnessWarrior.belongsTo(User, {
 WellnessWarrior.belongsTo(User, {
 	foreignKey: 'warrior_id',
 	as: 'warrior'
+})
+
+WellnessWarrior.hasMany(WellnessWarriorsCertificate, {
+	foreignKey: 'wellness_warrior_id',
+	sourceKey: 'id',
+	as: 'wellness_warrior_certificates',
+	onDelete: 'CASCADE'
 })
 
 WellnessWarrior.sync()

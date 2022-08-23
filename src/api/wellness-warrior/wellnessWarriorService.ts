@@ -12,6 +12,7 @@ import { UserRoleService } from '../user-role/userRoleService'
 import { User } from '../user/userModel'
 import { IWarriorUser } from '../warrior-information/interface'
 import { WarriorInformation } from '../warrior-information/warriorInformationModel'
+import { WellnessWarriorsCertificate } from '../wellness-warrior-certificate/wellnessWarriorCertificateModel'
 import {
 	ISearchWarriorParams,
 	IWellnessWarriorRequest,
@@ -23,9 +24,13 @@ import {
 import { WellnessWarrior } from './wellnessWarriorModel'
 
 export class WellnessWarriorService implements IWellnessWarriorService {
-	constructor() { }
+	constructor() {}
 
 	private readonly wellness_warrior_relationships = [
+		{
+			model: WellnessWarriorsCertificate,
+			as: 'wellness_warrior_certificates'
+		},
 		{
 			model: User,
 			as: 'warrior',
@@ -110,9 +115,9 @@ export class WellnessWarriorService implements IWellnessWarriorService {
 					_specialty?.length
 						?
 						[{
-							specialty: {
-								[Op.or]: getALikeStringFromArray(_specialty)
-							}
+								specialty: {
+									[Op.or]: getALikeStringFromArray(_specialty)
+								}
 						}]
 						:
 						[]
@@ -121,9 +126,9 @@ export class WellnessWarriorService implements IWellnessWarriorService {
 					_therapy_type?.length
 						?
 						[{
-							therapy_type: {
-								[Op.or]: getALikeStringFromArray(_therapy_type)
-							}
+								therapy_type: {
+									[Op.or]: getALikeStringFromArray(_therapy_type)
+								}
 						}]
 						:
 						[]
@@ -132,7 +137,7 @@ export class WellnessWarriorService implements IWellnessWarriorService {
 					_language?.length
 						?
 						[{
-							language: { [Op.or]: getALikeStringFromArray(_language) }
+								language: { [Op.or]: getALikeStringFromArray(_language) }
 						}]
 						:
 						[]
@@ -141,12 +146,12 @@ export class WellnessWarriorService implements IWellnessWarriorService {
 					_max_hourly_rate || _min_hourly_rate
 						?
 						[{
-							hourly_rate: {
-								[Op.and]: [
-									...(_max_hourly_rate ? [{ [Op.lte]: _max_hourly_rate }] : []),
-									...(_min_hourly_rate ? [{ [Op.gte]: _min_hourly_rate }] : [])
-								]
-							}
+								hourly_rate: {
+									[Op.and]: [
+										...(_max_hourly_rate ? [{ [Op.lte]: _max_hourly_rate }] : []),
+										...(_min_hourly_rate ? [{ [Op.gte]: _min_hourly_rate }] : [])
+									]
+								}
 						}]
 						:
 						[]
@@ -155,7 +160,7 @@ export class WellnessWarriorService implements IWellnessWarriorService {
 					_conversation_mode?.length
 						?
 						[{
-							conversation_mode: { [Op.or]: getALikeStringFromArray(_conversation_mode) }
+								conversation_mode: { [Op.or]: getALikeStringFromArray(_conversation_mode) }
 						}]
 						:
 						[]

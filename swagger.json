@@ -96,9 +96,444 @@
 		{
 			"name": "dashboard",
 			"description": "Dashboard Statistics Routes"
+		},
+    {
+			"name": "wellness-warrior-certificate",
+			"description": "Store certificate of wellness warrior as pdf file"
 		}
 	],
 	"paths": {
+    "/wellness-warrior-certificate/create": {
+			"post": {
+				"tags": ["wellness-warrior-certificate"],
+				"description": "Create certificate",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						},
+						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+					}
+				],
+				"requestBody": {
+					"content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pdfFile": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "authority": {"type":"string"},
+                  "title": {"type":"string"},
+                  "year": {"type":"number"},
+                  "wellness_warrior_id": {"type":"number"}
+                }
+              }
+            }
+					}
+				},
+				"responses": {
+					"200": {
+            "description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+                    "data": {
+                        "warriorCertificate": {
+                            "id": 5,
+                            "wellness_warrior_id": 1,
+                            "authority": "authority",
+                            "title": "title",
+                            "year": 2000,
+                            "pdfUrl": "https://girls-first-finance.s3.amazonaws.com//uploads/wellness_warrior/certificates/1/pdf_files/1661168832658_AgreementData-275000.pdf",
+                            "wellness_warrior": {
+                                "id": 1,
+                                "user_id": 37,
+                                "warrior_id": 169,
+                                "status": "approve",
+                                "request_type": "warrior"
+                            }
+                        }
+                    },
+                    "message": "Warrior certificate created successfully",
+                    "code": 200
+                  }
+                }
+              }
+          },
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+    "/wellness-warrior-certificate/wellness-warrior/{id}": {
+			"get": {
+				"tags": ["wellness-warrior-certificate"],
+				"description": "get all wellness warrior certificate",
+				"parameters": [
+          {
+						"name": "id",
+						"in": "path",
+						"description": "wellness warrior ID",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					},
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+                  "data": {
+                      "wellness_warriors_certificates": [
+                          {
+                              "id": 1,
+                              "wellness_warrior_id": 1,
+                              "authority": "authorityy",
+                              "title": "titl",
+                              "year": 2022,
+                              "pdfUrl": "https://girls-first-finance.s3.amazonaws.com//uploads/wellness_warrior/certificates/1/pdf_files/1661161728308_0ef72e12-28c6-4932-b29b-20ec1c103498.png",
+                              "wellness_warrior": {
+                                  "id": 1,
+                                  "user_id": 37,
+                                  "warrior_id": 169,
+                                  "status": "approve",
+                                  "request_type": "warrior"
+                              }
+                          },
+                          {
+                              "id": 3,
+                              "wellness_warrior_id": 1,
+                              "authority": "authority",
+                              "title": "title",
+                              "year": 123,
+                              "pdfUrl": "https://girls-first-finance.s3.amazonaws.com//uploads/wellness_warrior/certificates/1/pdf_files/1661165269049_0ef72e12-28c6-4932-b29b-20ec1c103498.png",
+                              "wellness_warrior": {
+                                  "id": 1,
+                                  "user_id": 37,
+                                  "warrior_id": 169,
+                                  "status": "approve",
+                                  "request_type": "warrior"
+                              }
+                          },
+                          {
+                              "id": 4,
+                              "wellness_warrior_id": 1,
+                              "authority": "authority",
+                              "title": "title",
+                              "year": 123,
+                              "pdfUrl": "https://girls-first-finance.s3.amazonaws.com//uploads/wellness_warrior/certificates/1/pdf_files/1661165288283_0ef72e12-28c6-4932-b29b-20ec1c103498.png",
+                              "wellness_warrior": {
+                                  "id": 1,
+                                  "user_id": 37,
+                                  "warrior_id": 169,
+                                  "status": "approve",
+                                  "request_type": "warrior"
+                              }
+                          },
+                          {
+                              "id": 5,
+                              "wellness_warrior_id": 1,
+                              "authority": "authority",
+                              "title": "title",
+                              "year": 2000,
+                              "pdfUrl": "https://girls-first-finance.s3.amazonaws.com//uploads/wellness_warrior/certificates/1/pdf_files/1661168832658_AgreementData-275000.pdf",
+                              "wellness_warrior": {
+                                  "id": 1,
+                                  "user_id": 37,
+                                  "warrior_id": 169,
+                                  "status": "approve",
+                                  "request_type": "warrior"
+                              }
+                          }
+                      ]
+                  },
+                  "code": 200,
+                  "message": "OK"
+                }
+							}
+						}
+					}
+				}
+			}
+		},
+    "/wellness-warrior-certificate/{id}": {
+			"get": {
+				"tags": ["wellness-warrior-certificate"],
+				"description": "Get wellness warrior certificate By ID",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "wellness warrior certificate ID",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					},
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						},
+						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+					}
+				],
+				"responses": {
+					"200": {
+              "description": "OK",
+              "content": {
+                "application/json; charset=utf-8": {
+                  "schema": {
+                    "type": "object"
+                  },
+                  "example": {
+                    "data": {
+                        "warriorCertificate": {
+                            "id": 5,
+                            "wellness_warrior_id": 1,
+                            "authority": "authority",
+                            "title": "title",
+                            "year": 2000,
+                            "pdfUrl": "https://girls-first-finance.s3.amazonaws.com//uploads/wellness_warrior/certificates/1/pdf_files/1661168832658_AgreementData-275000.pdf",
+                            "wellness_warrior": {
+                                "id": 1,
+                                "user_id": 37,
+                                "warrior_id": 169,
+                                "status": "approve",
+                                "request_type": "warrior"
+                            }
+                        }
+                    },
+                    "message": "fetch warrior certificate successfully",
+                    "code": 200
+                  }
+                }
+              }
+            },
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+    "/wellness-warrior-certificate/update/{id}": {
+			"put": {
+				"tags": ["wellness-warrior-certificate"],
+				"description": "Update a wellness warrior certificate",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "wellness warrior certificate ID",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					},
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						},
+						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+					}
+				],
+				"requestBody": {
+					"content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pdfFile": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "authority": {"type":"string"},
+                  "title": {"type":"string"},
+                  "year": {"type":"number"},
+                  "wellness_warrior_id": {"type":"number"}
+                }
+              }
+            }
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+                    "data": {
+                        "warriorCertificate": {
+                            "id": 1,
+                            "wellness_warrior_id": 1,
+                            "authority": "authority",
+                            "title": "title",
+                            "year": 2022,
+                            "pdfUrl": "https://girls-first-finance.s3.amazonaws.com//uploads/wellness_warrior/certificates/1/pdf_files/1661168832658_AgreementData-275000.pdf",
+                            "wellness_warrior": {
+                                "id": 1,
+                                "user_id": 37,
+                                "warrior_id": 169,
+                                "status": "approve",
+                                "request_type": "warrior"
+                            }
+                        }
+                    },
+                    "message": "Warrior certificate updated successfully",
+                    "code": 200
+                  }
+                }
+              }
+            },
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+    "/wellness-warrior-certificate/delete/{id}": {
+			"delete": {
+				"tags": ["wellness-warrior-certificate"],
+				"description": "Delete a wellness warrior certificate",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "wellness warrior certificate ID",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "integer",
+							"format": "int64"
+						}
+					},
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						},
+						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+                  "message": "delete warrior certificate successfully",
+                  "code": 200
+                }
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/dashboard/chart": {
 			"get": {
 				"tags": ["dashboard"],
@@ -10633,6 +11068,29 @@
 	},
 	"components": {
 		"schemas": {
+      "wellness_warriors_certificate": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "number"
+					},
+					"authority": {
+						"type": "string"
+					},
+          "title": {
+						"type": "string"
+					},
+          "year": {
+						"type": "number"
+					},
+          "pdfUrl": {
+						"type": "string"
+					},
+          "wellness_warrior_id": {
+						"type": "integer"
+					}
+				}
+			},
 			"loanLedgerPersonalInformation_add_body": {
 				"type": "object",
 				"properties": {
