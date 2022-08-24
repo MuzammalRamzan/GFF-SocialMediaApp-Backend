@@ -6,7 +6,7 @@ export const createMeetingValidation = [
 	check('participant_id').isInt().notEmpty().withMessage("Participant's id should be an integer."),
 	check('isContractSigned').isBoolean().notEmpty().withMessage('isContractSigned should be of type boolean.'),
 	check('answers.*.question_id').isInt({ gt: 0 }).notEmpty().withMessage('Invalid question id.'),
-	check('answers.*.answer').isInt({ min: 0, max: 4 }).notEmpty().withMessage('Invalid answer.')
+	check('answers.*.answer').notEmpty().withMessage('Invalid answer.')
 ]
 
 export const acceptOrRejectMeetingRequestValidation = [

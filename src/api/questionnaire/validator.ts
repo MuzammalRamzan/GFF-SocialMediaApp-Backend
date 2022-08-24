@@ -13,7 +13,7 @@ export const questionnaireIdExistInParams = [
 
 export const saveOrUpdateAnswersValidator = [
 	check('answers.*.question_id').isInt({ gt: 0 }).notEmpty().withMessage('Invalid question_id'),
-	check('answers.*.answer').isInt({ gt: -1, lt: 5 }).notEmpty().withMessage('Invalid answer')
+	check('answers.*.answer').notEmpty().withMessage('Invalid answer')
 ]
 
 export const updateAnswers = [check('answers.*.id').isInt({ gt: 0 }).notEmpty().withMessage('Invalid answer id')]

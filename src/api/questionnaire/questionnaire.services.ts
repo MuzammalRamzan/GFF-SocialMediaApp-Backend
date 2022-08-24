@@ -3,6 +3,17 @@ import { IQuestionnaire, IQuestionnaireAnswer, IQuestionnaireService } from './i
 import { Questionnaire, QuestionnaireAnswers } from './questionnaire.model'
 
 export class QuestionnaireService implements IQuestionnaireService {
+	static groupTheQuestionAnswersByType(questions: any) {
+		return questions.reduce((acc: any, question: any) => {
+			if (acc[question.type]) {
+				acc[question.type].push(question)
+			} else {
+				acc[question.type] = [question]
+			}
+			return acc
+		}, {});
+	}
+
 	async createQuestion(params: IQuestionnaire): Promise<Questionnaire> {
 		return await Questionnaire.create({ ...params })
 	}
@@ -13,13 +24,12 @@ export class QuestionnaireService implements IQuestionnaireService {
 		return (await Questionnaire.findByPk(params.id)) as Questionnaire
 	}
 
-	async getQuestionnaire(role_id: number, withAnswers: boolean, user_id: number): Promise<Questionnaire[]> {
-		return await Questionnaire.findAll({
-			where: { role_id },
-			include: [
-				...(withAnswers ? [{ model: QuestionnaireAnswers, as: 'answers', where: { user_id }, required: false }] : [])
-			]
-		})
+	async getQuestionnaire(): Promise<Questionnaire[]> {
+		const questions = await Questionnaire.findAll({
+			attributes: { exclude: ['role_id'] }
+		});
+
+		return QuestionnaireService.groupTheQuestionAnswersByType(questions);
 	}
 
 	async saveAnswers(params: IQuestionnaireAnswer[] | any, transaction?: Transaction): Promise<void> {
@@ -30,10 +40,27 @@ export class QuestionnaireService implements IQuestionnaireService {
 		await QuestionnaireAnswers.bulkCreate(params, { updateOnDuplicate: ['answer'] })
 	}
 
-	async getAnswers(user_id: number): Promise<QuestionnaireAnswers[]> {
+	async getAnswers(roomId: number): Promise<QuestionnaireAnswers[]> {
 		const answers = await QuestionnaireAnswers.findAll({
-			where: { user_id }
+			where: { meeting_id: roomId },
+			include: [
+				{
+					model: Questionnaire,
+					attributes: ['question', 'type'],
+					as: 'question',
+					required: true,
+					foreignKey: 'question_id',
+				}
+			]
 		})
-		return answers
+		const filteredAnswer = answers.map((answer: any) => {
+			return {
+				...answer.get(),
+				question: answer.get('question').question,
+				type: answer.get('question').type
+			}
+		});
+
+		return QuestionnaireService.groupTheQuestionAnswersByType(filteredAnswer);
 	}
 }

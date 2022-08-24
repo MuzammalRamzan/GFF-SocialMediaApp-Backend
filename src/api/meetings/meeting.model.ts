@@ -4,7 +4,7 @@ import { sequelize } from '../../database'
 import { MeetingRequestStatus } from './interface'
 import { MeetingParticipants } from './meetingParticipants.model'
 
-export class Meeting extends Model {}
+export class Meeting extends Model { }
 
 Meeting.init(
 	{

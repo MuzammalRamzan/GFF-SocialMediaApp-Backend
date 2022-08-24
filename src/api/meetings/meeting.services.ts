@@ -85,7 +85,13 @@ export class MeetingServices implements IMeetingServices {
 				{
 					model: QuestionnaireAnswers,
 					as: 'answers',
-					required: false
+					required: false,
+					include: [
+						{
+							model: Questionnaire,
+							as: 'question',
+						}
+					]
 				}
 			]
 		})

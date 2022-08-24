@@ -3,7 +3,7 @@ import { sequelize } from '../../database'
 import { Meeting } from '../meetings/meeting.model'
 import { QuestionType } from './interface'
 
-export class Questionnaire extends Model {}
+export class Questionnaire extends Model { }
 Questionnaire.init(
 	{
 		id: {
@@ -28,7 +28,7 @@ Questionnaire.init(
 	{ sequelize: sequelize, tableName: 'questionnaire' }
 )
 
-export class QuestionnaireAnswers extends Model {}
+export class QuestionnaireAnswers extends Model { }
 QuestionnaireAnswers.init(
 	{
 		id: {
@@ -38,7 +38,7 @@ QuestionnaireAnswers.init(
 			allowNull: false
 		},
 		question_id: { type: DataTypes.INTEGER, allowNull: false },
-		answer: { type: DataTypes.INTEGER, validate: { min: 0, max: 4 }, allowNull: false },
+		answer: { type: DataTypes.STRING, allowNull: false },
 		user_id: { type: DataTypes.INTEGER, allowNull: false },
 		meeting_id: { type: DataTypes.INTEGER }
 	},

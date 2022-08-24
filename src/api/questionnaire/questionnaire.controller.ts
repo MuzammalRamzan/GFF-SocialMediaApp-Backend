@@ -39,12 +39,7 @@ export class QuestionnaireController {
 
 	getQuestionnaire = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
 		try {
-			const role_id = +req.params.role_id
-			const user_id = req.user?.id as number
-
-			const withAnswers = Boolean(req.query?.answer)
-
-			const questionnaire = await this.questionnaireService.getQuestionnaire(role_id, withAnswers, user_id)
+			const questionnaire = await this.questionnaireService.getQuestionnaire()
 			return res.status(200).json({ data: { questionnaire }, code: 200, message: 'OK' })
 		} catch (err) {
 			next(err)
@@ -83,8 +78,8 @@ export class QuestionnaireController {
 
 	getAnswers = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
 		try {
-			const user_id = req.user?.id as number
-			const answers = await this.questionnaireService.getAnswers(user_id)
+			const meeting_id = +req.params.meeting_id;
+			const answers = await this.questionnaireService.getAnswers(meeting_id)
 
 			return res.status(200).json({ data: { answers }, message: 'OK', code: 200 })
 		} catch (err) {

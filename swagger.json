@@ -104,9 +104,154 @@
 		{
 			"name": "meeting",
 			"description": "Meeting Routes"
+		},
+		{
+			"name": "questionnaire",
+			"description": "Questionnaire Routes"
 		}
 	],
 	"paths": {
+		"/questionnaire": {
+			"get": {
+				"tags": ["questionnaire"],
+				"description": "Get all questionnaire",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful operation",
+
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+											"questionnaire": {
+													"PHQ-9": [
+															{
+																	"id": 1,
+																	"question": "Little interest or pleasure in doing things",
+																	"type": "PHQ-9"
+															}
+													],
+													"SRQ-20": [
+															{
+																	"id": 2,
+																	"question": "Do you often have headaches?",
+																	"type": "SRQ-20"
+															},
+															{
+																	"id": 3,
+																	"question": "Is your appetite poor?",
+																	"type": "SRQ-20"
+															}
+													]
+											}
+									},
+									"code": 200,
+									"message": "OK"
+							}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid input"
+					}
+				}
+			}
+		},
+		"/questionnaire/answer/{meeting_id}": {
+			"get": {
+				"tags": ["questionnaire"],
+				"description": "Get answers by meeting id",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "meeting_id",
+						"in": "path",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful operation",
+
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+											"answers": {
+													"PHQ-9": [
+															{
+																	"id": 3,
+																	"question_id": 1,
+																	"answer": "1",
+																	"user_id": 169,
+																	"meeting_id": 5,
+																	"question": "Little interest or pleasure in doing things",
+																	"type": "PHQ-9"
+															}
+													],
+													"SRQ-20": [
+															{
+																	"id": 4,
+																	"question_id": 2,
+																	"answer": "0",
+																	"user_id": 169,
+																	"meeting_id": 5,
+																	"question": "Do you often have headaches?",
+																	"type": "SRQ-20"
+															}
+													]
+											}
+									},
+									"message": "OK",
+									"code": 200
+							}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid input"
+					}
+				}
+			}
+		},
 		"/wellness-warrior-certificate/create": {
 			"post": {
 				"tags": ["wellness-warrior-certificate"],
@@ -11136,7 +11281,7 @@
 									"endTime": { "type": "string", "format": "date" },
 									"isContractSigned": { "type": "boolean" },
 									"participant_id": { "type": "integer" },
-									"questioner": { "type": "object" }
+									"answers": { "type": "array" }
 								}
 							},
 							"example": {
@@ -11144,10 +11289,18 @@
 								"endTime": "2022-08-14 22:20:07",
 								"participant_id": 165,
 								"isContractSigned": false,
-								"questioner": [
+								"answers": [
 									{
-										"question": "How are you?",
-										"answer": "I'm doing great!"
+											"question_id": 1,
+											"answer": 0
+									},
+									{
+											"question_id": 2,
+											"answer": 1
+									},
+									{
+											"question_id": 3,
+											"answer": 0
 									}
 								]
 							}

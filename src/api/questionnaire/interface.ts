@@ -26,8 +26,8 @@ export interface IQuestionnaireAnswer {
 export interface IQuestionnaireService {
 	createQuestion(params: IQuestionnaire): Promise<Questionnaire>
 	updateQuestion(params: IQuestionnaire): Promise<Questionnaire>
-	getQuestionnaire(role_id: number, withAnswers: boolean, user_id: number): Promise<Questionnaire[]>
+	getQuestionnaire(): Promise<Questionnaire[]>
 	saveAnswers(params: IQuestionnaireAnswer[], transaction?: Transaction): Promise<void>
 	updateAnswers(params: IQuestionnaireAnswer[]): Promise<void>
-	getAnswers(user_id: number): Promise<QuestionnaireAnswers[]>
+	getAnswers(meeting_id: number): Promise<QuestionnaireAnswers[]>
 }
