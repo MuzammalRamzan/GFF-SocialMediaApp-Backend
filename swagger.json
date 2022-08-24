@@ -11313,16 +11313,17 @@
 							"schema": {
 								"type": "object",
 								"properties": {
-									"startTime": { "type": "string", "format": "date" },
-									"endTime": { "type": "string", "format": "date" },
+									"startTime": { "type": "integer" },
+									"endTime": { "type": "integer" },
 									"isContractSigned": { "type": "boolean" },
 									"participant_id": { "type": "integer" },
-									"answers": { "type": "array" }
+									"answers": { "type": "array" },
+									"message": { "type": "string" }
 								}
 							},
 							"example": {
-								"startTime": "2022-08-14 21:20:07",
-								"endTime": "2022-08-14 22:20:07",
+								"startTime": 1660489668,
+								"endTime": 1661335306,
 								"participant_id": 165,
 								"isContractSigned": false,
 								"answers": [

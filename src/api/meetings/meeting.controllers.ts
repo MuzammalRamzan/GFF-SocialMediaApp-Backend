@@ -25,11 +25,14 @@ export class MeetingController {
 	createMeeting = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
 		try {
 			const user_id = req.user?.id as number
-			const startTime = req.body.startTime as string
-			const endTime = req.body.endTime as string
+			const startTime = req.body.startTime as number
+			const endTime = req.body.endTime as number
 			const participant_id = req.body.participant_id as number
 			const isContractSigned = req.body.isContractSigned as boolean
 			const answers = req.body.answers as IQuestionnaireAnswer[]
+			const message = req.body.message as string
+
+			if (startTime === endTime) throw new GffError('Start time and end time should not be same!', { errorCode: '400' })
 
 			const meeting = await this.meetingServices.createMeeting({
 				user_id,
@@ -37,7 +40,8 @@ export class MeetingController {
 				startTime,
 				endTime,
 				isContractSigned,
-				answers
+				answers,
+				message
 			})
 
 			return res.status(200).json({ data: { meeting }, code: 200, message: 'OK' })

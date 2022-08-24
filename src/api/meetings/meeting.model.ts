@@ -1,3 +1,4 @@
+import moment from 'moment'
 import { DataTypes, Model } from 'sequelize'
 import { DATABASE_TABLES } from '../../constants/db_tables'
 import { sequelize } from '../../database'
@@ -15,8 +16,18 @@ Meeting.init(
 		},
 		name: { type: DataTypes.STRING, allowNull: false },
 		roomId: { type: DataTypes.INTEGER },
-		startTime: { type: DataTypes.DATE, allowNull: false },
-		endTime: { type: DataTypes.DATE },
+		startTime: {
+			type: DataTypes.DATE, allowNull: false,
+			get() {
+				return moment(this.getDataValue('startTime')).unix()
+			}
+		},
+		endTime: {
+			type: DataTypes.DATE,
+			get() {
+				return moment(this.getDataValue('endTime')).unix()
+			}
+		},
 		reservationTime: { type: DataTypes.DATE, allowNull: false, defaultValue: sequelize.fn('NOW') },
 		canceledTime: { type: DataTypes.DATE },
 		description: { type: DataTypes.STRING },

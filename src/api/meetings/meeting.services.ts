@@ -24,10 +24,11 @@ export class MeetingServices implements IMeetingServices {
 				{
 					createdBy: params.user_id,
 					status: MeetingRequestStatus.SEND,
-					startTime: moment(params.startTime).utc(),
+					startTime: moment(params.startTime * 1000).utc(),
 					name: `Meeting - ${params.user_id} - ${params.participant_id}`,
-					endTime: moment(params.endTime).utc(),
-					isContractSigned: params.isContractSigned
+					endTime: moment(params.endTime * 1000).utc(),
+					isContractSigned: params.isContractSigned,
+					description: params.message
 				},
 				{ transaction: t }
 			)

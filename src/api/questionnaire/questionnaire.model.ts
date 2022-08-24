@@ -23,6 +23,10 @@ Questionnaire.init(
 		type: {
 			type: DataTypes.ENUM(...Object.values(QuestionType)),
 			allowNull: false
+		},
+		rank: {
+			type: DataTypes.INTEGER,
+			allowNull: true,
 		}
 	},
 	{ sequelize: sequelize, tableName: 'questionnaire' }

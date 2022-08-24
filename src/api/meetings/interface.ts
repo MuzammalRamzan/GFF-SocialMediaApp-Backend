@@ -8,12 +8,13 @@ export enum MeetingRequestStatus {
 }
 
 export type createMeetingParams = {
-	startTime: string
-	endTime: string
+	startTime: number
+	endTime: number
 	user_id: number
 	participant_id: number
 	isContractSigned: boolean
 	answers?: IQuestionnaireAnswer[]
+	message?: string
 }
 
 export interface IMeetingServices {
