@@ -2,10 +2,10 @@ require('dotenv').config()
 
 module.exports = {
   development: {
-    "username": "admin",
-    "password": "R4OUuw65GMgTMUoRwpvn",
-    "database": "gff_dev",
-    "host": "gff-dev1.cnh9v2u3ksbp.us-east-1.rds.amazonaws.com",
+    "username": process.env.RDS_USERNAME,
+    "password": process.env.RDS_PASSWORD,
+    "database": process.env.RDS_NAME,
+    "host": process.env.RDS_HOSTNAME,
     "dialect": "mysql"
   },
   "test": {
