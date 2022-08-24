@@ -10,12 +10,12 @@ export const signUpSchema: SchemaMap = {
     first_name: Joi.string()
       .min(3)
       .max(100)
-      .required(),
+      .optional(),
 
     last_name: Joi.string()
       .min(3)
       .max(100)
-      .required(),
+      .optional(),
 
     email: Joi.string()
       .pattern(new RegExp('^([a-zA-Z0-9_.-]+)@([a-zA-Z0-9_.-]+)\\.([a-zA-Z]{2,5})$'))
