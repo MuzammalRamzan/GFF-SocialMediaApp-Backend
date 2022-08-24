@@ -11,6 +11,7 @@ export type LoanLedgerProfessionalInformationType = {
 	education: string
 	net_monthly_salary: number
 	work_experience: string
+	document: Express.Multer.File
 }
 
 export interface CreateLoanLedgerProfessionalInformationRequest extends Request {

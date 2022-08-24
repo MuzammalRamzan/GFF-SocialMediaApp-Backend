@@ -3702,6 +3702,23 @@
 				],
 				"requestBody": {
 					"content": {
+            "multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"employment_type": { "type": "string" },
+									"company_name": { "type": "string" },
+									"profession": { "type": "string" },
+									"education": { "type": "string" },
+									"net_monthly_salary": { "type": "number" },
+									"work_experience": { "type": "string" },
+                  "document": {
+										"type": "string",
+										"format": "binary"
+									}
+								}
+							}
+						},
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/update_id_body_7"
@@ -3732,7 +3749,8 @@
 											"profession": "Test profession2",
 											"education": "Test education2",
 											"net_monthly_salary": 101.83,
-											"work_experience": "Test work_experience2"
+											"work_experience": "Test work_experience2",
+                      "document_url": "https://girls-first-finance.s3.amazonaws.com//uploads/loan-ledger/documents/699/1661322566036_0ef72e12-28c6-4932-b29b-20ec1c103498.png"
 										}
 									},
 									"code": 200,
@@ -5087,6 +5105,23 @@
 				],
 				"requestBody": {
 					"content": {
+            "multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"employment_type": { "type": "string" },
+									"company_name": { "type": "string" },
+									"profession": { "type": "string" },
+									"education": { "type": "string" },
+									"net_monthly_salary": { "type": "number" },
+									"work_experience": { "type": "string" },
+                  "document": {
+										"type": "string",
+										"format": "binary"
+									}
+								}
+							}
+						},
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/loanLedgerProfessionalInformation_add_body"
@@ -5116,7 +5151,8 @@
 												"profession": "Test profession",
 												"education": "Test education",
 												"net_monthly_salary": 100.73,
-												"work_experience": "Test work_experience"
+												"work_experience": "Test work_experience",
+                        "document_url": "https://girls-first-finance.s3.amazonaws.com//uploads/loan-ledger/documents/699/1661322566036_0ef72e12-28c6-4932-b29b-20ec1c103498.png"
 											}
 										},
 										"code": 200,

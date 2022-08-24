@@ -1,4 +1,5 @@
 import express, { Application } from 'express'
+import multer from 'multer'
 import { authMiddleware } from '../helper/authMiddleware'
 import { LoanLedgerProfessionalInformationController } from './professionalInformationController'
 
@@ -22,11 +23,13 @@ loanLedgerProfessionalInformationRouter.get(
 
 loanLedgerProfessionalInformationRouter.post(
 	'/add', authMiddleware,
+  multer().single('document'),
 	loanLedgerProfessionalInformationController.createLoanLedgerProfessionalInformation as Application
 )
 
 loanLedgerProfessionalInformationRouter.put(
 	'/update/:id', authMiddleware,
+  multer().single('document'),
 	loanLedgerProfessionalInformationController.updateLoanLedgerProfessionalInformation as Application
 )
 

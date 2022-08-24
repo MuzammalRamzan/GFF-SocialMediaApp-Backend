@@ -19,9 +19,9 @@ export class LoanLedgerProfessionalInformationController {
 	getAllLoanLedgerProfessionalInformations = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const professionalInformation = await this.loanLedgerProfessionalInformationService.list()
-			if(!professionalInformation.length) {
+			if (!professionalInformation.length) {
 				throw new Error('No data found')
-			} 
+			}
 			return res.status(200).send({
 				data: {
 					professionalInformation
@@ -34,12 +34,10 @@ export class LoanLedgerProfessionalInformationController {
 			if (error.message === 'Unauthorized') {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
-			}
-			else if  (error.message === 'No data found') {
+			} else if (error.message === 'No data found') {
 				error.errorCode = '404'
 				error.httpStatusCode = 404
-			}
-			else {
+			} else {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
@@ -57,9 +55,9 @@ export class LoanLedgerProfessionalInformationController {
 
 		try {
 			const professionalInformation = await this.loanLedgerProfessionalInformationService.fetchById(id, userId)
-			if(!professionalInformation) {
+			if (!professionalInformation) {
 				throw new Error('No data found')
-			} 
+			}
 			return res.status(200).send({
 				data: {
 					professionalInformation
@@ -72,12 +70,10 @@ export class LoanLedgerProfessionalInformationController {
 			if (error.message === 'Unauthorized') {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
-			}
-			else if  (error.message === 'No data found') {
+			} else if (error.message === 'No data found') {
 				error.errorCode = '404'
 				error.httpStatusCode = 404
-			}
-			else {
+			} else {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
@@ -94,9 +90,9 @@ export class LoanLedgerProfessionalInformationController {
 
 		try {
 			const professionalInformation = await this.loanLedgerProfessionalInformationService.fetchByUserId(user_id)
-			if(!professionalInformation.length) {
+			if (!professionalInformation.length) {
 				throw new Error('No data found')
-			} 
+			}
 			return res.status(200).send({
 				data: {
 					professionalInformation
@@ -109,12 +105,10 @@ export class LoanLedgerProfessionalInformationController {
 			if (error.message === 'Unauthorized') {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
-			}
-			else if  (error.message === 'No data found') {
+			} else if (error.message === 'No data found') {
 				error.errorCode = '404'
 				error.httpStatusCode = 404
-			}
-			else {
+			} else {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
@@ -128,7 +122,12 @@ export class LoanLedgerProfessionalInformationController {
 		next: NextFunction
 	) => {
 		const user_id = +req.user.id
-		const params = { ...req.body, user_id }
+
+		if (!req.file) {
+			throw new Error('Please upload a document')
+		}
+
+		const params = { ...req.body, user_id, document: req.file }
 
 		try {
 			const professionalInformation = await this.loanLedgerProfessionalInformationService.add(params)
@@ -144,12 +143,10 @@ export class LoanLedgerProfessionalInformationController {
 			if (error.message === 'Professional information already exists') {
 				error.errorCode = '409'
 				error.httpStatusCode = 409
-			}
-			else if (error.message === 'Unauthorized') {
+			} else if (error.message === 'Unauthorized') {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
-			}
-			else {
+			} else {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
@@ -164,7 +161,11 @@ export class LoanLedgerProfessionalInformationController {
 	) => {
 		const id = +req.params.id
 		const user_id = +req.user.id
-		const params = { ...req.body, user_id }
+		let params = { ...req.body, user_id }
+
+		if (req.file) {
+			params = { ...params, document: req.file }
+		}
 
 		try {
 			const professionalInformation = await this.loanLedgerProfessionalInformationService.update(id, params)
@@ -180,8 +181,7 @@ export class LoanLedgerProfessionalInformationController {
 			if (error.message === 'Unauthorized') {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
-			}
-			else {
+			} else {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}
@@ -211,8 +211,7 @@ export class LoanLedgerProfessionalInformationController {
 			if (error.message === 'Unauthorized') {
 				error.errorCode = '401'
 				error.httpStatusCode = 401
-			}
-			else {
+			} else {
 				error.errorCode = '500'
 				error.httpStatusCode = 500
 			}

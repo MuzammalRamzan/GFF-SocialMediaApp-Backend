@@ -38,6 +38,10 @@ LoanLedgerProfessionalInformation.init(
 		work_experience: {
 			type: DataTypes.STRING,
 			allowNull: false
+		},
+		document_url: {
+			type: DataTypes.STRING,
+			allowNull: false
 		}
 	},
 	{
