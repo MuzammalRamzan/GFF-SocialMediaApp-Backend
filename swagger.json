@@ -108,9 +108,204 @@
 		{
 			"name": "questionnaire",
 			"description": "Questionnaire Routes"
+		},
+    {
+			"name": "apply-to-loan",
+			"description": "Apply to loan routes"
 		}
 	],
 	"paths": {
+    "/apply-to-loan/check-eligibility": {
+			"get": {
+				"tags": ["apply-to-loan"],
+				"description": "check eligibility for apply to loan",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful operation",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+                    "checkEligibleForLoan": {
+                        "phone_confirmed": true,
+                        "yoti_verification_passed": false,
+                        "is_premium": false,
+                        "has_crew": true,
+                        "is_crew_valid": true,
+                        "has_bb": true,
+                        "is_bb_valid": false,
+                        "is_country_valid": true
+                    }
+                },
+									"code": 200,
+									"message": "OK"
+							}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid input"
+					}
+				}
+			}
+		},
+    "/apply-to-loan": {
+			"post": {
+				"tags": ["apply-to-loan"],
+				"description": "apply to loan",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						},
+						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMjI1NjAsImlhdCI6MTY1NTExNTM2MC4yMzIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiJDJiJDEwJFE5QnpUdC5jRk1zdUZsaW9xL0JNWXVUZDVHUWJDcEpRVS45b0FQYWcuSmhDbmd1M1o3aGdxIn0.1DDDYGrD_oA1pScmkhbkAZO4zKXSKVqgvBXyVtlY1eg"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/apply-for-loan"
+							},
+							"examples": {
+								"0": {
+									"value": {
+										"amount": 1000000,
+										"years": 10
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+										"warriorCertificate": {
+											"id": 5,
+											"wellness_warrior_id": 1,
+											"authority": "authority",
+											"title": "title",
+											"year": 2000,
+											"pdfUrl": "https://girls-first-finance.s3.amazonaws.com//uploads/wellness_warrior/certificates/1/pdf_files/1661168832658_AgreementData-275000.pdf",
+											"wellness_warrior": {
+												"id": 1,
+												"user_id": 37,
+												"warrior_id": 169,
+												"status": "approve",
+												"request_type": "warrior"
+											}
+										}
+									},
+									"message": "Warrior certificate created successfully",
+									"code": 200
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"message": "Unauthorized",
+									"status": 401
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+    "/apply-to-loan/get-loans": {
+			"get": {
+				"tags": ["apply-to-loan"],
+				"description": "get applied loans",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful operation",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"data": {
+                    "loans": [
+                      {
+                          "id": 1,
+                          "user_id": 699,
+                          "amount": 2000,
+                          "years": 10
+                      },
+                      {
+                          "id": 2,
+                          "user_id": 699,
+                          "amount": 2000,
+                          "years": 10
+                      }
+                  ]
+                },
+									"code": 200,
+									"message": "OK"
+							}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid input"
+					}
+				}
+			}
+		},
 		"/questionnaire": {
 			"get": {
 				"tags": ["questionnaire"],
@@ -12426,7 +12621,27 @@
 						}
 					}
 				}
-			}
+			},
+      "apply-for-loan": {
+				"type": "object",
+				"properties": {
+					"id": { "type": "integer" },
+					"amount": { "type": "integer" },
+					"years": { "type": "integer" },
+					"user_id": { "type": "integer" },
+					"user": {
+						"type": "object",
+						"properties": {
+							"id": { "type": "integer" },
+							"full_name": { "type": "string" },
+							"userInformation": {
+								"type": "object",
+								"$ref": "#/components/schemas/UserInformation"
+							}
+						}
+					}
+				}
+      }
 		}
 	}
 }

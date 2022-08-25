@@ -48,6 +48,7 @@ import { worldRouter } from './api/world/worldRouter'
 import { questionnaireRouter } from './api/questionnaire/questionnaire.routes'
 
 import { warriorCertificateRouter } from './api/wellness-warrior-certificate/warriorInformationRouter'
+import { applyForLoanRouter } from './api/apply-for-loan/applyForLoanRouter'
 
 const storage = multer.memoryStorage()
 
@@ -118,6 +119,7 @@ export const upload = multer({
 	app.use('/crew-member', crewMemberRouter)
 	app.use('/world', worldRouter)
 	app.use('/questionnaire', questionnaireRouter)
+	app.use('/apply-to-loan', applyForLoanRouter)
 
 	app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 		const error = err as GffError

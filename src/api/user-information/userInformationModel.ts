@@ -38,6 +38,10 @@ UserInformation.init({
         type: DataTypes.STRING,
         allowNull: true
     },
+    phone_number_verified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+  },
     country: {
         type: DataTypes.STRING,
         allowNull: true
