@@ -18,12 +18,12 @@ export class WarriorInformationService implements IWarriorInformationService {
 		})
 
 		const payload = {
-			specialty: params.specialty.join(','),
-			certification: params.certification.join(','),
-			therapy_type: params.therapy_type.join(','),
-			conversation_mode: params.conversation_mode.join(','),
+			specialty: (params.specialty || []).join(','),
+			certification: (params.certification || []).join(','),
+			therapy_type: (params.therapy_type || []).join(','),
+			conversation_mode: (params.conversation_mode || []).join(','),
 			hourly_rate: params.hourly_rate,
-			language: params.language.join(','),
+			language: (params.language || []).join(','),
 			status: Status.PENDING,
 		}
 
