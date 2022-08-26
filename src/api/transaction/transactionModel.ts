@@ -5,7 +5,7 @@ import { TransactionAccount } from '../transaction-account/transactionAccModel'
 import { TransactionCategory } from '../transaction-category/transactionCategoryModel'
 import { RecurringStatus, transactionType, Frequency } from './interface'
 
-export class Transaction extends Model { }
+export class Transaction extends Model {}
 
 Transaction.init(
 	{
@@ -55,14 +55,10 @@ Transaction.init(
 		},
 		paid_at: {
 			type: DataTypes.DATE,
-			allowNull: true,
-			defaultValue: sequelize.fn('now')
+			allowNull: true
 		},
 		transaction_type: {
-			type: DataTypes.ENUM(transactionType.INCOME, transactionType.EXPENSE),
-			get() {
-				return this.getDataValue('amount') > 0 ? transactionType.INCOME : transactionType.EXPENSE
-			}
+			type: DataTypes.ENUM(transactionType.INCOME, transactionType.EXPENSE)
 		}
 	},
 	{
@@ -74,7 +70,7 @@ Transaction.init(
 const beforeCreateHook = (transaction: Transaction) => {
 	transaction.setDataValue(
 		'transaction_type',
-		transaction.getDataValue('amount') > 0 ? transactionType.EXPENSE : transactionType.INCOME
+		transaction.getDataValue('amount') > 0 ? transactionType.INCOME : transactionType.EXPENSE
 	)
 }
 

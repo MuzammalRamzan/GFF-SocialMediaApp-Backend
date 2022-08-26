@@ -4,7 +4,14 @@ import { TransactionCategory } from '../transaction-category/transactionCategory
 import moment from 'moment'
 import sequelize, { Op } from 'sequelize'
 import { GffError } from '../helper/errorHandler'
-import { Frequency, ITransactionService, ListTransactionsReqParams, Status, transactionType, TransactionType } from './interface'
+import {
+	Frequency,
+	ITransactionService,
+	ListTransactionsReqParams,
+	Status,
+	transactionType,
+	TransactionType
+} from './interface'
 import { Transaction } from './transactionModel'
 import { Currency } from '../currency/currencyModel'
 import { ObjectParser } from '../../helper/ObjectParser'
@@ -122,9 +129,8 @@ export class TransactionService implements ITransactionService {
 			status: params.status,
 			created_at: created_at,
 			due_date: params.due_date,
-			paid_at: params.paid_at,
-			recurring_status: params.frequency !== Frequency.Never ? Status.Active : Status.Inactive,
-			transaction_type: params.amount > 0 ? transactionType.INCOME : transactionType.EXPENSE
+			paid_at: params.paid_at || null,
+			recurring_status: params.frequency !== Frequency.Never ? Status.Active : Status.Inactive
 		})
 		transaction = (await Transaction.findByPk(transaction.getDataValue('id'), {
 			include: TransactionService.transactionIncludeables

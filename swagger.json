@@ -109,19 +109,17 @@
 			"name": "questionnaire",
 			"description": "Questionnaire Routes"
 		},
-    {
+		{
 			"name": "apply-to-loan",
 			"description": "Apply to loan routes"
 		}
 	],
 	"paths": {
-    "/apply-to-loan/check-eligibility": {
+		"/apply-to-loan/check-eligibility": {
 			"get": {
 				"tags": ["apply-to-loan"],
 				"description": "check eligibility for apply to loan",
-				"produces": [
-					"application/json"
-				],
+				"produces": ["application/json"],
 				"parameters": [
 					{
 						"name": "auth-token",
@@ -144,20 +142,20 @@
 								},
 								"example": {
 									"data": {
-                    "checkEligibleForLoan": {
-                        "phone_confirmed": true,
-                        "yoti_verification_passed": false,
-                        "is_premium": false,
-                        "has_crew": true,
-                        "is_crew_valid": true,
-                        "has_bb": true,
-                        "is_bb_valid": false,
-                        "is_country_valid": true
-                    }
-                },
+										"checkEligibleForLoan": {
+											"phone_confirmed": true,
+											"yoti_verification_passed": false,
+											"is_premium": false,
+											"has_crew": true,
+											"is_crew_valid": true,
+											"has_bb": true,
+											"is_bb_valid": false,
+											"is_country_valid": true
+										}
+									},
 									"code": 200,
 									"message": "OK"
-							}
+								}
 							}
 						}
 					},
@@ -167,7 +165,7 @@
 				}
 			}
 		},
-    "/apply-to-loan": {
+		"/apply-to-loan": {
 			"post": {
 				"tags": ["apply-to-loan"],
 				"description": "apply to loan",
@@ -250,13 +248,11 @@
 				}
 			}
 		},
-    "/apply-to-loan/get-loans": {
+		"/apply-to-loan/get-loans": {
 			"get": {
 				"tags": ["apply-to-loan"],
 				"description": "get applied loans",
-				"produces": [
-					"application/json"
-				],
+				"produces": ["application/json"],
 				"parameters": [
 					{
 						"name": "auth-token",
@@ -279,24 +275,24 @@
 								},
 								"example": {
 									"data": {
-                    "loans": [
-                      {
-                          "id": 1,
-                          "user_id": 699,
-                          "amount": 2000,
-                          "years": 10
-                      },
-                      {
-                          "id": 2,
-                          "user_id": 699,
-                          "amount": 2000,
-                          "years": 10
-                      }
-                  ]
-                },
+										"loans": [
+											{
+												"id": 1,
+												"user_id": 699,
+												"amount": 2000,
+												"years": 10
+											},
+											{
+												"id": 2,
+												"user_id": 699,
+												"amount": 2000,
+												"years": 10
+											}
+										]
+									},
 									"code": 200,
 									"message": "OK"
-							}
+								}
 							}
 						}
 					},
@@ -310,9 +306,7 @@
 			"get": {
 				"tags": ["questionnaire"],
 				"description": "Get all questionnaire",
-				"produces": [
-					"application/json"
-				],
+				"produces": ["application/json"],
 				"parameters": [
 					{
 						"name": "auth-token",
@@ -336,31 +330,31 @@
 								},
 								"example": {
 									"data": {
-											"questionnaire": {
-													"PHQ-9": [
-															{
-																	"id": 1,
-																	"question": "Little interest or pleasure in doing things",
-																	"type": "PHQ-9"
-															}
-													],
-													"SRQ-20": [
-															{
-																	"id": 2,
-																	"question": "Do you often have headaches?",
-																	"type": "SRQ-20"
-															},
-															{
-																	"id": 3,
-																	"question": "Is your appetite poor?",
-																	"type": "SRQ-20"
-															}
-													]
-											}
+										"questionnaire": {
+											"PHQ-9": [
+												{
+													"id": 1,
+													"question": "Little interest or pleasure in doing things",
+													"type": "PHQ-9"
+												}
+											],
+											"SRQ-20": [
+												{
+													"id": 2,
+													"question": "Do you often have headaches?",
+													"type": "SRQ-20"
+												},
+												{
+													"id": 3,
+													"question": "Is your appetite poor?",
+													"type": "SRQ-20"
+												}
+											]
+										}
 									},
 									"code": 200,
 									"message": "OK"
-							}
+								}
 							}
 						}
 					},
@@ -374,9 +368,7 @@
 			"get": {
 				"tags": ["questionnaire"],
 				"description": "Get answers by meeting id",
-				"produces": [
-					"application/json"
-				],
+				"produces": ["application/json"],
 				"parameters": [
 					{
 						"name": "auth-token",
@@ -410,34 +402,34 @@
 								},
 								"example": {
 									"data": {
-											"answers": {
-													"PHQ-9": [
-															{
-																	"id": 3,
-																	"question_id": 1,
-																	"answer": "1",
-																	"user_id": 169,
-																	"meeting_id": 5,
-																	"question": "Little interest or pleasure in doing things",
-																	"type": "PHQ-9"
-															}
-													],
-													"SRQ-20": [
-															{
-																	"id": 4,
-																	"question_id": 2,
-																	"answer": "0",
-																	"user_id": 169,
-																	"meeting_id": 5,
-																	"question": "Do you often have headaches?",
-																	"type": "SRQ-20"
-															}
-													]
-											}
+										"answers": {
+											"PHQ-9": [
+												{
+													"id": 3,
+													"question_id": 1,
+													"answer": "1",
+													"user_id": 169,
+													"meeting_id": 5,
+													"question": "Little interest or pleasure in doing things",
+													"type": "PHQ-9"
+												}
+											],
+											"SRQ-20": [
+												{
+													"id": 4,
+													"question_id": 2,
+													"answer": "0",
+													"user_id": 169,
+													"meeting_id": 5,
+													"question": "Do you often have headaches?",
+													"type": "SRQ-20"
+												}
+											]
+										}
 									},
 									"message": "OK",
 									"code": 200
-							}
+								}
 							}
 						}
 					},
@@ -889,6 +881,20 @@
 						"description": "Auth Token",
 						"required": true,
 						"type": "string"
+					},
+					{
+						"name": "start",
+						"in": "query",
+						"description": "Start date-time in UNIX",
+						"type": "integer",
+						"example": "1660933800"
+					},
+					{
+						"name": "end",
+						"in": "query",
+						"description": "end date-time in UNIX",
+						"type": "integer",
+						"example": "1661106600"
 					}
 				],
 				"responses": {
@@ -3897,7 +3903,7 @@
 				],
 				"requestBody": {
 					"content": {
-            "multipart/form-data": {
+						"multipart/form-data": {
 							"schema": {
 								"type": "object",
 								"properties": {
@@ -3907,7 +3913,7 @@
 									"education": { "type": "string" },
 									"net_monthly_salary": { "type": "number" },
 									"work_experience": { "type": "string" },
-                  "document": {
+									"document": {
 										"type": "string",
 										"format": "binary"
 									}
@@ -3945,7 +3951,7 @@
 											"education": "Test education2",
 											"net_monthly_salary": 101.83,
 											"work_experience": "Test work_experience2",
-                      "document_url": "https://girls-first-finance.s3.amazonaws.com//uploads/loan-ledger/documents/699/1661322566036_0ef72e12-28c6-4932-b29b-20ec1c103498.png"
+											"document_url": "https://girls-first-finance.s3.amazonaws.com//uploads/loan-ledger/documents/699/1661322566036_0ef72e12-28c6-4932-b29b-20ec1c103498.png"
 										}
 									},
 									"code": 200,
@@ -5300,7 +5306,7 @@
 				],
 				"requestBody": {
 					"content": {
-            "multipart/form-data": {
+						"multipart/form-data": {
 							"schema": {
 								"type": "object",
 								"properties": {
@@ -5310,7 +5316,7 @@
 									"education": { "type": "string" },
 									"net_monthly_salary": { "type": "number" },
 									"work_experience": { "type": "string" },
-                  "document": {
+									"document": {
 										"type": "string",
 										"format": "binary"
 									}
@@ -5347,7 +5353,7 @@
 												"education": "Test education",
 												"net_monthly_salary": 100.73,
 												"work_experience": "Test work_experience",
-                        "document_url": "https://girls-first-finance.s3.amazonaws.com//uploads/loan-ledger/documents/699/1661322566036_0ef72e12-28c6-4932-b29b-20ec1c103498.png"
+												"document_url": "https://girls-first-finance.s3.amazonaws.com//uploads/loan-ledger/documents/699/1661322566036_0ef72e12-28c6-4932-b29b-20ec1c103498.png"
 											}
 										},
 										"code": 200,
@@ -11549,16 +11555,16 @@
 								"isContractSigned": false,
 								"answers": [
 									{
-											"question_id": 1,
-											"answer": 0
+										"question_id": 1,
+										"answer": 0
 									},
 									{
-											"question_id": 2,
-											"answer": 1
+										"question_id": 2,
+										"answer": 1
 									},
 									{
-											"question_id": 3,
-											"answer": 0
+										"question_id": 3,
+										"answer": 0
 									}
 								]
 							}
@@ -12716,7 +12722,7 @@
 					}
 				}
 			},
-      "apply-for-loan": {
+			"apply-for-loan": {
 				"type": "object",
 				"properties": {
 					"id": { "type": "integer" },
@@ -12735,7 +12741,7 @@
 						}
 					}
 				}
-      }
+			}
 		}
 	}
 }

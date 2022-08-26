@@ -1,6 +1,7 @@
 import { Response, NextFunction } from 'express'
 import { IAuthenticatedRequest } from '../helper/authMiddleware'
 import { DashboardServices } from './dashboard.services'
+import { GetChartReqQueryType } from './interface'
 
 export class DashboardController {
 	private readonly dashboardServices: DashboardServices
@@ -13,8 +14,9 @@ export class DashboardController {
 		try {
 			const userId = req.user?.id as number
 			const default_currency_id = req.user?.default_currency_id as number
+			const params = req.query as GetChartReqQueryType
 
-			const chart = await this.dashboardServices.getTransactionStatistics(userId, default_currency_id)
+			const chart = await this.dashboardServices.getTransactionStatistics(userId, default_currency_id, params)
 			return res.status(200).json({ data: { chart }, code: 200, message: 'OK' })
 		} catch (error) {
 			next(error)

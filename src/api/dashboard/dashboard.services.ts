@@ -1,3 +1,4 @@
+import moment from 'moment'
 import { Op } from 'sequelize'
 import { sequelize } from '../../database'
 import { Currency } from '../currency/currencyModel'
@@ -8,17 +9,40 @@ import { Transaction } from '../transaction/transactionModel'
 import { TransactionService } from '../transaction/transactionService'
 import {
 	DashboardTransactionInformation,
+	GetChartReqQueryType,
 	GroupedTransactionType,
 	IDashboardServices,
 	TransactionStatistics
 } from './interface'
 
 export class DashboardServices implements IDashboardServices {
-	async getTransactionStatistics(user_id: number, currency_id: number): Promise<TransactionStatistics> {
+	async getTransactionStatistics(
+		user_id: number,
+		currency_id: number,
+		params?: GetChartReqQueryType
+	): Promise<TransactionStatistics> {
 		const currency = await Currency.findByPk(currency_id)
 
 		const transactions = await Transaction.findAll({
-			where: { user_id },
+			where: {
+				[Op.and]: [
+					{ user_id },
+					...(params?.start
+						? [
+								{
+									created_at: { [Op.gte]: moment.unix(params.start).utc() }
+								}
+						  ]
+						: []),
+					...(params?.end
+						? [
+								{
+									created_at: { [Op.lte]: moment.unix(params.end).utc() }
+								}
+						  ]
+						: [])
+				]
+			},
 			include: TransactionService.transactionIncludeables,
 			attributes: [[sequelize.fn('sum', sequelize.col('amount')), 'total_amount'], 'transaction_type'],
 			group: ['transaction_type', 'category_id']

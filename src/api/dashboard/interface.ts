@@ -3,6 +3,11 @@ import { TransactionCategoryType } from '../transaction-category/interface'
 import { transactionType } from '../transaction/interface'
 import { Transaction } from '../transaction/transactionModel'
 
+export type GetChartReqQueryType = {
+	start?: number
+	end?: number
+}
+
 export type GroupedTransactionType = {
 	total_amount: string
 	transaction_type: transactionType
@@ -20,6 +25,10 @@ export type DashboardTransactionInformation = {
 }
 
 export interface IDashboardServices {
-	getTransactionStatistics(user_id: number, currency_id: number): Promise<TransactionStatistics>
+	getTransactionStatistics(
+		user_id: number,
+		currency_id: number,
+		params?: GetChartReqQueryType
+	): Promise<TransactionStatistics>
 	getTransactionInformation(user_id: number): Promise<DashboardTransactionInformation>
 }
