@@ -10,6 +10,12 @@ export const createMeetingValidation = [
 	check('message').isString().notEmpty().withMessage('Message should be of type string.')
 ]
 
-export const acceptOrRejectMeetingRequestValidation = [
-	check('meeting_id').isInt().notEmpty().withMessage('Meeting id should be an integer')
+export const acceptMeetingRequestValidation = [
+	check('meeting_id').isInt().notEmpty().withMessage('Meeting id should be an integer'),
+	check('isContractSigned').isBoolean().notEmpty().withMessage('isContractSigned should be of type boolean.'),
+]
+
+export const rejectMeetingRequestValidation = [
+	check('meeting_id').isInt().notEmpty().withMessage('Meeting id should be an integer'),
+	check('message').isString().notEmpty().withMessage('Message should be of type string.')
 ]

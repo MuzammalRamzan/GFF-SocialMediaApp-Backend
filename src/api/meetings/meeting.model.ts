@@ -28,13 +28,24 @@ Meeting.init(
 				return moment(this.getDataValue('endTime')).unix()
 			}
 		},
-		reservationTime: { type: DataTypes.DATE, allowNull: false, defaultValue: sequelize.fn('NOW') },
-		canceledTime: { type: DataTypes.DATE },
+		reservationTime: {
+			type: DataTypes.DATE, allowNull: false, defaultValue: sequelize.fn('NOW'),
+			get() {
+				return moment(this.getDataValue('reservationTime')).unix()
+			}
+		},
+		canceledTime: {
+			type: DataTypes.DATE,
+			get() {
+				return moment(this.getDataValue('canceledTime')).unix()
+			}
+		},
 		description: { type: DataTypes.STRING },
 		canceledReason: { type: DataTypes.STRING },
 		status: { type: DataTypes.ENUM(...Object.values(MeetingRequestStatus)) },
 		createdBy: { type: DataTypes.INTEGER, allowNull: false },
-		isContractSigned: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false }
+		isContractSignedByWarrior: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
+		isContractSignedByClient: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
 	},
 	{ sequelize, tableName: DATABASE_TABLES.MEETING }
 )

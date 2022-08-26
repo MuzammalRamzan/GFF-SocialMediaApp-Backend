@@ -14,6 +14,16 @@ export class QuestionnaireService implements IQuestionnaireService {
 		}, {});
 	}
 
+	static filterAnswerObject(answer: any): any {
+		return {
+			question_id: answer.question_id,
+			answer: answer.answer,
+			user_id: answer.user_id || null,
+			meeting_id: answer.meeting_id || null,
+			question: answer?.question?.question || null,
+		}
+	}
+
 	async createQuestion(params: IQuestionnaire): Promise<Questionnaire> {
 		return await Questionnaire.create({ ...params })
 	}

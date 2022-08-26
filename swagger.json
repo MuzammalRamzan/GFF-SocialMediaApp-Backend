@@ -11469,20 +11469,46 @@
 							"application/json; charset=utf-8": {
 								"schema": {
 									"type": "object",
-									"properties": {
+									"example": {
 										"data": {
-											"type": "object",
-											"properties": {
-												"meetings": {
-													"type": "array",
-													"items": {
-														"$ref": "#/components/schemas/MeetingResponse"
-													}
+											"meetings": [
+												{
+													"startTime": 1660489668,
+													"endTime": 1660493268,
+													"reservationTime": 1661326920,
+													"canceledTime": null,
+													"id": 5,
+													"name": "Meeting - 169 - 165",
+													"roomId": null,
+													"description": null,
+													"canceledReason": null,
+													"status": "send",
+													"createdBy": 169,
+													"isContractSignedByWarrior": true,
+													"isContractSignedByClient": false,
+													"participants": [
+														{
+															"id": 9,
+															"user_id": 169,
+															"full_name": null,
+															"profile_url": "params.profile_url",
+															"bio": "Update it bro!!"
+														}
+													],
+													"answers": [
+														{
+															"question_id": 1,
+															"answer": "1",
+															"user_id": 169,
+															"meeting_id": 5,
+															"question": "Little interest or pleasure in doing things"
+														}
+													]
 												}
-											}
+											]
 										},
-										"message": { "type": "string" },
-										"code": { "type": "integer" }
+										"code": 200,
+    								"message": "OK"
 									}
 								}
 							}
@@ -11646,6 +11672,74 @@
 										"data": {},
 										"message": { "type": "string", "example": "Meeting request has been rejected!" },
 										"code": { "type": "integer" }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/meeting/past": {
+			"get": {
+				"tags": ["meeting"],
+				"description": "Get all meetings user is part of.",
+				"parameters": [
+					{
+						"name": "auth-token",
+						"in": "header",
+						"description": "Auth Token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"example": {
+										"data": {
+											"meetings": [
+												{
+													"startTime": 1660489668,
+													"endTime": 1660493268,
+													"reservationTime": 1661326920,
+													"canceledTime": null,
+													"id": 5,
+													"name": "Meeting - 169 - 165",
+													"roomId": null,
+													"description": null,
+													"canceledReason": null,
+													"status": "send",
+													"createdBy": 169,
+													"isContractSignedByWarrior": true,
+													"isContractSignedByClient": false,
+													"participants": [
+														{
+															"id": 9,
+															"user_id": 169,
+															"full_name": null,
+															"profile_url": "params.profile_url",
+															"bio": "Update it bro!!"
+														}
+													],
+													"answers": [
+														{
+															"question_id": 1,
+															"answer": "1",
+															"user_id": 169,
+															"meeting_id": 5,
+															"question": "Little interest or pleasure in doing things"
+														}
+													]
+												}
+											]
+										},
+										"code": 200,
+    								"message": "OK"
 									}
 								}
 							}
@@ -12593,10 +12687,10 @@
 					"id": { "type": "integer" },
 					"name": { "type": "string" },
 					"roomId": { "type": "integer" },
-					"startTime": { "type": "string", "format": "date" },
-					"endTime": { "type": "string", "format": "date" },
-					"reservationTime": { "type": "string", "format": "date" },
-					"canceledTime": { "type": "string", "format": "date" },
+					"startTime": { "type": "integer" },
+					"endTime": { "type": "integer" },
+					"reservationTime": { "type": "integer" },
+					"canceledTime": { "type": "integer" },
 					"description": { "type": "string" },
 					"canceledReason": { "type": "string" },
 					"status": { "type": "string" },

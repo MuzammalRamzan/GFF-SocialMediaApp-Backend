@@ -19,7 +19,8 @@ export type createMeetingParams = {
 
 export interface IMeetingServices {
 	createMeeting(params: createMeetingParams): Promise<Meeting>
-	acceptMeetingRequest(user_id: number, meeting_id: number): Promise<void>
-	rejectMeetingRequest(user_id: number, meeting_id: number): Promise<void>
+	acceptMeetingRequest(user_id: number, meeting_id: number, isContractSigned: boolean): Promise<void>
+	rejectMeetingRequest(user_id: number, meeting_id: number, message: string): Promise<void>
 	getMeetings(user_id: number): Promise<Meeting[]>
+	getPastMeetings(user_id: number): Promise<Meeting[]>
 }

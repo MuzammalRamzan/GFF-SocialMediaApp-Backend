@@ -54,10 +54,11 @@ export class MeetingController {
 		try {
 			const user_id = req.user?.id as number
 			const meeting_id = req.body.meeting_id as number
+			const isContractSigned = req.body.isContractSigned as boolean
 
 			await this.validateIsParticipantMentorOrWarrior(user_id)
 
-			await this.meetingServices.acceptMeetingRequest(user_id, meeting_id)
+			await this.meetingServices.acceptMeetingRequest(user_id, meeting_id, isContractSigned)
 
 			return res.status(200).json({ data: {}, message: 'Meeting request has been accepted!', code: 200 })
 		} catch (error) {
@@ -69,10 +70,11 @@ export class MeetingController {
 		try {
 			const user_id = req.user?.id as number
 			const meeting_id = req.body.meeting_id as number
+			const message = req.body.message as string
 
 			await this.validateIsParticipantMentorOrWarrior(user_id)
 
-			await this.meetingServices.rejectMeetingRequest(user_id, meeting_id)
+			await this.meetingServices.rejectMeetingRequest(user_id, meeting_id, message)
 
 			return res.status(200).json({ data: {}, message: 'Meeting request has been rejected!', code: 200 })
 		} catch (error) {
@@ -85,6 +87,18 @@ export class MeetingController {
 			const user_id = req.user?.id as number
 
 			const meetings = await this.meetingServices.getMeetings(user_id)
+
+			return res.status(200).json({ data: { meetings }, code: 200, message: 'OK' })
+		} catch (error) {
+			next(error)
+		}
+	}
+
+	getPastMeetings = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
+		try {
+			const user_id = req.user?.id as number
+
+			const meetings = await this.meetingServices.getPastMeetings(user_id)
 
 			return res.status(200).json({ data: { meetings }, code: 200, message: 'OK' })
 		} catch (error) {

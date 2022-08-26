@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { Op } from 'sequelize'
 import { sequelize } from '../../database'
 import { USER_FIELDS, USER_INFORMATION_FIELDS } from '../../helper/db.helper'
 import { GffError } from '../helper/errorHandler'
@@ -18,6 +19,24 @@ export class MeetingServices implements IMeetingServices {
 		this.questionnaireService = new QuestionnaireService()
 	}
 
+	static filterMeetingParticipant(participant: any): any {
+		return {
+			id: participant.id,
+			user_id: participant.user_id,
+			full_name: participant?.user?.user_information?.full_name || null,
+			profile_url: participant?.user?.user_information?.profile_url || null,
+			bio: participant?.user?.user_information?.bio || null,
+		}
+	}
+
+	static filterMeetingResponse(meeting: any): any {
+		return {
+			...meeting,
+			participants: meeting?.participants?.map((item: any) => MeetingServices.filterMeetingParticipant(item)),
+			answers: meeting?.answers?.map((item: any) => QuestionnaireService.filterAnswerObject(item))
+		}
+	}
+
 	async createMeeting(params: createMeetingParams): Promise<Meeting> {
 		const meeting = await sequelize.transaction(async t => {
 			const meeting = await Meeting.create(
@@ -27,7 +46,7 @@ export class MeetingServices implements IMeetingServices {
 					startTime: moment(params.startTime * 1000).utc(),
 					name: `Meeting - ${params.user_id} - ${params.participant_id}`,
 					endTime: moment(params.endTime * 1000).utc(),
-					isContractSigned: params.isContractSigned,
+					isContractSignedByClient: params.isContractSigned,
 					description: params.message
 				},
 				{ transaction: t }
@@ -58,20 +77,24 @@ export class MeetingServices implements IMeetingServices {
 		return meeting
 	}
 
-	async acceptMeetingRequest(user_id: number, meeting_id: number): Promise<void> {
+	async acceptMeetingRequest(user_id: number, meeting_id: number, isContractSigned: boolean): Promise<void> {
 		const isPartOfMeeting = await MeetingParticipants.count({ where: { user_id, meeting_id } })
 
 		if (!isPartOfMeeting) throw new GffError("You're not part of the meeting!", { errorCode: '400' })
 
-		await Meeting.update({ status: MeetingRequestStatus.APPROVE }, { where: { id: meeting_id } })
+		await Meeting.update({ status: MeetingRequestStatus.APPROVE, isContractSignedByWarrior: isContractSigned }, { where: { id: meeting_id } })
 	}
 
-	async rejectMeetingRequest(user_id: number, meeting_id: number): Promise<void> {
+	async rejectMeetingRequest(user_id: number, meeting_id: number, message: string): Promise<void> {
 		const isPartOfMeeting = await MeetingParticipants.count({ where: { user_id, meeting_id } })
 
 		if (!isPartOfMeeting) throw new GffError("You're not part of the meeting!", { errorCode: '400' })
 
-		await Meeting.update({ status: MeetingRequestStatus.REJECT }, { where: { id: meeting_id } })
+		await Meeting.update({
+			status: MeetingRequestStatus.REJECT,
+			canceledReason: message,
+			canceledTime: moment().utc()
+		}, { where: { id: meeting_id } })
 	}
 
 	async getMeetings(user_id: number): Promise<Meeting[]> {
@@ -118,6 +141,59 @@ export class MeetingServices implements IMeetingServices {
 			})
 		)
 
-		return meets
+		return meets.map(meeting => MeetingServices.filterMeetingResponse(meeting))
+	}
+
+	async getPastMeetings(user_id: number): Promise<Meeting[]> {
+		const meetings = await Meeting.findAll({
+			where: {
+				startTime: {
+					[Op.lt]: moment().utc()
+				}
+			},
+			order: [['startTime', 'ASC']],
+			include: [
+				{
+					model: MeetingParticipants,
+					as: 'participants',
+					required: true,
+					where: { user_id }
+				},
+				{
+					model: QuestionnaireAnswers,
+					as: 'answers',
+					required: false,
+					include: [
+						{
+							model: Questionnaire,
+							as: 'question',
+						}
+					]
+				}
+			]
+		})
+
+		const meets: any[] = []
+
+		await Promise.all(
+			meetings.map(async meeting => {
+				const meeting_id = meeting.getDataValue('id')
+				const participants = await MeetingParticipants.findAll({
+					where: { meeting_id },
+					include: [
+						{
+							model: User,
+							as: 'user',
+							attributes: USER_FIELDS,
+							include: [{ model: UserInformation, as: 'user_information', attributes: USER_INFORMATION_FIELDS }]
+						}
+					]
+				})
+
+				meets.push({ ...meeting.toJSON(), participants: participants.map(r => r.toJSON()) })
+			})
+		)
+
+		return meets.map(meeting => MeetingServices.filterMeetingResponse(meeting))
 	}
 }
