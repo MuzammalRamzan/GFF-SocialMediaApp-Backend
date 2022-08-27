@@ -29,17 +29,17 @@ export class DashboardServices implements IDashboardServices {
 					{ user_id },
 					...(params?.start
 						? [
-								{
-									created_at: { [Op.gte]: moment.unix(params.start).utc() }
-								}
-						  ]
+							{
+								created_at: { [Op.gte]: moment.unix(params.start).utc() }
+							}
+						]
 						: []),
 					...(params?.end
 						? [
-								{
-									created_at: { [Op.lte]: moment.unix(params.end).utc() }
-								}
-						  ]
+							{
+								created_at: { [Op.lte]: moment.unix(params.end).utc() }
+							}
+						]
 						: [])
 				]
 			},
@@ -84,7 +84,8 @@ export class DashboardServices implements IDashboardServices {
 		const paid = await Transaction.findAll({
 			where: { user_id, paid_at: { [Op.ne]: null } },
 			include: TransactionService.transactionIncludeables,
-			limit: 15
+			order: [['created_at', 'DESC']],
+			limit: 15,
 		})
 
 		return {
